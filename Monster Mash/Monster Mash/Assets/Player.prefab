@@ -1,0 +1,362 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1251849871196894678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1251849871196894700}
+  - component: {fileID: 1251849871196894675}
+  - component: {fileID: 1251849871196894674}
+  - component: {fileID: 1251849871196894673}
+  - component: {fileID: 1251849871196894672}
+  - component: {fileID: 1251849871196894679}
+  - component: {fileID: 2068421904}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1251849871196894700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1251849871196894675
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1251849871196894674
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!143 &1251849871196894673
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &1251849871196894672
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1251849871196894679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: faea1ad05c989b5458936350594bacf3,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2068421904}
+        m_TargetAssemblyTypeName: input_handler, Assembly-CSharp
+        m_MethodName: A_button
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8ac38166-86a6-4ced-b144-7ed1ffda52c9
+    m_ActionName: xbox - menu/A Button
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 63010e8f-1b25-45c0-bd15-bd428674a1e3
+    m_ActionName: xbox - menu/B Button
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e2146ec3-e68d-4e51-a128-fad884c6aa60
+    m_ActionName: xbox - menu/X Button
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b632551f-848e-426f-96d4-692c7a19f6e3
+    m_ActionName: xbox - menu/Y Button
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cb66e2c8-45ba-46cd-ad3c-0628965a7909
+    m_ActionName: xbox - menu/Left Trigger
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 066a4b5f-e600-480b-a6e0-3b96928ef53c
+    m_ActionName: xbox - menu/Right Trigger
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ddb5ddfe-0463-49c4-9e73-035f7c0d5f20
+    m_ActionName: xbox - menu/Left Bumper
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 219f7b6d-b1dc-4348-9f60-fb91aa078ce7
+    m_ActionName: xbox - menu/Right Bumper
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c5225996-b3d7-4894-aff3-07036266f31e
+    m_ActionName: xbox - menu/Left Stick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0d1354c6-0186-4caf-83f3-0bf6546b55a3
+    m_ActionName: xbox - menu/Right Stick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: da102a34-1c03-4ef9-8558-2ef685d5b61f
+    m_ActionName: xbox - menu/DPad Up
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9ad9354d-f8b1-48e2-9766-908293664b26
+    m_ActionName: xbox - menu/DPad Down
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c918918f-a16f-467e-b9b0-a2b2ceaf5d88
+    m_ActionName: xbox - menu/DPad Left
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0d02a3e6-6118-46f9-8ec3-b647d00cfdc4
+    m_ActionName: xbox - menu/DPad Right
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8693d9d2-d30f-4b99-91fa-aea795446b9e
+    m_ActionName: keyboard/mouse/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2068421904}
+        m_TargetAssemblyTypeName: input_handler, Assembly-CSharp
+        m_MethodName: controllerSetUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e2d86e18-7529-4731-bff1-715cf6012fa5
+    m_ActionName: Starting Action Map/Enter Game - Controller Map
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2068421904}
+        m_TargetAssemblyTypeName: input_handler, Assembly-CSharp
+        m_MethodName: keyboardMouseSetUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: aa9cde63-8749-43a1-9b42-61959077431e
+    m_ActionName: Starting Action Map/Enter Game - Keyboard/Mouse Map[/Keyboard/anyKey,/Mouse/press]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Starting Action Map
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &2068421904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251849871196894678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf5240b1a695a4ea64e5ede440b3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  currentControllerMap:
+  - inputName: A Button
+    inputFunction: sayHi
+  - inputName: B Button
+    inputFunction: 
+  - inputName: X Button
+    inputFunction: 
+  - inputName: Y Button
+    inputFunction: 
+  - inputName: Left Trigger
+    inputFunction: 
+  - inputName: Right Trigger
+    inputFunction: 
+  - inputName: Left Bumper
+    inputFunction: 
+  - inputName: Right Bumper
+    inputFunction: 
+  - inputName: Left Joystick
+    inputFunction: 
+  - inputName: Right Joystick
+    inputFunction: 
+  - inputName: D-Pad Up
+    inputFunction: 
+  - inputName: D-Pad Down
+    inputFunction: 
+  - inputName: D-Pad Left
+    inputFunction: 
+  - inputName: D-Pad Right
+    inputFunction: 
+  - inputName: Start
+    inputFunction: 
+  defaultControllerMap_Menu:
+  - inputName: A Button
+    inputFunction: 
+  - inputName: B Button
+    inputFunction: 
+  - inputName: X Button
+    inputFunction: 
+  - inputName: Y Button
+    inputFunction: 
+  - inputName: Left Trigger
+    inputFunction: 
+  - inputName: Right Trigger
+    inputFunction: 
+  - inputName: Left Bumper
+    inputFunction: 
+  - inputName: Right Bumper
+    inputFunction: 
+  - inputName: Left Joystick
+    inputFunction: 
+  - inputName: Right Joystick
+    inputFunction: 
+  - inputName: D-Pad Up
+    inputFunction: 
+  - inputName: D-Pad Down
+    inputFunction: 
+  - inputName: D-Pad Left
+    inputFunction: 
+  - inputName: D-Pad Right
+    inputFunction: 
+  - inputName: Start
+    inputFunction: 
+  defaultControllerMap_Combat:
+  - inputName: A Button
+    inputFunction: 
+  - inputName: B Button
+    inputFunction: 
+  - inputName: X Button
+    inputFunction: 
+  - inputName: Y Button
+    inputFunction: 
+  - inputName: Left Trigger
+    inputFunction: 
+  - inputName: Right Trigger
+    inputFunction: 
+  - inputName: Left Bumper
+    inputFunction: 
+  - inputName: Right Bumper
+    inputFunction: 
+  - inputName: Left Joystick
+    inputFunction: 
+  - inputName: Right Joystick
+    inputFunction: 
+  - inputName: D-Pad Up
+    inputFunction: 
+  - inputName: D-Pad Down
+    inputFunction: 
+  - inputName: D-Pad Left
+    inputFunction: 
+  - inputName: D-Pad Right
+    inputFunction: 
+  - inputName: Start
+    inputFunction: 

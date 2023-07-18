@@ -13,23 +13,13 @@ public class AddTorso : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        limbPrefab = GameObject.FindGameObjectWithTag("LimbPrefab");
-
         torsoPrefab = GameObject.FindGameObjectWithTag("TorsoPrefab");
-
-        //canDo = true;
     }
 
     private void OnMouseOver()
     {
         if (canDo)
         {
-            //if (Input.GetMouseButtonDown(0))
-            //{
-                //MakeNewLimb();
-                //canDo = false;
-            //}
-            //else if (Input.GetMouseButtonDown(1))
             if (Input.GetMouseButtonDown(0))
             {
                 //print("the time has come");
@@ -37,15 +27,6 @@ public class AddTorso : MonoBehaviour
                 canDo = false;
             }
         }
-    }
-
-    void MakeNewLimb()
-    {
-        GameObject newLimb = Instantiate(limbPrefab);
-        newLimb.transform.parent = transform;
-        newLimb.transform.localPosition = Vector3.zero;
-        newLimb.transform.localRotation = Quaternion.identity;
-        newLimb.tag = "Untagged";
     }
 
     void MakeNewTorso()

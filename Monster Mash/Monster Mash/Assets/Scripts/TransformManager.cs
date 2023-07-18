@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class TransformManager : MonoBehaviour
 {
     [SerializeField] private GameObject uiParent;
-    //[SerializeField] private GameObject RotateUIParent;
-    //[SerializeField] private GameObject MoveUIParent;
 
     private RotateManager rotateManager;
     private MoveManager moveManager;
@@ -20,8 +18,6 @@ public class TransformManager : MonoBehaviour
     void Start()
     {
         uiParent.SetActive(false);
-        //RotateUIParent.SetActive(false);
-        //MoveUIParent.SetActive(false);
 
         rotateManager = FindObjectOfType<RotateManager>();
         moveManager = FindObjectOfType<MoveManager>();

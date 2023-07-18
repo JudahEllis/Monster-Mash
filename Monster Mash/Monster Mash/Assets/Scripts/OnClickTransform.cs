@@ -7,12 +7,12 @@ public class OnClickTransform : MonoBehaviour
     TransformManager manager;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         manager = FindObjectOfType<TransformManager>();
     }
 
-    private void OnMouseDown()
+    /*private void OnMouseDown()
     {
         print("oh hell yeah");
 
@@ -25,6 +25,23 @@ public class OnClickTransform : MonoBehaviour
         else
         {
             manager.NewRotObj(transform.parent.gameObject);
+        }
+    }*/
+
+    private void OnMouseOver()
+    {
+        //print("Oh hell yeah over");
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            if (GetComponent<BoxCollider>())
+            {
+                manager.NewRotObj(transform.parent.parent.gameObject);
+            }
+            else
+            {
+                manager.NewRotObj(transform.parent.gameObject);
+            }
         }
     }
 }

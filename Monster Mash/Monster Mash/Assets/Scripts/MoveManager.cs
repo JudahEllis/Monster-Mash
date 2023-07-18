@@ -36,19 +36,16 @@ public class MoveManager : MonoBehaviour
 
     public void XMove()
     {
-        //ResetmoveSliders();
         currObj.transform.position = new Vector3(xSlid.value, currObj.transform.position.y, currObj.transform.position.z);
     }
 
     public void YMove()
     {
-        //ResetmoveSliders();
         currObj.transform.position = new Vector3(currObj.transform.position.x, ySlid.value, currObj.transform.position.z);
     }
 
     public void ZMove()
     {
-        //ResetmoveSliders();
         currObj.transform.position = new Vector3(currObj.transform.position.x, currObj.transform.position.y, zSlid.value);
     }
 

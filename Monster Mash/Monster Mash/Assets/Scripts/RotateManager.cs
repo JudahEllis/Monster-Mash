@@ -45,19 +45,16 @@ public class RotateManager : MonoBehaviour
 
     public void RotateX()
     {
-        //ResetRotSliders();
         currObj.transform.rotation = Quaternion.Euler(xSlid.value, currObj.transform.rotation.y, currObj.transform.rotation.z);
     }
 
     public void RotateY()
     {
-        //ResetRotSliders();
         currObj.transform.rotation = Quaternion.Euler(currObj.transform.rotation.x, ySlid.value, currObj.transform.rotation.z);
     }
 
     public void RotateZ()
     {
-        //ResetRotSliders();
         currObj.transform.rotation = Quaternion.Euler(currObj.transform.rotation.x, currObj.transform.rotation.y, zSlid.value);
     }
 

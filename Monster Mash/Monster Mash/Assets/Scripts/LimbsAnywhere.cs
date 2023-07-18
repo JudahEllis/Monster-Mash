@@ -8,14 +8,10 @@ public class LimbsAnywhere : MonoBehaviour
 
     private GameObject limbPref;
 
-    //private SelectionManager manager;
-
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
-
-        //manager = FindObjectOfType<SelectionManager>();
     }
 
     // Update is called once per frame
@@ -32,10 +28,6 @@ public class LimbsAnywhere : MonoBehaviour
                 // Check if the collider has a reference to the GameObject you want to detect clicks on
                 if (hit.collider.CompareTag("Limbable"))
                 {
-                    // The player clicked on the collider of the desired GameObject
-                    //Vector3 clickPosition = hit.point;
-                    //Debug.Log("Clicked on: " + hit.collider.gameObject.name + " at position: " + hit.point);
-
                     // Calculate the position and rotation for the new limb
                     Vector3 clickPosition = hit.point;
 
@@ -71,7 +63,6 @@ public class LimbsAnywhere : MonoBehaviour
             emptyParent.transform.position = newLimb.transform.position;
             emptyParent.transform.rotation = Quaternion.identity;
 
-            //newLimb.transform.parent = closestBone;
             newLimb.transform.parent = emptyParent.transform;
 
             SelectionManager.Instance.SetSelectedPrefab(null);

@@ -11,11 +11,7 @@ public class RotateManager : MonoBehaviour
 
     [SerializeField] private GameObject sliderParent;
 
-    private int xRot;
-    private int yRot;
-    private int zRot;
-
-    private GameObject currTorso;
+    private GameObject currObj;
     private bool hasTarget = false;
 
     // Start is called before the first frame update
@@ -30,34 +26,42 @@ public class RotateManager : MonoBehaviour
         
     }
 
-    public void NewRotObj(GameObject obj)
+    public void Initiate(GameObject obj)
     {
         hasTarget = true;
         sliderParent.SetActive(true);
 
-        currTorso = obj;
+        currObj = obj;
 
-        xRot = Mathf.RoundToInt(obj.transform.rotation.x);
-        yRot = Mathf.RoundToInt(obj.transform.rotation.y);
-        zRot = Mathf.RoundToInt(obj.transform.rotation.z);
+        xSlid.value = obj.transform.rotation.x;
+        ySlid.value = obj.transform.rotation.y;
+        zSlid.value = obj.transform.rotation.z;
+    }
 
-        xSlid.value = xRot;
-        ySlid.value = yRot;
-        zSlid.value = zRot;
+    public void Stop()
+    {
+        sliderParent.SetActive(false);
     }
 
     public void RotateX()
     {
-        currTorso.transform.rotation = Quaternion.Euler(xSlid.value, currTorso.transform.rotation.y, currTorso.transform.rotation.z);
+        currObj.transform.rotation = Quaternion.Euler(xSlid.value, currObj.transform.rotation.y, currObj.transform.rotation.z);
     }
 
     public void RotateY()
     {
-        currTorso.transform.rotation = Quaternion.Euler(currTorso.transform.rotation.x, ySlid.value, currTorso.transform.rotation.z);
+        currObj.transform.rotation = Quaternion.Euler(currObj.transform.rotation.x, ySlid.value, currObj.transform.rotation.z);
     }
 
     public void RotateZ()
     {
-        currTorso.transform.rotation = Quaternion.Euler(currTorso.transform.rotation.x, currTorso.transform.rotation.y, zSlid.value);
+        currObj.transform.rotation = Quaternion.Euler(currObj.transform.rotation.x, currObj.transform.rotation.y, zSlid.value);
+    }
+
+    private void ResetRotSliders()
+    {
+        xSlid.value = currObj.transform.rotation.x;
+        ySlid.value = currObj.transform.rotation.y;
+        zSlid.value = currObj.transform.rotation.z;
     }
 }

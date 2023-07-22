@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.InputSystem;
 
 public class CameraRot : MonoBehaviour
 {
+    public cursor playerCursor;
+    private Vector3 lastMousePosition;
+
     private CinemachineVirtualCamera cam;
 
     private float yRotSpeed = 0.5f;
@@ -39,6 +43,11 @@ public class CameraRot : MonoBehaviour
     void Update()
     {
         //if (Input.getm)
+        if (Input.GetKeyDown(camMove))
+        {
+            playerCursor.cameraRotating = true;
+            lastMousePosition = Input.mousePosition;
+        }
 
         if (Input.GetKey(camMove))
         {
@@ -56,9 +65,16 @@ public class CameraRot : MonoBehaviour
 
             transform.rotation = Quaternion.Lerp(transform.localRotation, targetYRot * targetXRot, rotSpeed);
         }
-        else
+        else if(Input.GetKeyUp(camMove))
         {
             Cursor.lockState = CursorLockMode.None;
+            correctMousePosition();
+            playerCursor.cameraRotating = false;
         }
+    }
+
+    private void correctMousePosition()
+    {
+        Mouse.current.WarpCursorPosition(lastMousePosition);
     }
 }

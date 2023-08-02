@@ -48,14 +48,6 @@ public class Controller2D : MonoBehaviour
 
     private bool IsGrounded()
     {
-        // Implement your own grounded check, e.g., using raycasting or collider checks.
-        // Return true if the player is grounded, false otherwise.
-        /*if(Physics2D.Raycast(transform.position, Vector2.down, cap.size.y /2 + 0.1f, groundLayerMask))
-        {
-            //print("YES");
-            return true;
-        }*/
-
         if (Physics2D.CapsuleCast(transform.position, cap.size, cap.direction, 0, Vector2.down, 0.1f, groundLayerMask))
         {
             return true;
@@ -67,11 +59,6 @@ public class Controller2D : MonoBehaviour
 
     private bool HitWall(float direction)
     {
-        /*if (Physics2D.Raycast(transform.position, Vector2.right * direction, cap.size.x /2 +0.1f, groundLayerMask))
-        {
-            return true;
-        }*/
-
         if (Physics2D.CapsuleCast(transform.position, new Vector2(cap.size.x, cap.size.y * 0.5f), cap.direction, 0, Vector2.right * direction, 0.1f, groundLayerMask))
         {
             return true;

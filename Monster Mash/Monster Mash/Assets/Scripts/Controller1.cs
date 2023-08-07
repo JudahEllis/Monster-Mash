@@ -17,22 +17,32 @@ public class Controller1 : MonoBehaviour
     private float terminalVelocity = -50f; // Limit the maximum falling speed.
     private bool knockBack = false; //true when player is in "knockback" state
     private bool stun = false; //true when in "stun" state, hitstun
+    private bool jump = false;
+
+    private Vector3 move;
 
     [SerializeField] private GameObject[] ActiveBodyParts; //body parts used for attacks
     private int lastUsedBP; //index of most recently used ActiveBodyPart
 
     [SerializeField] private Vector3 impact = Vector3.zero;
 
+    [SerializeField] private GameObject dummy;
+    private Rigidbody dummyRb;
+    private DummyCollision col;
+    private bool checkKB = false;
+
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        dummyRb = dummy.GetComponent<Rigidbody>();
+        col = dummy.GetComponent<DummyCollision>();
         jumpsRemaining = 2; // Set the initial jumps allowed (double jump).
     }
 
     void Update()
     {
-        if (!knockBack || !stun)
+        if (!knockBack)
         {
             groundedPlayer = controller.isGrounded;
             if (groundedPlayer)
@@ -41,15 +51,22 @@ public class Controller1 : MonoBehaviour
                 jumpsRemaining = 2; // Reset the number of jumps when grounded.
             }
 
-            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+            //move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
             controller.Move(move * Time.deltaTime * playerSpeed);
 
+            if (move != Vector3.zero)
+            {
+                transform.forward = move;
+            }
+
             // Perform the jump when the Space key is pressed and there are jumps remaining.
-            if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
+            if (jump && jumpsRemaining > 0)
             {
                 playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 jumpsRemaining--;
+                jump = false;
             }
+            else if (jump) jump = false;
 
             // Apply gravity only when not grounded and add fallMultiplier when falling.
             if (!groundedPlayer)
@@ -65,7 +82,7 @@ public class Controller1 : MonoBehaviour
         else //while knockback
         {
             KnockingBack();
-            playerVelocity = impact;
+            //playerVelocity = impact;
         }
 
         // Clamp the vertical velocity to prevent it from increasing indefinitely.
@@ -74,17 +91,40 @@ public class Controller1 : MonoBehaviour
             playerVelocity[i] = Mathf.Max(playerVelocity[i], terminalVelocity);
             playerVelocity[i] = Mathf.Min(playerVelocity[i], -terminalVelocity);
         }
-        //playerVelocity.y = Mathf.Max(playerVelocity.y, terminalVelocity);
-        //playerVelocity.y = Mathf.Min
 
         controller.Move(playerVelocity * Time.deltaTime);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             //AddImpact(Vector3.left + Vector3.up, 15f, 0.5f);
-            LimbFallOff();
+            //LimbFallOff();
+            AddImpact();
         }
     }
+
+
+    #region public Input functions for input_handler script
+    public void Move(int direction)
+    {
+        Vector3 dir = Vector3.zero;
+
+        if (direction > 0)
+        {
+            dir = Vector3.right;
+        }
+        else if (direction < 0)
+        {
+            dir = Vector3.left;
+        }
+
+        move = dir;
+    }
+
+    public void Jump()
+    {
+        jump = true;
+    }
+    #endregion
 
     #region LimbFallOff
     private void LimbFallOff()
@@ -96,56 +136,31 @@ public class Controller1 : MonoBehaviour
     #endregion
 
     #region KnockBack
-    public void AddImpact(Vector3 dir, float force, float dur)
-    {
-        ApplyKnockback(dir * force, dur);
-    }
 
-    private void ApplyKnockback(Vector3 dir, float dur)
+    void AddImpact()
     {
-        StopCoroutine("StartStopKnockback");
-        StopKnockback();
+        checkKB = false;
         knockBack = true;
-        stun = true;
-        impact = dir;
-        StartCoroutine("StartStopKnockback", dur);
+        dummyRb.velocity = Vector3.zero;
+        dummy.transform.position = transform.position + new Vector3(0, 0.9f, 0);
+        dummyRb.AddForce(new Vector3(-15, 10, 0), ForceMode.Impulse);
+        Invoke("Check", 0.25f);
     }
 
-    private void KnockingBack()
+    void KnockingBack()
     {
-        if (impact.y > 1)
+        if (checkKB && col.GetCollide())
         {
-            impact.y *= 0.8f;
-        } else if (impact.y > 0)
-        {
-            //impact.y = 0.0f;
+            dummyRb.velocity = Vector3.zero;
+            knockBack = false;
         }
+
+        controller.Move(dummy.transform.position - transform.position);
     }
 
-    private IEnumerator StartStopKnockback(float dur)
+    void Check()
     {
-        yield return new WaitForSeconds(dur);
-
-        StopKnockback();
-
-        yield break;
-    }
-    private void StopKnockback()
-    {
-        knockBack = false;
-        stun = false;
-        impact = Vector3.zero;
-        playerVelocity = Vector3.zero;
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit collision)
-    {
-        if (collision.gameObject.CompareTag("Ground") && knockBack)
-        {
-            //print("hit that wall");
-            StopCoroutine("StartStopKnockback");
-            StopKnockback();
-        }
+        checkKB = true;
     }
 
     #endregion

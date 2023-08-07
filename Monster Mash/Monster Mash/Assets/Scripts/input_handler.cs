@@ -4,6 +4,7 @@ using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
+using System.Reflection;
 
 public class input_handler : MonoBehaviour
 {
@@ -19,8 +20,13 @@ public class input_handler : MonoBehaviour
     public List<availableControllerInputs> defaultControllerMap_Menu;
     public List<availableControllerInputs> defaultControllerMap_Combat;
 
+    //Judah Added some items hehe
+    private Controller1 player;
+
     private void Awake()
     {
+        player = FindObjectOfType<Controller1>();
+
         playerInput = GetComponent<PlayerInput>();
         game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
         gameManager.activePlayers.Add(this);
@@ -101,53 +107,81 @@ public class input_handler : MonoBehaviour
         }
     }
 
-    public void leftTrigger()
+    public void leftTrigger(CallbackContext context)
     {
-
+        if (context.started)
+        {
+            Invoke(currentControllerMap[4].inputFunction, 0f);
+        }
     }
 
-    public void rightTrigger()
+    public void rightTrigger(CallbackContext context)
     {
-
+        if (context.started)
+        {
+            Invoke(currentControllerMap[5].inputFunction, 0f);
+        }
     }
-    public void leftBumper()
+    public void leftBumper(CallbackContext context)
     {
-
-    }
-
-    public void rightBumper()
-    {
-
-    }
-
-    public void leftJoystick()
-    {
-
+        if (context.started)
+        {
+            Invoke(currentControllerMap[6].inputFunction, 0f);
+        }
     }
 
-    public void rightJoystick()
+    public void rightBumper(CallbackContext context)
     {
-
+        if (context.started)
+        {
+            Invoke(currentControllerMap[7].inputFunction, 0f);
+        }
     }
 
-    public void Dpad_UP()
+    public void leftJoystick(CallbackContext context)
     {
-
+        GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        .Invoke(this, new object[] { context });
     }
 
-    public void Dpad_DOWN()
+    public void rightJoystick(CallbackContext context)
     {
-
+        if (context.started)
+        {
+            Invoke(currentControllerMap[9].inputFunction, 0f);
+        }
     }
 
-    public void Dpad_LEFT()
+    public void Dpad_UP(CallbackContext context)
     {
-
+        if (context.started)
+        {
+            Invoke(currentControllerMap[10].inputFunction, 0f);
+        }
     }
 
-    public void Dpad_RIGHT()
+    public void Dpad_DOWN(CallbackContext context)
     {
+        if (context.started)
+        {
+            Invoke(currentControllerMap[11].inputFunction, 0f);
+        }
+    }
 
+    public void Dpad_LEFT(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentControllerMap[12].inputFunction, 0f);
+        }
+    }
+
+    public void Dpad_RIGHT(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentControllerMap[13].inputFunction, 0f);
+        }
     }
     #endregion
 
@@ -171,7 +205,28 @@ public class input_handler : MonoBehaviour
 
     //A library of combat functions called by inputs. Essentially all the tangible events
     #region Combat Interaction
+    private void movePlayer(CallbackContext context) //with left stick, move player either right or left
+    {
+        int dir = 0;
 
+        Vector2 moveInput = context.ReadValue<Vector2>();
+
+        if (moveInput.x < 0)
+        {
+            dir = -1;
+        }
+        else if (moveInput.x > 0)
+        {
+            dir = 1;
+        }
+
+        player.Move(dir);
+    }
+
+    private void jumpPlayer()
+    {
+        player.Jump();
+    }
     #endregion
 
 }

@@ -120,6 +120,21 @@ public class Controller1 : MonoBehaviour
         move = dir;
     }
 
+    public void KeyboardMoveLeft(bool canMove)
+    {
+        if (canMove)
+        {
+            move = Vector3.left;
+        } else
+        {
+        }
+    }
+
+    public void KeyboardMoveRight()
+    {
+        move = Vector3.right;
+    }
+
     public void Jump()
     {
         jump = true;

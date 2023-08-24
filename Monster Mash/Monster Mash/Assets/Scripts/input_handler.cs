@@ -20,8 +20,11 @@ public class input_handler : MonoBehaviour
     public List<availableControllerInputs> defaultControllerMap_Menu;
     public List<availableControllerInputs> defaultControllerMap_Combat;
 
+    public List<availableKeyboardInputs> currentKeyboardMap;
+
     //Judah Added some items hehe
     private Controller1 player;
+    private string controlType;
 
     private void Awake()
     {
@@ -48,11 +51,13 @@ public class input_handler : MonoBehaviour
     {
         //switch input from starter to controller
         playerInput.SwitchCurrentActionMap("XBOX");
+        controlType = "XBOX";
     }
     public void keyboardMouseSetUp()
     {
         //switch input from starter to keyboard/mouse
         playerInput.SwitchCurrentActionMap("keyboard/mouse");
+        controlType = "keyboard/mouse";
     }
 
     public void controller_SwitchToMenuActions()
@@ -188,6 +193,121 @@ public class input_handler : MonoBehaviour
     //A translator for communication between what our player presses and what actions take place on screen
     #region Keyboard/Mouse Inputs
 
+    public void W_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[0].inputFunction, 0f);
+        }
+    }
+
+    public void Horizontal_key(CallbackContext context) //A + D = horizontal axis
+    {
+        GetType().GetMethod(currentKeyboardMap[1].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        .Invoke(this, new object[] { context });
+    }
+
+    public void A_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[2].inputFunction, 0f);
+        }
+    }
+
+    public void S_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[3].inputFunction, 0f);
+        }
+    }
+
+    public void D_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[4].inputFunction, 0f);
+        }
+    }
+
+    public void Spacebar_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[5].inputFunction, 0f);
+        }
+    }
+
+    public void Q_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[6].inputFunction, 0f);
+        }
+    }
+
+    public void E_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[7].inputFunction, 0f);
+        }
+    }
+    public void R_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[8].inputFunction, 0f);
+        }
+    }
+
+    public void F_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[9].inputFunction, 0f);
+        }
+    }
+    public void LeftShift_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[10].inputFunction, 0f);
+        }
+    }
+
+    public void LeftControl_key(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[11].inputFunction, 0f);
+        }
+    }
+
+    public void Left_mouse(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[12].inputFunction, 0f);
+        }
+    }
+
+    public void Middle_mouse(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[13].inputFunction, 0f);
+        }
+    }
+
+    public void Right_mouse(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[14].inputFunction, 0f);
+        }
+    }
     #endregion
 
     //A library of menu functions called by inputs. Essentially all the tangible events
@@ -207,20 +327,45 @@ public class input_handler : MonoBehaviour
     #region Combat Interaction
     private void movePlayer(CallbackContext context) //with left stick, move player either right or left
     {
-        int dir = 0;
-
-        Vector2 moveInput = context.ReadValue<Vector2>();
-
-        if (moveInput.x < 0)
+        if (controlType == "XBOX")
         {
-            dir = -1;
-        }
-        else if (moveInput.x > 0)
-        {
-            dir = 1;
-        }
+            int dir = 0;
 
-        player.Move(dir);
+            Vector2 moveInput = context.ReadValue<Vector2>();
+
+            if (moveInput.x < 0)
+            {
+                dir = -1;
+            }
+            else if (moveInput.x > 0)
+            {
+                dir = 1;
+            }
+
+            player.Move(dir);
+        }
+        else if (controlType == "keyboard/mouse") // A and D make horizontal Axis
+        {
+            float moveInput = context.ReadValue<float>();
+
+            int dir = 0;
+
+            if (moveInput < 0)
+            {
+                dir = -1;
+            }
+            else if (moveInput > 0)
+            {
+                dir = 1;
+            }
+
+            player.Move(dir);
+        }
+    }
+
+    private void movePlayerRightKeyboard()
+    {
+        player.KeyboardMoveRight();
     }
 
     private void jumpPlayer()
@@ -235,6 +380,14 @@ public class input_handler : MonoBehaviour
 //This is the magic that allows us to rename elements in lists
 [System.Serializable]
 public class availableControllerInputs
+{
+    public string inputName;
+    public string inputFunction;
+}
+
+[System.Serializable]
+
+public class availableKeyboardInputs
 {
     public string inputName;
     public string inputFunction;

@@ -19,6 +19,8 @@ public class monsterAttackTest : MonoBehaviour
     //REACTION DRIVEN PARTS
     public List<Animator> allMonsterParts_Animators;
     public List<Animator> allTorsosAndHeads;
+    public List<attackObject> allLegs;
+    public List<attackObject> allAttackObjects;
 
     public void grabAttackSlotInfo()
     {
@@ -42,9 +44,22 @@ public class monsterAttackTest : MonoBehaviour
     {
         grabAttackSlotInfo();
 
+        for (int i = 0; i < allAttackObjects.Count; i++)
+        {
+            allAttackObjects[i].triggerAnimationOffsets();
+        }
+
         for (int u = 0; u < allMonsterParts_Animators.Count; u++)
         {
             allMonsterParts_Animators[u].SetTrigger("Idle");
+        }
+
+        for (int e = 0; e < allLegs.Count; e++)
+        {
+            if (allLegs[e].isPrimaryLeg)
+            {
+                allLegs[e].triggerStretchJump();
+            }
         }
 
     }
@@ -185,16 +200,40 @@ public class monsterAttackTest : MonoBehaviour
         }
     }
 
+    public void walk()
+    {
+        if (isGrounded)
+        {
+            for (int u = 0; u < allLegs.Count; u++)
+            {
+                allLegs[u].triggerWalk();
+            }
+
+        }
+    }
+
+    public void screechingStop()
+    {
+        if (isGrounded)
+        {
+            for (int u = 0; u < allLegs.Count; u++)
+            {
+                allLegs[u].triggerScreechingStop();
+            }
+
+        }
+    }
+
     public void jump()
     {
         if (isGrounded)
         {
             isGrounded = false;
 
-            for (int u = 0; u < allMonsterParts_Animators.Count; u++)
+            for (int i = 0; i < allMonsterParts_Animators.Count; i++)
             {
-                allMonsterParts_Animators[u].SetBool("Grounded", false);
-                allMonsterParts_Animators[u].SetTrigger("Jump");
+                allMonsterParts_Animators[i].SetBool("Grounded", false);
+                allMonsterParts_Animators[i].SetTrigger("Jump");
             }
 
             //TESTING PURPOSES - Basically faking a vertical jump and land
@@ -207,6 +246,25 @@ public class monsterAttackTest : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         land();
+    }
+
+    //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)
+    public void fall()
+    {
+        if (isGrounded)
+        {
+            isGrounded = false;
+
+            for (int u = 0; u < allMonsterParts_Animators.Count; u++)
+            {
+                allMonsterParts_Animators[u].SetBool("Grounded", false);
+                allMonsterParts_Animators[u].SetTrigger("Fall");
+            }
+
+            //TESTING PURPOSES - Basically faking a fall and land
+            StartCoroutine(fakeJump());
+
+        }
     }
 
     public void land()

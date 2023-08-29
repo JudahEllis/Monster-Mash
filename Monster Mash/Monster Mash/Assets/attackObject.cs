@@ -6,8 +6,12 @@ public class attackObject : MonoBehaviour
 {
     public int objectType;
     public string objectClassName;
-    public bool isRightSided;
-    public bool isLeftSided;
+    public bool isRightSidedLimb;
+    public bool isLeftSidedLimb;
+    public bool isUpperLimb;
+    public bool isLowerLimb;
+    public bool isGroundedLimb;
+    public bool isPrimaryLeg;
     public Animator myAnimator;
     public Animator connectedBodyPart_Animator;
 
@@ -19,19 +23,45 @@ public class attackObject : MonoBehaviour
         }
     }
 
-    public void triggerUpperAttackAnticipation()
+    public void triggerAttackAnticipation()
     {
-        if (isRightSided)
+
+        if (isUpperLimb)
         {
-            connectedBodyPart_Animator.SetTrigger("Right Upper Attack - Anticipate");
+            if (isRightSidedLimb)
+            {
+                connectedBodyPart_Animator.SetTrigger("Right Upper Attack - Anticipate");
+            }
+            else if (isLeftSidedLimb)
+            {
+                connectedBodyPart_Animator.SetTrigger("Left Upper Attack - Anticipate");
+            }
         }
-        else if (isLeftSided)
+        else if (isLowerLimb)
         {
-            connectedBodyPart_Animator.SetTrigger("Left Upper Attack - Anticipate");
+            if (isRightSidedLimb)
+            {
+                connectedBodyPart_Animator.SetTrigger("Right Lower Attack - Anticipate");
+            }
+            else if (isLeftSidedLimb)
+            {
+                connectedBodyPart_Animator.SetTrigger("Left Lower Attack - Anticipate");
+            }
+        }
+        else
+        {
+            if (isRightSidedLimb)
+            {
+                connectedBodyPart_Animator.SetTrigger("Right Attack - Anticipate");
+            }
+            else if (isLeftSidedLimb)
+            {
+                connectedBodyPart_Animator.SetTrigger("Left Attack - Anticipate");
+            }
         }
     }
 
-    public void triggerUpperAttackRelease()
+    public void triggerAttackRelease()
     {
         connectedBodyPart_Animator.SetBool("Ready to Swing", true);
     }
@@ -40,5 +70,59 @@ public class attackObject : MonoBehaviour
     {
         connectedBodyPart_Animator.SetBool("Attack to Idle", true);
         connectedBodyPart_Animator.SetBool("Ready to Swing", false);
+    }
+
+    public void triggerStretchJump()
+    {
+        myAnimator.SetBool("Primary Leg", true);
+    }
+
+    public void triggerWalk()
+    {
+        if (isGroundedLimb)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
+                myAnimator.SetBool("Walking", true);
+                myAnimator.SetTrigger("Walk");
+                //trigger torso to sway hips
+            }
+        }
+    }
+
+    public void triggerScreechingStop()
+    {
+        if (isGroundedLimb)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            {
+                myAnimator.SetBool("Walking", false);
+                myAnimator.SetTrigger("Walk to Screech");
+                //trigger torso to sway hips
+
+            }
+        }
+    }
+
+    public void triggerAnimationOffsets()
+    {
+        if (isGroundedLimb)
+        {
+            if (isRightSidedLimb)
+            {
+                myAnimator.SetFloat("Idle Offset", 0.0f);
+                myAnimator.SetFloat("Walk Offset", 0.0f);
+            }
+            else if (isLeftSidedLimb)
+            {
+                myAnimator.SetFloat("Idle Offset", 0.5f);
+                myAnimator.SetFloat("Walk Offset", 0.5f);
+            }
+        }
+        else if ((isRightSidedLimb || isLeftSidedLimb))
+        {
+            float randomOffset = Random.Range(0, 0.5f);
+            myAnimator.SetFloat("Idle Offset", randomOffset);
+        }
     }
 }

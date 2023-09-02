@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class attackObject : MonoBehaviour
 {
+    public Animator mainMonsterBody;
     public int objectType;
     public string objectClassName;
     public bool isRightSidedLimb;
@@ -12,6 +13,7 @@ public class attackObject : MonoBehaviour
     public bool isLowerLimb;
     public bool isGroundedLimb;
     public bool isPrimaryLeg;
+    public bool isAttacking = false;
     public Animator myAnimator;
     public Animator connectedBodyPart_Animator;
 
@@ -19,6 +21,7 @@ public class attackObject : MonoBehaviour
     {
         if (connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
         {
+            isAttacking = true;
             myAnimator.SetTrigger(animationName);
         }
     }
@@ -66,10 +69,41 @@ public class attackObject : MonoBehaviour
         connectedBodyPart_Animator.SetBool("Ready to Swing", true);
     }
 
+    public void triggerLeftAttackStance()
+    {
+        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            if (isGroundedLimb && isRightSidedLimb)
+            {
+                myAnimator.SetTrigger("Backward Brace");
+            }
+            else if (isGroundedLimb && isLeftSidedLimb && isAttacking == false)
+            {
+                myAnimator.SetTrigger("Forward Brace");
+            }
+        }
+    }
+
+    public void triggerRightAttackStance()
+    {
+        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            if (isGroundedLimb && isLeftSidedLimb)
+            {
+                myAnimator.SetTrigger("Backward Brace");
+            }
+            else if (isGroundedLimb && isRightSidedLimb && isAttacking == false)
+            {
+                myAnimator.SetTrigger("Forward Brace");
+            }
+        }
+    }
+
     public void triggerAttackToIdle()
     {
         connectedBodyPart_Animator.SetBool("Attack to Idle", true);
         connectedBodyPart_Animator.SetBool("Ready to Swing", false);
+        isAttacking = false;
     }
 
     public void triggerStretchJump()

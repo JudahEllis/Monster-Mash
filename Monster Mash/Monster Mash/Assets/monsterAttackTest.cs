@@ -54,6 +54,7 @@ public class monsterAttackTest : MonoBehaviour
             allMonsterParts_Animators[u].SetTrigger("Idle");
         }
 
+        /*
         for (int e = 0; e < allLegs.Count; e++)
         {
             if (allLegs[e].isPrimaryLeg)
@@ -61,17 +62,10 @@ public class monsterAttackTest : MonoBehaviour
                 allLegs[e].triggerStretchJump();
             }
         }
+        */
 
     }
 
-    //attack slot 0 - Conditionally Mapped to A
-    //attack slot 1 - Conditionally Mapped to B
-    //attack slot 2 - Conditionally Mapped to X
-    //attack slot 3 - Conditionally Mapped to Y
-    //attack slot 4 - Conditionally Mapped to Left Bumper
-    //attack slot 5 - Conditionally Mapped to Right Bumper
-    //attack slot 6 - Conditionally Mapped to Left Trigger
-    //attack slot 7 - Conditionally Mapped to Right Trigger
     public void attack(int attackSlot)
     {
         if (attackSlotObjects[attackSlot] != null)
@@ -87,6 +81,15 @@ public class monsterAttackTest : MonoBehaviour
                 if (isGrounded)
                 {
                     attackSlotObjectsScripts[attackSlot].activateAttack("Ground Attack");
+
+                    if (attackSlotObjectsScripts[attackSlot].isRightSidedLimb)
+                    {
+                        braceForRightImpact();
+                    }
+                    else if (attackSlotObjectsScripts[attackSlot].isLeftSidedLimb)
+                    {
+                        braceForLeftImpact();
+                    }
                 }
                 else
                 {
@@ -192,11 +195,32 @@ public class monsterAttackTest : MonoBehaviour
         }
     }
 
+    public void braceForLeftImpact()
+    {
+        for (int i = 0; i < allAttackObjects.Count; i++)
+        {
+            allAttackObjects[i].triggerLeftAttackStance();
+        }
+    }
+
+    public void braceForRightImpact()
+    {
+        for (int i = 0; i < allAttackObjects.Count; i++)
+        {
+            allAttackObjects[i].triggerRightAttackStance();
+        }
+    }
+
     public void hit()
     {
         for (int u = 0; u < allMonsterParts_Animators.Count; u++)
         {
             allMonsterParts_Animators[u].SetTrigger("Hit");
+        }
+
+        for (int i = 0; i < allAttackObjects.Count; i++)
+        {
+            allAttackObjects[i].isAttacking = false;
         }
     }
 
@@ -286,6 +310,7 @@ public class monsterAttackTest : MonoBehaviour
         if (facingRight)
         {
             facingRight = false;
+            //update parameter in my animator
 
             for (int i = 0; i < allTorsosAndHeads.Count; i++)
             {
@@ -298,6 +323,7 @@ public class monsterAttackTest : MonoBehaviour
         else
         {
             facingRight = true;
+            //update parameter in my animator
 
             for (int i = 0; i < allTorsosAndHeads.Count; i++)
             {

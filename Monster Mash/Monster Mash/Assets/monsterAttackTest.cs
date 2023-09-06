@@ -97,96 +97,6 @@ public class monsterAttackTest : MonoBehaviour
                 }
             }
 
-            #region Removed Code that Serves a Purpose - Tells Us Every Type of Attack Orientated Monster Part
-
-            /*
-            else if (attackSlotObjects_Type[attackSlot] == 1 && attackSlotObjects_Animators[attackSlot].GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-            {
-                if (attackSlotObjects_TypeName[attackSlot] == "Right Arm")
-                {
-                    if (isGrounded)
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Ground Attack");
-                    }
-                    else
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Airborn Attack");
-                    }
-                } 
-                else if (attackSlotObjects_TypeName[attackSlot] == "Left Arm")
-                {
-                    if (isGrounded)
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Ground Attack");
-                    }
-                    else
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Airborn Attack");
-                    }
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Right Leg")
-                {
-                    if (isGrounded)
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Ground Attack");
-                    }
-                    else
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Airborn Attack");
-                    }
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Left Leg")
-                {
-                    if (isGrounded)
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Ground Attack");
-                    }
-                    else
-                    {
-                        attackSlotObjects_Animators[attackSlot].SetTrigger("Airborn Attack");
-                    }
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Single Eye")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Double Eyes")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Mouth")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Head")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Slashing Tail")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Jabbing Tail")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Spinning Tail")
-                {
-
-                }
-                else if (attackSlotObjects_TypeName[attackSlot] == "Gizmo")
-                {
-
-                }
-                else
-                {
-                    print("Monster Part not Found");
-                }
-            }
-
-            */
-            #endregion
-
             //If it is a scientific module
             else if (attackSlotObjects_Type[attackSlot] == 2)
             {
@@ -317,8 +227,9 @@ public class monsterAttackTest : MonoBehaviour
                 allTorsosAndHeads[i].SetBool("Facing Right", false);
             }
 
-            Quaternion targetRot = Quaternion.Euler(0, -30, 0);
-            transform.localRotation = targetRot;
+            //Quaternion targetRot = Quaternion.Euler(0, -30, 0);
+            //transform.localRotation = targetRot;
+            this.GetComponent<Animator>().SetTrigger("Flip to Left");
         }
         else
         {
@@ -330,8 +241,9 @@ public class monsterAttackTest : MonoBehaviour
                 allTorsosAndHeads[i].SetBool("Facing Right", true);
             }
 
-            Quaternion targetRot = Quaternion.Euler(0, -150, 0);
-            transform.localRotation = targetRot;
+            //Quaternion targetRot = Quaternion.Euler(0, -150, 0);
+            //transform.localRotation = targetRot;
+            this.GetComponent<Animator>().SetTrigger("Flip to Right");
         }
     }
 }

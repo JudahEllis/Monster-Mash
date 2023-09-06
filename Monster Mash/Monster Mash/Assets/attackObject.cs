@@ -19,7 +19,9 @@ public class attackObject : MonoBehaviour
 
     public void activateAttack(string animationName)
     {
-        if (connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
+        if (connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || 
+            connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+            connectedBodyPart_Animator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
         {
             isAttacking = true;
             myAnimator.SetTrigger(animationName);
@@ -71,7 +73,7 @@ public class attackObject : MonoBehaviour
 
     public void triggerLeftAttackStance()
     {
-        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
         {
             if (isGroundedLimb && isRightSidedLimb)
             {
@@ -86,7 +88,7 @@ public class attackObject : MonoBehaviour
 
     public void triggerRightAttackStance()
     {
-        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
         {
             if (isGroundedLimb && isLeftSidedLimb)
             {
@@ -115,7 +117,7 @@ public class attackObject : MonoBehaviour
     {
         if (isGroundedLimb)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
                 myAnimator.SetBool("Walking", true);
                 myAnimator.SetTrigger("Walk");
@@ -123,6 +125,7 @@ public class attackObject : MonoBehaviour
             }
         }
     }
+    //KNOWN ISSUE: Jumping during Walk Animation, Jump needs to handled locally here on new version so that we can set walking to false when jumping
 
     public void triggerScreechingStop()
     {

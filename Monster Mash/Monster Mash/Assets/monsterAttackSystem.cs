@@ -130,9 +130,29 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    //SOME FUNCTION HERE WITH A SIMPLE STOP
+    public void stopWalking()
+    {
+        if (isGrounded)
+        {
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerStopWalking();
+            }
+        }
+    }
 
-    public void screechingStopWalking()
+    public void run()
+    {
+        if (isGrounded)
+        {
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerRun();
+            }
+        }
+    }
+
+    public void screechingStop()
     {
         if (isGrounded)
         {

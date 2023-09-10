@@ -42,7 +42,7 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Grounded Limb", false); //This is just so that loose legs do a spike kick instead of a stomp on ground
         }
 
-        if (isLeg) //this will be expanded to include arms, tails, and heads
+        if (isLeg || isArm) //this will be expanded to include arms, tails, wings and heads
         {
             myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
         }
@@ -61,11 +61,15 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetFloat("Idle Offset", 0.0f);
                 myAnimator.SetFloat("Walk Offset", 0.0f);
+                myAnimator.SetFloat("Run Offset", 0.0f);
             }
             else if (isLeftSidedLimb)
             {
+                float leftWalkOffset = myAnimator.GetFloat("Left Walk Offset");
+                float leftRunOffset = myAnimator.GetFloat("Left Run Offset");
                 myAnimator.SetFloat("Idle Offset", 0.5f);
-                myAnimator.SetFloat("Walk Offset", 0.5f);
+                myAnimator.SetFloat("Walk Offset", leftWalkOffset);
+                myAnimator.SetFloat("Run Offset", leftRunOffset);
             }
         }
         else if ((isRightSidedLimb || isLeftSidedLimb))
@@ -138,30 +142,65 @@ public class monsterPart : MonoBehaviour
 
     public void triggerLeftAttackStance()
     {
-        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+
+        if (isGroundedLimb)
         {
-            if (isGroundedLimb && isRightSidedLimb && isAttacking == false)
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
-                myAnimator.SetTrigger("Backward Brace");
+                if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Backward Brace");
+                }
+                else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Forward Brace");
+                }
             }
-            else if (isGroundedLimb && isLeftSidedLimb && isAttacking == false)
+        }
+        else if (isArm)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
-                myAnimator.SetTrigger("Forward Brace");
+                if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+                else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
             }
         }
     }
 
     public void triggerRightAttackStance()
     {
-        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+        if (isGroundedLimb)
         {
-            if (isGroundedLimb && isLeftSidedLimb && isAttacking == false)
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
-                myAnimator.SetTrigger("Backward Brace");
+                if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Backward Brace");
+                }
+                else if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Forward Brace");
+                }
             }
-            else if (isGroundedLimb && isRightSidedLimb && isAttacking == false)
+        }
+        else if (isArm)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
-                myAnimator.SetTrigger("Forward Brace");
+                if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+                else if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
             }
         }
     }
@@ -183,28 +222,48 @@ public class monsterPart : MonoBehaviour
     #region Movement Animations
     public void triggerWalk()
     {
-        if (isGroundedLimb)
+        if (isGroundedLimb || isTorso)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
                 myAnimator.SetBool("Walking", true);
-                myAnimator.SetTrigger("Walk");
-                //trigger torso to sway hips
             }
         }
     }
-    //KNOWN ISSUE: Jumping during Walk Animation, Jump needs to handled locally here on new version so that we can set walking to false when jumping
-    //this should be fixed now, needs testing
 
-    public void triggerScreechingStop()
+    public void triggerStopWalking()
     {
-        if (isGroundedLimb)
+        if (isGroundedLimb || isTorso)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             {
                 myAnimator.SetBool("Walking", false);
-                myAnimator.SetTrigger("Walk to Screech");
-                //trigger torso to sway hips
+                myAnimator.SetTrigger("Walk to Idle");
+
+            }
+        }
+    }
+
+    public void triggerRun()
+    {
+        if (isGroundedLimb || isTorso)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            {
+                myAnimator.SetBool("Running", true);
+                myAnimator.SetBool("Walking", false);
+            }
+        }
+    }
+
+    public void triggerScreechingStop()
+    {
+        if (isGroundedLimb || isTorso)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            {
+                myAnimator.SetBool("Running", false);
+                myAnimator.SetTrigger("Run to Screech");
 
             }
         }
@@ -215,9 +274,10 @@ public class monsterPart : MonoBehaviour
         myAnimator.SetBool("Grounded", false);
         myAnimator.SetTrigger("Jump");
 
-        if (isGroundedLimb)
+        if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
         }
     }
 
@@ -227,18 +287,7 @@ public class monsterPart : MonoBehaviour
         myAnimator.SetBool("Grounded", false);
         myAnimator.SetTrigger("Fall");
 
-        //TESTING PURPOSES - Basically faking a fall and land
-        //StartCoroutine(fakeJump());
     }
-
-    /*
-    IEnumerator fakeJump()
-    {
-        yield return new WaitForSeconds(3);
-        triggerLand();
-    }
-
-    */
 
     public void triggerLand()
     {
@@ -253,6 +302,12 @@ public class monsterPart : MonoBehaviour
     {
         myAnimator.SetTrigger("Hit");
         isAttacking = false;
+
+        if (isGroundedLimb || isTorso)
+        {
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+        }
     }
 
     #endregion

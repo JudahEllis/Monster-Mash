@@ -16,6 +16,12 @@ public class OnConveyor : MonoBehaviour
 
     private Vector3 currentVelocity;
 
+    private void Awake()
+    {
+        onBelt = false;
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,18 +55,23 @@ public class OnConveyor : MonoBehaviour
         }
         else if (collision.gameObject.GetComponent<OnConveyor>())
         {
-            OnConveyor convey = collision.gameObject.GetComponent<OnConveyor>();
+            //OnConveyor convey = collision.gameObject.GetComponent<OnConveyor>();
 
-            onBelt = true;
+            //onBelt = true;
 
-            currentVelocity = convey.GetCurrentVelocity();
-            Move(currentVelocity);
+            //currentVelocity = convey.GetCurrentVelocity();
+            //Move(currentVelocity);
         }
     }
 
-    private void OnMouseDown()
+    /*private void OnMouseDown()
     {
         belt.SetSelection(this.gameObject);
+    }*/
+
+    public void ClickedOn(CursorConveyorSelection myCursor)
+    {
+        myCursor.SetSelection(this.gameObject);
     }
 
     private void OnCollisionExit(Collision collision)
@@ -81,5 +92,10 @@ public class OnConveyor : MonoBehaviour
     public Vector3 GetCurrentVelocity()
     {
         return currentVelocity;
+    }
+
+    public void NotOnBelt()
+    {
+        onBelt = false;
     }
 }

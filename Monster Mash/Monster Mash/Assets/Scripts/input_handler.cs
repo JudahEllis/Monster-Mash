@@ -23,15 +23,18 @@ public class input_handler : MonoBehaviour
     public List<availableKeyboardInputs> currentKeyboardMap;
 
     //Judah Added some items hehe
-    private Controller1 player;
+    [SerializeField] private Controller1 player;
+    [SerializeField] private CustomCursor myCursor;
     private string controlType;
 
     private void Awake()
     {
-        player = FindObjectOfType<Controller1>();
+        //player = FindObjectOfType<Controller1>();
 
         playerInput = GetComponent<PlayerInput>();
-        game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
+        //i changed this line because it was ruining my life
+        //game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
+        game_manager gameManager = FindObjectOfType<game_manager>();
         gameManager.activePlayers.Add(this);
         for (int i = 0; i < gameManager.activePlayers.Count; i++)
         {
@@ -82,10 +85,8 @@ public class input_handler : MonoBehaviour
 
     public void A_button(CallbackContext context)
     {
-        if (context.started)
-        {
-            Invoke(currentControllerMap[0].inputFunction, 0f);
-        }
+        GetType().GetMethod(currentControllerMap[0].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        .Invoke(this, new object[] { context });
     }
 
     public void B_button(CallbackContext context)
@@ -287,10 +288,8 @@ public class input_handler : MonoBehaviour
 
     public void Left_mouse(CallbackContext context)
     {
-        if (context.started)
-        {
-            Invoke(currentKeyboardMap[12].inputFunction, 0f);
-        }
+        GetType().GetMethod(currentKeyboardMap[12].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        .Invoke(this, new object[] { context });
     }
 
     public void Middle_mouse(CallbackContext context)
@@ -308,6 +307,12 @@ public class input_handler : MonoBehaviour
             Invoke(currentKeyboardMap[14].inputFunction, 0f);
         }
     }
+
+    public void Move_mouse(CallbackContext context)
+    {
+        GetType().GetMethod(currentKeyboardMap[15].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        .Invoke(this, new object[] { context });
+    }
     #endregion
 
     //A library of menu functions called by inputs. Essentially all the tangible events
@@ -320,6 +325,41 @@ public class input_handler : MonoBehaviour
     public void sayBye()
     {
         print("goodbye!");
+    }
+
+    public void moveCursor(CallbackContext context)
+    {
+        if (controlType == "XBOX")
+        {
+            Vector2 moveInput = context.ReadValue<Vector2>().normalized;
+
+            if (GetComponent<CustomCursor>())
+            {
+                GetComponent<CustomCursor>().MoveCursor(moveInput);
+            }
+        }
+        else if (controlType == "keyboard/mouse")
+        {
+            Vector2 moveInput = context.ReadValue<Vector2>().normalized / 2;
+
+            if (GetComponent<CustomCursor>())
+            {
+                GetComponent<CustomCursor>().MoveCursor(moveInput);
+            }
+        }
+    }
+
+    public void selectButton(CallbackContext context)
+    {
+        if (context.canceled)
+        {
+            myCursor.SetButtonHeld(false);
+        }
+        else if (context.started)
+        {
+            myCursor.SetButtonHeld(true);
+            myCursor.Select();
+        }
     }
     #endregion
 

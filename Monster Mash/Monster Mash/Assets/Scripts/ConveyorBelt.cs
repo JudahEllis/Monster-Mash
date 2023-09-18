@@ -12,8 +12,8 @@ public class ConveyorBelt : MonoBehaviour
 
     float objSpeed = 0.125f;
 
-    private GameObject currentSelection;
-    private bool hasSelection = false;
+    //private GameObject currentSelection;
+    //private bool hasSelection = false;
 
     [SerializeField] Camera cam;
 
@@ -35,7 +35,7 @@ public class ConveyorBelt : MonoBehaviour
 
         GetComponent<Renderer>().material.mainTextureOffset = offset;
 
-        if (hasSelection)
+        /*if (hasSelection)
         {
             //Vector3 mousePositionWorld = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, currentSelection.transform.position.y, Input.mousePosition.y));
             //currentSelection.transform.position = mousePositionWorld;
@@ -52,10 +52,10 @@ public class ConveyorBelt : MonoBehaviour
             {
                 StopSelection();
             }
-        }
+        }*/
     }
 
-    private void NewSelection()
+    /*private void NewSelection()
     {
         currentSelection.GetComponent<Rigidbody>().isKinematic = true;
         currentSelection.GetComponent<OnConveyor>().enabled = false;
@@ -67,7 +67,7 @@ public class ConveyorBelt : MonoBehaviour
         currentSelection.GetComponent<OnConveyor>().enabled = true;
         currentSelection = null;
         hasSelection = false;
-    }
+    }*/
 
     public Vector3 GetDirection()
     {
@@ -79,7 +79,7 @@ public class ConveyorBelt : MonoBehaviour
         return objSpeed;
     }
 
-    public void SetSelection(GameObject part)
+    /*public void SetSelection(GameObject part)
     {
         if (!hasSelection)
         {
@@ -87,5 +87,5 @@ public class ConveyorBelt : MonoBehaviour
             currentSelection = part;
             NewSelection();
         }
-    }
+    }*/
 }

@@ -415,12 +415,46 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void triggerRoll()
+    {
+        if (isLeg || isArm ||isTorso || isHead)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Roll");
+
+            if (isGroundedLimb || isTorso || isHead)
+            {
+                myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
+                isRunning = false;
+            }
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Running", false);
+                isRunning = false;
+            }
+        }
+    }
+
     //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)
     public void triggerFall()
     {
         myAnimator.SetBool("Grounded", false);
         myAnimator.SetTrigger("Fall");
 
+        if (isGroundedLimb || isTorso || isHead)
+        {
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
+        }
     }
 
     public void triggerLand()

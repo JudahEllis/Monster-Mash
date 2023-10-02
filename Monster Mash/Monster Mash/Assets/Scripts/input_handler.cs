@@ -26,10 +26,14 @@ public class input_handler : MonoBehaviour
     [SerializeField] private Controller1 player;
     [SerializeField] private CustomCursor myCursor;
     private string controlType;
+    private bool mapHasSwitched = false;
 
     private void Awake()
     {
-        //player = FindObjectOfType<Controller1>();
+        if (FindObjectOfType<Controller1>())
+        {
+            player = FindObjectOfType<Controller1>();
+        }
 
         playerInput = GetComponent<PlayerInput>();
         //i changed this line because it was ruining my life
@@ -52,15 +56,26 @@ public class input_handler : MonoBehaviour
 
     public void controllerSetUp()
     {
-        //switch input from starter to controller
-        playerInput.SwitchCurrentActionMap("XBOX");
-        controlType = "XBOX";
+        if (!mapHasSwitched)
+        {
+            mapHasSwitched = true;
+            print("current map: " + playerInput.currentActionMap);
+            //switch input from starter to controller
+            playerInput.SwitchCurrentActionMap("XBOX");
+            controlType = "XBOX";
+        }
     }
     public void keyboardMouseSetUp()
     {
-        //switch input from starter to keyboard/mouse
-        playerInput.SwitchCurrentActionMap("keyboard/mouse");
-        controlType = "keyboard/mouse";
+        if (!mapHasSwitched)
+        {
+            mapHasSwitched = true;
+            print("trace: " + UnityEngine.StackTraceUtility.ExtractStackTrace());
+            //switch input from starter to keyboard/mouse
+            playerInput.SwitchCurrentActionMap("keyboardmouse");
+            controlType = "keyboardmouse";
+            print("current map: " + playerInput.currentActionMap);
+        }
     }
 
     public void controller_SwitchToMenuActions()
@@ -85,8 +100,12 @@ public class input_handler : MonoBehaviour
 
     public void A_button(CallbackContext context)
     {
-        GetType().GetMethod(currentControllerMap[0].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .Invoke(this, new object[] { context });
+        MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[0].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(this, new object[] { context });
+        }
     }
 
     public void B_button(CallbackContext context)
@@ -146,8 +165,12 @@ public class input_handler : MonoBehaviour
 
     public void leftJoystick(CallbackContext context)
     {
-        GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .Invoke(this, new object[] { context });
+        MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(this, new object[] { context });
+        }
     }
 
     public void rightJoystick(CallbackContext context)
@@ -204,8 +227,12 @@ public class input_handler : MonoBehaviour
 
     public void Horizontal_key(CallbackContext context) //A + D = horizontal axis
     {
-        GetType().GetMethod(currentKeyboardMap[1].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .Invoke(this, new object[] { context });
+        MethodInfo methodInfo = GetType().GetMethod(currentKeyboardMap[1].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(this, new object[] { context });
+        }
     }
 
     public void A_key(CallbackContext context)
@@ -288,8 +315,12 @@ public class input_handler : MonoBehaviour
 
     public void Left_mouse(CallbackContext context)
     {
-        GetType().GetMethod(currentKeyboardMap[12].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .Invoke(this, new object[] { context });
+        MethodInfo methodInfo = GetType().GetMethod(currentKeyboardMap[12].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(this, new object[] { context });
+        }
     }
 
     public void Middle_mouse(CallbackContext context)
@@ -310,8 +341,12 @@ public class input_handler : MonoBehaviour
 
     public void Move_mouse(CallbackContext context)
     {
-        GetType().GetMethod(currentKeyboardMap[15].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .Invoke(this, new object[] { context });
+        MethodInfo methodInfo = GetType().GetMethod(currentKeyboardMap[15].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(this, new object[] { context });
+        }
     }
     #endregion
 
@@ -338,7 +373,7 @@ public class input_handler : MonoBehaviour
                 GetComponent<CustomCursor>().MoveCursor(moveInput);
             }
         }
-        else if (controlType == "keyboard/mouse")
+        else if (controlType == "keyboardmouse")
         {
             Vector2 moveInput = context.ReadValue<Vector2>().normalized / 2;
 
@@ -384,7 +419,7 @@ public class input_handler : MonoBehaviour
 
             player.Move(dir);
         }
-        else if (controlType == "keyboard/mouse") // A and D make horizontal Axis
+        else if (controlType == "keyboardmouse") // A and D make horizontal Axis
         {
             float moveInput = context.ReadValue<float>();
 

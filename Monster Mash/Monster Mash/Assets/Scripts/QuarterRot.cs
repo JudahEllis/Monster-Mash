@@ -18,6 +18,8 @@ public class QuarterRot : MonoBehaviour
     void Start()
     {
         mainCameraTransform = Camera.main.transform;
+
+        cont = FindObjectOfType<CharacterController>();
     }
 
     void Update()

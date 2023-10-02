@@ -9,8 +9,8 @@ public class Controller1 : MonoBehaviour
     private Vector3 playerVelocity;
     private bool groundedPlayer; //get grounded state
     private int jumpsRemaining; // Track the number of jumps left.
-    private float playerSpeed = 5.0f;
-    private float jumpHeight = 3.0f;
+    private float playerSpeed = 20.0f;
+    private float jumpHeight = 15.0f;
     private float gravityValue = -9.81f;
     private float groundedGravity = -1f; //not applying gravity caused errors but regular gravity was too strong
     private float fallMultiplier = 2.5f; // Adjust this value to control fall speed.
@@ -31,17 +31,37 @@ public class Controller1 : MonoBehaviour
     private DummyCollision col;
     private bool checkKB = false;
 
+    private monsterAttackSystem attack;
+    private bool isWalk = false;
+    private bool facingRight = true;
+
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
-        dummyRb = dummy.GetComponent<Rigidbody>();
-        col = dummy.GetComponent<DummyCollision>();
+
+        if (FindObjectOfType<monsterAttackSystem>())
+        {
+            attack = FindObjectOfType<monsterAttackSystem>();
+
+            attack.awakenTheBeast();
+
+            //attack.flipCharacter();
+        }
+
+        if (GameObject.Find("Dummy"))
+        {
+            dummy = GameObject.Find("Dummy");
+            dummyRb = dummy.GetComponent<Rigidbody>();
+            col = dummy.GetComponent<DummyCollision>();
+        }
+
         jumpsRemaining = 2; // Set the initial jumps allowed (double jump).
     }
 
     void Update()
     {
+
         if (!knockBack)
         {
             groundedPlayer = controller.isGrounded;
@@ -51,7 +71,7 @@ public class Controller1 : MonoBehaviour
                 jumpsRemaining = 2; // Reset the number of jumps when grounded.
             }
 
-            //move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+
             controller.Move(move * Time.deltaTime * playerSpeed);
 
             if (move != Vector3.zero)
@@ -111,10 +131,40 @@ public class Controller1 : MonoBehaviour
         if (direction > 0)
         {
             dir = Vector3.right;
+
+            if (!isWalk)
+            {
+                attack.walk();
+                isWalk = true;
+            }
+
+            if (!facingRight)
+            {
+                attack.flipCharacter();
+                facingRight = true;
+            }
         }
         else if (direction < 0)
         {
             dir = Vector3.left;
+
+            if (!isWalk)
+            {
+                attack.walk();
+                isWalk = true;
+            }
+
+            if (facingRight)
+            {
+                attack.flipCharacter();
+                facingRight = false;
+            }
+        }
+
+        if (isWalk && dir == Vector3.zero)
+        {
+            attack.stopWalking();
+            isWalk = false;
         }
 
         move = dir;

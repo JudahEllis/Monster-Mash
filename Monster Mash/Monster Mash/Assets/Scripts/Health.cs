@@ -8,20 +8,24 @@ public class Health : MonoBehaviour
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int limbCount = 8;
     [SerializeField] private int currHealth;
-    [SerializeField] private int segmentValue;
-    [SerializeField] private int currSegment;
     [SerializeField] private int currLimbCount;
 
     public Slider healthSlider;
     private bool isThereASlider = false;
 
+    [SerializeField] private int singleLimbHealth = 20;
+
+    [SerializeField] private int currLimbHealth;
+
     // Start is called before the first frame update
     void Start()
     {
+        maxHealth = limbCount * singleLimbHealth;
+
         currHealth = maxHealth;
-        segmentValue = Mathf.CeilToInt((float) maxHealth / limbCount);
-        currSegment = limbCount;
         currLimbCount = limbCount;
+
+        currLimbHealth = singleLimbHealth;
 
         if (healthSlider != null)
         {
@@ -52,19 +56,17 @@ public class Health : MonoBehaviour
 
     public void LoseHealth(int loseValue)
     {
-        // Calculate the remaining health within the current segment
-        int healthWithinSegment = currHealth % segmentValue;
+        currHealth = Mathf.RoundToInt(Mathf.Max(0f, currHealth - loseValue));
 
-        // Subtract the health loss
-        currHealth = Mathf.CeilToInt(Mathf.Max(0f, currHealth - loseValue));
 
-        // Calculate the remaining health within the new current segment
-        int newHealthWithinSegment = currHealth % segmentValue;
+        // Update the current limb's health
+        currLimbHealth = Mathf.Max(0, currLimbHealth - loseValue);
 
-        // Check if a segment was fully depleted
-        if (newHealthWithinSegment > healthWithinSegment)
+        // Check if the current limb has lost all its health
+        if (currLimbHealth == 0)
         {
-            // A segment was lost, call the function
+            currLimbHealth = singleLimbHealth;
+            // A limb was lost, call the function
             PopThatLimbOff();
         }
     }

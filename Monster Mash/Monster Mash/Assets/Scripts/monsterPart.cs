@@ -33,6 +33,8 @@ public class monsterPart : MonoBehaviour
     private int regularJumpAmount = 2;
     private int wingedJumpAmount = 4;
 
+    public bool isJointed;
+
 
     #region Animation Set Up
 
@@ -487,4 +489,10 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
+    #region Judah's BS
+    public bool isAttackingJudah()
+    {
+        return isAttacking;
+    }
+    #endregion
 }

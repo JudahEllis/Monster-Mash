@@ -348,6 +348,30 @@ public class input_handler : MonoBehaviour
             methodInfo.Invoke(this, new object[] { context });
         }
     }
+
+    public void numPad_1(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[16].inputFunction, 0f);
+        }
+    }
+
+    public void numPad_2(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[17].inputFunction, 0f);
+        }
+    }
+
+    public void numPad_3(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Invoke(currentKeyboardMap[18].inputFunction, 0f);
+        }
+    }
     #endregion
 
     //A library of menu functions called by inputs. Essentially all the tangible events
@@ -438,14 +462,32 @@ public class input_handler : MonoBehaviour
         }
     }
 
-    private void movePlayerRightKeyboard()
-    {
-        player.KeyboardMoveRight();
-    }
-
     private void jumpPlayer()
     {
         player.Jump();
+    }
+
+    private void attackPlayerContext(CallbackContext context)
+    {
+        if (context.started)
+        {
+            player.Attack();
+        }
+    }
+
+    private void attack1()
+    {
+        player.Attack1();
+    }
+
+    private void attack2()
+    {
+        player.Attack2();
+    }
+
+    private void attack3()
+    {
+        player.Attack3();
     }
     #endregion
 

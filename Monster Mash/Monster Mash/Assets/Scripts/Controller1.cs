@@ -9,15 +9,19 @@ public class Controller1 : MonoBehaviour
     private Vector3 playerVelocity;
     private bool groundedPlayer; //get grounded state
     private int jumpsRemaining; // Track the number of jumps left.
-    private float playerSpeed = 20.0f;
+    [SerializeField] private float playerSpeedGrounded = 1f;
+    [SerializeField] private float playerSpeedAir = 0.989f;
+    [SerializeField] private float playerSpeedCurrent = 1.0f;
+    [SerializeField] private float playerSpeed = 20f;
     private float jumpHeight = 15.0f;
-    private float gravityValue = -9.81f;
+    private float gravityValue = -57f;
     private float groundedGravity = -1f; //not applying gravity caused errors but regular gravity was too strong
     private float fallMultiplier = 2.5f; // Adjust this value to control fall speed.
-    private float terminalVelocity = -50f; // Limit the maximum falling speed.
+    private float terminalVelocity = -56f; // Limit the maximum falling speed.
     private bool knockBack = false; //true when player is in "knockback" state
     private bool stun = false; //true when in "stun" state, hitstun
     private bool jump = false;
+    private bool jumpStarted = false;
 
     private Vector3 move;
 
@@ -34,6 +38,9 @@ public class Controller1 : MonoBehaviour
     private monsterAttackSystem attack;
     private bool isWalk = false;
     private bool facingRight = true;
+    private bool isJumping = false;
+    private bool isFalling = false;
+    private bool isAttacking = false;
 
     private void Start()
     {
@@ -69,34 +76,79 @@ public class Controller1 : MonoBehaviour
             {
                 playerVelocity.y = -1f; // Reset the vertical velocity when grounded.
                 jumpsRemaining = 2; // Reset the number of jumps when grounded.
+                playerSpeedCurrent = playerSpeedGrounded;
+
+                if ((isJumping || isFalling) && !jumpStarted)
+                {
+                    isJumping = false;
+                    isFalling = false;
+                    attack.land();
+                }
+
+                if (isWalk )//&& attack.CurrentAnimationState().IsName("Idle"))
+                {
+                    attack.walk();
+                }
             }
-
-
-            controller.Move(move * Time.deltaTime * playerSpeed);
-
-            if (move != Vector3.zero)
-            {
-                transform.forward = move;
-            }
-
-            // Perform the jump when the Space key is pressed and there are jumps remaining.
-            if (jump && jumpsRemaining > 0)
-            {
-                playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-                jumpsRemaining--;
-                jump = false;
-            }
-            else if (jump) jump = false;
-
-            // Apply gravity only when not grounded and add fallMultiplier when falling.
-            if (!groundedPlayer)
+            else
             {
                 playerVelocity.y += gravityValue * fallMultiplier * Time.deltaTime;
+                playerSpeedCurrent = playerSpeedAir;
+
+                if (jumpStarted) //waits for player to leave the ground so the animations aren't cancelled when still on ground
+                {
+                    jumpStarted = false;
+                }
+
+                if (!isFalling && playerVelocity.y < 0 && isWalk)
+                {
+                    isFalling = true;
+                    attack.walkToFall();
+                }
 
                 if (jumpsRemaining > 1 && !Input.GetKey(KeyCode.Space))
                 {
                     jumpsRemaining = 1;
                 }
+            }
+
+            if (!IsBusy())
+            {
+                //if (move != Vector3.zero)
+                //{
+                    move.x = playerSpeedCurrent * move.normalized.x;
+                //}
+                controller.Move(move * Time.deltaTime * playerSpeed);
+            }
+
+            // Perform the jump when the Space key is pressed and there are jumps remaining.
+            if (jump && jumpsRemaining > 0)
+            {
+                isJumping = true;
+
+                if (groundedPlayer)
+                {
+                    attack.jump();
+                }
+                else
+                {
+                    attack.doubleJump();
+                    //attack.jump();
+                }
+                playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                jumpsRemaining--;
+                jump = false;
+                jumpStarted = true;
+            }
+            else if (jump) jump = false;
+
+            //AnimatorStateInfo anim = attack.CurrentAnimationState();
+
+            //if (isAttacking && (anim.IsName("Base Layer.Idle") || anim.IsName("Base Layer.Walk") || anim.IsName("Base Layer.Run")))
+            if (attack.allMonsterParts[0].isAttackingJudah())
+            {
+                isAttacking = false;
+                
             }
         }
         else //while knockback
@@ -122,6 +174,15 @@ public class Controller1 : MonoBehaviour
         }
     }
 
+    private bool IsBusy() //returns true if the player is already jumping or attacking
+    {
+        if (isAttacking)
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     #region public Input functions for input_handler script
     public void Move(int direction)
@@ -167,27 +228,50 @@ public class Controller1 : MonoBehaviour
             isWalk = false;
         }
 
+        print("dir: " + dir);
         move = dir;
-    }
-
-    public void KeyboardMoveLeft(bool canMove)
-    {
-        if (canMove)
-        {
-            move = Vector3.left;
-        } else
-        {
-        }
-    }
-
-    public void KeyboardMoveRight()
-    {
-        move = Vector3.right;
     }
 
     public void Jump()
     {
-        jump = true;
+        if (!IsBusy())
+        {
+            jump = true;
+        }
+    }
+
+    public void Attack()
+    {
+        int random = Random.Range(0, 2);
+
+        attack.attack(3);
+    }
+
+    public void Attack1()
+    {
+        if (!IsBusy())
+        {
+            isAttacking = true;
+            attack.attack(1);
+        }
+    }
+
+    public void Attack2()
+    {
+        if (!IsBusy())
+        {
+            isAttacking = true;
+            attack.attack(2);
+        }
+    }
+
+    public void Attack3()
+    {
+        if (!IsBusy())
+        {
+            isAttacking = true;
+            attack.attack(3);
+        }
     }
     #endregion
 

@@ -386,6 +386,19 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public bool IsAttacking()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            if (allMonsterParts[i].isAttackingCheck())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     #endregion
 
     #region Reactions

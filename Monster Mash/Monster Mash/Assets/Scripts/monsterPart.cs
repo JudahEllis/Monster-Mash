@@ -490,7 +490,7 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Judah's BS
-    public bool isAttackingJudah()
+    public bool isAttackingCheck()
     {
         return isAttacking;
     }

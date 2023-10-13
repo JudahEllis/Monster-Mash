@@ -59,7 +59,7 @@ public class input_handler : MonoBehaviour
         if (!mapHasSwitched)
         {
             mapHasSwitched = true;
-            print("current map: " + playerInput.currentActionMap);
+            //print("current map: " + playerInput.currentActionMap);
             //switch input from starter to controller
             playerInput.SwitchCurrentActionMap("XBOX");
             controlType = "XBOX";
@@ -70,11 +70,11 @@ public class input_handler : MonoBehaviour
         if (!mapHasSwitched)
         {
             mapHasSwitched = true;
-            print("trace: " + UnityEngine.StackTraceUtility.ExtractStackTrace());
+            //print("trace: " + UnityEngine.StackTraceUtility.ExtractStackTrace());
             //switch input from starter to keyboard/mouse
             playerInput.SwitchCurrentActionMap("keyboardmouse");
             controlType = "keyboardmouse";
-            print("current map: " + playerInput.currentActionMap);
+            //print("current map: " + playerInput.currentActionMap);
         }
     }
 
@@ -299,9 +299,11 @@ public class input_handler : MonoBehaviour
     }
     public void LeftShift_key(CallbackContext context)
     {
-        if (context.started)
+        MethodInfo methodInfo = GetType().GetMethod(currentKeyboardMap[10].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
         {
-            Invoke(currentKeyboardMap[10].inputFunction, 0f);
+            methodInfo.Invoke(this, new object[] { context });
         }
     }
 
@@ -424,6 +426,11 @@ public class input_handler : MonoBehaviour
 
     //A library of combat functions called by inputs. Essentially all the tangible events
     #region Combat Interaction
+    private void runPlayer(CallbackContext context)
+    {
+        print("runninging");
+        player.SetIsRun(context.performed);
+    }
     private void movePlayer(CallbackContext context) //with left stick, move player either right or left
     {
         if (controlType == "XBOX")

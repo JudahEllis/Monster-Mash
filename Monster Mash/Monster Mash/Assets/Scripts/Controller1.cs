@@ -13,6 +13,7 @@ public class Controller1 : MonoBehaviour
     [SerializeField] private float playerSpeedAir = 0.989f;
     [SerializeField] private float playerSpeedCurrent = 1.0f;
     [SerializeField] private float playerSpeed = 20f;
+    private float playerSpeedRunning = 1.2f;
     private float jumpHeight = 15.0f;
     private float gravityValue = -57f;
     private float groundedGravity = -1f; //not applying gravity caused errors but regular gravity was too strong
@@ -24,6 +25,7 @@ public class Controller1 : MonoBehaviour
     private bool jumpStarted = false;
 
     private Vector3 move;
+    [SerializeField] private bool isRunning = false;
 
     [SerializeField] private GameObject[] ActiveBodyParts; //body parts used for attacks
     private int lastUsedBP; //index of most recently used ActiveBodyPart
@@ -88,6 +90,16 @@ public class Controller1 : MonoBehaviour
                 if (isWalk )//&& attack.CurrentAnimationState().IsName("Idle"))
                 {
                     attack.walk();
+
+                    if (isRunning)
+                    {
+                        playerSpeedCurrent = playerSpeedRunning;
+                        attack.run();
+                    }
+                    else
+                    {
+                        playerSpeedCurrent = playerSpeedGrounded;
+                    }
                 }
             }
             else
@@ -145,7 +157,7 @@ public class Controller1 : MonoBehaviour
             //AnimatorStateInfo anim = attack.CurrentAnimationState();
 
             //if (isAttacking && (anim.IsName("Base Layer.Idle") || anim.IsName("Base Layer.Walk") || anim.IsName("Base Layer.Run")))
-            if (attack.allMonsterParts[0].isAttackingJudah())
+            if (!attack.IsAttacking())
             {
                 isAttacking = false;
                 
@@ -226,10 +238,24 @@ public class Controller1 : MonoBehaviour
         {
             attack.stopWalking();
             isWalk = false;
+
+            if (isRunning)
+            {
+                attack.screechingStop();
+                isRunning = false;
+            }
         }
 
-        print("dir: " + dir);
+        //print("dir: " + dir);
         move = dir;
+    }
+
+    public void SetIsRun(bool frDawg)
+    {
+        if (isWalk)
+        {
+            isRunning = frDawg;
+        }
     }
 
     public void Jump()

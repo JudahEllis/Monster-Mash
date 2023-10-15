@@ -28,6 +28,7 @@ public class monsterPart : MonoBehaviour
     public bool isGroundedLimb;
     public bool isLeadingLeg;
     private bool isAttacking = false;
+    private bool attackFocusOn = false;
     private bool isRunning = false;
     private int jumpsAllotted;
     private int regularJumpAmount = 2;
@@ -113,7 +114,7 @@ public class monsterPart : MonoBehaviour
         }
         else if (connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Run") || connectedMonsterPart.GetBool("Running") == true)
         {
-            if (attackAnimationID == -1 && isRunning == true && isGroundedLimb == true)
+            if (attackAnimationID != 1 && isRunning == true && isGroundedLimb == true)
             {
                 return;
             }
@@ -122,6 +123,7 @@ public class monsterPart : MonoBehaviour
                 isAttacking = true;
                 myAnimator.SetTrigger(animationName);
                 myMainSystem.attackFocusOn();
+                attackFocusOn = true;
             }
         }
     }
@@ -253,11 +255,14 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackRelease()
     {
-        connectedMonsterPart.SetBool("Ready to Swing", true);
-        connectedMonsterPart.SetBool("Walking", false);
-        connectedMonsterPart.SetBool("Running", false);
-        isRunning = false;
-        myMainSystem.correctWalkingAttackAnimations();
+        if (isJointed)
+        {
+            connectedMonsterPart.SetBool("Ready to Swing", true);
+            connectedMonsterPart.SetBool("Walking", false);
+            connectedMonsterPart.SetBool("Running", false);
+            isRunning = false;
+            myMainSystem.correctWalkingAttackAnimations();
+        }
     }
 
     public void walkToAttackCorrections()
@@ -284,8 +289,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRunAttackCorrections()
     {
-        myMainSystem.correctRunningAttackAnimations();
-        myMainSystem.attackFocusOff();
+        if (attackFocusOn)
+        {
+            myMainSystem.correctRunningAttackAnimations();
+            myMainSystem.attackFocusOff();
+            attackFocusOn = false;
+        }
     }
 
     public void runToAttackCorrections()
@@ -417,11 +426,11 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerRoll()
+    public void triggerRoll(bool groundedWhenTriggered)
     {
         if (isLeg || isArm ||isTorso || isHead)
         {
-            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetBool("Grounded", groundedWhenTriggered);
             myAnimator.SetTrigger("Roll");
 
             if (isGroundedLimb || isTorso || isHead)
@@ -437,6 +446,11 @@ public class monsterPart : MonoBehaviour
                 isRunning = false;
             }
         }
+    }
+
+    public void correctRollSpamControl()
+    {
+        myMainSystem.correctRollControl();
     }
 
     //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)

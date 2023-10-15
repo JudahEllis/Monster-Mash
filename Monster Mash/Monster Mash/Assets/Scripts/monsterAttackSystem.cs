@@ -13,6 +13,7 @@ public class monsterAttackSystem : MonoBehaviour
     private bool isWalking = false;
     private bool isRunning = false;
     private bool focusedAttackActive = false;
+    private bool canRoll = true;
 
     private Animator myAnimator;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
@@ -156,6 +157,14 @@ public class monsterAttackSystem : MonoBehaviour
                                 isRunning = false;
                             }
                         }
+                        else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0 && isRunning)
+                        {
+                            if (attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
+                            {
+                                braceForRightImpact();
+                                isRunning = false;
+                            }
+                        }
                         else
                         {
                             braceForRightImpact();
@@ -173,6 +182,14 @@ public class monsterAttackSystem : MonoBehaviour
                                 braceForRightImpact();
                             }
                             else if (isRunning == true && attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
+                            {
+                                braceForRightImpact();
+                                isRunning = false;
+                            }
+                        }
+                        else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0 && isRunning)
+                        {
+                            if (attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
                             {
                                 braceForRightImpact();
                                 isRunning = false;
@@ -313,7 +330,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Count; i++)
             {
-                allMonsterParts[i].triggerRoll();
+                allMonsterParts[i].triggerRoll(false);
             }
 
             myAnimator.SetTrigger("Roll");
@@ -353,7 +370,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Count; i++)
             {
-                allMonsterParts[i].triggerRoll();
+                allMonsterParts[i].triggerRoll(false);
             }
 
             myAnimator.SetTrigger("Roll");
@@ -399,6 +416,24 @@ public class monsterAttackSystem : MonoBehaviour
         return false;
     }
 
+    public void roll()
+    {
+        if (isGrounded && canRoll)
+        {
+            isGrounded = true;
+            isRunning = false;
+            focusedAttackActive = false;
+            canRoll = false;
+
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerRoll(true);
+            }
+
+            myAnimator.SetTrigger("Roll");
+        }
+    }
+
     #endregion
 
     #region Reactions
@@ -441,6 +476,16 @@ public class monsterAttackSystem : MonoBehaviour
     public void attackFocusOff()
     {
         focusedAttackActive = false;
+    }
+
+    public void correctGroundedState()
+    {
+
+    }
+
+    public void correctRollControl()
+    {
+        canRoll = true;
     }
 
     #endregion

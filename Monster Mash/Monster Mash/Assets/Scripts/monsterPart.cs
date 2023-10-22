@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class monsterPart : MonoBehaviour
 {
+    [Header("Monster Part Info")]
     public monsterAttackSystem myMainSystem;
     public Animator connectedMonsterPart;
+    public Animator mainTorso;
     private Animator myAnimator;
     public int monsterPartHealth = 100;
-
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
     public int monsterPartID;
     public int attackAnimationID;
     public bool connected = true;
+
+    //also because there is a pretty big oversight right now for "right" sided limbs that may end up being repositioned or rotated to act as a "left" sided limb
+    [Header("Monster Part Questionaire")]
     public bool isArm;
     public bool isLeg;
     public bool isTail;
@@ -21,20 +25,46 @@ public class monsterPart : MonoBehaviour
     public bool isEye;
     public bool isMouth;
     public bool isTorso;
-    public bool isUpperLimb;
-    public bool isLowerLimb;
+    public bool isHorn;
+    public bool isJointed;
+    public bool isRightShoulderLimb;
+    public bool isLeftShoudlerLimb;
+    public bool isRightPelvisLimb;
+    public bool isLeftPelvisLimb;
+    public bool isChestLimb;
+    public bool isBellyLimb;
+    public bool isNeckLimb;
+    public bool isTailLimb;
+    public bool isShoulderBladeLimb;
+    public bool isTopHeadLimb;
+    public bool isBacksideHeadLimb;
+    public bool isRightEarLimb;
+    public bool isLeftEarLimb;
+    public bool isFacialLimb;
     public bool isRightSidedLimb;
     public bool isLeftSidedLimb;
     public bool isGroundedLimb;
+    private string torsoCommand = "";
+    private bool hasTorsoCommand = false;
+    private string torsoCommandOverride = "";
+    private bool hasTorsoCommandOverride = false; //refers to heads on torsos, torsos on torsos, torsos on heads on torsos, etc. that needs to move the main body
+    private string headCommand = "";
+    private bool hasHeadCommand = false;
+
+    [Header("Internal Info - Don't Touch")]
+    public bool requiresRightStance = false;
+    public bool requiresLeftStance = false;
+    public bool requiresForwardStance = false;
+    public bool requiresBackwardStance = false;
     public bool isLeadingLeg;
+
+
     private bool isAttacking = false;
     private bool attackFocusOn = false;
     private bool isRunning = false;
     private int jumpsAllotted;
     private int regularJumpAmount = 2;
     private int wingedJumpAmount = 4;
-
-    public bool isJointed;
 
 
     #region Animation Set Up
@@ -57,6 +87,240 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Is Leading Leg", true);
         }
+
+        #region Attack Reaction Calculations
+
+        if (isRightShoulderLimb)
+        {
+            //we'll replace the useage of attack IDs here once we have gyroscopic understanding of limbs and then we can factor both
+            //nothing wrong with it right now but if we have a forward attacking arm thats been rotated backwards then yeah we need something to account for that
+            if (attackAnimationID == -1) 
+            {
+                torsoCommand = "Left Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
+            else
+            {
+                torsoCommand = "Right Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+        }
+
+        if (isLeftShoudlerLimb)
+        {
+
+            if (attackAnimationID == -1)
+            {
+                torsoCommand = "Right Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+            else
+            {
+                torsoCommand = "Left Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
+        }
+
+        if (isRightPelvisLimb)
+        {
+
+            if (attackAnimationID == -1)
+            {
+                torsoCommand = "Left Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
+            else
+            {
+                torsoCommand = "Right Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+        }
+
+        if (isLeftPelvisLimb)
+        {
+
+            if (attackAnimationID == -1)
+            {
+                torsoCommand = "Right Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+            else
+            {
+                torsoCommand = "Left Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
+        }
+
+        if (isChestLimb || isNeckLimb)
+        {
+            torsoCommand = "Upper Attack";
+            isRightSidedLimb = true;
+            requiresBackwardStance = false;
+            requiresForwardStance = false;
+            requiresRightStance = true;
+            requiresLeftStance = false;
+        }
+
+        if (isBellyLimb)
+        {
+            torsoCommand = "Lower Attack";
+            requiresBackwardStance = true;
+            requiresForwardStance = false;
+            requiresRightStance = false;
+            requiresLeftStance = false;
+        }
+
+        if (isTailLimb)
+        {
+            torsoCommand = "Upper Attack";
+            isRightSidedLimb = true;
+            requiresBackwardStance = false;
+            requiresForwardStance = true;
+            requiresRightStance = false;
+            requiresLeftStance = false;
+        }
+
+        if (isShoulderBladeLimb)
+        {
+            torsoCommand = "Lower Attack";
+            requiresBackwardStance = false;
+            requiresForwardStance = true;
+            requiresRightStance = false;
+            requiresLeftStance = false;
+        }
+
+        if (isTopHeadLimb)
+        {
+            if (attackAnimationID == -1)
+            {
+                headCommand = "Upward Attack";
+                torsoCommandOverride = "Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+            else
+            {
+                headCommand = "Forward Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+        }
+
+        if (isFacialLimb)
+        {
+
+            if (attackAnimationID == 2)
+            {
+                headCommand = "Upward Attack";
+                torsoCommandOverride = "Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+            else
+            {
+                headCommand = "Forward Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+        }
+        //Forgot back of the head attacks
+
+        if (isRightEarLimb)
+        {
+
+            if (attackAnimationID == -1)
+            {
+                headCommand = "Left Attack";
+                torsoCommandOverride = "Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
+            else
+            {
+                headCommand = "Right Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+        }
+
+        if (isLeftEarLimb)
+        {
+
+            if (attackAnimationID == -1)
+            {
+                headCommand = "Right Attack";
+                torsoCommandOverride = "Lower Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+            else
+            {
+                headCommand = "Left Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
+        }
+
+        if (torsoCommand != "")
+        {
+            hasTorsoCommand = true;
+        }
+
+        if (torsoCommandOverride != "")
+        {
+            hasTorsoCommandOverride = true;
+        }
+
+        if (headCommand != "")
+        {
+            hasHeadCommand = true;
+        }
+
+        #endregion
     }
 
     public void triggerAnimationOffsets()
@@ -88,6 +352,11 @@ public class monsterPart : MonoBehaviour
             float randomOffset = Random.Range(0, 0.5f);
             myAnimator.SetFloat("Idle Offset", randomOffset);
         }
+        else if(isMouth)
+        {
+            float randomOffset = Random.Range(0, 0.5f);
+            myAnimator.SetFloat("Idle Offset", randomOffset);
+        }
     }
 
     public void triggerIdle()
@@ -104,13 +373,20 @@ public class monsterPart : MonoBehaviour
     #region Attack Animations
     public void triggerAttack(string animationName)
     {
+        //We'' be simplifying this section down once we know 100% whats happening with dash attacks
         if (connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Idle") ||
             connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
             connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Walk")) 
         {
-            isAttacking = true;
-            myAnimator.SetTrigger(animationName);
+            if (attackFocusOn == false)
+            {
+                isAttacking = true;
+                myAnimator.SetTrigger(animationName);
+                myMainSystem.attackFocusOn();
+                attackFocusOn = true;
+            }
+
         }
         else if (connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Run") || connectedMonsterPart.GetBool("Running") == true)
         {
@@ -120,66 +396,36 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-                isAttacking = true;
-                myAnimator.SetTrigger(animationName);
-                myMainSystem.attackFocusOn();
-                attackFocusOn = true;
+                if (attackFocusOn == false)
+                {
+                    isAttacking = true;
+                    myAnimator.SetTrigger(animationName);
+                    myMainSystem.attackFocusOn();
+                    attackFocusOn = true;
+                }
             }
         }
     }
 
     public void triggerAttackAnticipation()
     {
+        if (hasTorsoCommand)
+        {
+            connectedMonsterPart.SetTrigger(torsoCommand);
+        }
 
-        if (isUpperLimb)
+        if (hasTorsoCommandOverride)
         {
-            if (isRightSidedLimb)
-            {
-                connectedMonsterPart.SetTrigger("Right Upper Attack - Anticipate");
-            }
-            else if (isLeftSidedLimb)
-            {
-                connectedMonsterPart.SetTrigger("Left Upper Attack - Anticipate");
-            }
+            mainTorso.SetTrigger(torsoCommandOverride);
         }
-        else if (isLowerLimb)
+
+        if (hasHeadCommand)
         {
-            if (attackAnimationID == -1) //backwards attack coming from the leg area
-            {
-                if (isRightSidedLimb)
-                {
-                    connectedMonsterPart.SetTrigger("Left Upper Attack - Anticipate");//because its a backwards attack from the leg area it twists exact opposite
-                }
-                else if (isLeftSidedLimb)
-                {
-                    connectedMonsterPart.SetTrigger("Right Upper Attack - Anticipate");
-                }
-            }
-            else
-            {
-                if (isRightSidedLimb)
-                {
-                    connectedMonsterPart.SetTrigger("Right Lower Attack - Anticipate");
-                }
-                else if (isLeftSidedLimb)
-                {
-                    connectedMonsterPart.SetTrigger("Left Lower Attack - Anticipate");
-                }
-            }
-        }
-        else
-        {
-            if (isRightSidedLimb)
-            {
-                connectedMonsterPart.SetTrigger("Right Attack - Anticipate");
-            }
-            else if (isLeftSidedLimb)
-            {
-                connectedMonsterPart.SetTrigger("Left Attack - Anticipate");
-            }
+            connectedMonsterPart.SetTrigger(headCommand);
         }
     }
 
+    #region Bracing with Attack Stances
     public void triggerLeftAttackStance()
     {
 
@@ -210,6 +456,17 @@ public class monsterPart : MonoBehaviour
                     myAnimator.SetTrigger("Brace");
                 }
                 else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (isMouth)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            {
+                if (isAttacking == false)
                 {
                     myAnimator.SetTrigger("Brace");
                 }
@@ -251,7 +508,114 @@ public class monsterPart : MonoBehaviour
                 }
             }
         }
+        else if (isMouth)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            {
+                if (isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
     }
+
+    public void triggerForwardStance()
+    {
+        if (isGroundedLimb)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            {
+                if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Forward Brace");
+                }
+                else if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Forward Brace");
+                }
+
+                myAnimator.SetBool("Walking", false);
+            }
+        }
+        else if (isArm)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            {
+                if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+                else if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (isMouth)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            {
+                if (isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+    }
+
+    public void triggerBackwardStance()
+    {
+        if (isGroundedLimb)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            {
+                if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Backward Brace");
+                }
+                else if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Backward Brace");
+                }
+
+                myAnimator.SetBool("Walking", false);
+            }
+        }
+        else if (isArm)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            {
+                if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+                else if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (isMouth)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            {
+                if (isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+    }
+
+    #endregion
 
     public void triggerAttackRelease()
     {
@@ -260,6 +624,14 @@ public class monsterPart : MonoBehaviour
             connectedMonsterPart.SetBool("Ready to Swing", true);
             connectedMonsterPart.SetBool("Walking", false);
             connectedMonsterPart.SetBool("Running", false);
+
+            if (hasTorsoCommandOverride)
+            {
+                mainTorso.SetBool("Ready to Swing", true);
+                mainTorso.SetBool("Walking", false);
+                mainTorso.SetBool("Running", false);
+            }
+
             isRunning = false;
             myMainSystem.correctWalkingAttackAnimations();
         }
@@ -323,6 +695,13 @@ public class monsterPart : MonoBehaviour
     {
         connectedMonsterPart.SetBool("Attack to Idle", true);
         connectedMonsterPart.SetBool("Ready to Swing", false);
+
+        if (hasTorsoCommandOverride)
+        {
+            mainTorso.SetBool("Attack to Idle", true);
+            mainTorso.SetBool("Ready to Swing", false);
+        }
+
         isAttacking = false;
     }
 

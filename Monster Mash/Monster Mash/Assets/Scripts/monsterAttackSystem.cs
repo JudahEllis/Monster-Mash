@@ -139,73 +139,45 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 if (isGrounded)
                 {
-                    attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
-                    //isWalking = false;
-
-                    #region Bracing for Attacks
-                    if (attackSlotMonsterParts[attackSlot].isRightSidedLimb)
+                    if (focusedAttackActive == false)
                     {
-                        if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
-                        {
-                            if (isRunning == false)
-                            {
-                                braceForLeftImpact();
-                            }
-                            else if (isRunning == true && attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
-                            {
-                                braceForLeftImpact();
-                                isRunning = false;
-                            }
-                        }
-                        else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0 && isRunning)
-                        {
-                            if (attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
-                            {
-                                braceForRightImpact();
-                                isRunning = false;
-                            }
-                        }
-                        else
+                        attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
+                        //isWalking = false;
+
+                        #region Bracing for Attacks
+
+                        if (attackSlotMonsterParts[attackSlot].requiresRightStance)
                         {
                             braceForRightImpact();
-                            isRunning = false;
                         }
-                    }
-                    else if (attackSlotMonsterParts[attackSlot].isLeftSidedLimb)
-                    {
 
-                        if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
-                        {
-
-                            if (isRunning == false)
-                            {
-                                braceForRightImpact();
-                            }
-                            else if (isRunning == true && attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
-                            {
-                                braceForRightImpact();
-                                isRunning = false;
-                            }
-                        }
-                        else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0 && isRunning)
-                        {
-                            if (attackSlotMonsterParts[attackSlot].isGroundedLimb == false)
-                            {
-                                braceForRightImpact();
-                                isRunning = false;
-                            }
-                        }
-                        else
+                        if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
                         {
                             braceForLeftImpact();
-                            isRunning = false;
                         }
+
+                        if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
+                        {
+                            braceForForwardImpact();
+                        }
+
+                        if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
+                        {
+                            braceForBackwardImpact();
+                        }
+
+                        isRunning = false;
+                        #endregion
                     }
-                    #endregion
                 }
                 else
                 {
-                    attackSlotMonsterParts[attackSlot].triggerAttack("Airborn Attack");
+          
+                    if (focusedAttackActive == false)
+                    {
+                        attackSlotMonsterParts[attackSlot].triggerAttack("Airborn Attack");
+                    }
+                    //Add to this later so that we can having bracing while attacking in the air
                 }
             }
             else if (attackSlotMonsterID[attackSlot] == 2)
@@ -228,6 +200,22 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Count; i++)
         {
             allMonsterParts[i].triggerLeftAttackStance();
+        }
+    }
+
+    public void braceForForwardImpact()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerForwardStance();
+        }
+    }
+
+    public void braceForBackwardImpact()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerBackwardStance();
         }
     }
     #endregion
@@ -452,6 +440,7 @@ public class monsterAttackSystem : MonoBehaviour
         //It does need to know which way to start though so that it is facing the camera
     }
 
+    //Relocate this stuff into its own category for corrections
     public void correctWalkingAttackAnimations()
     {
         for (int i = 0; i < allMonsterParts.Count; i++)

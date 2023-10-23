@@ -14,11 +14,15 @@ public class monsterAttackSystem : MonoBehaviour
     private bool isRunning = false;
     private bool focusedAttackActive = false;
     private bool canRoll = true;
+    private bool canDashAttack = true;
 
     private Animator myAnimator;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     public List<monsterPart> allMonsterParts;
+    public GameObject dashSplat;
+    private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
+    private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
 
     public void awakenTheBeast()
     {
@@ -88,6 +92,8 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerIdle();
         }
+
+        myAnimator.SetBool("Idle Bounce Allowed", true);
     }
 
     public void grabAttackSlotInfo()
@@ -187,56 +193,94 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    public void braceForRightImpact()
+    public void dashAttack()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        if (isRunning && canDashAttack && canRoll && focusedAttackActive == false)
         {
-            allMonsterParts[i].triggerRightAttackStance();
+            isRunning = false;
+            canRoll = false;
+            canDashAttack = false;
+            attackFocusOn();
+            StartCoroutine(dashVisuals());
         }
     }
 
-    public void braceForLeftImpact()
+    IEnumerator dashVisuals()
     {
         for (int i = 0; i < allMonsterParts.Count; i++)
         {
-            allMonsterParts[i].triggerLeftAttackStance();
+            allMonsterParts[i].triggerRoll(true);
         }
+
+        myAnimator.SetTrigger("Roll");
+
+        yield return new WaitForSeconds(0.2f);
+
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerVisualDissappearance();
+        }
+
+        dashSplat.SetActive(true);
+
+        yield return new WaitForSeconds(0.4f);
+
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerVisualReappearance();
+            allMonsterParts[i].triggerRoll(true);
+        }
+        myAnimator.SetTrigger("Roll");
+        dashSplat.SetActive(false);
+        attackFocusOff();
+        canDashAttack = true;
+        canRoll = true;
     }
 
-    public void braceForForwardImpact()
-    {
-        for (int i = 0; i < allMonsterParts.Count; i++)
-        {
-            allMonsterParts[i].triggerForwardStance();
-        }
-    }
 
-    public void braceForBackwardImpact()
-    {
-        for (int i = 0; i < allMonsterParts.Count; i++)
-        {
-            allMonsterParts[i].triggerBackwardStance();
-        }
-    }
     #endregion
 
     #region Movement
 
     public void flipCharacter()
     {
+        if (isRunning)
+        {
+            screechingStop();
+            StartCoroutine(characterFlipDelay(true));
+        }
+        else
+        {
+            StartCoroutine(characterFlipDelay(false));
+        }
+    }
+
+    IEnumerator characterFlipDelay(bool needsDelay)
+    {
+        if (needsDelay)
+        {
+            yield return new WaitForSeconds(0.35f);
+            myAnimator.SetFloat("Flipping Speed", 1);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0);
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
+        }
+
         if (facingRight)
         {
             facingRight = false;
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
-            //if grounded then make grounded limbs step pivot
+            dashSplat.transform.eulerAngles = leftDashSplatRotation;
         }
         else
         {
             facingRight = true;
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
-            //if grounded then make grounded limbs step pivot
+            dashSplat.transform.eulerAngles = rightDashSplatRotation;
         }
     }
 
@@ -250,6 +294,8 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].triggerWalk();
             }
+
+            myAnimator.SetBool("Idle Bounce Allowed", false);
         }
     }
 
@@ -263,6 +309,8 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].triggerStopWalking();
             }
+
+            myAnimator.SetBool("Idle Bounce Allowed", true);
         }
     }
 
@@ -276,15 +324,48 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].triggerRun();
             }
+
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+        }
+        else
+        {
+            isRunning = true;
+
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerRun();
+            }
         }
     }
 
-    public void screechingStop()
+    public void stopRunning()
     {
         if (isGrounded)
         {
             isRunning = false;
 
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerStopRunning();
+            }
+
+            myAnimator.SetBool("Idle Bounce Allowed", true);
+        }
+        else
+        {
+            isRunning = false;
+
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerStopRunning();
+            }
+        }
+    }
+
+    public void screechingStop()
+    {
+        if (isGrounded && isRunning)
+        {
             for (int i = 0; i < allMonsterParts.Count; i++)
             {
                 allMonsterParts[i].triggerScreechingStop();
@@ -307,6 +388,11 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetTrigger("Jump");
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+        }
+        else
+        {
+            doubleJump();
         }
     }
 
@@ -325,6 +411,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    //going to fit in flight into double jump so that it isn't a whole separate thing
     public void flightedJump()
     {
         if (jumpsLeft != 0)
@@ -345,6 +432,8 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].triggerFall();
             }
+
+            myAnimator.SetBool("Idle Bounce Allowed", false);
         }
     }
 
@@ -362,6 +451,7 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetTrigger("Roll");
+            myAnimator.SetBool("Idle Bounce Allowed", false);
         }
     }
 
@@ -370,7 +460,6 @@ public class monsterAttackSystem : MonoBehaviour
         if(isGrounded == false)
         {
             isGrounded = true;
-            isRunning = false;
             focusedAttackActive = false;
 
             for (int i = 0; i < allMonsterParts.Count; i++)
@@ -379,6 +468,11 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetTrigger("Land");
+
+            if (isRunning == false)
+            {
+                myAnimator.SetBool("Idle Bounce Allowed", true);
+            }
 
             if (isWinged)
             {
@@ -419,12 +513,44 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetTrigger("Roll");
+            myAnimator.SetBool("Idle Bounce Allowed", false);
         }
     }
 
     #endregion
 
     #region Reactions
+    public void braceForRightImpact()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerRightAttackStance();
+        }
+    }
+
+    public void braceForLeftImpact()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerLeftAttackStance();
+        }
+    }
+
+    public void braceForForwardImpact()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerForwardStance();
+        }
+    }
+
+    public void braceForBackwardImpact()
+    {
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerBackwardStance();
+        }
+    }
 
     public void hit()
     {
@@ -440,7 +566,22 @@ public class monsterAttackSystem : MonoBehaviour
         //It does need to know which way to start though so that it is facing the camera
     }
 
-    //Relocate this stuff into its own category for corrections
+    public void attackFocusOn()
+    {
+        focusedAttackActive = true;
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+    }
+
+    public void attackFocusOff()
+    {
+        focusedAttackActive = false;
+        myAnimator.SetBool("Idle Bounce Allowed", true);
+    }
+
+    #endregion
+
+    #region Corrections
+
     public void correctWalkingAttackAnimations()
     {
         for (int i = 0; i < allMonsterParts.Count; i++)
@@ -456,17 +597,6 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].runToAttackCorrections();
         }
     }
-
-    public void attackFocusOn()
-    {
-        focusedAttackActive = true;
-    }
-
-    public void attackFocusOff()
-    {
-        focusedAttackActive = false;
-    }
-
     public void correctGroundedState()
     {
 
@@ -475,6 +605,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void correctRollControl()
     {
         canRoll = true;
+        myAnimator.SetBool("Idle Bounce Allowed", true);
     }
 
     #endregion

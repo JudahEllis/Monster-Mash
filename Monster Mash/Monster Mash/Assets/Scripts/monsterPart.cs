@@ -6,6 +6,8 @@ public class monsterPart : MonoBehaviour
 {
     [Header("Monster Part Info")]
     public monsterAttackSystem myMainSystem;
+    private SkinnedMeshRenderer[] mySkinnedMeshRenderers;
+    private MeshRenderer[] myMeshRenderers;
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     private Animator myAnimator;
@@ -321,6 +323,10 @@ public class monsterPart : MonoBehaviour
         }
 
         #endregion
+
+        //search through all my objects and gather everything with a skinned mesh renderer
+        mySkinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        myMeshRenderers = GetComponentsInChildren<MeshRenderer>();
     }
 
     public void triggerAnimationOffsets()
@@ -712,14 +718,19 @@ public class monsterPart : MonoBehaviour
     {
         if (isGroundedLimb || isTorso)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") 
+                || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
                 myAnimator.SetBool("Walking", true);
+                myAnimator.SetBool("Running", false);
+                isRunning = false;
             }
         }
         else if (isHead)
         {
             myAnimator.SetBool("Walking", true);
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
         }
     }
 
@@ -744,12 +755,9 @@ public class monsterPart : MonoBehaviour
     {
         if (isGroundedLimb || isTorso)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            {
-                myAnimator.SetBool("Running", true);
-                myAnimator.SetBool("Walking", false);
-                isRunning = true;
-            }
+            myAnimator.SetBool("Running", true);
+            myAnimator.SetBool("Walking", false);
+            isRunning = true;
         }
 
         if (isArm)
@@ -766,14 +774,13 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerScreechingStop()
+    public void triggerStopRunning()
     {
         if (isGroundedLimb || isTorso)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
                 myAnimator.SetBool("Running", false);
-                myAnimator.SetTrigger("Run to Screech");
                 isRunning = false;
 
             }
@@ -784,6 +791,28 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
             isRunning = false;
         }
+    }
+
+    public void triggerScreechingStop()
+    {
+        if (isGroundedLimb || isTorso)
+        {
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            {
+                //myAnimator.SetBool("Running", false);
+                myAnimator.SetTrigger("Run to Screech");
+                //isRunning = false;
+
+            }
+        }
+
+        /*
+        if (isArm || isHead)
+        {
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
+        }
+        */
     }
 
     public void triggerJump()
@@ -877,6 +906,32 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Running", false);
             isRunning = false;
+        }
+    }
+
+    public void triggerVisualDissappearance()
+    {
+        for (int i = 0; i < mySkinnedMeshRenderers.Length; i++)
+        {
+            mySkinnedMeshRenderers[i].enabled = false;
+        }
+
+        for (int i = 0; i < myMeshRenderers.Length; i++)
+        {
+            myMeshRenderers[i].enabled = false;
+        }
+    }
+
+    public void triggerVisualReappearance()
+    {
+        for (int i = 0; i < mySkinnedMeshRenderers.Length; i++)
+        {
+            mySkinnedMeshRenderers[i].enabled = true;
+        }
+
+        for (int i = 0; i < myMeshRenderers.Length; i++)
+        {
+            myMeshRenderers[i].enabled = true;
         }
     }
 

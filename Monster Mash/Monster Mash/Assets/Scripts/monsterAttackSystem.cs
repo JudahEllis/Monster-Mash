@@ -12,6 +12,7 @@ public class monsterAttackSystem : MonoBehaviour
     private int jumpsLeft = 0;
     private bool isWalking = false;
     private bool isRunning = false;
+    private bool isGliding = false;
     private bool focusedAttackActive = false;
     private bool canRoll = true;
     private bool canDashAttack = true;
@@ -34,8 +35,10 @@ public class monsterAttackSystem : MonoBehaviour
 
         bool hasLeftGroundedLegs = false;
         bool hasRightGroundedLegs = false;
+        bool hasWings = false;
         List<monsterPart> allGroundedRightLegs = new List<monsterPart>();
         List<monsterPart> allGroundedLeftLegs = new List<monsterPart>();
+        List<monsterPart> allWings = new List<monsterPart>();
 
         for (int i = 0; i < allMonsterParts.Count; i++)
         {
@@ -51,6 +54,12 @@ public class monsterAttackSystem : MonoBehaviour
                     allGroundedLeftLegs.Add(allMonsterParts[i]);
                     hasLeftGroundedLegs = true;
                 }
+            }
+
+            if (allMonsterParts[i].isWing)
+            {
+                allWings.Add(allMonsterParts[i]);
+                hasWings = true;
             }
         }
 
@@ -79,7 +88,13 @@ public class monsterAttackSystem : MonoBehaviour
             }
             else //oh this creature has no grounded legs, high likelihood of it being a floating/flying monster
             {
-
+                if (hasWings)
+                {
+                    for (int u = 0; u < allWings.Count; u++)
+                    {
+                        allWings[u].hasFlightedIdle = true;
+                    }
+                }
             }
         }
 
@@ -125,21 +140,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             if (attackSlotMonsterID[attackSlot] == 0)
             {
-                if (isGrounded)
-                {
-                    jump();
-                }
-                else
-                {
-                    if (isWinged)
-                    {
-                        flightedJump();
-                    }
-                    else
-                    {
-                        doubleJump();
-                    }
-                }
+                jump();
             }
             else if (attackSlotMonsterID[attackSlot] == 1)
             {
@@ -182,6 +183,31 @@ public class monsterAttackSystem : MonoBehaviour
                     if (focusedAttackActive == false)
                     {
                         attackSlotMonsterParts[attackSlot].triggerAttack("Airborn Attack");
+
+                        #region Bracing for Attacks
+
+                        if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                        {
+                            braceForRightImpact();
+                        }
+
+                        if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                        {
+                            braceForLeftImpact();
+                        }
+
+                        if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
+                        {
+                            braceForForwardImpact();
+                        }
+
+                        if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
+                        {
+                            braceForBackwardImpact();
+                        }
+
+                        isRunning = false;
+                        #endregion
                     }
                     //Add to this later so that we can having bracing while attacking in the air
                 }
@@ -380,6 +406,7 @@ public class monsterAttackSystem : MonoBehaviour
             isGrounded = false;
             isRunning = false;
             focusedAttackActive = false;
+            isGliding = false;
             jumpsLeft--;
 
             for (int i = 0; i < allMonsterParts.Count; i++)
@@ -398,25 +425,63 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void doubleJump()
     {
-        if (jumpsLeft != 0)
+        if (isWinged)
         {
-            jumpsLeft--;
-
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            if (jumpsLeft != 0)
             {
-                allMonsterParts[i].triggerRoll(false);
-            }
+                isGliding = false;
+                jumpsLeft--;
 
-            myAnimator.SetTrigger("Roll");
+                for (int i = 0; i < allMonsterParts.Count; i++)
+                {
+                    allMonsterParts[i].triggerWingFlap();
+                }
+
+            }
+        }
+        else
+        {
+            if (jumpsLeft != 0)
+            {
+                isGliding = false;
+                jumpsLeft--;
+
+                for (int i = 0; i < allMonsterParts.Count; i++)
+                {
+                    allMonsterParts[i].triggerRoll(false);
+                }
+
+                myAnimator.SetTrigger("Roll");
+            }
         }
     }
 
-    //going to fit in flight into double jump so that it isn't a whole separate thing
-    public void flightedJump()
+    public void glide()
     {
-        if (jumpsLeft != 0)
+        if (isGliding == false)
         {
+            isGliding = true;
+            focusedAttackActive = true;
 
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerGlide();
+            }
+        }
+        else
+        {
+            glideToFall();
+        }
+    }
+
+    private void glideToFall()
+    {
+        focusedAttackActive = false;
+        isGliding = false;
+
+        for (int i = 0; i < allMonsterParts.Count; i++)
+        {
+            allMonsterParts[i].triggerFall();
         }
     }
 
@@ -427,6 +492,7 @@ public class monsterAttackSystem : MonoBehaviour
             isGrounded = false;
             isRunning = false;
             focusedAttackActive = false;
+            isGliding = false;
 
             for (int i = 0; i < allMonsterParts.Count; i++)
             {
@@ -575,7 +641,10 @@ public class monsterAttackSystem : MonoBehaviour
     public void attackFocusOff()
     {
         focusedAttackActive = false;
-        myAnimator.SetBool("Idle Bounce Allowed", true);
+        if (isGrounded)
+        {
+            myAnimator.SetBool("Idle Bounce Allowed", true);
+        }
     }
 
     #endregion
@@ -597,15 +666,14 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].runToAttackCorrections();
         }
     }
-    public void correctGroundedState()
-    {
-
-    }
 
     public void correctRollControl()
     {
         canRoll = true;
-        myAnimator.SetBool("Idle Bounce Allowed", true);
+        if (isGrounded)
+        {
+            myAnimator.SetBool("Idle Bounce Allowed", true);
+        }
     }
 
     #endregion

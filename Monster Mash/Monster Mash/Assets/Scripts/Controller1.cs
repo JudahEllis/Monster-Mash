@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class Controller1 : MonoBehaviour
 {
+    [SerializeField] LayerMask platCast;
+    [SerializeField] LayerMask bounceCast;
+
     private CharacterController controller;
     private Rigidbody rb;
+    [SerializeField] private CapsuleCollider capcol;
+    [SerializeField] private bool onPlat = false;
     private Vector3 playerVelocity;
-    private bool groundedPlayer; //get grounded state
+    [SerializeField] private bool groundedPlayer; //get grounded state
+    private PlatformFinder platFinder;
     private int jumpsRemaining; // Track the number of jumps left.
     [SerializeField] private float playerSpeedGrounded = 1f;
     [SerializeField] private float playerSpeedAir = 0.989f;
@@ -43,6 +49,8 @@ public class Controller1 : MonoBehaviour
     private bool isJumping = false;
     private bool isFalling = false;
     private bool isAttacking = false;
+    private bool screechingStop = false;
+    private float screechingStopTime = 5f;
 
     private void Start()
     {
@@ -58,6 +66,8 @@ public class Controller1 : MonoBehaviour
             //attack.flipCharacter();
         }
 
+        platFinder = GetComponentInChildren<PlatformFinder>();
+
         if (GameObject.Find("Dummy"))
         {
             dummy = GameObject.Find("Dummy");
@@ -68,12 +78,43 @@ public class Controller1 : MonoBehaviour
         jumpsRemaining = 2; // Set the initial jumps allowed (double jump).
     }
 
+    private void FixedUpdate()
+    {
+        /*if (!platFinder.Grounded()) //if the semisolid platform collider is NOT grounded, check if at least CC is grounded
+        {
+            groundedPlayer = controller.isGrounded;
+        }
+        else
+        {
+            groundedPlayer = true;
+
+            if (!jumpStarted)
+            {
+                playerVelocity.y = 0f;
+            }
+        }*/
+    }
     void Update()
     {
+        RaycastHit hit;
+        Debug.DrawRay(transform.position - Vector3.down, Vector3.down * 2f);
+        if (Physics.Raycast(transform.position - Vector3.down, Vector3.down, out hit, 2f, platCast) && !Input.GetKey(KeyCode.P))
+        {
+            hit.collider.isTrigger = false;
+        }
+        Debug.DrawRay(transform.position + Vector3.up, Vector3.up * 2f);
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.up, out hit, 2f, platCast))
+        {
+            hit.collider.isTrigger = true;
+        }
 
         if (!knockBack)
         {
-            groundedPlayer = controller.isGrounded;
+            if (!onPlat)
+            {
+                groundedPlayer = controller.isGrounded;
+            }
+
             if (groundedPlayer)
             {
                 playerVelocity.y = -1f; // Reset the vertical velocity when grounded.
@@ -99,8 +140,9 @@ public class Controller1 : MonoBehaviour
                     else
                     {
                         playerSpeedCurrent = playerSpeedGrounded;
+                        attack.stopRunning();
                     }
-                }
+                } else { attack.stopWalking(); }
             }
             else
             {
@@ -124,7 +166,7 @@ public class Controller1 : MonoBehaviour
                 }
             }
 
-            if (!IsBusy())
+            if (!IsBusy() && !screechingStop)
             {
                 //if (move != Vector3.zero)
                 //{
@@ -147,7 +189,14 @@ public class Controller1 : MonoBehaviour
                     attack.doubleJump();
                     //attack.jump();
                 }
-                playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                int jumpMulti = 1;
+
+                if (Physics.Raycast(transform.position - Vector3.down, Vector3.down, out hit, 2f, bounceCast))
+                {
+                    print("BOUNCE!");
+                    //jumpMulti = 3;
+                }
+                playerVelocity.y = Mathf.Sqrt(jumpHeight * jumpMulti * -3.0f * gravityValue);
                 jumpsRemaining--;
                 jump = false;
                 jumpStarted = true;
@@ -186,6 +235,49 @@ public class Controller1 : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.layer == 10)
+        {
+            if (Input.GetKey(KeyCode.P))
+            {
+                collision.collider.isTrigger = true;
+            }
+        } else if (collision.gameObject.layer == 12)
+        {
+            jump = true;
+        }
+    }
+
+    /*private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == 10)
+        {
+            //onPlat = true;
+            if (Input.GetKey(KeyCode.P))
+            {
+                print("platformyy");
+                //Physics.IgnoreCollision(rb.collisionDetectionMode = , other, true);
+                //groundedPlayer = false;
+                //other.gameObject.GetComponent<Collider>().enabled = false;
+                other.enabled = false;
+            }
+            else
+            {
+                //groundedPlayer = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == 10)
+        {
+            //onPlat = false;
+            //Physics.IgnoreCollision(capcol, other, false);
+        }
+    }*/
+
     private bool IsBusy() //returns true if the player is already jumping or attacking
     {
         if (isAttacking)
@@ -207,12 +299,16 @@ public class Controller1 : MonoBehaviour
 
             if (!isWalk)
             {
-                attack.walk();
+                //attack.walk();
                 isWalk = true;
             }
 
             if (!facingRight)
             {
+                if (isRunning)
+                {
+                    StartCoroutine("ScreechStop");
+                }
                 attack.flipCharacter();
                 facingRight = true;
             }
@@ -223,12 +319,16 @@ public class Controller1 : MonoBehaviour
 
             if (!isWalk)
             {
-                attack.walk();
+                //attack.walk();
                 isWalk = true;
             }
 
             if (facingRight)
             {
+                if (isRunning)
+                {
+                    StartCoroutine("ScreechStop");
+                }
                 attack.flipCharacter();
                 facingRight = false;
             }
@@ -236,18 +336,30 @@ public class Controller1 : MonoBehaviour
 
         if (isWalk && dir == Vector3.zero)
         {
-            attack.stopWalking();
+            //attack.stopWalking();
             isWalk = false;
 
             if (isRunning)
             {
-                attack.screechingStop();
+                //attack.screechingStop();
                 isRunning = false;
             }
         }
 
         //print("dir: " + dir);
         move = dir;
+    }
+
+    private IEnumerator ScreechStop()
+    {
+        print("my ooop corooutiune");
+        screechingStop = true;
+
+        yield return new WaitForSeconds(screechingStopTime);
+
+        screechingStop = false;
+
+        yield break;
     }
 
     public void SetIsRun(bool frDawg)

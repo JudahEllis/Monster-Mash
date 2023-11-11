@@ -765,6 +765,7 @@ public class monsterPart : MonoBehaviour
     #region Movement Animations
     public void triggerWalk()
     {
+        /*
         if (isGroundedLimb || isTorso)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") 
@@ -774,6 +775,13 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Running", false);
                 isRunning = false;
             }
+        }
+        */
+        if (isGroundedLimb || isTorso)
+        {
+            myAnimator.SetBool("Walking", true);
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
         }
         else if (isHead)
         {

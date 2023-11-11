@@ -314,7 +314,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         if (isGrounded)
         {
-            //isWalking = true;
+            isWalking = true;
 
             for (int i = 0; i < allMonsterParts.Count; i++)
             {
@@ -323,13 +323,22 @@ public class monsterAttackSystem : MonoBehaviour
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
         }
+        else
+        {
+            isWalking = true;
+
+            for (int i = 0; i < allMonsterParts.Count; i++)
+            {
+                allMonsterParts[i].triggerWalk();
+            }
+        }
     }
 
     public void stopWalking()
     {
         if (isGrounded)
         {
-            //isWalking = false;
+            isWalking = false;
 
             for (int i = 0; i < allMonsterParts.Count; i++)
             {
@@ -405,6 +414,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = false;
             isRunning = false;
+            isWalking = false;
             focusedAttackActive = false;
             isGliding = false;
             jumpsLeft--;
@@ -491,6 +501,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = false;
             isRunning = false;
+            isWalking = false;
             focusedAttackActive = false;
             isGliding = false;
 
@@ -509,6 +520,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = false;
             isRunning = false;
+            isWalking = false;
             focusedAttackActive = false;
 
             for (int i = 0; i < allMonsterParts.Count; i++)
@@ -535,7 +547,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             myAnimator.SetTrigger("Land");
 
-            if (isRunning == false)
+            if (isRunning == false && isWalking == false)
             {
                 myAnimator.SetBool("Idle Bounce Allowed", true);
             }
@@ -570,6 +582,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = true;
             isRunning = false;
+            isWalking = false;
             focusedAttackActive = false;
             canRoll = false;
 
@@ -621,6 +634,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void hit()
     {
         isRunning = false;
+        isWalking = false;
         focusedAttackActive = false;
 
         for (int i = 0; i < allMonsterParts.Count; i++)

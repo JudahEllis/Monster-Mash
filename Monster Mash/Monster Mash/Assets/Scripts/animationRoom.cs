@@ -6,6 +6,7 @@ public class animationRoom : MonoBehaviour
 {
     public GameObject safetyScreen;
     public GameObject floor;
+    public GameObject groundedLimbCheck;
     public void removeSafetyScreen()
     {
         safetyScreen.SetActive(false);
@@ -19,5 +20,10 @@ public class animationRoom : MonoBehaviour
     public void bringBackFloor()
     {
         floor.SetActive(true);
+    }
+
+    public void removeGroundedLimbCheck()
+    {
+        groundedLimbCheck.SetActive(false);
     }
 }

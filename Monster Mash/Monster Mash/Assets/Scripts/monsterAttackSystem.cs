@@ -20,7 +20,8 @@ public class monsterAttackSystem : MonoBehaviour
     private Animator myAnimator;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
-    public List<monsterPart> allMonsterParts;
+    //public List<monsterPart> allMonsterParts;
+    private monsterPart[] allMonsterParts;
     public GameObject dashSplat;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
@@ -31,6 +32,15 @@ public class monsterAttackSystem : MonoBehaviour
         grabAttackSlotInfo();
         myAnimator.SetBool("Facing Right", facingRight);
 
+        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
+
+        for (int i = 0; i < limbConnections.Length; i++)
+        {
+            limbConnections[i].disableColliders(); //this essentially stops the scripts from looking to connect pieces at runtime
+        }
+
+        allMonsterParts = GetComponentsInChildren<monsterPart>();
+
         #region Figuring out if this Monster has one leg, many legs, or is a legless guy
 
         bool hasLeftGroundedLegs = false;
@@ -40,7 +50,7 @@ public class monsterAttackSystem : MonoBehaviour
         List<monsterPart> allGroundedLeftLegs = new List<monsterPart>();
         List<monsterPart> allWings = new List<monsterPart>();
 
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             if (allMonsterParts[i].isGroundedLimb)
             {
@@ -100,7 +110,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         #endregion
 
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].triggerAnimationSetUp();
@@ -233,7 +243,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     IEnumerator dashVisuals()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerRoll(true);
         }
@@ -242,7 +252,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualDissappearance();
         }
@@ -251,7 +261,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         yield return new WaitForSeconds(0.4f);
 
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
             allMonsterParts[i].triggerRoll(true);
@@ -316,7 +326,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isWalking = true;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerWalk();
             }
@@ -327,7 +337,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isWalking = true;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerWalk();
             }
@@ -340,7 +350,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isWalking = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerStopWalking();
             }
@@ -355,7 +365,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isRunning = true;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerRun();
             }
@@ -366,7 +376,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isRunning = true;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerRun();
             }
@@ -379,7 +389,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isRunning = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerStopRunning();
             }
@@ -390,7 +400,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isRunning = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerStopRunning();
             }
@@ -401,7 +411,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         if (isGrounded && isRunning)
         {
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerScreechingStop();
             }
@@ -419,7 +429,7 @@ public class monsterAttackSystem : MonoBehaviour
             isGliding = false;
             jumpsLeft--;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerJump();
             }
@@ -442,7 +452,7 @@ public class monsterAttackSystem : MonoBehaviour
                 isGliding = false;
                 jumpsLeft--;
 
-                for (int i = 0; i < allMonsterParts.Count; i++)
+                for (int i = 0; i < allMonsterParts.Length; i++)
                 {
                     allMonsterParts[i].triggerWingFlap();
                 }
@@ -456,7 +466,7 @@ public class monsterAttackSystem : MonoBehaviour
                 isGliding = false;
                 jumpsLeft--;
 
-                for (int i = 0; i < allMonsterParts.Count; i++)
+                for (int i = 0; i < allMonsterParts.Length; i++)
                 {
                     allMonsterParts[i].triggerRoll(false);
                 }
@@ -473,7 +483,7 @@ public class monsterAttackSystem : MonoBehaviour
             isGliding = true;
             focusedAttackActive = true;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerGlide();
             }
@@ -489,7 +499,7 @@ public class monsterAttackSystem : MonoBehaviour
         focusedAttackActive = false;
         isGliding = false;
 
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerFall();
         }
@@ -505,7 +515,7 @@ public class monsterAttackSystem : MonoBehaviour
             focusedAttackActive = false;
             isGliding = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerFall();
             }
@@ -523,7 +533,7 @@ public class monsterAttackSystem : MonoBehaviour
             isWalking = false;
             focusedAttackActive = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerRoll(false);
             }
@@ -540,7 +550,7 @@ public class monsterAttackSystem : MonoBehaviour
             isGrounded = true;
             focusedAttackActive = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerLand();
             }
@@ -565,7 +575,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public bool IsAttacking()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             if (allMonsterParts[i].isAttackingCheck())
             {
@@ -586,7 +596,7 @@ public class monsterAttackSystem : MonoBehaviour
             focusedAttackActive = false;
             canRoll = false;
 
-            for (int i = 0; i < allMonsterParts.Count; i++)
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerRoll(true);
             }
@@ -601,7 +611,7 @@ public class monsterAttackSystem : MonoBehaviour
     #region Reactions
     public void braceForRightImpact()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerRightAttackStance();
         }
@@ -609,7 +619,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForLeftImpact()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerLeftAttackStance();
         }
@@ -617,7 +627,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForForwardImpact()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerForwardStance();
         }
@@ -625,7 +635,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForBackwardImpact()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerBackwardStance();
         }
@@ -637,7 +647,7 @@ public class monsterAttackSystem : MonoBehaviour
         isWalking = false;
         focusedAttackActive = false;
 
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerHit();
         }
@@ -667,7 +677,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void correctWalkingAttackAnimations()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].walkToAttackCorrections();
         }
@@ -675,7 +685,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void correctRunningAttackAnimations()
     {
-        for (int i = 0; i < allMonsterParts.Count; i++)
+        for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].runToAttackCorrections();
         }

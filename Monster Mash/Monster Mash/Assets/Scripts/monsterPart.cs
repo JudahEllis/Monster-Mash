@@ -28,6 +28,8 @@ public class monsterPart : MonoBehaviour
     public bool isMouth;
     public bool isTorso;
     public bool isHorn;
+
+    [Header("Monster Part Positioning Info")]
     public bool isJointed;
     public bool isRightShoulderLimb;
     public bool isLeftShoudlerLimb;
@@ -329,9 +331,28 @@ public class monsterPart : MonoBehaviour
 
         #endregion
 
+        #region Separating Visual and Combat Elements for Dash Attacks
         //search through all my objects and gather everything with a skinned mesh renderer
+        List<GameObject> hitboxesAndHurtboxes = new List<GameObject>();
+
+        Transform[] childrenInObject = GetComponentsInChildren<Transform>();
+        for (int i = 0; i < childrenInObject.Length; i++)
+        {
+            if (childrenInObject[i].gameObject.tag == "Hurtbox" || childrenInObject[i].gameObject.tag == "Hitbox")
+            {
+                hitboxesAndHurtboxes.Add(childrenInObject[i].gameObject);
+                childrenInObject[i].gameObject.SetActive(false);
+            }
+        }
+
         mySkinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         myMeshRenderers = GetComponentsInChildren<MeshRenderer>();
+
+        for (int i = 0; i < hitboxesAndHurtboxes.Count; i++)
+        {
+            hitboxesAndHurtboxes[i].gameObject.SetActive(true);
+        }
+        #endregion
     }
 
     public void triggerAnimationOffsets()
@@ -866,8 +887,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerJump()
     {
-        myAnimator.SetBool("Grounded", false);
-        myAnimator.SetTrigger("Jump");
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Jump");
+        }
 
         if (isGroundedLimb || isTorso || isHead)
         {
@@ -947,8 +971,11 @@ public class monsterPart : MonoBehaviour
     //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)
     public void triggerFall()
     {
-        myAnimator.SetBool("Grounded", false);
-        myAnimator.SetTrigger("Fall");
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Fall");
+        }
 
         if (isGroundedLimb || isTorso || isHead)
         {
@@ -971,8 +998,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerLand()
     {
-        myAnimator.SetBool("Grounded", true);
-        myAnimator.SetTrigger("Land");
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", true);
+            myAnimator.SetTrigger("Land");
+        }
     }
 
     public void triggerGlide()

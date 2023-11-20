@@ -6,20 +6,23 @@ public class Controller1 : MonoBehaviour
 {
     [SerializeField] LayerMask platCast;
     [SerializeField] LayerMask bounceCast;
+    [SerializeField] LayerMask groundCheck;
 
     private CharacterController controller;
     private Rigidbody rb;
     [SerializeField] private CapsuleCollider capcol;
-    [SerializeField] private bool onPlat = false;
     private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer; //get grounded state
     private PlatformFinder platFinder;
-    private int jumpsRemaining; // Track the number of jumps left.
+    private bool platCanSolid = true;
+    private float platCooldown = 1f;
+    [SerializeField]private bool platDropInput = false;
+    [SerializeField] private int jumpsRemaining; // Track the number of jumps left.
     [SerializeField] private float playerSpeedGrounded = 1f;
     [SerializeField] private float playerSpeedAir = 0.989f;
     [SerializeField] private float playerSpeedCurrent = 1.0f;
     [SerializeField] private float playerSpeed = 20f;
-    private float playerSpeedRunning = 1.2f;
+    private float playerSpeedRunning = 1.5f;
     private float jumpHeight = 15.0f;
     private float gravityValue = -57f;
     private float groundedGravity = -1f; //not applying gravity caused errors but regular gravity was too strong
@@ -43,14 +46,14 @@ public class Controller1 : MonoBehaviour
     private DummyCollision col;
     private bool checkKB = false;
 
-    private monsterAttackSystem attack;
+    private monsterAttackSystem monsterAnim;
     private bool isWalk = false;
     private bool facingRight = true;
     private bool isJumping = false;
     private bool isFalling = false;
     private bool isAttacking = false;
     private bool screechingStop = false;
-    private float screechingStopTime = 5f;
+    private float screechingStopTime = 0.55f;
 
     private void Start()
     {
@@ -59,9 +62,9 @@ public class Controller1 : MonoBehaviour
 
         if (FindObjectOfType<monsterAttackSystem>())
         {
-            attack = FindObjectOfType<monsterAttackSystem>();
+            monsterAnim = FindObjectOfType<monsterAttackSystem>();
 
-            attack.awakenTheBeast();
+            monsterAnim.awakenTheBeast();
 
             //attack.flipCharacter();
         }
@@ -96,53 +99,70 @@ public class Controller1 : MonoBehaviour
     }
     void Update()
     {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position - Vector3.down, Vector3.down * 2f);
-        if (Physics.Raycast(transform.position - Vector3.down, Vector3.down, out hit, 2f, platCast) && !Input.GetKey(KeyCode.P))
+        if (!isFalling && playerVelocity.y < 0 && isWalk && !groundedPlayer && !Physics.Raycast(transform.position - Vector3.down, Vector3.down, 4f, groundCheck))
         {
-            hit.collider.isTrigger = false;
+            isFalling = true;
+            monsterAnim.walkToFall();
+        }
+
+        RaycastHit hit;
+        Debug.DrawRay(transform.position - Vector3.down, Vector3.down * 2f, Color.red);
+        if (Physics.Raycast(transform.position - Vector3.down, Vector3.down, out hit, 2f, platCast))
+        {
+            if (platCanSolid)
+            {
+                hit.collider.isTrigger = false;
+            }
+
+            if (platDropInput)
+            {
+                StartCoroutine("PlatMakeSolidCooldown");
+                monsterAnim.goThroughPlatform();
+                hit.collider.isTrigger = true;
+            }
         }
         Debug.DrawRay(transform.position + Vector3.up, Vector3.up * 2f);
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.up, out hit, 2f, platCast))
         {
+
             hit.collider.isTrigger = true;
         }
 
+        isAttacking = monsterAnim.IsAttacking();
+
         if (!knockBack)
         {
-            if (!onPlat)
-            {
-                groundedPlayer = controller.isGrounded;
-            }
+            groundedPlayer = controller.isGrounded;
 
             if (groundedPlayer)
             {
+                monsterAnim.land();
                 playerVelocity.y = -1f; // Reset the vertical velocity when grounded.
-                jumpsRemaining = 2; // Reset the number of jumps when grounded.
+                if (jumpsRemaining < 2) jumpsRemaining = 2; // Reset the number of jumps when grounded.
                 playerSpeedCurrent = playerSpeedGrounded;
 
                 if ((isJumping || isFalling) && !jumpStarted)
                 {
                     isJumping = false;
                     isFalling = false;
-                    attack.land();
+                    monsterAnim.land();
                 }
 
-                if (isWalk )//&& attack.CurrentAnimationState().IsName("Idle"))
+                if (isWalk )
                 {
-                    attack.walk();
+                    monsterAnim.walk();
 
                     if (isRunning)
                     {
                         playerSpeedCurrent = playerSpeedRunning;
-                        attack.run();
+                        monsterAnim.run();
                     }
                     else
                     {
                         playerSpeedCurrent = playerSpeedGrounded;
-                        attack.stopRunning();
+                        monsterAnim.stopRunning();
                     }
-                } else { attack.stopWalking(); }
+                } else { monsterAnim.stopWalking(); }
             }
             else
             {
@@ -154,19 +174,19 @@ public class Controller1 : MonoBehaviour
                     jumpStarted = false;
                 }
 
-                if (!isFalling && playerVelocity.y < 0 && isWalk)
+                /*if (!isFalling && playerVelocity.y < 0 && isWalk)
                 {
                     isFalling = true;
-                    attack.walkToFall();
-                }
+                    monsterAnim.walkToFall();
+                }*/
 
                 if (jumpsRemaining > 1 && !Input.GetKey(KeyCode.Space))
                 {
-                    jumpsRemaining = 1;
+                    //jumpsRemaining -= 1;
                 }
             }
 
-            if (!IsBusy() && !screechingStop)
+            if (!screechingStop)//(/*IsBusy()*/true)//!isAttacking && !screechingStop)
             {
                 //if (move != Vector3.zero)
                 //{
@@ -182,12 +202,11 @@ public class Controller1 : MonoBehaviour
 
                 if (groundedPlayer)
                 {
-                    attack.jump();
+                    monsterAnim.jump();
                 }
                 else
                 {
-                    attack.doubleJump();
-                    //attack.jump();
+                    monsterAnim.doubleJump();
                 }
                 int jumpMulti = 1;
 
@@ -206,11 +225,7 @@ public class Controller1 : MonoBehaviour
             //AnimatorStateInfo anim = attack.CurrentAnimationState();
 
             //if (isAttacking && (anim.IsName("Base Layer.Idle") || anim.IsName("Base Layer.Walk") || anim.IsName("Base Layer.Run")))
-            if (!attack.IsAttacking())
-            {
-                isAttacking = false;
-                
-            }
+
         }
         else //while knockback
         {
@@ -239,46 +254,18 @@ public class Controller1 : MonoBehaviour
     {
         if (collision.gameObject.layer == 10)
         {
-            if (Input.GetKey(KeyCode.P))
+            if (platDropInput)//Input.GetKey(KeyCode.P))
             {
                 collision.collider.isTrigger = true;
             }
         } else if (collision.gameObject.layer == 12)
         {
             jump = true;
+            jumpsRemaining = 3;
         }
     }
 
-    /*private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.layer == 10)
-        {
-            //onPlat = true;
-            if (Input.GetKey(KeyCode.P))
-            {
-                print("platformyy");
-                //Physics.IgnoreCollision(rb.collisionDetectionMode = , other, true);
-                //groundedPlayer = false;
-                //other.gameObject.GetComponent<Collider>().enabled = false;
-                other.enabled = false;
-            }
-            else
-            {
-                //groundedPlayer = true;
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == 10)
-        {
-            //onPlat = false;
-            //Physics.IgnoreCollision(capcol, other, false);
-        }
-    }*/
-
-    private bool IsBusy() //returns true if the player is already jumping or attacking
+    private bool IsBusy() //returns true if the player is already attacking
     {
         if (isAttacking)
         {
@@ -299,7 +286,6 @@ public class Controller1 : MonoBehaviour
 
             if (!isWalk)
             {
-                //attack.walk();
                 isWalk = true;
             }
 
@@ -309,7 +295,7 @@ public class Controller1 : MonoBehaviour
                 {
                     StartCoroutine("ScreechStop");
                 }
-                attack.flipCharacter();
+                monsterAnim.flipCharacter();
                 facingRight = true;
             }
         }
@@ -319,7 +305,6 @@ public class Controller1 : MonoBehaviour
 
             if (!isWalk)
             {
-                //attack.walk();
                 isWalk = true;
             }
 
@@ -329,20 +314,20 @@ public class Controller1 : MonoBehaviour
                 {
                     StartCoroutine("ScreechStop");
                 }
-                attack.flipCharacter();
+                monsterAnim.flipCharacter();
                 facingRight = false;
             }
         }
 
         if (isWalk && dir == Vector3.zero)
         {
-            //attack.stopWalking();
+            //monsterAnim.stopWalking();
             isWalk = false;
 
             if (isRunning)
             {
-                //attack.screechingStop();
-                isRunning = false;
+                //monsterAnim.screechingStop();
+                //isRunning = false;
             }
         }
 
@@ -350,6 +335,10 @@ public class Controller1 : MonoBehaviour
         move = dir;
     }
 
+    public void CanPlatformDrop(bool isDoingTheThing) //player is pressing down
+    {
+        platDropInput = isDoingTheThing;
+    }
     private IEnumerator ScreechStop()
     {
         print("my ooop corooutiune");
@@ -362,53 +351,77 @@ public class Controller1 : MonoBehaviour
         yield break;
     }
 
+    private IEnumerator PlatMakeSolidCooldown()
+    {
+        platCanSolid = false;
+
+        yield return new WaitForSeconds(platCooldown);
+
+        platCanSolid = true;
+
+        yield break;
+    }
+
     public void SetIsRun(bool frDawg)
     {
-        if (isWalk)
-        {
+        //if (isWalk)
+        //{
             isRunning = frDawg;
-        }
+        //}
     }
 
     public void Jump()
     {
-        if (!IsBusy())
-        {
+        //if (!isAttacking)//!IsBusy())
+        //{
             jump = true;
-        }
-    }
-
-    public void Attack()
-    {
-        int random = Random.Range(0, 2);
-
-        attack.attack(3);
+        //}
     }
 
     public void Attack1()
     {
-        if (!IsBusy())
+        if (!isAttacking)//!IsBusy())
         {
             isAttacking = true;
-            attack.attack(1);
+            if (!isRunning)
+            {
+                monsterAnim.attack(1);
+            } else
+            {
+                monsterAnim.dashAttack();
+            }
         }
     }
 
     public void Attack2()
     {
-        if (!IsBusy())
+        if (!isAttacking)//!IsBusy())
         {
             isAttacking = true;
-            attack.attack(2);
+            if (!isRunning)
+            {
+                monsterAnim.attack(2);
+            }
+            else
+            {
+                monsterAnim.dashAttack();
+            }
         }
     }
 
     public void Attack3()
     {
-        if (!IsBusy())
+        if (!isAttacking)//!IsBusy())
         {
             isAttacking = true;
-            attack.attack(3);
+            if (!isRunning)
+            {
+                monsterAnim.attack(3);
+            }
+            else
+            {
+                monsterAnim.dashAttack();
+            }
         }
     }
     #endregion

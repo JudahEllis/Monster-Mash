@@ -245,9 +245,11 @@ public class input_handler : MonoBehaviour
 
     public void S_key(CallbackContext context)
     {
-        if (context.started)
+        MethodInfo methodInfo = GetType().GetMethod(currentKeyboardMap[3].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
         {
-            Invoke(currentKeyboardMap[3].inputFunction, 0f);
+            methodInfo.Invoke(this, new object[] { context });
         }
     }
 
@@ -374,6 +376,16 @@ public class input_handler : MonoBehaviour
             Invoke(currentKeyboardMap[18].inputFunction, 0f);
         }
     }
+
+    /*public void Vertical_key(CallbackContext context) //A + D = horizontal axis
+    {
+        MethodInfo methodInfo = GetType().GetMethod(currentKeyboardMap[19].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(this, new object[] { context });
+        }
+    }*/
     #endregion
 
     //A library of menu functions called by inputs. Essentially all the tangible events
@@ -469,6 +481,33 @@ public class input_handler : MonoBehaviour
         }
     }
 
+    private void platformDrop(CallbackContext context)
+    {
+        if (controlType == "XBOX")
+        {
+            int dir = 0;
+
+            Vector2 moveInput = context.ReadValue<Vector2>();
+
+            if (moveInput.y < 0)
+            {
+            }
+
+            player.Move(dir);
+        }
+        else if (controlType == "keyboardmouse")
+        {
+            bool myInput = false;
+
+            if (context.performed)
+            {
+                myInput = true;
+            }
+
+            player.CanPlatformDrop(myInput);
+        }
+    }
+
     private void jumpPlayer()
     {
         player.Jump();
@@ -478,7 +517,7 @@ public class input_handler : MonoBehaviour
     {
         if (context.started)
         {
-            player.Attack();
+            //player.Attack1();
         }
     }
 

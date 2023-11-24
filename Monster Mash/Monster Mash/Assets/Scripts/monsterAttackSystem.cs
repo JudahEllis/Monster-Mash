@@ -229,6 +229,14 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void attackCancel(int attackSlot)
+    {
+        if (attackSlotMonsterID[attackSlot] == 1)
+        {
+            attackSlotMonsterParts[attackSlot].triggerNeutralOrHeavyRefresh(true);
+        }
+    }
+
     public void dashAttack()
     {
         if (isRunning && canDashAttack && canRoll && focusedAttackActive == false)
@@ -641,6 +649,22 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void switchBraceStance()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerHeavyLegStance();
+        }
+    }
+
+    public void endBracing()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerUnbrace();
+        }
+    }
+
     public void hit()
     {
         isRunning = false;
@@ -669,6 +693,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }
+        //have something here for unbracing
     }
 
     #endregion

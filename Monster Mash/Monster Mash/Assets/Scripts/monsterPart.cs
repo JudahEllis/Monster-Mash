@@ -57,6 +57,9 @@ public class monsterPart : MonoBehaviour
     private bool hasHeadCommand = false;
 
     [Header("Internal Info - Don't Touch")]
+    public bool attackMarkedHeavy = false;
+    private bool heavyAttackInMotion = false;
+    private bool fullActiveHeavy = false;
     public bool requiresRightStance = false;
     public bool requiresLeftStance = false;
     public bool requiresForwardStance = false;
@@ -64,7 +67,7 @@ public class monsterPart : MonoBehaviour
     public bool isLeadingLeg;
     public bool hasFlightedIdle = false;
     public Outline visualForAnimationTests;
-
+    public bool hasHeavyBrace = false;
     private bool isAttacking = false;
     private bool attackFocusOn = false;
     private bool isRunning = false;
@@ -714,6 +717,11 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetTrigger(animationName);
                 myMainSystem.attackFocusOn();
                 attackFocusOn = true;
+                runToAttackCorrections();
+                attackMarkedHeavy = false;
+                heavyAttackInMotion = false;
+                fullActiveHeavy = false;
+                triggerNeutralOrHeavyRefresh(false);
             }
 
         }
@@ -731,6 +739,11 @@ public class monsterPart : MonoBehaviour
                     myAnimator.SetTrigger(animationName);
                     myMainSystem.attackFocusOn();
                     attackFocusOn = true;
+                    runToAttackCorrections();
+                    attackMarkedHeavy = false;
+                    heavyAttackInMotion = false;
+                    fullActiveHeavy = false;
+                    triggerNeutralOrHeavyRefresh(false);
                 }
             }
         }
@@ -754,13 +767,12 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    #region Bracing with Attack Stances
+    #region Attack Bracing Animations
     public void triggerLeftAttackStance()
     {
-
         if (isGroundedLimb)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") || 
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
                 myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
                 if (isRightSidedLimb && isAttacking == false)
@@ -773,11 +785,23 @@ public class monsterPart : MonoBehaviour
                 }
 
                 myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
+            }
+            else if(myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
+            {
+                if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Airborn Brace");
+                }
             }
         }
         else if (isArm)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || 
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
                 myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
                 if (isRightSidedLimb && isAttacking == false)
@@ -803,7 +827,7 @@ public class monsterPart : MonoBehaviour
         }
         else if (isWing)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Fly") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Grounded") || 
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Fly") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Grounded") ||
                 myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
                 if (isAttacking == false)
@@ -818,7 +842,7 @@ public class monsterPart : MonoBehaviour
     {
         if (isGroundedLimb)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") || 
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
                 myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
                 if (isLeftSidedLimb && isAttacking == false)
@@ -831,11 +855,23 @@ public class monsterPart : MonoBehaviour
                 }
 
                 myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
+            }
+            else if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
+            {
+                if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Airborn Brace");
+                }
             }
         }
         else if (isArm)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || 
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
                 myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
             {
                 if (isLeftSidedLimb && isAttacking == false)
@@ -889,6 +925,7 @@ public class monsterPart : MonoBehaviour
                 }
 
                 myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
             }
         }
         else if (isArm)
@@ -947,6 +984,7 @@ public class monsterPart : MonoBehaviour
                 }
 
                 myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
             }
         }
         else if (isArm)
@@ -988,7 +1026,87 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void triggerUnbrace()
+    {
+        if (isAttacking == false)
+        {
+            if (isGroundedLimb) // || isTorso
+            {
+                myAnimator.SetTrigger("Unbrace");
+            }
+
+            if (isArm)
+            {
+                myAnimator.SetTrigger("Unbrace");
+            }
+
+            if (isMouth && myAnimator != null)
+            {
+                myAnimator.SetTrigger("Unbrace");
+            }
+
+            if (isHead)
+            {
+
+            }
+        }
+    }
+
     #endregion
+
+    public void triggerNeutralOrHeavyRefresh(bool inputCanceled)
+    {
+        //most likely a canceled input after system already has registered the difference between input but before the attack has been unleashed
+        //aka a canceled heavy attack
+
+        if (fullActiveHeavy == false && attackFocusOn == true)
+        {
+            if (inputCanceled)
+            {
+                if (heavyAttackInMotion)
+                {
+                    myAnimator.SetTrigger("Cancel Heavy");
+                }
+                else
+                {
+                    attackMarkedHeavy = false;
+                    myAnimator.SetBool("Attack Marked Heavy", false);
+                }
+            }
+            else
+            {
+                attackMarkedHeavy = true;
+                myAnimator.SetBool("Attack Marked Heavy", true);
+            }
+        }
+    }
+
+    public void triggerNeutralOrHeavy()
+    {
+        if (attackMarkedHeavy)
+        {
+            heavyAttackInMotion = true;
+            myMainSystem.switchBraceStance(); //for a stronger looking leg stance
+        }
+        else
+        {
+            myAnimator.SetTrigger("Force Neutral Attack");
+        }
+    }
+
+    public void triggerHeavyLegStance()
+    {
+        if (isGroundedLimb)
+        {
+            myAnimator.SetTrigger("Switch Stance");
+            hasHeavyBrace = true;
+        }
+    }
+
+    public void inputCanceled()//this is when a heavy has been triggered but the player cancels it early
+    {
+        //if this part has a failure state or if it has the ability to cancel heavies early
+    }
 
     public void triggerAttackRelease()
     {
@@ -1006,6 +1124,7 @@ public class monsterPart : MonoBehaviour
             }
 
             isRunning = false;
+            fullActiveHeavy = true;
             myMainSystem.correctWalkingAttackAnimations();
         }
     }
@@ -1024,6 +1143,12 @@ public class monsterPart : MonoBehaviour
         if (isGroundedLimb)
         {
             myAnimator.SetBool("Walking", false);
+
+            if (hasHeavyBrace)
+            {
+                myAnimator.SetTrigger("Switch Stance Quick");
+                hasHeavyBrace = false;
+            }
         }
 
         if (isHead)
@@ -1032,35 +1157,45 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerRunAttackCorrections()
+    public void triggerAttackCorrections()
     {
         if (attackFocusOn)
         {
             myMainSystem.correctRunningAttackAnimations();
             myMainSystem.attackFocusOff();
             attackFocusOn = false;
+            isAttacking = false;
+            fullActiveHeavy = false;
+
+            connectedMonsterPart.SetBool("Attack to Idle", false);
+
+            if (hasTorsoCommandOverride)
+            {
+                mainTorso.SetBool("Attack to Idle", false);
+            }
         }
     }
 
     public void runToAttackCorrections()
     {
-        if (isTorso)
-        {
-            if (myAnimator.GetBool("Running") == true)
-            {
-                myAnimator.SetBool("Running", false);
-                myAnimator.SetTrigger("Run to Idle");
-            }
-        }
-
-        if (isGroundedLimb)
+        if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Walking", false);
+            isRunning = false;
         }
 
-        if (isArm || isHead)
+        if (isArm)
         {
             myAnimator.SetBool("Running", false);
+            isRunning = false;
+        }
+
+        if (isHead)
+        {
+            myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Walking", false);
+            isRunning = false;
         }
     }
 
@@ -1075,7 +1210,7 @@ public class monsterPart : MonoBehaviour
             mainTorso.SetBool("Ready to Swing", false);
         }
 
-        isAttacking = false;
+        myMainSystem.endBracing();
     }
 
     #endregion
@@ -1083,18 +1218,6 @@ public class monsterPart : MonoBehaviour
     #region Movement Animations
     public void triggerWalk()
     {
-        /*
-        if (isGroundedLimb || isTorso)
-        {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") 
-                || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-            {
-                myAnimator.SetBool("Walking", true);
-                myAnimator.SetBool("Running", false);
-                isRunning = false;
-            }
-        }
-        */
         if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Walking", true);

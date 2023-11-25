@@ -384,6 +384,11 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
         }
 
+        if (isMouth && myAnimator != null) //this will be expanded to include arms, tails, wings and heads
+        {
+            myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
+        }
+
         if (isLeadingLeg)
         {
             myAnimator.SetBool("Is Leading Leg", true);
@@ -494,9 +499,9 @@ public class monsterPart : MonoBehaviour
         if (isBellyLimb)
         {
             torsoCommand = "Lower Attack";
-            requiresBackwardStance = true;
+            requiresBackwardStance = false;
             requiresForwardStance = false;
-            requiresRightStance = false;
+            requiresRightStance = true;
             requiresLeftStance = false;
         }
 
@@ -1334,10 +1339,13 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRoll(bool groundedWhenTriggered)
     {
-        if (isLeg || isArm ||isTorso || isHead)
+        if (isLeg || isArm ||isTorso || isHead || isMouth)
         {
-            myAnimator.SetBool("Grounded", groundedWhenTriggered);
-            myAnimator.SetTrigger("Roll");
+            if (myAnimator != null)
+            {
+                myAnimator.SetBool("Grounded", groundedWhenTriggered);
+                myAnimator.SetTrigger("Roll");
+            }
 
             if (isGroundedLimb || isTorso || isHead)
             {
@@ -1377,9 +1385,16 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetTrigger("Jump");
         }
 
-        if (isMouth || isEye)
+        if ((isMouth || isEye) && myAnimator != null)
         {
-            myAnimator.SetTrigger("Brace");
+            if (isMouth)
+            {
+                myAnimator.SetTrigger("Roll");
+            }
+            else
+            {
+                myAnimator.SetTrigger("Brace");
+            }
         }
     }
 

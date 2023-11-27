@@ -6918,6 +6918,7 @@ GameObject:
   - component: {fileID: 1791959063690137488}
   - component: {fileID: 1739680733123134172}
   - component: {fileID: 3664642531377288051}
+  - component: {fileID: 5997806726022409697}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Hitbox
@@ -6998,11 +6999,28 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5319977031258626799}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.0000001, y: 1, z: 0.99999994}
   m_Center: {x: 0.00000005960466, y: 0.00000023841858, z: -0.000000119209275}
+--- !u!114 &5997806726022409697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5319977031258626799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83dded194cf0ff14d8f35e0e9c721b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainSystem: {fileID: 0}
+  partReference: {fileID: 0}
+  isHitbox: 1
+  isHurtbox: 0
+  hitVFX: {fileID: 0}
 --- !u!1 &5349138093627487576
 GameObject:
   m_ObjectHideFlags: 0
@@ -10276,7 +10294,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9084139060585879942}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.0000001, y: 1, z: 0.99999994}

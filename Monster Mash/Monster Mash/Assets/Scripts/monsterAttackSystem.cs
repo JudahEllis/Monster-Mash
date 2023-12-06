@@ -684,6 +684,8 @@ public class monsterAttackSystem : MonoBehaviour
     {
         focusedAttackActive = true;
         myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.ResetTrigger("Back to Prior State");
+        //myAnimator.SetTrigger("Back to Prior State");
     }
 
     public void attackFocusOff()
@@ -693,12 +695,39 @@ public class monsterAttackSystem : MonoBehaviour
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }
-        //have something here for unbracing
+        myAnimator.ResetTrigger("Right Attack Release");
+        myAnimator.ResetTrigger("Left Attack Release");
+        myAnimator.SetTrigger("Back to Prior State");
     }
 
     #endregion
 
     #region Corrections
+
+    public void correctAttackDirection(int limbPlacement)
+    {
+        if (limbPlacement == -1) //punch sent from left limb while facing left --> full turn; punch sent from left limb while facing right --> half turn
+        {
+            myAnimator.SetTrigger("Left Attack Release");
+        }
+        else if(limbPlacement == 1) //punch sent from right limb while facing right --> full turn; punch sent from right limb while facing left --> half turn
+        {
+            myAnimator.SetTrigger("Right Attack Release");
+        }
+        else
+        {
+            //should be a forward attack with a full turn
+
+            if (facingRight)
+            {
+                myAnimator.SetTrigger("Right Attack Release");
+            }
+            else
+            {
+                myAnimator.SetTrigger("Left Attack Release");
+            }
+        }
+    }
 
     public void correctWalkingAttackAnimations()
     {

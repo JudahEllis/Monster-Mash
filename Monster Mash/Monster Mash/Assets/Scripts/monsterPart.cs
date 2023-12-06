@@ -489,7 +489,7 @@ public class monsterPart : MonoBehaviour
         if (isChestLimb || isNeckLimb)
         {
             torsoCommand = "Upper Attack";
-            isRightSidedLimb = true;
+            //isRightSidedLimb = true;
             requiresBackwardStance = false;
             requiresForwardStance = false;
             requiresRightStance = true;
@@ -508,7 +508,7 @@ public class monsterPart : MonoBehaviour
         if (isTailLimb)
         {
             torsoCommand = "Upper Attack";
-            isRightSidedLimb = true;
+            //isRightSidedLimb = true;
             requiresBackwardStance = false;
             requiresForwardStance = true;
             requiresRightStance = false;
@@ -681,7 +681,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetFloat("Run Offset", leftRunOffset);
             }
         }
-        else if ((isRightSidedLimb || isLeftSidedLimb))
+        else if ((isRightSidedLimb || isLeftSidedLimb) && isHorn == false)
         {
             float randomOffset = Random.Range(0, 0.5f);
             myAnimator.SetFloat("Idle Offset", randomOffset);
@@ -1131,6 +1131,19 @@ public class monsterPart : MonoBehaviour
             isRunning = false;
             fullActiveHeavy = true;
             myMainSystem.correctWalkingAttackAnimations();
+
+            if (isLeftSidedLimb)
+            {
+                myMainSystem.correctAttackDirection(-1);
+            }
+            else if (isRightSidedLimb)
+            {
+                myMainSystem.correctAttackDirection(1);
+            }
+            else
+            {
+                myMainSystem.correctAttackDirection(0);
+            }
         }
     }
 

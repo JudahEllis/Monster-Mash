@@ -67,6 +67,8 @@ public class autoLimb_Connection : MonoBehaviour
                 monsterPartScript.isBellyLimb = isBellyTorsoConnection;
 
                 //this section may be removed at a later date if we decide to separate left and right limbs as separate limbs and deserving of a hardcoded orientation
+                //Dont forget!!! Horns, Eyes, and Mouths need to be excluded from this grouping 
+
                 if (isLeftHeadConnection || isLeftUpperTorsoConnection || isLeftLowerTorsoConnection)
                 {
                     monsterPartScript.isLeftSidedLimb = true;

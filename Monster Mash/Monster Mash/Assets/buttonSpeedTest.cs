@@ -28,5 +28,15 @@ public class buttonSpeedTest : MonoBehaviour
         {
             monster.attackCancel(2);
         }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            monster.attack(3);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Y))
+        {
+            monster.attackCancel(3);
+        }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class autoLimb_Connection : MonoBehaviour
 {
     public Collider triggerBubble;
+    public Animator connectedBodyPiece;
 
     [Header("Head Connection Data")]
     public bool isLeftHeadConnection = false;
@@ -50,6 +51,7 @@ public class autoLimb_Connection : MonoBehaviour
             if (other.gameObject.GetComponent<monsterPart>() != null)
             {
                 monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
+                monsterPartScript.connectedMonsterPart = connectedBodyPiece;
                 monsterPartScript.isJointed = true;
                 monsterPartScript.isLeftEarLimb = isLeftHeadConnection;
                 monsterPartScript.isRightEarLimb = isRightHeadConnection;

@@ -182,7 +182,7 @@ public class monsterPart : MonoBehaviour
             if (isChestLimb || isNeckLimb)
             {
                 torsoCommand = "Upper Attack";
-                isRightSidedLimb = true;
+                //isRightSidedLimb = true;
                 requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
@@ -192,16 +192,16 @@ public class monsterPart : MonoBehaviour
             if (isBellyLimb)
             {
                 torsoCommand = "Lower Attack";
-                requiresBackwardStance = true;
+                requiresBackwardStance = false;
                 requiresForwardStance = false;
-                requiresRightStance = false;
+                requiresRightStance = true;
                 requiresLeftStance = false;
             }
 
             if (isTailLimb)
             {
                 torsoCommand = "Upper Attack";
-                isRightSidedLimb = true;
+                //isRightSidedLimb = true;
                 requiresBackwardStance = false;
                 requiresForwardStance = true;
                 requiresRightStance = false;
@@ -244,12 +244,24 @@ public class monsterPart : MonoBehaviour
 
                 if (attackAnimationID == 2)
                 {
-                    headCommand = "Upward Attack";
-                    torsoCommandOverride = "Lower Attack";
-                    requiresBackwardStance = false;
-                    requiresForwardStance = false;
-                    requiresRightStance = true;
-                    requiresLeftStance = false;
+                    if (isMouth || isEye)
+                    {
+                        headCommand = "Upward Attack";
+                        torsoCommandOverride = "Lower Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else
+                    {
+                        headCommand = "Forward Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
                 }
                 else
                 {
@@ -551,12 +563,24 @@ public class monsterPart : MonoBehaviour
 
             if (attackAnimationID == 2)
             {
-                headCommand = "Upward Attack";
-                torsoCommandOverride = "Lower Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
+                if (isMouth || isEye)
+                {
+                    headCommand = "Upward Attack";
+                    torsoCommandOverride = "Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+                else
+                {
+                    headCommand = "Forward Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
             else
             {
@@ -655,6 +679,8 @@ public class monsterPart : MonoBehaviour
             hitboxesAndHurtboxes[i].gameObject.SetActive(true);
         }
         #endregion
+
+
     }
 
     public void triggerAnimationOffsets()
@@ -1233,6 +1259,20 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
+    #region Attack Effects
+
+    public void triggerSprayAttack()
+    {
+        //get all the VFX from monster part reference, reparent, and reset them
+    }
+
+    public void triggerParticleUnparenting()
+    {
+        //get all the VFX from monster part reference and unparent them
+    }
+
+    #endregion
+
     #region Movement Animations
     public void triggerWalk()
     {
@@ -1466,8 +1506,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHit()
     {
-        myAnimator.SetTrigger("Hit");
-        isAttacking = false;
+        if (myAnimator != null)
+        {
+            myAnimator.SetTrigger("Hit");
+            isAttacking = false;
+        }
 
         if (isGroundedLimb || isTorso || isHead)
         {

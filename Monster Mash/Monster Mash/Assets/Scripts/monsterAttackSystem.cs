@@ -20,7 +20,7 @@ public class monsterAttackSystem : MonoBehaviour
     private Animator myAnimator;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
-    //public List<monsterPart> allMonsterParts;
+    private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     private monsterPart[] allMonsterParts;
     public GameObject dashSplat;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
@@ -119,6 +119,17 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
+
+        monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
+        for (int i = 0; i < internalPartReferences.Length; i++)
+        {
+            listOfInternalReferences.Add(internalPartReferences[i]);
+        }
+        for (int u = 0; u < listOfInternalReferences.Count; u++)
+        {
+            listOfInternalReferences[u].referencesToIgnore = listOfInternalReferences;
+        }
+
     }
 
     public void grabAttackSlotInfo()
@@ -716,16 +727,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
         else
         {
-            //should be a forward attack with a full turn
-
-            if (facingRight)
-            {
-                myAnimator.SetTrigger("Right Attack Release");
-            }
-            else
-            {
-                myAnimator.SetTrigger("Left Attack Release");
-            }
+            myAnimator.SetTrigger("Forward Attack Release");
         }
     }
 

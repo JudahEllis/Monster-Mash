@@ -6,6 +6,7 @@ public class monsterPartReference : MonoBehaviour
 {
     public monsterAttackSystem mainSystem;
     public monsterPart partReference;
+    public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
     public bool isHitbox;
     public bool isHurtbox;
     public bool hasVFX;
@@ -23,24 +24,58 @@ public class monsterPartReference : MonoBehaviour
         }
     }
 
+    public void setUpVFX()
+    {
+        if (hasVFX)
+        {
+            VFXPosition = hitVFX[0].transform.localPosition;
+            hitVFXParent = hitVFX[0].transform.parent;
+        }
+    }
+
+    public void resetSprayVFX()
+    {
+        for (int i = 0; i < hitVFX.Length; i++)
+        {
+            hitVFX[i].SetActive(false);
+            hitVFX[i].transform.parent = hitVFXParent;
+            hitVFX[i].transform.localPosition = VFXPosition;
+            hitVFX[i].SetActive(true);
+        }
+    }
+
+    public void unparentSprayVFX()
+    {
+        for (int i = 0; i < hitVFX.Length; i++)
+        {
+            hitVFX[i].transform.parent = null;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (isHitbox && hitVFX != null)
+        if (other.GetComponent<monsterPartReference>() != null)
         {
-            if (hitVFXCount == hitVFX.Length - 1)
+            if (referencesToIgnore.Contains(other.GetComponent<monsterPartReference>()) == false)
             {
-                hitVFXCount = 0;
-            }
-            else
-            {
-                hitVFXCount++;
-            }
+                if (isHitbox && hitVFX != null)
+                {
+                    if (hitVFXCount == hitVFX.Length - 1)
+                    {
+                        hitVFXCount = 0;
+                    }
+                    else
+                    {
+                        hitVFXCount++;
+                    }
 
-            hitVFX[hitVFXCount].SetActive(false);
-            hitVFX[hitVFXCount].transform.parent = hitVFXParent;
-            hitVFX[hitVFXCount].transform.localPosition = VFXPosition;
-            hitVFX[hitVFXCount].transform.parent = null;
-            hitVFX[hitVFXCount].SetActive(true);
+                    hitVFX[hitVFXCount].SetActive(false);
+                    hitVFX[hitVFXCount].transform.parent = hitVFXParent;
+                    hitVFX[hitVFXCount].transform.localPosition = VFXPosition;
+                    hitVFX[hitVFXCount].transform.parent = null;
+                    hitVFX[hitVFXCount].SetActive(true);
+                }
+            }
         }
     }
 }

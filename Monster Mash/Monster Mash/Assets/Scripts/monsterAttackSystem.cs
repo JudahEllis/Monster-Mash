@@ -267,6 +267,8 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerRoll(true);
         }
 
+        myAnimator.SetFloat("Flipping Speed", 1);
+        myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
 
         yield return new WaitForSeconds(0.2f);
@@ -285,6 +287,8 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerVisualReappearance();
             allMonsterParts[i].triggerRoll(true);
         }
+
+        myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
         dashSplat.SetActive(false);
         attackFocusOff();
@@ -490,6 +494,7 @@ public class monsterAttackSystem : MonoBehaviour
                     allMonsterParts[i].triggerRoll(false);
                 }
 
+                myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
             }
         }
@@ -557,6 +562,7 @@ public class monsterAttackSystem : MonoBehaviour
                 allMonsterParts[i].triggerRoll(false);
             }
 
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
         }
@@ -620,6 +626,7 @@ public class monsterAttackSystem : MonoBehaviour
                 allMonsterParts[i].triggerRoll(true);
             }
 
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
         }

@@ -8,6 +8,7 @@ public class monsterPart : MonoBehaviour
     public monsterAttackSystem myMainSystem;
     private SkinnedMeshRenderer[] mySkinnedMeshRenderers;
     private MeshRenderer[] myMeshRenderers;
+    private ParticleSystem[] myIdleVFX;
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     private Animator myAnimator;
@@ -673,6 +674,7 @@ public class monsterPart : MonoBehaviour
 
         mySkinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         myMeshRenderers = GetComponentsInChildren<MeshRenderer>();
+        myIdleVFX = GetComponentsInChildren<ParticleSystem>();
 
         for (int i = 0; i < hitboxesAndHurtboxes.Count; i++)
         {
@@ -1537,6 +1539,11 @@ public class monsterPart : MonoBehaviour
         {
             myMeshRenderers[i].enabled = false;
         }
+
+        for (int i = 0; i < myIdleVFX.Length; i++)
+        {
+            myIdleVFX[i].gameObject.SetActive(false);
+        }
     }
 
     public void triggerVisualReappearance()
@@ -1549,6 +1556,11 @@ public class monsterPart : MonoBehaviour
         for (int i = 0; i < myMeshRenderers.Length; i++)
         {
             myMeshRenderers[i].enabled = true;
+        }
+
+        for (int i = 0; i < myIdleVFX.Length; i++)
+        {
+            myIdleVFX[i].gameObject.SetActive(true);
         }
     }
 

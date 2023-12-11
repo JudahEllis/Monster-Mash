@@ -20,6 +20,7 @@ public class animationRoom : MonoBehaviour
     private string[] monsterPartAttackDirections;
     public TMP_Text monsterPartName;
     private string[] monsterPartNameCollection;
+    public Animator sceneCamera;
 
     public void removeFloor()
     {
@@ -193,5 +194,10 @@ public class animationRoom : MonoBehaviour
         monsterPartCollection[selectedMonsterPart].disableOutline();
         reMappingUI.SetActive(false);
         animationTestingUI.SetActive(true);
+    }
+
+    public void flipCamera()
+    {
+        sceneCamera.SetTrigger("Flip Camera");
     }
 }

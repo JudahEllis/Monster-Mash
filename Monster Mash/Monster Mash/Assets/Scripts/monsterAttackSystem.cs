@@ -20,7 +20,7 @@ public class monsterAttackSystem : MonoBehaviour
     private Animator myAnimator;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
-    //public List<monsterPart> allMonsterParts;
+    private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     private monsterPart[] allMonsterParts;
     public GameObject dashSplat;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
@@ -119,6 +119,17 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
+
+        monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
+        for (int i = 0; i < internalPartReferences.Length; i++)
+        {
+            listOfInternalReferences.Add(internalPartReferences[i]);
+        }
+        for (int u = 0; u < listOfInternalReferences.Count; u++)
+        {
+            listOfInternalReferences[u].referencesToIgnore = listOfInternalReferences;
+        }
+
     }
 
     public void grabAttackSlotInfo()
@@ -256,6 +267,8 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerRoll(true);
         }
 
+        myAnimator.SetFloat("Flipping Speed", 1);
+        myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
 
         yield return new WaitForSeconds(0.2f);
@@ -274,6 +287,8 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerVisualReappearance();
             allMonsterParts[i].triggerRoll(true);
         }
+
+        myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
         dashSplat.SetActive(false);
         attackFocusOff();
@@ -479,6 +494,7 @@ public class monsterAttackSystem : MonoBehaviour
                     allMonsterParts[i].triggerRoll(false);
                 }
 
+                myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
             }
         }
@@ -546,6 +562,7 @@ public class monsterAttackSystem : MonoBehaviour
                 allMonsterParts[i].triggerRoll(false);
             }
 
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
         }
@@ -609,6 +626,7 @@ public class monsterAttackSystem : MonoBehaviour
                 allMonsterParts[i].triggerRoll(true);
             }
 
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
         }
@@ -684,6 +702,8 @@ public class monsterAttackSystem : MonoBehaviour
     {
         focusedAttackActive = true;
         myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.ResetTrigger("Back to Prior State");
+        //myAnimator.SetTrigger("Back to Prior State");
     }
 
     public void attackFocusOff()
@@ -693,12 +713,30 @@ public class monsterAttackSystem : MonoBehaviour
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }
-        //have something here for unbracing
+        myAnimator.ResetTrigger("Right Attack Release");
+        myAnimator.ResetTrigger("Left Attack Release");
+        myAnimator.SetTrigger("Back to Prior State");
     }
 
     #endregion
 
     #region Corrections
+
+    public void correctAttackDirection(int limbPlacement)
+    {
+        if (limbPlacement == -1) //punch sent from left limb while facing left --> full turn; punch sent from left limb while facing right --> half turn
+        {
+            myAnimator.SetTrigger("Left Attack Release");
+        }
+        else if(limbPlacement == 1) //punch sent from right limb while facing right --> full turn; punch sent from right limb while facing left --> half turn
+        {
+            myAnimator.SetTrigger("Right Attack Release");
+        }
+        else
+        {
+            myAnimator.SetTrigger("Forward Attack Release");
+        }
+    }
 
     public void correctWalkingAttackAnimations()
     {

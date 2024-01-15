@@ -98,6 +98,27 @@ public class Outline : MonoBehaviour {
     // Apply material properties immediately
     needsUpdate = true;
   }
+    
+
+    //Gavin added this bit for easier control with outlines since this script is temporary
+    public void enableOutline()
+    {
+        // Cache renderers
+        renderers = GetComponentsInChildren<Renderer>();
+
+        // Instantiate outline materials
+        outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
+        outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineFill"));
+
+        outlineMaskMaterial.name = "OutlineMask (Instance)";
+        outlineFillMaterial.name = "OutlineFill (Instance)";
+
+        // Retrieve or generate smooth normals
+        LoadSmoothNormals();
+
+        // Apply material properties immediately
+        needsUpdate = true;
+    }
 
   void OnEnable() {
     foreach (var renderer in renderers) {

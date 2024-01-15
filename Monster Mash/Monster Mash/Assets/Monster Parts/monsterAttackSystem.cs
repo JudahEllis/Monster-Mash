@@ -18,6 +18,7 @@ public class monsterAttackSystem : MonoBehaviour
     private bool canDashAttack = true;
 
     private Animator myAnimator;
+    private Animator mainTorso;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
@@ -71,6 +72,11 @@ public class monsterAttackSystem : MonoBehaviour
                 allWings.Add(allMonsterParts[i]);
                 hasWings = true;
             }
+
+            if (allMonsterParts[i].isTorso)
+            {
+                mainTorso = allMonsterParts[i].GetComponent<Animator>();
+            }
         }
 
         if (hasRightGroundedLegs == true && hasLeftGroundedLegs == true)
@@ -113,6 +119,7 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].myMainSystem = this;
+            allMonsterParts[i].mainTorso = mainTorso;
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerIdle();

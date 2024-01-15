@@ -15,6 +15,8 @@ public class monsterPartReference : MonoBehaviour
     private Transform hitVFXParent;
     private Vector3 VFXPosition;
 
+    public bool isProjectile;
+
     private void Awake()
     {
         if (hasVFX)
@@ -58,7 +60,12 @@ public class monsterPartReference : MonoBehaviour
         {
             if (referencesToIgnore.Contains(other.GetComponent<monsterPartReference>()) == false)
             {
-                if (isHitbox && hitVFX != null)
+                if (isProjectile && isHitbox)
+                {
+                    GetComponent<projectile>().impact();
+                }
+
+                if (isHitbox && hitVFX.Length != 0)
                 {
                     if (hitVFXCount == hitVFX.Length - 1)
                     {

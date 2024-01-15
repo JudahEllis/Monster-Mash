@@ -8,7 +8,6 @@ public class monsterPart : MonoBehaviour
     public monsterAttackSystem myMainSystem;
     private SkinnedMeshRenderer[] mySkinnedMeshRenderers;
     private MeshRenderer[] myMeshRenderers;
-    private ParticleSystem[] myIdleVFX;
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     private Animator myAnimator;
@@ -30,6 +29,38 @@ public class monsterPart : MonoBehaviour
     public bool isTorso;
     public bool isHorn;
     public bool isDecor;
+
+    [Header("Neutral Attack Questionaire")]
+    public bool jabNeutralAttack;
+    public bool slashNeutralAttack;
+    public bool sprayNeutralAttack;
+    public bool projectileNeutralAttack;
+    public bool beamNeutralAttack;
+    public GameObject[] neutralAttackVFXArray;
+    private int neutralVFXCount;
+    private Transform neutralVFXParent;
+    private Vector3 neutralVFXPosition;
+
+    [Header("Heavy Attack Questionaire")]
+    public bool jabHeavyAttack;
+    public bool slashHeavyAttack;
+    public bool sprayHeavyAttack;
+    public bool projectileHeavyAttack;
+    public bool beamHeavyAttack;
+    public bool reelHeavyAttack;
+    public GameObject[] heavyAttackVFXArray;
+    public bool burnedStatusEffect;
+    public bool electrifiedStatusEffect;
+    public bool poisonedStatusEffect;
+    public bool stinkyStatusEffect;
+    public bool hauntedStatusEffect;
+    public bool confusedStatusEffect;
+    public bool slimedStatusEffect;
+    public bool stunnedStatusEffect;
+    public bool frozenStatusEffect;
+    public bool squashedStatusEffect;
+    public bool slowedStatusEffect;
+    private bool grabbedStatusEffect;
 
     [Header("Monster Part Positioning Info")]
     public bool isJointed;
@@ -75,6 +106,7 @@ public class monsterPart : MonoBehaviour
     private int jumpsAllotted;
     private int regularJumpAmount = 2;
     private int wingedJumpAmount = 4;
+    public ParticleSystem[] myIdleVFX;
 
     #region Animation Team Tools
 
@@ -345,9 +377,16 @@ public class monsterPart : MonoBehaviour
     {
         if (monsterPartID == 1 || isWing) //fix this, I dont like having to clarify that a wing isn't a ID 1 just so that it can jump
         {
+            myIdleVFX = GetComponentsInChildren<ParticleSystem>();
+            for (int i = 0; i < myIdleVFX.Length; i++)
+            {
+                myIdleVFX[i].gameObject.SetActive(false);
+            }
+
             if (gameObject.GetComponent<Outline>() != null)
             {
                 visualForAnimationTests = gameObject.GetComponent<Outline>();
+                visualForAnimationTests.enabled = true;
             }
             else
             {
@@ -550,12 +589,36 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-                headCommand = "Forward Attack";
-                torsoCommandOverride = "Upper Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
+                if (isHorn)
+                {
+                    if (attackAnimationID == 1)
+                    {
+                        headCommand = "Forward Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else if (attackAnimationID == 2)
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                }
+                else
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
         }
 
@@ -575,7 +638,7 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    headCommand = "Forward Attack";
+                    headCommand = "Face Attack";
                     torsoCommandOverride = "Upper Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
@@ -585,7 +648,7 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-                headCommand = "Forward Attack";
+                headCommand = "Face Attack";
                 torsoCommandOverride = "Upper Attack";
                 requiresBackwardStance = false;
                 requiresForwardStance = false;
@@ -597,47 +660,93 @@ public class monsterPart : MonoBehaviour
 
         if (isRightEarLimb)
         {
-
-            if (attackAnimationID == -1)
+            if (isHorn)
             {
-                headCommand = "Left Attack";
-                torsoCommandOverride = "Lower Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = false;
-                requiresLeftStance = true;
+                if (attackAnimationID == 2)
+                {
+                    headCommand = "Upward Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+                else
+                {
+                    headCommand = "Forward Attack";
+                    torsoCommandOverride = "Forward Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
             else
             {
-                headCommand = "Right Attack";
-                torsoCommandOverride = "Upper Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
+                if (attackAnimationID == -1)
+                {
+                    headCommand = "Left Attack";
+                    torsoCommandOverride = "Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+                else
+                {
+                    headCommand = "Right Attack";
+                    torsoCommandOverride = "Forward Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
         }
 
         if (isLeftEarLimb)
         {
-
-            if (attackAnimationID == -1)
+            if (isHorn)
             {
-                headCommand = "Right Attack";
-                torsoCommandOverride = "Lower Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
+                if (attackAnimationID == 2)
+                {
+                    headCommand = "Upward Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+                else
+                {
+                    headCommand = "Forward Attack";
+                    torsoCommandOverride = "Forward Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
             else
             {
-                headCommand = "Left Attack";
-                torsoCommandOverride = "Upper Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = false;
-                requiresLeftStance = true;
+                if (attackAnimationID == -1)
+                {
+                    headCommand = "Right Attack";
+                    torsoCommandOverride = "Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+                else
+                {
+                    headCommand = "Left Attack";
+                    torsoCommandOverride = "Forward Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
             }
         }
 
@@ -674,7 +783,18 @@ public class monsterPart : MonoBehaviour
 
         mySkinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         myMeshRenderers = GetComponentsInChildren<MeshRenderer>();
-        myIdleVFX = GetComponentsInChildren<ParticleSystem>();
+
+        if (myIdleVFX.Length != 0) //checks for the idle VFX because of what needs to happen for the outline to not go around the VFX planes
+        {
+            for (int i = 0; i < myIdleVFX.Length; i++)
+            {
+                myIdleVFX[i].gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            myIdleVFX = GetComponentsInChildren<ParticleSystem>();
+        }
 
         for (int i = 0; i < hitboxesAndHurtboxes.Count; i++)
         {
@@ -682,7 +802,7 @@ public class monsterPart : MonoBehaviour
         }
         #endregion
 
-
+        setUpVFX();
     }
 
     public void triggerAnimationOffsets()
@@ -1066,6 +1186,8 @@ public class monsterPart : MonoBehaviour
             if (isGroundedLimb) // || isTorso
             {
                 myAnimator.SetTrigger("Unbrace");
+                myAnimator.ResetTrigger("Backward Brace");
+                myAnimator.ResetTrigger("Forward Brace");
             }
 
             if (isArm)
@@ -1262,6 +1384,52 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Attack Effects
+
+    private void setUpVFX()
+    {
+        if (neutralAttackVFXArray.Length != 0)
+        {
+            neutralVFXPosition = neutralAttackVFXArray[0].transform.localPosition;
+            neutralVFXParent = neutralAttackVFXArray[0].transform.parent;
+        }
+    }
+
+    public void triggerNeutralAttackVisuals()
+    {
+        if (jabNeutralAttack)
+        {
+
+        }
+        else if (slashNeutralAttack)
+        {
+
+        }
+        else if (sprayNeutralAttack)
+        {
+
+        }
+        else if (projectileNeutralAttack && neutralAttackVFXArray.Length != 0)
+        {
+            if (neutralVFXCount == neutralAttackVFXArray.Length - 1)
+            {
+                neutralVFXCount = 0;
+            }
+            else
+            {
+                neutralVFXCount++;
+            }
+
+            neutralAttackVFXArray[neutralVFXCount].SetActive(false);
+            neutralAttackVFXArray[neutralVFXCount].transform.parent = neutralVFXParent;
+            neutralAttackVFXArray[neutralVFXCount].transform.localPosition = neutralVFXPosition;
+            neutralAttackVFXArray[neutralVFXCount].transform.parent = null;
+            neutralAttackVFXArray[neutralVFXCount].SetActive(true);
+        }
+        else if (beamNeutralAttack)
+        {
+
+        }
+    }
 
     public void triggerSprayAttack()
     {

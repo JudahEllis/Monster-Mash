@@ -11,7 +11,7 @@ public class MultiplayerJoinManager : MonoBehaviour
     private PlayerInputManager playerInputController;
 
     // The Scene's UI Canvas that the Player UI Controllers are spawned under
-    public GameObject uiCanvas;
+    public GameObject cursorParent;
 
     // The Colors that are mapped to the UI Elements to visually show which player they are
     public Color[] playerTokenColors;
@@ -28,9 +28,8 @@ public class MultiplayerJoinManager : MonoBehaviour
     {
         playerInputController.onPlayerJoined += AddPlayerToken;
 
-        playerInputController.onPlayerJoined += AssignTokenControls;
+        playerInputController.onPlayerJoined += AssignCursorControls;
 
-        print(playerInputController.playerCount);
     }
 
     // Update is called once per frame
@@ -38,6 +37,8 @@ public class MultiplayerJoinManager : MonoBehaviour
     
     void LateUpdate()
     {
+        //Clamps the Player Cursors' Positions so that they do not go off screen
+
         foreach(VirtualMouseInput cursor in playerCursors)
         {
             Vector2 mousePos = cursor.virtualMouse.position.ReadValue();
@@ -50,20 +51,21 @@ public class MultiplayerJoinManager : MonoBehaviour
     }
     
     
-
+    //Function is used to Controll the position of Player Cursors after they spawn
+    //As of right now assigns a color value but that can be swapped out for a sprite at a later date
     void AddPlayerToken(PlayerInput player)
     {
-        player.gameObject.transform.SetParent(uiCanvas.transform, false);
+        player.gameObject.transform.SetParent(cursorParent.transform, false);
 
         player.gameObject.GetComponent<RectTransform>().position = Vector3.zero;
 
         player.gameObject.GetComponentInChildren<Image>().color = playerTokenColors[
             playerInputController.playerCount - 1];
-
-        print(playerInputController.playerCount);
     }
 
-    void AssignTokenControls(PlayerInput player)
+    //Assigns the newly Spawned in Cursors their respective Player's controller
+    //Input System likes to have them all be controlled by one so this is the manual workarond
+    void AssignCursorControls(PlayerInput player)
     {
         InputActionAsset playerInput = player.GetComponent<PlayerInput>().actions;
 

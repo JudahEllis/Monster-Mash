@@ -73,13 +73,19 @@ public class autoLimb_Connection : MonoBehaviour
 
                 if (isLeftHeadConnection || isLeftUpperTorsoConnection || isLeftLowerTorsoConnection)
                 {
-                    monsterPartScript.isLeftSidedLimb = true;
-                    monsterPartScript.isRightSidedLimb = false;
+                    if (monsterPartScript.isHorn == false)
+                    {
+                        monsterPartScript.isLeftSidedLimb = true;
+                        monsterPartScript.isRightSidedLimb = false;
+                    }
                 }
                 if (isRightHeadConnection || isRightUpperTorsoConnection || isRightLowerTorsoConnection)
                 {
-                    monsterPartScript.isRightSidedLimb = true;
-                    monsterPartScript.isLeftSidedLimb = false;
+                    if (monsterPartScript.isHorn == false)
+                    {
+                        monsterPartScript.isRightSidedLimb = true;
+                        monsterPartScript.isLeftSidedLimb = false;
+                    }
                 }
             }
         }

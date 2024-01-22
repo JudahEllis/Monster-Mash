@@ -21,6 +21,14 @@ public class animationRoom : MonoBehaviour
     public TMP_Text monsterPartName;
     private string[] monsterPartNameCollection;
     public Animator sceneCamera;
+    private bool facingLeft = true;
+    public GameObject leftCloseRangeTarget;
+    public GameObject leftMediumRangeTarget;
+    public GameObject leftLongeRangeTarget;
+    public GameObject rightCloseRangeTarget;
+    public GameObject rightMediumRangeTarget;
+    public GameObject rightLongRangeTarget;
+    private int cameraNumber = -1; //facing left first
 
     public void removeFloor()
     {
@@ -199,5 +207,123 @@ public class animationRoom : MonoBehaviour
     public void flipCamera()
     {
         sceneCamera.SetTrigger("Flip Camera");
+
+        if (facingLeft)
+        {
+            facingLeft = false;
+        }
+        else
+        {
+            facingLeft = true;
+        }
+
+        cameraNumber = cameraNumber * -1;
+        switchTarget();
+    }
+
+    public void closeCamera()
+    {
+        sceneCamera.SetTrigger("Close Range");
+
+        if (facingLeft)
+        {
+            cameraNumber = -1;
+        }
+        else
+        {
+            cameraNumber = 1;
+        }
+
+        switchTarget();
+    }
+
+    public void mediumCamera()
+    {
+        sceneCamera.SetTrigger("Medium Range");
+
+        if (facingLeft)
+        {
+            cameraNumber = -2;
+        }
+        else
+        {
+            cameraNumber = 2;
+        }
+
+        switchTarget();
+    }
+
+    public void longCamera()
+    {
+        sceneCamera.SetTrigger("Long Range");
+
+        if (facingLeft)
+        {
+            cameraNumber = -3;
+        }
+        else
+        {
+            cameraNumber = 3;
+        }
+
+        switchTarget();
+    }
+
+    private void switchTarget()
+    {
+        if (cameraNumber == -1)
+        {
+            leftCloseRangeTarget.SetActive(true);
+            leftMediumRangeTarget.SetActive(false);
+            leftLongeRangeTarget.SetActive(false);
+            rightCloseRangeTarget.SetActive(false);
+            rightMediumRangeTarget.SetActive(false);
+            rightLongRangeTarget.SetActive(false);
+        }
+        else if (cameraNumber == -2)
+        {
+            leftCloseRangeTarget.SetActive(false);
+            leftMediumRangeTarget.SetActive(true);
+            leftLongeRangeTarget.SetActive(false);
+            rightCloseRangeTarget.SetActive(false);
+            rightMediumRangeTarget.SetActive(false);
+            rightLongRangeTarget.SetActive(false);
+        }
+        else if (cameraNumber == -3)
+        {
+            leftCloseRangeTarget.SetActive(false);
+            leftMediumRangeTarget.SetActive(false);
+            leftLongeRangeTarget.SetActive(true);
+            rightCloseRangeTarget.SetActive(false);
+            rightMediumRangeTarget.SetActive(false);
+            rightLongRangeTarget.SetActive(false);
+        }
+        else if (cameraNumber == 1)
+        {
+            leftCloseRangeTarget.SetActive(false);
+            leftMediumRangeTarget.SetActive(false);
+            leftLongeRangeTarget.SetActive(false);
+            rightCloseRangeTarget.SetActive(true);
+            rightMediumRangeTarget.SetActive(false);
+            rightLongRangeTarget.SetActive(false);
+        }
+        else if (cameraNumber == 2)
+        {
+            leftCloseRangeTarget.SetActive(false);
+            leftMediumRangeTarget.SetActive(false);
+            leftLongeRangeTarget.SetActive(false);
+            rightCloseRangeTarget.SetActive(false);
+            rightMediumRangeTarget.SetActive(true);
+            rightLongRangeTarget.SetActive(false);
+        }
+        else if (cameraNumber == 3)
+        {
+            leftCloseRangeTarget.SetActive(false);
+            leftMediumRangeTarget.SetActive(false);
+            leftLongeRangeTarget.SetActive(false);
+            rightCloseRangeTarget.SetActive(false);
+            rightMediumRangeTarget.SetActive(false);
+            rightLongRangeTarget.SetActive(true);
+        }
     }
 }

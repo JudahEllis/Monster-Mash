@@ -116,26 +116,33 @@ public class monsterAttackSystem : MonoBehaviour
 
         #endregion
 
+        monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
+
+        for (int i = 0; i < internalPartReferences.Length; i++)
+        {
+            listOfInternalReferences.Add(internalPartReferences[i]);
+        }
+
+        /*
+        //remove this, have collider to ignore info handled by individual monster parts
+        for (int u = 0; u < listOfInternalReferences.Count; u++)
+        {
+            listOfInternalReferences[u].referencesToIgnore = listOfInternalReferences;
+        }
+        */
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].mainTorso = mainTorso;
+            allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
+            allMonsterParts[i].triggerCollisionLogic();
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerIdle();
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
-
-        monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
-        for (int i = 0; i < internalPartReferences.Length; i++)
-        {
-            listOfInternalReferences.Add(internalPartReferences[i]);
-        }
-        for (int u = 0; u < listOfInternalReferences.Count; u++)
-        {
-            listOfInternalReferences[u].referencesToIgnore = listOfInternalReferences;
-        }
 
     }
 

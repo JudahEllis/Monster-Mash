@@ -36,10 +36,12 @@ public class monsterPart : MonoBehaviour
     public bool sprayNeutralAttack;
     public bool projectileNeutralAttack;
     public bool beamNeutralAttack;
+    public GameObject vfxHolder;
     public GameObject[] neutralAttackVFXArray;
     private int neutralVFXCount;
     private Transform neutralVFXParent;
     private Vector3 neutralVFXPosition;
+    private Vector3 neutralVFXRotation;
 
     [Header("Heavy Attack Questionaire")]
     public bool jabHeavyAttack;
@@ -107,6 +109,7 @@ public class monsterPart : MonoBehaviour
     private int regularJumpAmount = 2;
     private int wingedJumpAmount = 4;
     public ParticleSystem[] myIdleVFX;
+    public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
 
     #region Animation Team Tools
 
@@ -855,6 +858,26 @@ public class monsterPart : MonoBehaviour
     }
     #endregion
 
+    #region Collision Set Up
+
+    public void triggerCollisionLogic()
+    {
+        for (int u = 0; u < referencesToIgnore.Count; u++)
+        {
+            referencesToIgnore[u].referencesToIgnore = referencesToIgnore;
+        }
+
+        if (neutralAttackVFXArray.Length > 0)
+        {
+            for (int u = 0; u < neutralAttackVFXArray.Length; u++)
+            {
+                neutralAttackVFXArray[u].GetComponent<monsterPartReference>().referencesToIgnore = referencesToIgnore;
+            }
+        }
+    }
+
+    #endregion
+
     #region Attack Animations
     public void triggerAttack(string animationName)
     {
@@ -1387,10 +1410,17 @@ public class monsterPart : MonoBehaviour
 
     private void setUpVFX()
     {
+        if (vfxHolder != null)
+        {
+            vfxHolder.transform.parent = mainTorso.gameObject.transform;
+            //neutralAttackVFXArray = vfxHolder.transform.GetComponentsInChildren<GameObject>();
+        }
+
         if (neutralAttackVFXArray.Length != 0)
         {
             neutralVFXPosition = neutralAttackVFXArray[0].transform.localPosition;
             neutralVFXParent = neutralAttackVFXArray[0].transform.parent;
+            neutralVFXRotation = neutralAttackVFXArray[0].transform.localRotation.eulerAngles;
         }
     }
 
@@ -1419,10 +1449,11 @@ public class monsterPart : MonoBehaviour
                 neutralVFXCount++;
             }
 
-            neutralAttackVFXArray[neutralVFXCount].SetActive(false);
-            neutralAttackVFXArray[neutralVFXCount].transform.parent = neutralVFXParent;
-            neutralAttackVFXArray[neutralVFXCount].transform.localPosition = neutralVFXPosition;
-            neutralAttackVFXArray[neutralVFXCount].transform.parent = null;
+            //neutralAttackVFXArray[neutralVFXCount].SetActive(false);
+            //neutralAttackVFXArray[neutralVFXCount].transform.parent = neutralVFXParent;
+            //neutralAttackVFXArray[neutralVFXCount].transform.localPosition = neutralVFXPosition;
+            //neutralAttackVFXArray[neutralVFXCount].transform.localRotation = Quaternion.Euler(0,0,0);
+            //neutralAttackVFXArray[neutralVFXCount].transform.parent = null;
             neutralAttackVFXArray[neutralVFXCount].SetActive(true);
         }
         else if (beamNeutralAttack)

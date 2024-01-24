@@ -864,6 +864,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Select Action - Generic Gamepad",
+                    "type": "Button",
+                    "id": "7379a2e0-8742-44ce-a1a0-2e663e7a300f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Start Game - Generic Gamepad",
+                    "type": "Button",
+                    "id": "6971e36f-1c55-49b7-82d5-c5176c97c4ef",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -875,6 +893,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Move Cursor  - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "251c7e5e-f9c3-4189-a368-d3d93336837a",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Start Game - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "40768ed8-c745-4173-b473-fedc8fa2a7b2",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Action - Generic Gamepad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

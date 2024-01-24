@@ -11,17 +11,42 @@ public class MultiplayerJoinManager : MonoBehaviour
     private PlayerInputManager playerInputController;
 
     // The Scene's UI Canvas that the Player UI Controllers are spawned under
-    public GameObject cursorParent;
+    [SerializeField]
+    private GameObject cursorParent;
 
     // The Colors that are mapped to the UI Elements to visually show which player they are
-    public Color[] playerTokenColors;
+    [SerializeField]
+    private Color[] playerTokenColors;
 
     [SerializeField]
     private List<VirtualMouseInput> playerCursors;
 
+    private int charactersSelected;
+
+    private bool allowStartGame = false;
+
+    [SerializeField]
+    private CanvasGroup characterSelectButtons;
+
+    [SerializeField]
+    private CanvasGroup stageSelectButtons;
+
+    [System.Serializable]
+    public class PlayerInformation
+    {
+        public int selectedCharIndex = -1;
+
+        public int playerIndex;
+    }
+
+    [SerializeField]
+    private List<PlayerInformation> playerInfo;
+
     void Awake()
     {
         playerInputController = FindObjectOfType<PlayerInputManager>();
+
+        allowStartGame = false;
     }
 
     private void Start()
@@ -29,6 +54,8 @@ public class MultiplayerJoinManager : MonoBehaviour
         playerInputController.onPlayerJoined += AddPlayerToken;
 
         playerInputController.onPlayerJoined += AssignCursorControls;
+
+        playerInputController.onPlayerJoined += AssignPlayerInformation;
 
     }
 
@@ -69,16 +96,64 @@ public class MultiplayerJoinManager : MonoBehaviour
     {
         InputActionAsset playerInput = player.GetComponent<PlayerInput>().actions;
 
-        InputActionMap moveStickMap = playerInput.FindActionMap("UI Navagation");
+        InputActionMap controllerMap = playerInput.FindActionMap("UI Navagation");
 
         VirtualMouseInput mouseUI = player.gameObject.GetComponent<VirtualMouseInput>();
 
         playerCursors.Add(mouseUI);
 
-        InputAction moveAction = moveStickMap.FindAction("Move Cursor  - Generic Gamepad");
+        InputAction moveAction = controllerMap.FindAction("Move Cursor  - Generic Gamepad");
 
-        InputActionProperty actionProperty = new InputActionProperty(moveAction);
+        InputAction selectAction = controllerMap.FindAction("Select Action - Generic Gamepad");
 
-        mouseUI.stickAction = actionProperty;
+        InputAction startGame = controllerMap.FindAction("Start Game - Generic Gamepad");
+
+        InputActionProperty moveActionProperty = new InputActionProperty(moveAction);
+
+        InputActionProperty selectActionProperty = new InputActionProperty(selectAction);
+
+        mouseUI.stickAction = moveActionProperty;
+
+        mouseUI.leftButtonAction = selectActionProperty;
+
+        startGame.started += CharacterToStageSelect;
     }
+
+    void AssignPlayerInformation(PlayerInput player)
+    {
+        PlayerInformation controllerInfo = new PlayerInformation();
+
+        controllerInfo.playerIndex = player.playerIndex;
+
+        playerInfo.Add(controllerInfo);
+    }
+
+    public void SelectCharacter(int charIndex)
+    {
+       if(charactersSelected < playerInputController.playerCount)
+        {
+            charactersSelected++;
+
+            if(charactersSelected == playerInputController.playerCount)
+            {
+                print("Proceed");
+
+                allowStartGame = true;
+            }
+        }
+    }
+
+    void CharacterToStageSelect(InputAction.CallbackContext context)
+    {
+        if(allowStartGame)
+        {
+            characterSelectButtons.alpha = 0;
+            characterSelectButtons.blocksRaycasts = false;
+
+            stageSelectButtons.alpha = 1;
+            stageSelectButtons.blocksRaycasts = true;
+        }
+    }
+
+
 }

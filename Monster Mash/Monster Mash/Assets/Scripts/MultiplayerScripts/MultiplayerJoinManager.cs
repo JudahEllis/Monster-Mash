@@ -21,9 +21,11 @@ public class MultiplayerJoinManager : MonoBehaviour
     [SerializeField]
     private List<VirtualMouseInput> playerCursors;
 
-    private int charactersSelected;
+    [HideInInspector]
+    public int charactersSelected;
 
-    private bool allowStartGame = false;
+    [HideInInspector]
+    public bool allowStartGame = false;
 
     [SerializeField]
     private CanvasGroup characterSelectButtons;
@@ -34,13 +36,14 @@ public class MultiplayerJoinManager : MonoBehaviour
     [System.Serializable]
     public class PlayerInformation
     {
-        public int selectedCharIndex = -1;
+        public GameObject selectedCharacter;
 
         public int playerIndex;
+
+        public InputActionAsset actionAsset;
     }
 
-    [SerializeField]
-    private List<PlayerInformation> playerInfo;
+    public List<PlayerInformation> playerInfo;
 
     void Awake()
     {
@@ -60,22 +63,13 @@ public class MultiplayerJoinManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    
-    
+
     void LateUpdate()
     {
-        //Clamps the Player Cursors' Positions so that they do not go off screen
-
-        foreach(VirtualMouseInput cursor in playerCursors)
-        {
-            Vector2 mousePos = cursor.virtualMouse.position.ReadValue();
-
-            mousePos.x = Mathf.Clamp(mousePos.x, 0f, Screen.width);
-            mousePos.y = Mathf.Clamp(mousePos.y, 0f, Screen.height);
-
-            InputState.Change(cursor.virtualMouse.position, mousePos);
-        }
+        
+     
     }
+
     
     
     //Function is used to Controll the position of Player Cursors after they spawn
@@ -110,43 +104,32 @@ public class MultiplayerJoinManager : MonoBehaviour
 
         InputActionProperty moveActionProperty = new InputActionProperty(moveAction);
 
-        InputActionProperty selectActionProperty = new InputActionProperty(selectAction);
-
         mouseUI.stickAction = moveActionProperty;
 
-        mouseUI.leftButtonAction = selectActionProperty;
-
-        startGame.started += CharacterToStageSelect;
+        startGame.started += StartAction;
     }
 
+    //Function to Assign Variables Needed when Loading into Scenes of Gameplay
     void AssignPlayerInformation(PlayerInput player)
     {
+        player.gameObject.GetComponent<MultiplayerCursor>().joinManager = this;
+
+        player.gameObject.GetComponent<MultiplayerCursor>().inputManager = playerInputController;
+
         PlayerInformation controllerInfo = new PlayerInformation();
 
         controllerInfo.playerIndex = player.playerIndex;
 
+        controllerInfo.actionAsset = player.actions;
+
         playerInfo.Add(controllerInfo);
     }
 
-    public void SelectCharacter(int charIndex)
-    {
-       if(charactersSelected < playerInputController.playerCount)
-        {
-            charactersSelected++;
-
-            if(charactersSelected == playerInputController.playerCount)
-            {
-                print("Proceed");
-
-                allowStartGame = true;
-            }
-        }
-    }
-
-    void CharacterToStageSelect(InputAction.CallbackContext context)
-    {
+    //Is Assigned to the Start Button, only works when all players have selected a charcater
+    void StartAction(InputAction.CallbackContext context)
+    { 
         if(allowStartGame)
-        {
+        { 
             characterSelectButtons.alpha = 0;
             characterSelectButtons.blocksRaycasts = false;
 
@@ -155,5 +138,8 @@ public class MultiplayerJoinManager : MonoBehaviour
         }
     }
 
-
+    public interface IQuickplayButtonable
+    {
+        void ButtonSelected(MultiplayerCursor cursor);
+    }
 }

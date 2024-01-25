@@ -6,6 +6,7 @@ using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MultiplayerCursor : MonoBehaviour
 {
@@ -93,9 +94,16 @@ public class MultiplayerCursor : MonoBehaviour
 
             if (joinManager.charactersSelected == inputManager.playerCount)
             {
+                print("Start Game!");
+
                 joinManager.allowStartGame = true;
             }
         }
+    }
+
+    public void SelectStage(int stageIndex)
+    {
+        SceneManager.LoadSceneAsync(stageIndex);
     }
 
     public void DeselectCharacter()

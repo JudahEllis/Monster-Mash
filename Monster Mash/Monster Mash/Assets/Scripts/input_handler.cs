@@ -11,7 +11,7 @@ public class input_handler : MonoBehaviour
     [SerializeField]
     private int playerIndex = 0;
 
-    private PlayerInput playerInput;
+    public PlayerInput playerInput;
 
     [Header("----------------Gamepad Controller Support----------------")]
     public List<availableControllerInputs> currentControllerMap;
@@ -35,7 +35,7 @@ public class input_handler : MonoBehaviour
             player = FindObjectOfType<Controller1>();
         }
 
-        playerInput = GetComponent<PlayerInput>();
+        //playerInput = GetComponent<PlayerInput>();
         //i changed this line because it was ruining my life
         //game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
         game_manager gameManager = FindObjectOfType<game_manager>();

@@ -29,12 +29,12 @@ public class MultiplayerCursor : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void OnEnable()
+    public void Enabled(PlayerInput spawnedPlayer)
     {
-        player = GetComponent<PlayerInput>();
+        player = spawnedPlayer;
         cursor = GetComponent<VirtualMouseInput>();
 
-        InputActionAsset playerInput = player.GetComponent<PlayerInput>().actions;
+        InputActionAsset playerInput = player.actions;
 
         InputActionMap controllerMap = playerInput.FindActionMap("UI Navagation");
 
@@ -90,6 +90,8 @@ public class MultiplayerCursor : MonoBehaviour
 
             joinManager.playerInfo[player.playerIndex].selectedCharacter = character;
 
+            joinManager.playerInfo[player.playerIndex].playerInput = player.gameObject;
+
             selectedCharacter = true;
 
             if (joinManager.charactersSelected == inputManager.playerCount)
@@ -104,6 +106,8 @@ public class MultiplayerCursor : MonoBehaviour
     public void SelectStage(int stageIndex)
     {
         SceneManager.LoadSceneAsync(stageIndex);
+
+        
     }
 
     public void DeselectCharacter()

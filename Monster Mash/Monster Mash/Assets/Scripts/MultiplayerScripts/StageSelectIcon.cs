@@ -8,6 +8,18 @@ public class StageSelectIcon : MonoBehaviour, MultiplayerJoinManager.IQuickplayB
     public int stageIndex;
     public void ButtonSelected(MultiplayerCursor cursor)
     {
+       
+        if (CharacterSelectManager.Instance.storedPlayerInformation.Count > 0)
+        {
+            CharacterSelectManager.Instance.storedPlayerInformation.Clear();
+        }
+
+        foreach (MultiplayerJoinManager.PlayerInformation info in cursor.joinManager.playerInfo)
+        {
+
+            CharacterSelectManager.Instance.storedPlayerInformation.Add(info);
+        }
+
         cursor.SelectStage(stageIndex);
     }
 }

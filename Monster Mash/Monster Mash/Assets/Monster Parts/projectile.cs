@@ -14,18 +14,23 @@ public class projectile : MonoBehaviour
     public Collider baseCollider;
     public Transform projectileHolder;
     private Vector3 startingPoint = new Vector3 (0,0,0);
+    private Quaternion startingRotation;
+    private bool impactCalled;
 
     public void resetPosition()
     {
         transform.parent = projectileHolder;
         transform.localPosition = startingPoint;
-        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        //transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.localRotation = startingRotation;
     }
 
     private void OnEnable()
     {
         StopAllCoroutines();
         movementModifier = 1;
+        impactCalled = false;
+        startingRotation = transform.localRotation;
         impactVisual.SetActive(false);
         mainVisual.SetActive(true);
         trailVisual.SetActive(true);
@@ -48,6 +53,7 @@ public class projectile : MonoBehaviour
     }
     public void impact()
     {
+        impactCalled = true;
         StartCoroutine(impactEffect());
     }
 
@@ -73,6 +79,9 @@ public class projectile : MonoBehaviour
     IEnumerator autoDisable()
     {
         yield return new WaitForSeconds(timeUntilAutoDisable);
-        impact();
+        if (impactCalled == false)
+        {
+            impact();
+        }
     }
 }

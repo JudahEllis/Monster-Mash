@@ -117,28 +117,37 @@ public class monsterAttackSystem : MonoBehaviour
         #endregion
 
         monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
+        vfxHolder[] internalVFXHolders = GetComponentsInChildren<vfxHolder>();
+
+        for (int i = 0; i < internalVFXHolders.Length; i++)
+        {
+            internalVFXHolders[i].grabReferences();
+
+            for (int u = 0; u < internalVFXHolders[i].damageGivingVFX.Length; u++)
+            {
+                listOfInternalReferences.Add(internalVFXHolders[i].damageGivingVFX[u]);
+            }
+        }
 
         for (int i = 0; i < internalPartReferences.Length; i++)
         {
             listOfInternalReferences.Add(internalPartReferences[i]);
         }
 
-        /*
-        //remove this, have collider to ignore info handled by individual monster parts
-        for (int u = 0; u < listOfInternalReferences.Count; u++)
+        for (int i = 0; i < internalVFXHolders.Length; i++)
         {
-            listOfInternalReferences[u].referencesToIgnore = listOfInternalReferences;
+            internalVFXHolders[i].referencesToIgnore = listOfInternalReferences;
+            internalVFXHolders[i].collisionOcclusion();
         }
-        */
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].mainTorso = mainTorso;
             allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
-            allMonsterParts[i].triggerCollisionLogic();
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
+            allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
             allMonsterParts[i].triggerIdle();
         }
 
@@ -730,6 +739,13 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.ResetTrigger("Right Attack Release");
         myAnimator.ResetTrigger("Left Attack Release");
         myAnimator.SetTrigger("Back to Prior State");
+
+        
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+           allMonsterParts[i].resetBracing();
+        }
+        
     }
 
     #endregion

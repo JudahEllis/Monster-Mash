@@ -36,21 +36,26 @@ public class monsterPart : MonoBehaviour
     public bool sprayNeutralAttack;
     public bool projectileNeutralAttack;
     public bool beamNeutralAttack;
-    public GameObject vfxHolder;
-    public GameObject[] neutralAttackVFXArray;
+    public GameObject neutralVFXHolder;
+    private vfxHolder neutralVFXManager;
+    public Transform[] neutralAttackVFXArray;
     private int neutralVFXCount;
-    private Transform neutralVFXParent;
-    private Vector3 neutralVFXPosition;
-    private Vector3 neutralVFXRotation;
+    //private Transform neutralVFXParent;
+    //private Vector3 neutralVFXPosition;
+    //private Vector3 neutralVFXRotation;
 
     [Header("Heavy Attack Questionaire")]
     public bool jabHeavyAttack;
     public bool slashHeavyAttack;
     public bool sprayHeavyAttack;
     public bool projectileHeavyAttack;
+    public bool projectileBurstHeavyAttack;
     public bool beamHeavyAttack;
     public bool reelHeavyAttack;
-    public GameObject[] heavyAttackVFXArray;
+    public GameObject heavyVFXHolder;
+    private vfxHolder heavyVFXManager;
+    public Transform[] heavyAttackVFXArray;
+    private int heavyVFXCount;
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
     public bool poisonedStatusEffect;
@@ -470,11 +475,35 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-                torsoCommand = "Right Upper Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
+                if (isHorn)
+                {
+                    if (attackAnimationID == 1)
+                    {
+                        headCommand = "Forward Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else if (attackAnimationID == 2)
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                }
+                else
+                {
+                    torsoCommand = "Right Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
         }
 
@@ -491,11 +520,35 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-                torsoCommand = "Left Upper Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = false;
-                requiresLeftStance = true;
+                if (isHorn)
+                {
+                    if (attackAnimationID == 1)
+                    {
+                        headCommand = "Forward Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else if (attackAnimationID == 2)
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                }
+                else
+                {
+                    torsoCommand = "Left Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
             }
         }
 
@@ -867,6 +920,7 @@ public class monsterPart : MonoBehaviour
             referencesToIgnore[u].referencesToIgnore = referencesToIgnore;
         }
 
+        /*
         if (neutralAttackVFXArray.Length > 0)
         {
             for (int u = 0; u < neutralAttackVFXArray.Length; u++)
@@ -874,6 +928,15 @@ public class monsterPart : MonoBehaviour
                 neutralAttackVFXArray[u].GetComponent<monsterPartReference>().referencesToIgnore = referencesToIgnore;
             }
         }
+
+        if (heavyAttackVFXArray.Length > 0)
+        {
+            for (int u = 0; u < heavyAttackVFXArray.Length; u++)
+            {
+                heavyAttackVFXArray[u].GetComponent<monsterPartReference>().referencesToIgnore = referencesToIgnore;
+            }
+        }
+        */
     }
 
     #endregion
@@ -1208,6 +1271,7 @@ public class monsterPart : MonoBehaviour
         {
             if (isGroundedLimb) // || isTorso
             {
+                myAnimator.ResetTrigger("Unbrace");
                 myAnimator.SetTrigger("Unbrace");
                 myAnimator.ResetTrigger("Backward Brace");
                 myAnimator.ResetTrigger("Forward Brace");
@@ -1215,11 +1279,13 @@ public class monsterPart : MonoBehaviour
 
             if (isArm)
             {
+                myAnimator.ResetTrigger("Unbrace");
                 myAnimator.SetTrigger("Unbrace");
             }
 
             if (isMouth && myAnimator != null)
             {
+                myAnimator.ResetTrigger("Unbrace");
                 myAnimator.SetTrigger("Unbrace");
             }
 
@@ -1410,18 +1476,36 @@ public class monsterPart : MonoBehaviour
 
     private void setUpVFX()
     {
-        if (vfxHolder != null)
+        if (neutralVFXHolder != null)
         {
-            vfxHolder.transform.parent = mainTorso.gameObject.transform;
-            //neutralAttackVFXArray = vfxHolder.transform.GetComponentsInChildren<GameObject>();
+            neutralVFXManager = neutralVFXHolder.GetComponent<vfxHolder>();
+            neutralVFXHolder.transform.parent = mainTorso.gameObject.transform;
+            neutralAttackVFXArray = new Transform[neutralVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackVFXArray.Length; i++)
+            {
+                neutralAttackVFXArray[i] = neutralVFXHolder.transform.GetChild(i);
+            }
         }
 
+        if (heavyVFXHolder != null)
+        {
+            heavyVFXManager = heavyVFXHolder.GetComponent<vfxHolder>();
+            heavyVFXHolder.transform.parent = mainTorso.gameObject.transform;
+            heavyAttackVFXArray = new Transform[heavyVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackVFXArray.Length; i++)
+            {
+                heavyAttackVFXArray[i] = heavyVFXHolder.transform.GetChild(i);
+            }
+        }
+
+        /*
         if (neutralAttackVFXArray.Length != 0)
         {
             neutralVFXPosition = neutralAttackVFXArray[0].transform.localPosition;
             neutralVFXParent = neutralAttackVFXArray[0].transform.parent;
             neutralVFXRotation = neutralAttackVFXArray[0].transform.localRotation.eulerAngles;
         }
+        */
     }
 
     public void triggerNeutralAttackVisuals()
@@ -1449,12 +1533,7 @@ public class monsterPart : MonoBehaviour
                 neutralVFXCount++;
             }
 
-            //neutralAttackVFXArray[neutralVFXCount].SetActive(false);
-            //neutralAttackVFXArray[neutralVFXCount].transform.parent = neutralVFXParent;
-            //neutralAttackVFXArray[neutralVFXCount].transform.localPosition = neutralVFXPosition;
-            //neutralAttackVFXArray[neutralVFXCount].transform.localRotation = Quaternion.Euler(0,0,0);
-            //neutralAttackVFXArray[neutralVFXCount].transform.parent = null;
-            neutralAttackVFXArray[neutralVFXCount].SetActive(true);
+            neutralAttackVFXArray[neutralVFXCount].gameObject.SetActive(true);
         }
         else if (beamNeutralAttack)
         {
@@ -1462,14 +1541,51 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerSprayAttack()
+    public void triggerHeavyAttackVisuals()
     {
-        //get all the VFX from monster part reference, reparent, and reset them
-    }
+        if (jabHeavyAttack)
+        {
 
-    public void triggerParticleUnparenting()
-    {
-        //get all the VFX from monster part reference and unparent them
+        }
+        else if (slashHeavyAttack)
+        {
+
+        }
+        else if (sprayHeavyAttack)
+        {
+
+        }
+        else if (projectileHeavyAttack && heavyAttackVFXArray.Length != 0)
+        {
+            if (heavyVFXCount == heavyAttackVFXArray.Length - 1)
+            {
+                heavyVFXCount = 0;
+            }
+            else
+            {
+                heavyVFXCount++;
+            }
+
+            heavyAttackVFXArray[heavyVFXCount].gameObject.SetActive(true);
+        }
+        else if (projectileBurstHeavyAttack && heavyAttackVFXArray.Length != 0)
+        {
+            if (heavyVFXCount == heavyAttackVFXArray.Length - 1)
+            {
+                heavyVFXCount = 0;
+            }
+            else
+            {
+                heavyVFXCount++;
+            }
+
+            heavyVFXManager.rechargeBurstProjectiles(heavyAttackVFXArray[heavyVFXCount].gameObject);
+            heavyAttackVFXArray[heavyVFXCount].gameObject.SetActive(true);
+        }
+        else if (beamHeavyAttack)
+        {
+
+        }
     }
 
     #endregion
@@ -1760,6 +1876,34 @@ public class monsterPart : MonoBehaviour
         for (int i = 0; i < myIdleVFX.Length; i++)
         {
             myIdleVFX[i].gameObject.SetActive(true);
+        }
+    }
+
+    #endregion
+
+    #region Corrections
+
+    public void resetBracing()
+    {
+        if (isAttacking == false)
+        {
+            if (isGroundedLimb || isArm || (isMouth && myAnimator != null))
+            {
+                myAnimator.ResetTrigger("Unbrace");
+
+                if (isGroundedLimb)
+                {
+                    myAnimator.ResetTrigger("Switch Stance");
+                    myAnimator.ResetTrigger("Switch Stance Quick");
+                }
+
+                /*
+                if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Brace") && myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") == false)
+                {
+                    myAnimator.SetTrigger("Unbrace");
+                }
+                */
+            }
         }
     }
 

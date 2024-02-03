@@ -102,7 +102,7 @@ public class Controller1 : MonoBehaviour
         if (!isFalling && playerVelocity.y < 0 && isWalk && !groundedPlayer && !Physics.Raycast(transform.position - Vector3.down, Vector3.down, 4f, groundCheck))
         {
             isFalling = true;
-            monsterAnim.walkToFall();
+            //monsterAnim.walkToFall();
         }
 
         RaycastHit hit;
@@ -128,7 +128,7 @@ public class Controller1 : MonoBehaviour
             hit.collider.isTrigger = true;
         }
 
-        isAttacking = monsterAnim.IsAttacking();
+        //isAttacking = monsterAnim.IsAttacking();
 
         if (!knockBack)
         {
@@ -136,7 +136,7 @@ public class Controller1 : MonoBehaviour
 
             if (groundedPlayer)
             {
-                monsterAnim.land();
+                //monsterAnim.land();
                 playerVelocity.y = -1f; // Reset the vertical velocity when grounded.
                 if (jumpsRemaining < 2) jumpsRemaining = 2; // Reset the number of jumps when grounded.
                 playerSpeedCurrent = playerSpeedGrounded;
@@ -145,24 +145,26 @@ public class Controller1 : MonoBehaviour
                 {
                     isJumping = false;
                     isFalling = false;
-                    monsterAnim.land();
+                    //monsterAnim.land();
                 }
 
                 if (isWalk )
                 {
-                    monsterAnim.walk();
+                    //monsterAnim.walk();
 
                     if (isRunning)
                     {
                         playerSpeedCurrent = playerSpeedRunning;
-                        monsterAnim.run();
+                       // monsterAnim.run();
                     }
                     else
                     {
                         playerSpeedCurrent = playerSpeedGrounded;
-                        monsterAnim.stopRunning();
+                        //monsterAnim.stopRunning();
                     }
-                } else { monsterAnim.stopWalking(); }
+                } else { 
+                    //monsterAnim.stopWalking(); 
+                        }
             }
             else
             {
@@ -202,11 +204,11 @@ public class Controller1 : MonoBehaviour
 
                 if (groundedPlayer)
                 {
-                    monsterAnim.jump();
+                    //monsterAnim.jump();
                 }
                 else
                 {
-                    monsterAnim.doubleJump();
+                    //monsterAnim.doubleJump();
                 }
                 int jumpMulti = 1;
 
@@ -295,7 +297,7 @@ public class Controller1 : MonoBehaviour
                 {
                     StartCoroutine("ScreechStop");
                 }
-                monsterAnim.flipCharacter();
+                //monsterAnim.flipCharacter();
                 facingRight = true;
             }
         }
@@ -314,7 +316,7 @@ public class Controller1 : MonoBehaviour
                 {
                     StartCoroutine("ScreechStop");
                 }
-                monsterAnim.flipCharacter();
+                //monsterAnim.flipCharacter();
                 facingRight = false;
             }
         }
@@ -385,10 +387,10 @@ public class Controller1 : MonoBehaviour
             isAttacking = true;
             if (!isRunning)
             {
-                monsterAnim.attack(1);
+                //monsterAnim.attack(1);
             } else
             {
-                monsterAnim.dashAttack();
+                //monsterAnim.dashAttack();
             }
         }
     }
@@ -400,11 +402,11 @@ public class Controller1 : MonoBehaviour
             isAttacking = true;
             if (!isRunning)
             {
-                monsterAnim.attack(2);
+                //monsterAnim.attack(2);
             }
             else
             {
-                monsterAnim.dashAttack();
+                //monsterAnim.dashAttack();
             }
         }
     }
@@ -416,11 +418,11 @@ public class Controller1 : MonoBehaviour
             isAttacking = true;
             if (!isRunning)
             {
-                monsterAnim.attack(3);
+                //monsterAnim.attack(3);
             }
             else
             {
-                monsterAnim.dashAttack();
+                //monsterAnim.dashAttack();
             }
         }
     }

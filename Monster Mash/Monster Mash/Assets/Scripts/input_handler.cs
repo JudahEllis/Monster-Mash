@@ -11,7 +11,9 @@ public class input_handler : MonoBehaviour
     [SerializeField]
     private int playerIndex = 0;
 
-    private PlayerInput playerInput;
+    public PlayerInput playerInput;
+
+    private InputAction movement;
 
     [Header("----------------Gamepad Controller Support----------------")]
     public List<availableControllerInputs> currentControllerMap;
@@ -30,12 +32,16 @@ public class input_handler : MonoBehaviour
 
     private void Awake()
     {
+        /*
         if (FindObjectOfType<Controller1>())
         {
             player = FindObjectOfType<Controller1>();
         }
+        */
 
-        playerInput = GetComponent<PlayerInput>();
+        player = GetComponent<Controller1>();
+
+        //playerInput = GetComponent<PlayerInput>();
         //i changed this line because it was ruining my life
         //game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
         game_manager gameManager = FindObjectOfType<game_manager>();
@@ -49,6 +55,39 @@ public class input_handler : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void Start()
+    {
+
+        if(playerInput.devices[0].name.Contains("Keyboard"))
+        {
+            keyboardMouseSetUp();
+
+            InputActionMap keyboardControls = playerInput.actions.FindActionMap(controlType);
+
+            movement = keyboardControls.FindAction("Horizontal");
+
+            movement.Enable();
+        }
+
+        else
+        {
+            controllerSetUp();
+
+            InputActionMap controllerControls = playerInput.actions.FindActionMap(controlType);
+
+            movement = controllerControls.FindAction("Left Stick");
+
+            movement.Enable();
+        }
+
+        print(controlType);
+    }
+
+    private void FixedUpdate()
+    {
+        movePlayer();
     }
 
     //Establishes the correct button inputs available, whether in menus or combat and if a certain control set is being used
@@ -443,13 +482,15 @@ public class input_handler : MonoBehaviour
         print("runninging");
         player.SetIsRun(context.performed);
     }
-    private void movePlayer(CallbackContext context) //with left stick, move player either right or left
+    private void movePlayer() //with left stick, move player either right or left
     {
         if (controlType == "XBOX")
         {
             int dir = 0;
 
-            Vector2 moveInput = context.ReadValue<Vector2>();
+            Vector2 moveInput = movement.ReadValue<Vector2>();
+
+            print("moving" + dir);
 
             if (moveInput.x < 0)
             {
@@ -464,7 +505,7 @@ public class input_handler : MonoBehaviour
         }
         else if (controlType == "keyboardmouse") // A and D make horizontal Axis
         {
-            float moveInput = context.ReadValue<float>();
+            float moveInput = movement.ReadValue<float>();
 
             int dir = 0;
 

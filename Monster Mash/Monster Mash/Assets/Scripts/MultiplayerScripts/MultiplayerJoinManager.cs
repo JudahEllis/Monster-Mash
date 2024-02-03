@@ -46,6 +46,28 @@ public class MultiplayerJoinManager : MonoBehaviour
         playerInputController = FindObjectOfType<PlayerInputManager>();
 
         allowStartGame = false;
+
+        PlayerInput[] inputs = FindObjectsOfType<PlayerInput>();
+
+        foreach(VirtualMouseInput cursor in playerCursors)
+        {
+            MultiplayerCursor playerCursor = cursor.gameObject.GetComponent<MultiplayerCursor>();
+
+            int index = playerCursor.cursorIndex;
+
+            foreach(PlayerInput input in inputs)
+            {
+                if (index == input.playerIndex)
+                {
+                    AddPlayerToken(input);
+
+                    AssignCursorControls(input);
+
+                    AssignPlayerInformation(input);
+                }
+            }
+            
+        }
     }
 
     private void Start()

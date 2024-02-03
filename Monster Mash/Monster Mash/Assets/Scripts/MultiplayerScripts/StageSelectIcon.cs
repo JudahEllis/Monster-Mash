@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageSelectIcon : MonoBehaviour, MultiplayerJoinManager.IQuickplayButtonable
 {
@@ -20,6 +21,11 @@ public class StageSelectIcon : MonoBehaviour, MultiplayerJoinManager.IQuickplayB
             CharacterSelectManager.Instance.storedPlayerInformation.Add(info);
         }
 
-        cursor.SelectStage(stageIndex);
+        SelectStage(stageIndex);
+    }
+
+    public void SelectStage(int stageIndex)
+    {
+        SceneManager.LoadSceneAsync(stageIndex);
     }
 }

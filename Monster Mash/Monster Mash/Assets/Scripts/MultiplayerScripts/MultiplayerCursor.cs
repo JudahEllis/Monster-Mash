@@ -14,6 +14,8 @@ public class MultiplayerCursor : MonoBehaviour
 
     VirtualMouseInput cursor;
 
+    public int cursorIndex;
+
     [HideInInspector]
     public MultiplayerJoinManager joinManager;
 
@@ -101,13 +103,6 @@ public class MultiplayerCursor : MonoBehaviour
                 joinManager.allowStartGame = true;
             }
         }
-    }
-
-    public void SelectStage(int stageIndex)
-    {
-        SceneManager.LoadSceneAsync(stageIndex);
-
-        
     }
 
     public void DeselectCharacter()

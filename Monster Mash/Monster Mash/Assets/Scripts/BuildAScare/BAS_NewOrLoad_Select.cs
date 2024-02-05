@@ -12,7 +12,7 @@ public class BAS_NewOrLoad_Select : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _new_monster.onClick.AddListener(LoadBAS);    
+        _new_monster.onClick.AddListener(LoadBAS);
     }
 
     private void LoadBAS()

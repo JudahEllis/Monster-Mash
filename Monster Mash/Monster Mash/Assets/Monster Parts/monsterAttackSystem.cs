@@ -22,7 +22,7 @@ public class monsterAttackSystem : MonoBehaviour
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
-    private monsterPart[] allMonsterParts;
+    public monsterPart[] allMonsterParts;
     public GameObject dashSplat;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
@@ -195,7 +195,9 @@ public class monsterAttackSystem : MonoBehaviour
                         attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
                         //isWalking = false;
 
-                        #region Bracing for Attacks
+                        //if we decide to allow for heavy charging while running then this would be moved out of attack function
+                        //instead this bracing would only be called once we have a neutral or heavy decision
+                        #region Bracing for Attacks 
 
                         if (attackSlotMonsterParts[attackSlot].requiresRightStance)
                         {
@@ -273,7 +275,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void dashAttack()
     {
-        if (isRunning && canDashAttack && canRoll && focusedAttackActive == false)
+        if ((isRunning || isGrounded == false) && canDashAttack && canRoll && focusedAttackActive == false)
         {
             isRunning = false;
             canRoll = false;
@@ -287,7 +289,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRoll(true);
+            allMonsterParts[i].triggerRoll(isGrounded);
         }
 
         myAnimator.SetFloat("Flipping Speed", 1);
@@ -308,15 +310,21 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
-            allMonsterParts[i].triggerRoll(true);
+            allMonsterParts[i].triggerRoll(isGrounded);
         }
 
         myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
         dashSplat.SetActive(false);
         attackFocusOff();
-        canDashAttack = true;
-        canRoll = true;
+
+        yield return new WaitForSeconds(5f);
+
+        if (isGrounded)
+        {
+            canDashAttack = true;
+            canRoll = true;
+        }
     }
 
 
@@ -326,14 +334,17 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipCharacter()
     {
-        if (isRunning)
+        if (focusedAttackActive == false)
         {
-            screechingStop();
-            StartCoroutine(characterFlipDelay(true));
-        }
-        else
-        {
-            StartCoroutine(characterFlipDelay(false));
+            if (isRunning)
+            {
+                screechingStop();
+                StartCoroutine(characterFlipDelay(true));
+            }
+            else
+            {
+                StartCoroutine(characterFlipDelay(false));
+            }
         }
     }
 
@@ -474,6 +485,8 @@ public class monsterAttackSystem : MonoBehaviour
             focusedAttackActive = false;
             isGliding = false;
             jumpsLeft--;
+            canDashAttack = true;
+            canRoll = true;
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -597,6 +610,8 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = true;
             focusedAttackActive = false;
+            canDashAttack = true;
+            canRoll = true;
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {

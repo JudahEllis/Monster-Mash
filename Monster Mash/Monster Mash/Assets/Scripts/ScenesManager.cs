@@ -14,6 +14,9 @@ public class ScenesManager : MonoBehaviour
 
     public enum Scene
     {
+        QuickPlay,
+        TestRoom,
+        MainMenu,
         BAS_NewOrEdit,
         BuildAScare,
         Load

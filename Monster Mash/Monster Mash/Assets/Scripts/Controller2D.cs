@@ -11,11 +11,15 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private float playerRunSpeed = 9.33f;
     [SerializeField] private float decelerate = 10f;
     [SerializeField] private float jumpForce = 8.0f;
-    private bool grounded;
+    private float jumpTime = 1f;
+    private int midAirJumps = 1;
+    private int jumpsLeft = 0;
+    private bool cannotJumpCuzMidJump = false;
+    [SerializeField] private bool grounded;
     private CapsuleCollider2D cap;
     private bool wall;
     [SerializeField] private float move;
-    private float fallMultiplier = -1f;
+    [SerializeField] private float fallMultiplier = 3f;
 
     private Vector3 xMovement;
     private Vector3 yMovement;
@@ -39,12 +43,12 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private int key2result;
 
     //ui
-    [SerializeField] Slider walkButton;
-    [SerializeField] TMP_Text walkText;
-    [SerializeField] Slider runButton;
-    [SerializeField] TMP_Text runText;
-    [SerializeField] Slider skidButton;
-    [SerializeField] TMP_Text skidText;
+    [SerializeField] Slider forceButton;
+    [SerializeField] TMP_Text forceText;
+    [SerializeField] Slider gravityButton;
+    [SerializeField] TMP_Text gravityText;
+    [SerializeField] Slider fallButton;
+    [SerializeField] TMP_Text fallText;
 
     private void Start()
     {
@@ -53,20 +57,24 @@ public class Controller2D : MonoBehaviour
 
         playerRunSpeed = playerSpeed * (13f / 10f);
 
-        walkButton.value = playerSpeed;
-        runButton.value = playerRunSpeed;
-        skidButton.value = skidTime;
+        jumpForce = 21.6f;
+        rb.gravityScale = 6.28f;
+        fallMultiplier = 4f;
+
+        forceButton.value = jumpForce;
+        gravityButton.value = rb.gravityScale;
+        fallButton.value = fallMultiplier;
     }
 
     private void Update()
     {
-        playerSpeed = walkButton.value;
-        playerRunSpeed = runButton.value;
-        skidTime = skidButton.value;
+        jumpForce = forceButton.value;
+        rb.gravityScale = gravityButton.value;
+        fallMultiplier = fallButton.value;
 
-        walkText.text = playerSpeed.ToString();
-        runText.text = playerRunSpeed.ToString();
-        skidText.text = skidTime.ToString();
+        forceText.text = jumpForce.ToString();
+        gravityText.text = rb.gravityScale.ToString();
+        fallText.text = fallMultiplier.ToString();
 
         if (Input.GetKeyDown(keyToDetect1))
         {
@@ -110,11 +118,38 @@ public class Controller2D : MonoBehaviour
             }
         }
 
-        MoveX();
-
-        if (!grounded)
+        if (cannotJumpCuzMidJump && Input.GetKeyUp(KeyCode.Space))
         {
-            //rb.velocity += new Vector2(0, rb.gravityScale * fallMultiplier);
+            cannotJumpCuzMidJump = false;
+        }
+
+        //MoveX();
+
+        //MoveY();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (grounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                jumpsLeft = midAirJumps;
+            } else if (jumpsLeft > 0)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                jumpsLeft--;
+            }
+        }
+
+        if (rb.velocity.y < 0.0f)
+        {
+            if (Input.GetAxis("Vertical") < 0)
+            {
+                rb.velocity -= -Physics2D.gravity * fallMultiplier * 5 * Time.deltaTime;
+            }
+            else
+            {
+                rb.velocity -= -Physics2D.gravity * fallMultiplier * Time.deltaTime;
+            }
         }
     }
 
@@ -124,23 +159,26 @@ public class Controller2D : MonoBehaviour
         //IsGrounded();
 
         // Jumping.
-        if (Input.GetKeyDown(KeyCode.Space))// && grounded)
+        /*if (Input.GetKeyDown(KeyCode.Space))// && grounded)
         {
             //rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        }
+        }*/
+
+        IsGrounded();
 
         ApplyMove();
     }
 
     private void IsGrounded()
     {
-        if (Physics2D.CapsuleCast(transform.position, cap.size * 0.75f, cap.direction, 0, Vector2.down, 0.1f, groundLayerMask))
+        //if (Physics2D.CapsuleCast(transform.position, cap.size * 0.75f, cap.direction, 0, Vector2.down, 0.1f, groundLayerMask))
+        if (Physics2D.BoxCast(new Vector2(transform.position.x, cap.bounds.min.y), new Vector2(cap.bounds.size.x, 0.25f), 0, Vector2.down, 0.1f, groundLayerMask))
         {
             grounded = true;
+        } else
+        {
+            grounded = false;
         }
-
-        //print("NOO");
-        grounded = false;
     }
 
     private bool HitWall(float direction)
@@ -157,6 +195,9 @@ public class Controller2D : MonoBehaviour
     {
         // Horizontal movement.
         move = Input.GetAxis("Horizontal");
+
+        //disable move
+        //move = 0;
 
         if (!HitWall(move))
         {
@@ -176,11 +217,30 @@ public class Controller2D : MonoBehaviour
     private void MoveY()
     {
 
+        /*if (Input.GetKey(KeyCode.Space) && !cannotJumpCuzMidJump)
+        {
+            if (grounded)
+            {
+                yMovement = Vector3.up * jumpForce;
+                jumpsLeft = midAirJumps;
+                cannotJumpCuzMidJump = true;
+            }
+            else if (jumpsLeft > 0)
+            {
+                yMovement = Vector3.up * jumpForce;
+                jumpsLeft--;
+                cannotJumpCuzMidJump = true;
+            }
+        }*/
+        //else
+        {
+            yMovement = Vector3.zero;
+        }
     }
 
     private void ApplyMove()
     {
-        if (!isSkid)
+        if (!isSkid) //x movement
         {
             if ((isRun && (move < 0 && rb.velocity.x > 0) || (move > 0 && rb.velocity.x < 0)))
             {
@@ -192,6 +252,16 @@ public class Controller2D : MonoBehaviour
             {
                 rb.velocity = xMovement + new Vector3(0.0f, rb.velocity.y, 0.0f);//yMovement;
             }
+        }
+
+        if (yMovement.y > 0.0f)
+        {
+            //rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f) + yMovement;
+        }
+
+        if (rb.velocity.y < 0.0f)
+        {
+            //rb.velocity -= Physics2D.gravity * fallMultiplier * Time.deltaTime;
         }
     }
 

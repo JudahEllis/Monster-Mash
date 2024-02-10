@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Run Speed
+  m_text: Gravity
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -534,7 +534,7 @@ MonoBehaviour:
   m_MinValue: 1
   m_MaxValue: 25
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 4
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -678,7 +678,9 @@ MonoBehaviour:
   playerRunSpeed: 9.33
   decelerate: 10
   jumpForce: 8
+  grounded: 0
   move: 0
+  fallMultiplier: -1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -689,12 +691,12 @@ MonoBehaviour:
   doubleTapTimeThreshold: 0.3
   key1result: 0
   key2result: 0
-  walkButton: {fileID: 0}
-  walkText: {fileID: 0}
-  runButton: {fileID: 0}
-  runText: {fileID: 0}
-  skidButton: {fileID: 0}
-  skidText: {fileID: 0}
+  forceButton: {fileID: 0}
+  forceText: {fileID: 0}
+  gravityButton: {fileID: 0}
+  gravityText: {fileID: 0}
+  fallButton: {fileID: 0}
+  fallText: {fileID: 0}
 --- !u!114 &217111832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1267,10 +1269,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 197932503}
   m_HandleRect: {fileID: 523696396}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 15
+  m_MinValue: 5
+  m_MaxValue: 30
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1521,7 +1523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Run Speed
+  m_text: Gravity
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1732,7 +1734,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Walk Speed
+  m_text: Jump Force
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3108,7 +3110,7 @@ Transform:
   m_GameObject: {fileID: 854666413}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -6.08, z: 0}
-  m_LocalScale: {x: 40.76, y: 1.6951147, z: 0.42914295}
+  m_LocalScale: {x: 40.76, y: 1.6951147, z: 5.8007255}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -3199,9 +3201,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 845330959}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 10
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 3
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3603,7 +3605,7 @@ Transform:
   m_GameObject: {fileID: 1422403400}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -25.45, y: -4.44, z: 0}
-  m_LocalScale: {x: 10.594858, y: 4.2046003, z: 0.42914295}
+  m_LocalScale: {x: 10.594858, y: 4.2046003, z: 5.8007255}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3647,7 +3649,9 @@ MonoBehaviour:
   playerRunSpeed: 9.33
   decelerate: 10
   jumpForce: 8
+  grounded: 0
   move: 0
+  fallMultiplier: -1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -3658,12 +3662,12 @@ MonoBehaviour:
   doubleTapTimeThreshold: 0.3
   key1result: 0
   key2result: 0
-  walkButton: {fileID: 266878112}
-  walkText: {fileID: 544613803}
-  runButton: {fileID: 211699040}
-  runText: {fileID: 64083711}
-  skidButton: {fileID: 897811316}
-  skidText: {fileID: 1531169941}
+  forceButton: {fileID: 266878112}
+  forceText: {fileID: 1643967713}
+  gravityButton: {fileID: 211699040}
+  gravityText: {fileID: 478874203}
+  fallButton: {fileID: 897811316}
+  fallText: {fileID: 1531169941}
 --- !u!50 &1509377237
 Rigidbody2D:
   serializedVersion: 4
@@ -3840,7 +3844,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: f
+  m_text: Fall Multiplier
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3867,8 +3871,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.6
-  m_fontSizeBase: 25.6
+  m_fontSize: 24.73
+  m_fontSizeBase: 24.73
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4012,7 +4016,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Walk Speed
+  m_text: Jump Force
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4223,7 +4227,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SkidToStop \ntime in f"
+  m_text: Fall Multiplier
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4514,7 +4518,7 @@ Transform:
   m_GameObject: {fileID: 1904814058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 25.25, y: -4.58, z: 0}
-  m_LocalScale: {x: 10.594858, y: 4.2046003, z: 0.42914295}
+  m_LocalScale: {x: 10.594858, y: 4.2046003, z: 5.8007255}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

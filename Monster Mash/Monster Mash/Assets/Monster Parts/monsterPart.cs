@@ -563,6 +563,14 @@ public class monsterPart : MonoBehaviour
                 requiresRightStance = false;
                 requiresLeftStance = true;
             }
+            else if (attackAnimationID == 0)
+            {
+                torsoCommand = "Right Lower Attack";
+                requiresBackwardStance = true;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = false;
+            }
             else
             {
                 torsoCommand = "Right Lower Attack";
@@ -582,6 +590,14 @@ public class monsterPart : MonoBehaviour
                 requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
+                requiresLeftStance = false;
+            }
+            else if (attackAnimationID == 0)
+            {
+                torsoCommand = "Left Lower Attack";
+                requiresBackwardStance = true;
+                requiresForwardStance = false;
+                requiresRightStance = false;
                 requiresLeftStance = false;
             }
             else
@@ -885,7 +901,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetFloat("Run Offset", leftRunOffset);
             }
         }
-        else if ((isRightSidedLimb || isLeftSidedLimb) && isHorn == false)
+        else if ((isRightSidedLimb || isLeftSidedLimb) && isHorn == false && isEye == false)
         {
             float randomOffset = Random.Range(0, 0.5f);
             myAnimator.SetFloat("Idle Offset", randomOffset);
@@ -948,7 +964,8 @@ public class monsterPart : MonoBehaviour
         if (connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Idle") ||
             connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
             connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Walk")) 
+            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Walk") || 
+            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Run")) 
         {
             if (attackFocusOn == false && myAnimator != null)
             {
@@ -1294,6 +1311,16 @@ public class monsterPart : MonoBehaviour
 
             }
         }
+        else
+        {
+            if (isGroundedLimb)
+            {
+                myAnimator.ResetTrigger("Unbrace");
+                myAnimator.SetTrigger("Unbrace");
+                myAnimator.ResetTrigger("Backward Brace");
+                myAnimator.ResetTrigger("Forward Brace");
+            }
+        }
     }
 
     #endregion
@@ -1340,7 +1367,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyLegStance()
     {
-        if (isGroundedLimb)
+        if (isGroundedLimb && requiresBackwardStance == false)
         {
             myAnimator.SetTrigger("Switch Stance");
             hasHeavyBrace = true;

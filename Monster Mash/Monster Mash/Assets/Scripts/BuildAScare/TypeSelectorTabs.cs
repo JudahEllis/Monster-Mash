@@ -25,6 +25,8 @@ public class TypeSelectorTabs : MonoBehaviour
         _legs.onClick.AddListener(() => ChangeScrollView(Type.Legs));
         _heads.onClick.AddListener(() => ChangeScrollView(Type.Heads));
         _other.onClick.AddListener(() => ChangeScrollView(Type.Other));
+
+        ChangeScrollView(Type.Arms);
     }
 
     void ChangeScrollView(Type type)

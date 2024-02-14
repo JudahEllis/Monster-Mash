@@ -69,6 +69,40 @@ public class input_handler : MonoBehaviour
             movement = keyboardControls.FindAction("Horizontal");
 
             movement.Enable();
+
+            keyboardControls.FindAction("Spacebar").performed += Spacebar_key;
+
+            keyboardControls.FindAction("W").performed += W_key;
+
+            keyboardControls.FindAction("A").performed += A_key;
+
+            keyboardControls.FindAction("S").performed += S_key;
+
+            keyboardControls.FindAction("D").performed += D_key;
+
+            keyboardControls.FindAction("Q").performed += Q_key;
+
+            keyboardControls.FindAction("E").performed += E_key;
+
+            keyboardControls.FindAction("R").performed += R_key;
+
+            keyboardControls.FindAction("F").performed += F_key;
+
+            keyboardControls.FindAction("Left Shift").performed += LeftShift_key;
+
+            keyboardControls.FindAction("Left Control").performed += LeftControl_key;
+
+            keyboardControls.FindAction("Left Mouse").performed += Left_mouse;
+
+            keyboardControls.FindAction("Middle Mouse").performed += Middle_mouse;
+
+            keyboardControls.FindAction("Right Mouse").performed += Right_mouse;
+
+            keyboardControls.FindAction("numPad1").performed += numPad_1;
+
+            keyboardControls.FindAction("numPad2").performed += numPad_2;
+
+            keyboardControls.FindAction("numPad3").performed += numPad_3;
         }
 
         else
@@ -80,11 +114,122 @@ public class input_handler : MonoBehaviour
             movement = controllerControls.FindAction("Left Stick");
 
             movement.Enable();
+
+            controllerControls.FindAction("A Button").performed += A_button;
+
+            controllerControls.FindAction("B Button").performed += B_button;
+
+            controllerControls.FindAction("X Button").performed += X_button;
+
+            controllerControls.FindAction("Y Button").performed += Y_button;
+
+            controllerControls.FindAction("Left Trigger").performed += leftTrigger;
+
+            controllerControls.FindAction("Right Trigger").performed += rightTrigger;
+
+            controllerControls.FindAction("Left Bumper").performed += leftBumper;
+
+            controllerControls.FindAction("Right Bumper").performed += rightBumper;
+
+            controllerControls.FindAction("Right Stick").Enable();
+
+            controllerControls.FindAction("DPad Up").performed += Dpad_UP;
+
+            controllerControls.FindAction("DPad Down").performed += Dpad_DOWN;
+
+            controllerControls.FindAction("DPad Left").performed += Dpad_LEFT;
+
+            controllerControls.FindAction("DPad Right").performed += Dpad_RIGHT;
         }
 
         print(controlType);
     }
 
+    /* On Disable
+
+    private void OnDisable()
+    {
+        if (controlType == "keyboardmouse")
+        {
+            InputActionMap keyboardControls = playerInput.actions.FindActionMap(controlType);
+
+            movement = keyboardControls.FindAction("Horizontal");
+
+            movement.Disable();
+
+            keyboardControls.FindAction("Spacebar").performed -= Spacebar_key;
+
+            keyboardControls.FindAction("W").performed -= W_key;
+
+            keyboardControls.FindAction("A").performed -= A_key;
+
+            keyboardControls.FindAction("S").performed -= S_key;
+
+            keyboardControls.FindAction("D").performed -= D_key;
+
+            keyboardControls.FindAction("Q").performed -= Q_key;
+
+            keyboardControls.FindAction("E").performed -= E_key;
+
+            keyboardControls.FindAction("R").performed -= R_key;
+
+            keyboardControls.FindAction("F").performed -= F_key;
+
+            keyboardControls.FindAction("Left Shift").performed -= LeftShift_key;
+
+            keyboardControls.FindAction("Left Control").performed -= LeftControl_key;
+
+            keyboardControls.FindAction("Left Mouse").performed -= Left_mouse;
+
+            keyboardControls.FindAction("Middle Mouse").performed -= Middle_mouse;
+
+            keyboardControls.FindAction("Right Mouse").performed -= Right_mouse;
+
+            keyboardControls.FindAction("numPad1").performed -= numPad_1;
+
+            keyboardControls.FindAction("numPad2").performed -= numPad_2;
+
+            keyboardControls.FindAction("numPad3").performed -= numPad_3;
+        }
+
+        else
+        { 
+            InputActionMap controllerControls = playerInput.actions.FindActionMap(controlType);
+
+            movement = controllerControls.FindAction("Left Stick");
+
+            movement.Disable();
+
+            controllerControls.FindAction("A Button").performed -= A_button;
+
+            controllerControls.FindAction("B Button").performed -= B_button;
+
+            controllerControls.FindAction("X Button").performed -= X_button;
+
+            controllerControls.FindAction("Y Button").performed -= Y_button;
+
+            controllerControls.FindAction("Left Trigger").performed -= leftTrigger;
+
+            controllerControls.FindAction("Right Trigger").performed -= rightTrigger;
+
+            controllerControls.FindAction("Left Bumper").performed -= leftBumper;
+
+            controllerControls.FindAction("Right Bumper").performed -= rightBumper;
+
+            controllerControls.FindAction("Right Stick").Disable();
+
+            controllerControls.FindAction("DPad Up").performed -= Dpad_UP;
+
+            controllerControls.FindAction("DPad Down").performed -= Dpad_DOWN;
+
+            controllerControls.FindAction("DPad Left").performed -= Dpad_LEFT;
+
+            controllerControls.FindAction("DPad Right").performed -= Dpad_RIGHT;
+        }
+
+    }
+
+    */
     private void FixedUpdate()
     {
         movePlayer();

@@ -17,6 +17,9 @@ public class MultiplayerJoinManager : MonoBehaviour
     [SerializeField]
     private List<VirtualMouseInput> playerCursors;
 
+    [SerializeField]
+    public GameObject[] playerTubes;
+
     [HideInInspector]
     public int charactersSelected;
 
@@ -94,9 +97,11 @@ public class MultiplayerJoinManager : MonoBehaviour
     //As of right now assigns a color value but that can be swapped out for a sprite at a later date
     void AddPlayerToken(PlayerInput player)
     {
-        playerCursors[playerInputController.playerCount - 1].gameObject.SetActive(true);
+        playerCursors[player.playerIndex].gameObject.SetActive(true);
 
-        playerCursors[playerInputController.playerCount - 1].gameObject.GetComponent<MultiplayerCursor>().Enabled(player);
+        playerCursors[player.playerIndex].gameObject.GetComponent<MultiplayerCursor>().Enabled(player);
+
+        playerTubes[player.playerIndex].SetActive(true);
 
         player.gameObject.transform.position = Vector3.zero;
 
@@ -149,12 +154,8 @@ public class MultiplayerJoinManager : MonoBehaviour
     void StartAction(InputAction.CallbackContext context)
     { 
         if(allowStartGame)
-        { 
-            characterSelectButtons.alpha = 0;
-            characterSelectButtons.blocksRaycasts = false;
-
-            stageSelectButtons.alpha = 1;
-            stageSelectButtons.blocksRaycasts = true;
+        {
+            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, 11, Camera.main.transform.position.z);
         }
     }
 

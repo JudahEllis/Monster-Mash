@@ -6,9 +6,14 @@ public class CharacterSelectIcon : MonoBehaviour, MultiplayerJoinManager.IQuickp
 {
     [SerializeField]
     private GameObject buttonCharacter;
+
+    GameObject storedMonster;
+    private void Start()
+    {
+        storedMonster = gameObject.transform.parent.GetChild(0).gameObject;
+    }
     public void ButtonSelected(MultiplayerCursor cursor)
     {
-        print("Selected: " + this.gameObject.name);
-        cursor.SelectCharacter(buttonCharacter);
+        cursor.SelectCharacter(buttonCharacter, storedMonster);
     }
 }

@@ -33,8 +33,6 @@ public class PlayerSpawnManager : MonoBehaviour
             if(input.playerIndex == index)
             {
                 spawnedPlayer.GetComponent<input_handler>().playerInput = input;
-
-                input.SwitchCurrentActionMap("XBOX");
             }
 
         }

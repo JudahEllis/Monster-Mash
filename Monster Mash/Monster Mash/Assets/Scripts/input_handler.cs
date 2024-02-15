@@ -70,39 +70,39 @@ public class input_handler : MonoBehaviour
 
             movement.Enable();
 
-            keyboardControls.FindAction("Spacebar").performed += Spacebar_key;
+            keyboardControls.FindAction("Spacebar").started += Spacebar_key;
 
-            keyboardControls.FindAction("W").performed += W_key;
+            keyboardControls.FindAction("W").started += W_key;
 
-            keyboardControls.FindAction("A").performed += A_key;
+            keyboardControls.FindAction("A").started += A_key;
 
-            keyboardControls.FindAction("S").performed += S_key;
+            keyboardControls.FindAction("S").started += S_key;
 
-            keyboardControls.FindAction("D").performed += D_key;
+            keyboardControls.FindAction("D").started += D_key;
 
-            keyboardControls.FindAction("Q").performed += Q_key;
+            keyboardControls.FindAction("Q").started += Q_key;
 
-            keyboardControls.FindAction("E").performed += E_key;
+            keyboardControls.FindAction("E").started += E_key;
 
-            keyboardControls.FindAction("R").performed += R_key;
+            keyboardControls.FindAction("R").started += R_key;
 
-            keyboardControls.FindAction("F").performed += F_key;
+            keyboardControls.FindAction("F").started += F_key;
 
-            keyboardControls.FindAction("Left Shift").performed += LeftShift_key;
+            keyboardControls.FindAction("Left Shift").started += LeftShift_key;
 
-            keyboardControls.FindAction("Left Control").performed += LeftControl_key;
+            keyboardControls.FindAction("Left Control").started += LeftControl_key;
 
-            keyboardControls.FindAction("Left Mouse").performed += Left_mouse;
+            keyboardControls.FindAction("Left Mouse").started += Left_mouse;
 
-            keyboardControls.FindAction("Middle Mouse").performed += Middle_mouse;
+            keyboardControls.FindAction("Middle Mouse").started += Middle_mouse;
 
-            keyboardControls.FindAction("Right Mouse").performed += Right_mouse;
+            keyboardControls.FindAction("Right Mouse").started += Right_mouse;
 
-            keyboardControls.FindAction("numPad1").performed += numPad_1;
+            keyboardControls.FindAction("numPad1").started += numPad_1;
 
-            keyboardControls.FindAction("numPad2").performed += numPad_2;
+            keyboardControls.FindAction("numPad2").started += numPad_2;
 
-            keyboardControls.FindAction("numPad3").performed += numPad_3;
+            keyboardControls.FindAction("numPad3").started += numPad_3;
         }
 
         else
@@ -115,31 +115,31 @@ public class input_handler : MonoBehaviour
 
             movement.Enable();
 
-            controllerControls.FindAction("A Button").performed += A_button;
+            controllerControls.FindAction("A Button").started += A_button;
 
-            controllerControls.FindAction("B Button").performed += B_button;
+            controllerControls.FindAction("B Button").started += B_button;
 
-            controllerControls.FindAction("X Button").performed += X_button;
+            controllerControls.FindAction("X Button").started += X_button;
 
-            controllerControls.FindAction("Y Button").performed += Y_button;
+            controllerControls.FindAction("Y Button").started += Y_button;
 
-            controllerControls.FindAction("Left Trigger").performed += leftTrigger;
+            controllerControls.FindAction("Left Trigger").started += leftTrigger;
 
-            controllerControls.FindAction("Right Trigger").performed += rightTrigger;
+            controllerControls.FindAction("Right Trigger").started += rightTrigger;
 
-            controllerControls.FindAction("Left Bumper").performed += leftBumper;
+            controllerControls.FindAction("Left Bumper").started += leftBumper;
 
-            controllerControls.FindAction("Right Bumper").performed += rightBumper;
+            controllerControls.FindAction("Right Bumper").started += rightBumper;
 
             controllerControls.FindAction("Right Stick").Enable();
 
-            controllerControls.FindAction("DPad Up").performed += Dpad_UP;
+            controllerControls.FindAction("DPad Up").started += Dpad_UP;
 
-            controllerControls.FindAction("DPad Down").performed += Dpad_DOWN;
+            controllerControls.FindAction("DPad Down").started += Dpad_DOWN;
 
-            controllerControls.FindAction("DPad Left").performed += Dpad_LEFT;
+            controllerControls.FindAction("DPad Left").started += Dpad_LEFT;
 
-            controllerControls.FindAction("DPad Right").performed += Dpad_RIGHT;
+            controllerControls.FindAction("DPad Right").started += Dpad_RIGHT;
         }
 
         print(controlType);
@@ -157,39 +157,39 @@ public class input_handler : MonoBehaviour
 
             movement.Disable();
 
-            keyboardControls.FindAction("Spacebar").performed -= Spacebar_key;
+            keyboardControls.FindAction("Spacebar").started -= Spacebar_key;
 
-            keyboardControls.FindAction("W").performed -= W_key;
+            keyboardControls.FindAction("W").started -= W_key;
 
-            keyboardControls.FindAction("A").performed -= A_key;
+            keyboardControls.FindAction("A").started -= A_key;
 
-            keyboardControls.FindAction("S").performed -= S_key;
+            keyboardControls.FindAction("S").started -= S_key;
 
-            keyboardControls.FindAction("D").performed -= D_key;
+            keyboardControls.FindAction("D").started -= D_key;
 
-            keyboardControls.FindAction("Q").performed -= Q_key;
+            keyboardControls.FindAction("Q").started -= Q_key;
 
-            keyboardControls.FindAction("E").performed -= E_key;
+            keyboardControls.FindAction("E").started -= E_key;
 
-            keyboardControls.FindAction("R").performed -= R_key;
+            keyboardControls.FindAction("R").started -= R_key;
 
-            keyboardControls.FindAction("F").performed -= F_key;
+            keyboardControls.FindAction("F").started -= F_key;
 
-            keyboardControls.FindAction("Left Shift").performed -= LeftShift_key;
+            keyboardControls.FindAction("Left Shift").started -= LeftShift_key;
 
-            keyboardControls.FindAction("Left Control").performed -= LeftControl_key;
+            keyboardControls.FindAction("Left Control").started -= LeftControl_key;
 
-            keyboardControls.FindAction("Left Mouse").performed -= Left_mouse;
+            keyboardControls.FindAction("Left Mouse").started -= Left_mouse;
 
-            keyboardControls.FindAction("Middle Mouse").performed -= Middle_mouse;
+            keyboardControls.FindAction("Middle Mouse").started -= Middle_mouse;
 
-            keyboardControls.FindAction("Right Mouse").performed -= Right_mouse;
+            keyboardControls.FindAction("Right Mouse").started -= Right_mouse;
 
-            keyboardControls.FindAction("numPad1").performed -= numPad_1;
+            keyboardControls.FindAction("numPad1").started -= numPad_1;
 
-            keyboardControls.FindAction("numPad2").performed -= numPad_2;
+            keyboardControls.FindAction("numPad2").started -= numPad_2;
 
-            keyboardControls.FindAction("numPad3").performed -= numPad_3;
+            keyboardControls.FindAction("numPad3").started -= numPad_3;
         }
 
         else
@@ -200,31 +200,31 @@ public class input_handler : MonoBehaviour
 
             movement.Disable();
 
-            controllerControls.FindAction("A Button").performed -= A_button;
+            controllerControls.FindAction("A Button").started -= A_button;
 
-            controllerControls.FindAction("B Button").performed -= B_button;
+            controllerControls.FindAction("B Button").started -= B_button;
 
-            controllerControls.FindAction("X Button").performed -= X_button;
+            controllerControls.FindAction("X Button").started -= X_button;
 
-            controllerControls.FindAction("Y Button").performed -= Y_button;
+            controllerControls.FindAction("Y Button").started -= Y_button;
 
-            controllerControls.FindAction("Left Trigger").performed -= leftTrigger;
+            controllerControls.FindAction("Left Trigger").started -= leftTrigger;
 
-            controllerControls.FindAction("Right Trigger").performed -= rightTrigger;
+            controllerControls.FindAction("Right Trigger").started -= rightTrigger;
 
-            controllerControls.FindAction("Left Bumper").performed -= leftBumper;
+            controllerControls.FindAction("Left Bumper").started -= leftBumper;
 
-            controllerControls.FindAction("Right Bumper").performed -= rightBumper;
+            controllerControls.FindAction("Right Bumper").started -= rightBumper;
 
             controllerControls.FindAction("Right Stick").Disable();
 
-            controllerControls.FindAction("DPad Up").performed -= Dpad_UP;
+            controllerControls.FindAction("DPad Up").started -= Dpad_UP;
 
-            controllerControls.FindAction("DPad Down").performed -= Dpad_DOWN;
+            controllerControls.FindAction("DPad Down").started -= Dpad_DOWN;
 
-            controllerControls.FindAction("DPad Left").performed -= Dpad_LEFT;
+            controllerControls.FindAction("DPad Left").started -= Dpad_LEFT;
 
-            controllerControls.FindAction("DPad Right").performed -= Dpad_RIGHT;
+            controllerControls.FindAction("DPad Right").started -= Dpad_RIGHT;
         }
 
     }
@@ -284,11 +284,9 @@ public class input_handler : MonoBehaviour
 
     public void A_button(CallbackContext context)
     {
-        MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[0].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-        if (methodInfo != null)
+        if (context.started)
         {
-            methodInfo.Invoke(this, new object[] { context });
+            Invoke(currentControllerMap[0].inputFunction, 0f);
         }
     }
 

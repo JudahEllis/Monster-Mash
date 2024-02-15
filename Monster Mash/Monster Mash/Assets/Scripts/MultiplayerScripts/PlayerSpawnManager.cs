@@ -12,7 +12,7 @@ public class PlayerSpawnManager : MonoBehaviour
        foreach(MultiplayerJoinManager.PlayerInformation info in CharacterSelectManager.Instance.storedPlayerInformation)
         {
             int spawnIndex = CharacterSelectManager.Instance.storedPlayerInformation.IndexOf(info);
-            SpawnPlayer(info.selectedCharacter, playerSpawnLocations[spawnIndex], info.playerInput, info.playerIndex);
+            SpawnPlayer(info.selectedCharacter, info.characterModel, playerSpawnLocations[spawnIndex], info.playerInput, info.playerIndex);
         }
     }
 
@@ -22,9 +22,15 @@ public class PlayerSpawnManager : MonoBehaviour
         
     }
 
-    void SpawnPlayer(GameObject playerChar, Transform spawnPoint, GameObject playerInput, int index)
+    void SpawnPlayer(GameObject playerChar, GameObject playerModel, Transform spawnPoint, GameObject playerInput, int index)
     {
         GameObject spawnedPlayer = Instantiate(playerChar, spawnPoint.position, Quaternion.identity);
+
+        GameObject spawnedModel = Instantiate(playerModel, spawnedPlayer.transform);
+
+        Vector3 charLocation = new Vector3(0, -0.4f, 0);
+
+        spawnedModel.transform.localPosition = charLocation;
 
         PlayerInput[] allInputs = FindObjectsOfType<PlayerInput>();
 

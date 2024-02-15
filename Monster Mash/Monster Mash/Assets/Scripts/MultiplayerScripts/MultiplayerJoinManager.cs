@@ -20,6 +20,8 @@ public class MultiplayerJoinManager : MonoBehaviour
     [SerializeField]
     public GameObject[] playerTubes;
 
+    public List<Transform> monsterSpawnPoints;
+
     [HideInInspector]
     public int charactersSelected;
 
@@ -36,6 +38,8 @@ public class MultiplayerJoinManager : MonoBehaviour
     public class PlayerInformation
     {
         public GameObject selectedCharacter;
+
+        public GameObject characterModel;
 
         public int playerIndex;
 

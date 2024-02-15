@@ -42,7 +42,11 @@ public class MultiplayerCursor : MonoBehaviour
 
         InputAction selectAction = controllerMap.FindAction("Select Action - Generic Gamepad");
 
+        InputAction deselectAction = controllerMap.FindAction("Deselect Action - Generic Gamepad");
+
         selectAction.started += SelectAction;
+
+        deselectAction.started += DeselectCharacter;
 
         graphicRaycaster = FindObjectOfType<GraphicRaycaster>();
 
@@ -105,7 +109,7 @@ public class MultiplayerCursor : MonoBehaviour
 
             selectedCharacter = true;
 
-            Transform monsterSpawn = joinManager.playerTubes[player.playerIndex].transform.GetChild(0);
+            Transform monsterSpawn = joinManager.monsterSpawnPoints[player.playerIndex];
 
             Instantiate(selectedMonster, monsterSpawn);
 
@@ -118,9 +122,25 @@ public class MultiplayerCursor : MonoBehaviour
         }
     }
 
-    public void DeselectCharacter()
+    public void DeselectCharacter(InputAction.CallbackContext context)
     {
+        if(selectedCharacter)
+        {
+            selectedCharacter = false;
 
+            joinManager.allowStartGame = false;
+
+            joinManager.charactersSelected--;
+
+            joinManager.playerInfo[player.playerIndex].selectedCharacter = null;
+
+            joinManager.playerInfo[player.playerIndex].playerInput = null;
+
+            GameObject previewChar = 
+                joinManager.monsterSpawnPoints[player.playerIndex].transform.GetChild(0).gameObject;
+
+            Destroy(previewChar);
+        }
     }
 
     void DisableVisuals(PlayerInput input)

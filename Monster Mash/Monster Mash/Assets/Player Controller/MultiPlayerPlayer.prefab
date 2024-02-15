@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1251849871196894673}
   - component: {fileID: 1251849871196894672}
   - component: {fileID: 2068421904}
-  - component: {fileID: -7194373132313955784}
   - component: {fileID: 5460158044551370781}
   m_Layer: 0
   m_Name: MultiPlayerPlayer
@@ -53,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251849871196894678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -136,7 +135,7 @@ MonoBehaviour:
   playerInput: {fileID: 0}
   currentControllerMap:
   - inputName: A Button
-    inputFunction: sayHi
+    inputFunction: jumpPlayer
   - inputName: B Button
     inputFunction: 
   - inputName: X Button
@@ -239,7 +238,7 @@ MonoBehaviour:
   - inputName: D
     inputFunction: 
   - inputName: Spacebar
-    inputFunction: 
+    inputFunction: jumpPlayer
   - inputName: Q
     inputFunction: 
   - inputName: E
@@ -262,18 +261,6 @@ MonoBehaviour:
     inputFunction: 
   player: {fileID: 0}
   myCursor: {fileID: 0}
---- !u!114 &-7194373132313955784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251849871196894678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f313b945ae9122541ac3bf0791b7946f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5460158044551370781
 MonoBehaviour:
   m_ObjectHideFlags: 0

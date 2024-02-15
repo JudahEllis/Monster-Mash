@@ -11,8 +11,8 @@ public class SelectionManager : MonoBehaviour
 
     private void Awake()
     {
-        icon = GameObject.FindGameObjectWithTag("DragIcon");
-        icon.SetActive(false);
+        //icon = GameObject.FindGameObjectWithTag("DragIcon");
+        //icon.SetActive(false);
 
         if (Instance == null)
             Instance = this;
@@ -24,7 +24,7 @@ public class SelectionManager : MonoBehaviour
     {
         selectedPrefab = prefab;
 
-        icon.SetActive(prefab != null);
+        //icon.SetActive(prefab != null);
     }
 
     // Use this selectedPrefab in other parts of your game as needed

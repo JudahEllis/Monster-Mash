@@ -37,6 +37,7 @@ public class LimbSelector : MonoBehaviour
     [HideInInspector]
     public GameObject limbToPlace = null;
 
+
     private Vector3 limbHomePos = Vector3.zero;
 
     private bool firstIntersectTorso = true;
@@ -50,7 +51,7 @@ public class LimbSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (limbState.GetState())
+        switch(limbState.GetState())
         {
             case State.States.noSelection:
                 NoLimbSelected();
@@ -283,3 +284,41 @@ public class LimbSelector : MonoBehaviour
         return closestBone;
     }
 }
+
+
+        //limbToPlace.transform.position = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 60f));
+
+        //if (Input.GetKeyDown(KeyCode.Mouse0))
+        //{
+        //    Ray ray = editorCamera.ScreenPointToRay(Input.mousePosition);
+        //    RaycastHit hit;
+
+        //    // Perform the raycast and check if it hits a collider
+        //    if (Physics.Raycast(ray, out hit))
+        //    {
+        //        // Check if the collider has a reference to the GameObject you want to detect clicks on
+        //        if (hit.collider.CompareTag("Limbable"))
+        //        {
+        //            //// Calculate the position and rotation for the new limb
+        //            //Vector3 clickPosition = hit.point;
+
+        //            //// Calculate the direction from the limb to the torso
+        //            //Vector3 directionToTorso = hit.transform.position - clickPosition;
+
+        //            //// Determine the rotation to face the torso
+        //            //Quaternion targetRotation = Quaternion.LookRotation(directionToTorso, Vector3.up);
+
+        //            // Calculate the direction from the limb to the torso
+        //            Vector3 directionToTorso = hit.transform.position - hit.point;
+
+        //            // Determine the rotation to face the torso
+        //            Quaternion targetRotation = Quaternion.LookRotation(directionToTorso, -hit.normal);
+
+        //            targetRotation = Quaternion.RotateTowards(targetRotation, Quaternion.identity, 50);
+
+        //            CreateLimb(hit, targetRotation);
+
+        //            Destroy(cursor_control.GetComponent<cursor_limbplacer>().limbToPlace);
+        //        }
+        //    }
+        //

@@ -9,18 +9,10 @@ public class CameraRotZoom : MonoBehaviour
     // public cursor playerCursor;
     private Vector3 lastMousePosition;
 
-    [SerializeField] private CinemachineVirtualCamera _vCam;
+    [SerializeField] private CinemachineVirtualCamera cam;
 
-    private Cinemachine3rdPersonFollow _3rdPersonFollow;
-
-    private float zoomMin;
-    private float zoomMax;
-
-    private float startShoulderOffsetX = 0.0f;
-    private float shoulderOffsetMin = 0.0f;
-    private float shoulderOffsetMax = 0.0f;
-
-    private float cameraDistanceX;
+    public float zoomMin = 80f;
+    public float zoomMax = 120f;
 
     private KeyCode camMove = KeyCode.Mouse2;
 
@@ -30,7 +22,7 @@ public class CameraRotZoom : MonoBehaviour
 
     CinemachineComponentBase componentBase;
     float cameraDistance;
-    float zoom_sensitivity = 100.0f;
+    float zoom_sensitivity = 1000.0f;
 
     //publics
     [Header("Mouse")]
@@ -62,7 +54,7 @@ public class CameraRotZoom : MonoBehaviour
     {
         if(componentBase == null)
         {
-            componentBase = _vCam.GetCinemachineComponent(CinemachineCore.Stage.Body);
+            componentBase = cam.GetCinemachineComponent(CinemachineCore.Stage.Body);
         }
 
         //if (playerControls == null)
@@ -82,22 +74,11 @@ public class CameraRotZoom : MonoBehaviour
         startYf = yRotation;
 
         startCamDist = (componentBase as Cinemachine3rdPersonFollow).CameraDistance;
-        cameraDistance = startCamDist;
-
-        zoomMin = startCamDist - 7;
-        zoomMax = startCamDist + 7;
-
-        _3rdPersonFollow = _vCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-
-        startShoulderOffsetX = _3rdPersonFollow.ShoulderOffset.x;
-        shoulderOffsetMin = startShoulderOffsetX + 3;
-        shoulderOffsetMax = startShoulderOffsetX - 3;
-
-        cameraDistanceX = startShoulderOffsetX;
     }
 
     void FixedUpdate()
     {
+        //if (Input.getm)
         if (Input.GetKeyDown(camMove))
         {
             //playerCursor.cameraRotating = true;
@@ -133,6 +114,16 @@ public class CameraRotZoom : MonoBehaviour
             //cursor_control.GetComponent<cursor_limbplacer>().cameraRotating = false;
         }
 
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            cameraDistance = Input.GetAxis("Mouse ScrollWheel") * zoom_sensitivity * Time.deltaTime;
+
+            if (componentBase is Cinemachine3rdPersonFollow)
+            {
+                (componentBase as Cinemachine3rdPersonFollow).CameraDistance = 
+                    Mathf.Clamp((componentBase as Cinemachine3rdPersonFollow).CameraDistance += cameraDistance, zoomMin, zoomMax);
+            }
+        }
     }
 
     private void Update()
@@ -146,35 +137,15 @@ public class CameraRotZoom : MonoBehaviour
             yRotation = startYf;
             xRotation = startXf;
             (componentBase as Cinemachine3rdPersonFollow).CameraDistance = startCamDist;
-            _3rdPersonFollow.ShoulderOffset.x = startShoulderOffsetX;
-            cameraDistance = startCamDist;
-        }
 
-        HandleCameraZoom();
+            //transform.position = Vector3.Lerp(currPos, startPos, Time.deltaTime);
+            //currPos = startPos;
+            //targPos = startPos;
+        }
     }
 
     private void correctMousePosition()
     {
         Mouse.current.WarpCursorPosition(lastMousePosition);
-    }
-
-    private void HandleCameraZoom()
-    {
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
-        {
-            cameraDistance += Input.mouseScrollDelta.y * 2.0f;
-            cameraDistanceX -= Input.mouseScrollDelta.y;
-
-            //Input.GetAxis("Mouse ScrollWheel") * zoom_sensitivity * Time.deltaTime;
-
-            cameraDistance = Mathf.Clamp(cameraDistance, zoomMin, zoomMax);
-            cameraDistanceX = Mathf.Clamp(cameraDistanceX, shoulderOffsetMax, shoulderOffsetMin);
-
-            _3rdPersonFollow.CameraDistance = 
-                Mathf.Lerp(_3rdPersonFollow.CameraDistance, cameraDistance,  zoom_sensitivity * Time.deltaTime);
-
-            _3rdPersonFollow.ShoulderOffset.x =
-                Mathf.Lerp(_3rdPersonFollow.ShoulderOffset.x, cameraDistanceX, zoom_sensitivity * Time.deltaTime);
-        }
     }
 }

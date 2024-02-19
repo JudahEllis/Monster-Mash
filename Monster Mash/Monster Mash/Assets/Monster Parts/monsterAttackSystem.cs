@@ -636,6 +636,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    /*
     public bool IsAttacking()
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
@@ -648,6 +649,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         return false;
     }
+    */
 
     public void roll()
     {

@@ -16,6 +16,7 @@ public class projectile : MonoBehaviour
     private Vector3 startingPoint = new Vector3 (0,0,0);
     private Quaternion startingRotation;
     private bool impactCalled;
+    public bool isCenterOfSpray;
 
     public void resetPosition()
     {

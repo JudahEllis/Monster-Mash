@@ -36,10 +36,15 @@ public class monsterPart : MonoBehaviour
     public bool sprayNeutralAttack;
     public bool projectileNeutralAttack;
     public bool beamNeutralAttack;
-    public GameObject neutralVFXHolder;
-    private vfxHolder neutralVFXManager;
-    public Transform[] neutralAttackVFXArray;
+    public GameObject neutralHitVFXHolder;
+    public GameObject neutralMissVFXHolder;
+    public Collider neutralCollider;
+    private vfxHolder neutralHitVFXManager;
+    private vfxHolder neutralMissVFXManager;
+    public Transform[] neutralAttackHitVFXArray;
+    public Transform[] neutralAttackMissVFXArray;
     private int neutralVFXCount;
+    private bool jabOrSlashLanded = false;
     //private Transform neutralVFXParent;
     //private Vector3 neutralVFXPosition;
     //private Vector3 neutralVFXRotation;
@@ -49,12 +54,15 @@ public class monsterPart : MonoBehaviour
     public bool slashHeavyAttack;
     public bool sprayHeavyAttack;
     public bool projectileHeavyAttack;
-    public bool projectileBurstHeavyAttack;
     public bool beamHeavyAttack;
     public bool reelHeavyAttack;
-    public GameObject heavyVFXHolder;
-    private vfxHolder heavyVFXManager;
-    public Transform[] heavyAttackVFXArray;
+    public GameObject heavyHitVFXHolder;
+    public GameObject heavyMissVFXHolder;
+    public Collider heavyCollider;
+    private vfxHolder heavyHitVFXManager;
+    private vfxHolder heavyMissVFXManager;
+    public Transform[] heavyAttackHitVFXArray;
+    public Transform[] heavyAttackMissVFXArray;
     private int heavyVFXCount;
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -936,23 +944,12 @@ public class monsterPart : MonoBehaviour
             referencesToIgnore[u].referencesToIgnore = referencesToIgnore;
         }
 
-        /*
-        if (neutralAttackVFXArray.Length > 0)
-        {
-            for (int u = 0; u < neutralAttackVFXArray.Length; u++)
-            {
-                neutralAttackVFXArray[u].GetComponent<monsterPartReference>().referencesToIgnore = referencesToIgnore;
-            }
-        }
+        monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
 
-        if (heavyAttackVFXArray.Length > 0)
+        for (int i = 0; i < internalPartReferences.Length; i++)
         {
-            for (int u = 0; u < heavyAttackVFXArray.Length; u++)
-            {
-                heavyAttackVFXArray[u].GetComponent<monsterPartReference>().referencesToIgnore = referencesToIgnore;
-            }
+            internalPartReferences[i].partReference = this.GetComponent<monsterPart>();
         }
-        */
     }
 
     #endregion
@@ -1410,6 +1407,11 @@ public class monsterPart : MonoBehaviour
             {
                 myMainSystem.correctAttackDirection(0);
             }
+
+            if(jabNeutralAttack || jabHeavyAttack || slashNeutralAttack || slashHeavyAttack)
+            {
+                triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
+            }
         }
     }
 
@@ -1503,64 +1505,150 @@ public class monsterPart : MonoBehaviour
 
     private void setUpVFX()
     {
-        if (neutralVFXHolder != null)
+        if (neutralHitVFXHolder != null)
         {
-            neutralVFXManager = neutralVFXHolder.GetComponent<vfxHolder>();
-            neutralVFXHolder.transform.parent = mainTorso.gameObject.transform;
-            neutralAttackVFXArray = new Transform[neutralVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackVFXArray.Length; i++)
+            if (neutralHitVFXHolder.GetComponent<vfxHolder>() != null)
             {
-                neutralAttackVFXArray[i] = neutralVFXHolder.transform.GetChild(i);
+                neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            if (projectileNeutralAttack || sprayNeutralAttack)
+            {
+                neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+            }
+
+            neutralAttackHitVFXArray = new Transform[neutralHitVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackHitVFXArray.Length; i++)
+            {
+                neutralAttackHitVFXArray[i] = neutralHitVFXHolder.transform.GetChild(i);
             }
         }
 
-        if (heavyVFXHolder != null)
+        if (neutralMissVFXHolder != null)
         {
-            heavyVFXManager = heavyVFXHolder.GetComponent<vfxHolder>();
-            heavyVFXHolder.transform.parent = mainTorso.gameObject.transform;
-            heavyAttackVFXArray = new Transform[heavyVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackVFXArray.Length; i++)
+            if (neutralMissVFXHolder.GetComponent<vfxHolder>() != null)
             {
-                heavyAttackVFXArray[i] = heavyVFXHolder.transform.GetChild(i);
+                neutralMissVFXManager = neutralMissVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralAttackMissVFXArray = new Transform[neutralMissVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackMissVFXArray.Length; i++)
+            {
+                neutralAttackMissVFXArray[i] = neutralMissVFXHolder.transform.GetChild(i);
             }
         }
 
-        /*
-        if (neutralAttackVFXArray.Length != 0)
+        if (heavyHitVFXHolder != null)
         {
-            neutralVFXPosition = neutralAttackVFXArray[0].transform.localPosition;
-            neutralVFXParent = neutralAttackVFXArray[0].transform.parent;
-            neutralVFXRotation = neutralAttackVFXArray[0].transform.localRotation.eulerAngles;
+            if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            if (projectileHeavyAttack || sprayHeavyAttack)
+            {
+                heavyHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+            }
+
+            heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackHitVFXArray.Length; i++)
+            {
+                heavyAttackHitVFXArray[i] = heavyHitVFXHolder.transform.GetChild(i);
+            }
         }
-        */
+
+        if (heavyMissVFXHolder != null)
+        {
+            if (heavyMissVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyMissVFXManager = heavyMissVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackMissVFXArray = new Transform[heavyMissVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackMissVFXArray.Length; i++)
+            {
+                heavyAttackMissVFXArray[i] = heavyMissVFXHolder.transform.GetChild(i);
+            }
+        }
     }
 
-    public void triggerNeutralAttackVisuals()
+    public void triggerJabOrSlashHitDetect() //marks whether or not the hit VFX is needed
+    {
+        jabOrSlashLanded = true;
+        //play out VFX
+
+        if (attackMarkedHeavy == true)
+        {
+            heavyHitVFXManager.unleashJabOrSlash();
+        }
+        else
+        {
+            neutralHitVFXManager.unleashJabOrSlash();
+
+        }
+    }
+
+    public void triggerJabOrSlashCollisionsOn() //called in attack animation
+    {
+        //turn on neutral vfx holder
+        jabOrSlashLanded = false;
+        
+        if (attackMarkedHeavy == true)
+        {
+            heavyCollider.enabled = true;
+        }
+        else
+        {
+            neutralCollider.enabled = true;
+        }
+        
+    }
+
+    public void triggerJabOrSlashCollisionsOff() //called in attack animation
+    {
+        //turn off neutral vfx holder
+        jabOrSlashLanded = false;
+
+        if (attackMarkedHeavy == true)
+        {
+            heavyCollider.enabled = false;
+        }
+        else
+        {
+            neutralCollider.enabled = false;
+        }
+        
+    }
+
+    public void triggerNeutralAttackVisuals() //called in attack animation
     {
         if (jabNeutralAttack)
         {
+            neutralCollider.enabled = false;
 
+            if (jabOrSlashLanded == false)
+            {
+                //turn on miss visual if neutral vfx holder's script hasn't made contact
+                neutralMissVFXManager.unleashJabOrSlash();
+            }
         }
         else if (slashNeutralAttack)
         {
+            neutralCollider.enabled = false;
 
+            if (jabOrSlashLanded == false)
+            {
+                //turn on miss visual if neutral vfx holder's script hasn't made contact
+                neutralMissVFXManager.unleashJabOrSlash();
+            }
         }
         else if (sprayNeutralAttack)
         {
-
+            neutralHitVFXManager.unleashSpray();
         }
-        else if (projectileNeutralAttack && neutralAttackVFXArray.Length != 0)
+        else if (projectileNeutralAttack && neutralAttackHitVFXArray.Length != 0)
         {
-            if (neutralVFXCount == neutralAttackVFXArray.Length - 1)
-            {
-                neutralVFXCount = 0;
-            }
-            else
-            {
-                neutralVFXCount++;
-            }
-
-            neutralAttackVFXArray[neutralVFXCount].gameObject.SetActive(true);
+            neutralHitVFXManager.unleashSingleProjectile();
         }
         else if (beamNeutralAttack)
         {
@@ -1572,42 +1660,31 @@ public class monsterPart : MonoBehaviour
     {
         if (jabHeavyAttack)
         {
+            heavyCollider.enabled = false;
 
+            if (jabOrSlashLanded == false)
+            {
+                //turn on miss visual if neutral vfx holder's script hasn't made contact
+                heavyMissVFXManager.unleashJabOrSlash();
+            }
         }
         else if (slashHeavyAttack)
         {
+            heavyCollider.enabled = false;
 
+            if (jabOrSlashLanded == false)
+            {
+                //turn on miss visual if neutral vfx holder's script hasn't made contact
+                heavyMissVFXManager.unleashJabOrSlash();
+            }
         }
         else if (sprayHeavyAttack)
         {
-
+            heavyHitVFXManager.unleashSpray();
         }
-        else if (projectileHeavyAttack && heavyAttackVFXArray.Length != 0)
+        else if (projectileHeavyAttack && heavyAttackHitVFXArray.Length != 0)
         {
-            if (heavyVFXCount == heavyAttackVFXArray.Length - 1)
-            {
-                heavyVFXCount = 0;
-            }
-            else
-            {
-                heavyVFXCount++;
-            }
-
-            heavyAttackVFXArray[heavyVFXCount].gameObject.SetActive(true);
-        }
-        else if (projectileBurstHeavyAttack && heavyAttackVFXArray.Length != 0)
-        {
-            if (heavyVFXCount == heavyAttackVFXArray.Length - 1)
-            {
-                heavyVFXCount = 0;
-            }
-            else
-            {
-                heavyVFXCount++;
-            }
-
-            heavyVFXManager.rechargeBurstProjectiles(heavyAttackVFXArray[heavyVFXCount].gameObject);
-            heavyAttackVFXArray[heavyVFXCount].gameObject.SetActive(true);
+            heavyHitVFXManager.unleashSingleProjectile();
         }
         else if (beamHeavyAttack)
         {
@@ -1936,10 +2013,12 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
+    /*
     #region Judah's BS
     public bool isAttackingCheck()
     {
         return isAttacking;
     }
     #endregion
+    */
 }

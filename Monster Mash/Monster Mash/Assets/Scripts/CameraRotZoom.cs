@@ -86,8 +86,8 @@ public class CameraRotZoom : MonoBehaviour
         startCamDist = (componentBase as Cinemachine3rdPersonFollow).CameraDistance;
         cameraDistance = startCamDist;
 
-        zoomMin = startCamDist - 10;
-        zoomMax = startCamDist + 10;
+        zoomMin = startCamDist - 7;
+        zoomMax = startCamDist + 7;
 
         _3rdPersonFollow = _vCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
 
@@ -128,6 +128,11 @@ public class CameraRotZoom : MonoBehaviour
             yRotation += mouseX;
             targetYRot = Quaternion.Euler(0f, yRotation, 0f);
             transform.rotation = Quaternion.Lerp(transform.localRotation, targetYRot * targetXRot, rotSpeed);
+        }
+
+        else
+        {
+            //cursor_control.GetComponent<cursor_limbplacer>().cameraRotating = false;
         }
     }
 

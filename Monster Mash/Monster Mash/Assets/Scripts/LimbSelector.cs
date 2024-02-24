@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.XR;
@@ -39,7 +38,6 @@ public class LimbSelector : MonoBehaviour
     public GameObject limbToPlace = null;
 
     private Vector3 limbHomePos = Vector3.zero;
-    private Quaternion limbHomeRotation = Quaternion.identity;
 
     private bool firstIntersectTorso = true;
 
@@ -104,8 +102,6 @@ public class LimbSelector : MonoBehaviour
 
                     limbHomePos = limbToPlace.transform.position;
 
-                    limbHomeRotation = limbToPlace.transform.rotation;
-
                     limbState.ChangeState(State.States.limbSelected);
 
                     Debug.Log("limbAssigned: " + limbToPlace.name);
@@ -127,9 +123,13 @@ public class LimbSelector : MonoBehaviour
             // Check if the collider has a reference to the GameObject you want to detect clicks on
             if (hit.collider.CompareTag("Limbable"))
             {
+                //Debug.Log("This happened");
+
                 if (firstIntersectTorso)
                 {
                     // change layer so that the editor camera is looking at the body part
+                    //SetGameLayerRecursive(hit.collider.transform.parent.gameObject, LayerMask.NameToLayer("Parts"));
+
                     SetGameLayerRecursive(limbToPlace, LayerMask.NameToLayer("Player"));
 
                     firstIntersectTorso = false;
@@ -175,16 +175,12 @@ public class LimbSelector : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    limbToPlace.transform.localScale = new Vector3(3, 3, 3);
                     CreateLimb(hit, targetRotation);
 
                     //Destroy(cursor_control.GetComponent<cursor_limbplacer>().limbToPlace);
-                    Destroy(limbToPlace);
 
                     //move back to home position
                     //StartCoroutine(MoveLimbHome());
-
-                    firstIntersectTorso = true;
 
                     //Change the state to no limb selected
                     limbState.ChangeState(State.States.noSelection);
@@ -193,7 +189,7 @@ public class LimbSelector : MonoBehaviour
             }
             else
             {
-                // change layer so that the main camera is looking at the body part
+                // change layer so that the editor camera is looking at the body part
                 SetGameLayerRecursive(limbToPlace, LayerMask.NameToLayer("UI"));
 
                 firstIntersectTorso = true;
@@ -208,7 +204,6 @@ public class LimbSelector : MonoBehaviour
         while (Vector3.Distance(limbToPlace.transform.position, limbHomePos) > 0.05f)
         {
             limbToPlace.transform.position = Vector3.Lerp(limbToPlace.transform.position, limbHomePos, 0.05f);
-            limbToPlace.transform.rotation = limbHomeRotation;
             yield return null;
         }
 
@@ -229,12 +224,12 @@ public class LimbSelector : MonoBehaviour
             newLimb.transform.rotation = rot;
 
             //trying this new thing
-            //GameObject emptyParent = new GameObject();
-            //emptyParent.transform.parent = closestBone;
-            //emptyParent.transform.position = newLimb.transform.position;
-            //emptyParent.transform.rotation = Quaternion.identity;
+            GameObject emptyParent = new GameObject();
+            emptyParent.transform.parent = closestBone;
+            emptyParent.transform.position = newLimb.transform.position;
+            emptyParent.transform.rotation = Quaternion.identity;
 
-            newLimb.transform.parent = closestBone;// emptyParent.transform; //closestBone
+            newLimb.transform.parent = emptyParent.transform; //closestBone
 
             SelectionManager.Instance.SetSelectedPrefab(null);
         }

@@ -59,6 +59,7 @@ public class LimbSelector : MonoBehaviour
                 LimbSelected();
                 break;
             case State.States.onTorso:
+                OnTorso();
                 break;
             default:
                 break;
@@ -113,7 +114,7 @@ public class LimbSelector : MonoBehaviour
     {
         limbToPlace.transform.position = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 70f));
 
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = editorCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         // Perform the raycast and check if it hits a collider
@@ -122,12 +123,13 @@ public class LimbSelector : MonoBehaviour
             // Check if the collider has a reference to the GameObject you want to detect clicks on
             if (hit.collider.CompareTag("Limbable"))
             {
-                Debug.Log("This happened");
+                //Debug.Log("This happened");
 
                 if (firstIntersectTorso)
                 {
                     // change layer so that the editor camera is looking at the body part
                     //SetGameLayerRecursive(hit.collider.transform.parent.gameObject, LayerMask.NameToLayer("Parts"));
+
                     SetGameLayerRecursive(limbToPlace, LayerMask.NameToLayer("Player"));
 
                     firstIntersectTorso = false;
@@ -137,6 +139,8 @@ public class LimbSelector : MonoBehaviour
             }
         }
 
+        // mouse was clicked on screen other than on a torso will cause the monster part to
+        // return to its home position
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //move back to home position
@@ -148,11 +152,11 @@ public class LimbSelector : MonoBehaviour
 
     private void OnTorso()
     {
-        Ray ray = editorCamera.ScreenPointToRay(transform.position);
+        Ray torsoRay = editorCamera.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(torsoRay, out hit))
         {
             if (hit.collider.CompareTag("Limbable"))
             {
@@ -171,40 +175,21 @@ public class LimbSelector : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    // Calculate the position and rotation for the new limb
-                    Vector3 clickPosition = hit.point;
-
-                    // Calculate the direction from the limb to the torso
-                    Vector3 directionToTorso2 = hit.transform.position - clickPosition;
-
-                    // Determine the rotation to face the torso
-                    Quaternion targetRotation2 = Quaternion.LookRotation(directionToTorso, Vector3.up);
-
-                    //// Calculate the direction from the limb to the torso
-                    //directionToTorso = hit.transform.position - hit.point;
-
-                    //// Determine the rotation to face the torso
-                    //Quaternion targetRotation = Quaternion.LookRotation(directionToTorso, -hit.normal);
-
-                    targetRotation2 = Quaternion.RotateTowards(targetRotation2, Quaternion.identity, 50);
-
-                    CreateLimb(hit, targetRotation2);
+                    CreateLimb(hit, targetRotation);
 
                     //Destroy(cursor_control.GetComponent<cursor_limbplacer>().limbToPlace);
 
                     //move back to home position
-                    StartCoroutine(MoveLimbHome());
+                    //StartCoroutine(MoveLimbHome());
 
-                    //change the state
+                    //Change the state to no limb selected
                     limbState.ChangeState(State.States.noSelection);
                 }
 
             }
-
             else
             {
                 // change layer so that the editor camera is looking at the body part
-                //SetGameLayerRecursive(hit.collider.transform.parent.gameObject, LayerMask.NameToLayer("Parts"));
                 SetGameLayerRecursive(limbToPlace, LayerMask.NameToLayer("UI"));
 
                 firstIntersectTorso = true;
@@ -222,10 +207,10 @@ public class LimbSelector : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.5f);
+        // once a limb has returned home, reactivate its collider
+        limbToPlace.GetComponentInChildren<MeshCollider>().enabled = true;
 
-        // once a limb has return home, reactivate its collider
-        limbToPlace.GetComponentInChildren<Collider>().enabled = true;
+        yield return new WaitForSeconds(0.5f);
     }
 
     void CreateLimb(RaycastHit hit, Quaternion rot)

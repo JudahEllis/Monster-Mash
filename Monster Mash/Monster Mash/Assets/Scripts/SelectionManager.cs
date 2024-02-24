@@ -7,12 +7,12 @@ public class SelectionManager : MonoBehaviour
 
     private GameObject selectedPrefab;
 
-    private GameObject icon;
+    // private GameObject icon;
 
     private void Awake()
     {
-        icon = GameObject.FindGameObjectWithTag("DragIcon");
-        icon.SetActive(false);
+        //icon = GameObject.FindGameObjectWithTag("DragIcon");
+        //icon.SetActive(false);
 
         if (Instance == null)
             Instance = this;
@@ -24,7 +24,7 @@ public class SelectionManager : MonoBehaviour
     {
         selectedPrefab = prefab;
 
-        icon.SetActive(prefab != null);
+        //icon.SetActive(prefab != null);
     }
 
     // Use this selectedPrefab in other parts of your game as needed
@@ -55,6 +55,6 @@ public class SelectionManager : MonoBehaviour
 
         Vector2 offset = new Vector2(canvasSize.x / -2f, canvasSize.y / -2f);
 
-        icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(viewportPosition.x * canvasSize.x, viewportPosition.y * canvasSize.y) + offset;
+        //icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(viewportPosition.x * canvasSize.x, viewportPosition.y * canvasSize.y) + offset;
     }
 }

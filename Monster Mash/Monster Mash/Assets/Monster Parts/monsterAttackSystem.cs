@@ -71,6 +71,7 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allWings.Add(allMonsterParts[i]);
                 hasWings = true;
+                isWinged = true;
             }
 
             if (allMonsterParts[i].isTorso)

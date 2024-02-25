@@ -909,7 +909,9 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetFloat("Run Offset", leftRunOffset);
             }
         }
-        else if ((isRightSidedLimb || isLeftSidedLimb) && isHorn == false && isEye == false)
+        //this whole section needs an overhaul
+        //I need a better way to exclude parts from this idle offset thing
+        else if ((isRightSidedLimb || isLeftSidedLimb) && isHorn == false && isEye == false) 
         {
             float randomOffset = Random.Range(0, 0.5f);
             myAnimator.SetFloat("Idle Offset", randomOffset);
@@ -1703,7 +1705,7 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
             isRunning = false;
         }
-        else if (isHead)
+        else if (isHead || isWing)
         {
             myAnimator.SetBool("Walking", true);
             myAnimator.SetBool("Running", false);
@@ -1722,7 +1724,7 @@ public class monsterPart : MonoBehaviour
 
             }
         }
-        else if (isHead)
+        else if (isHead || isWing)
         {
             myAnimator.SetBool("Walking", false);
         }
@@ -1743,7 +1745,7 @@ public class monsterPart : MonoBehaviour
             isRunning = true;
         }
 
-        if (isHead)
+        if (isHead || isWing)
         {
             myAnimator.SetBool("Running", true);
             myAnimator.SetBool("Walking", false);
@@ -1763,7 +1765,7 @@ public class monsterPart : MonoBehaviour
             }
         }
 
-        if (isArm || isHead)
+        if (isArm || isHead || isWing)
         {
             myAnimator.SetBool("Running", false);
             isRunning = false;
@@ -1808,6 +1810,9 @@ public class monsterPart : MonoBehaviour
         if (isWing)
         {
             myAnimator.SetBool("Glide Activated", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
         }
     }
 
@@ -1821,7 +1826,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetTrigger("Roll");
             }
 
-            if (isGroundedLimb || isTorso || isHead)
+            if (isGroundedLimb || isTorso || isHead || isWing)
             {
                 myAnimator.SetBool("Walking", false);
                 myAnimator.SetBool("Running", false);
@@ -1902,6 +1907,9 @@ public class monsterPart : MonoBehaviour
         if (isWing)
         {
             myAnimator.SetBool("Glide Activated", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isRunning = false;
         }
     }
 

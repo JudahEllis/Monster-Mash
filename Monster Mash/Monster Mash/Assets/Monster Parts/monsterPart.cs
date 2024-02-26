@@ -118,9 +118,9 @@ public class monsterPart : MonoBehaviour
     private bool isAttacking = false;
     private bool attackFocusOn = false;
     private bool isRunning = false;
-    private int jumpsAllotted;
-    private int regularJumpAmount = 2;
-    private int wingedJumpAmount = 4;
+    //private int jumpsAllotted;
+    //private int regularJumpAmount = 2;
+    //private int wingedJumpAmount = 4;
     public ParticleSystem[] myIdleVFX;
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
 
@@ -1083,11 +1083,15 @@ public class monsterPart : MonoBehaviour
         else if (isWing)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Fly") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Grounded") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Glide") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Running"))
             {
                 if (isAttacking == false)
                 {
+                    myAnimator.ResetTrigger("Unbrace");
                     myAnimator.SetTrigger("Brace");
+                    myAnimator.SetBool("Walking", false);
+                    myAnimator.SetBool("Running", false);
                 }
             }
         }
@@ -1153,11 +1157,15 @@ public class monsterPart : MonoBehaviour
         else if (isWing)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Fly") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Grounded") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Glide") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Running"))
             {
                 if (isAttacking == false)
                 {
+                    myAnimator.ResetTrigger("Unbrace");
                     myAnimator.SetTrigger("Brace");
+                    myAnimator.SetBool("Walking", false);
+                    myAnimator.SetBool("Running", false);
                 }
             }
         }
@@ -1212,11 +1220,15 @@ public class monsterPart : MonoBehaviour
         else if (isWing)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Fly") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Grounded") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") || 
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Glide") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Running"))
             {
                 if (isAttacking == false)
                 {
+                    myAnimator.ResetTrigger("Unbrace");
                     myAnimator.SetTrigger("Brace");
+                    myAnimator.SetBool("Walking", false);
+                    myAnimator.SetBool("Running", false);
                 }
             }
         }
@@ -1271,11 +1283,15 @@ public class monsterPart : MonoBehaviour
         else if (isWing)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Fly") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle Grounded") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land"))
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Glide") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Running"))
             {
                 if (isAttacking == false)
                 {
+                    myAnimator.ResetTrigger("Unbrace");
                     myAnimator.SetTrigger("Brace");
+                    myAnimator.SetBool("Walking", false);
+                    myAnimator.SetBool("Running", false);
                 }
             }
         }
@@ -1293,10 +1309,15 @@ public class monsterPart : MonoBehaviour
                 myAnimator.ResetTrigger("Forward Brace");
             }
 
-            if (isArm)
+            if (isArm || isWing)
             {
                 myAnimator.ResetTrigger("Unbrace");
                 myAnimator.SetTrigger("Unbrace");
+
+                if (isWing)
+                {
+                    myAnimator.SetBool("Glide Activated", false);
+                }
             }
 
             if (isMouth && myAnimator != null)
@@ -1794,20 +1815,14 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetTrigger("Jump");
         }
 
-        if (isGroundedLimb || isTorso || isHead)
+        if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
             isRunning = false;
         }
 
-        if (isArm)
-        {
-            myAnimator.SetBool("Running", false);
-            isRunning = false;
-        }
-
-        if (isWing)
+        if (isWing || isHead || isArm)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Walking", false);
@@ -1818,7 +1833,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRoll(bool groundedWhenTriggered)
     {
-        if (isLeg || isArm ||isTorso || isHead || isMouth)
+        if (isLeg || isArm ||isTorso || isHead || isMouth || isWing)
         {
             if (myAnimator != null)
             {
@@ -1831,10 +1846,16 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Walking", false);
                 myAnimator.SetBool("Running", false);
                 isRunning = false;
+
+                if (isWing || isHead)
+                {
+                    myAnimator.SetBool("Glide Activated", false);
+                }
             }
 
             if (isArm)
             {
+                myAnimator.SetBool("Glide Activated", false);
                 myAnimator.SetBool("Running", false);
                 isRunning = false;
             }
@@ -1891,20 +1912,14 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetTrigger("Fall");
         }
 
-        if (isGroundedLimb || isTorso || isHead)
+        if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
             isRunning = false;
         }
 
-        if (isArm)
-        {
-            myAnimator.SetBool("Running", false);
-            isRunning = false;
-        }
-
-        if (isWing)
+        if (isWing || isHead || isArm)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Walking", false);
@@ -1920,11 +1935,16 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Grounded", true);
             myAnimator.SetTrigger("Land");
         }
+
+        if (isWing || isHead || isArm)
+        {
+            myAnimator.SetBool("Glide Activated", false);
+        }
     }
 
     public void triggerGlide()
     {
-        if (isWing)
+        if (isWing || isHead || isArm)
         {
             myAnimator.SetBool("Glide Activated", true);
         }
@@ -1952,6 +1972,11 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Running", false);
             isRunning = false;
+        }
+
+        if (isWing)
+        {
+            myAnimator.SetBool("Glide Activated", false);
         }
     }
 

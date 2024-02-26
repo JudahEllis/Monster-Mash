@@ -24,6 +24,7 @@ public class monsterAttackSystem : MonoBehaviour
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     public monsterPart[] allMonsterParts;
     public GameObject dashSplat;
+    public ParticleSystem glideVisual;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
 
@@ -255,6 +256,11 @@ public class monsterAttackSystem : MonoBehaviour
 
                         isRunning = false;
                         #endregion
+
+                        if (isGliding)
+                        {
+                            glideToAttack();
+                        }
                     }
                     //Add to this later so that we can having bracing while attacking in the air
                 }
@@ -296,6 +302,10 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetFloat("Flipping Speed", 1);
         myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
+        isGliding = false;
+        glideVisual.Stop();
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Glide to Attack");
 
         yield return new WaitForSeconds(0.2f);
 
@@ -539,19 +549,24 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void glide()
     {
-        if (isGliding == false)
+        if (isGrounded == false)
         {
-            isGliding = true;
-            focusedAttackActive = true;
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
+            if (isGliding == false)
             {
-                allMonsterParts[i].triggerGlide();
+                isGliding = true;
+                //focusedAttackActive = true;
+                glideVisual.Play();
+                myAnimator.SetBool("Gliding", true);
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerGlide();
+                }
             }
-        }
-        else
-        {
-            glideToFall();
+            else
+            {
+                glideToFall();
+            }
         }
     }
 
@@ -559,11 +574,22 @@ public class monsterAttackSystem : MonoBehaviour
     {
         focusedAttackActive = false;
         isGliding = false;
+        glideVisual.Stop();
+        myAnimator.ResetTrigger("Glide to Attack");
+        myAnimator.SetBool("Gliding", false);
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerFall();
         }
+    }
+
+    private void glideToAttack()
+    {
+        isGliding = false;
+        glideVisual.Stop();
+        myAnimator.SetTrigger("Glide to Attack");
+        myAnimator.SetBool("Gliding", false);
     }
 
     public void walkToFall()
@@ -613,11 +639,32 @@ public class monsterAttackSystem : MonoBehaviour
             focusedAttackActive = false;
             canDashAttack = true;
             canRoll = true;
+            glideVisual.Stop();
+            myAnimator.SetBool("Gliding", false);
+            myAnimator.ResetTrigger("Glide to Attack");
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerLand();
+                allMonsterParts[i].triggerRoll(isGrounded);
             }
+            /*
+            if (isGliding)
+            {
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerRoll(isGrounded);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerLand();
+                }
+            }
+            */
+
+            isGliding = false;
 
             myAnimator.SetTrigger("Land");
 
@@ -661,6 +708,9 @@ public class monsterAttackSystem : MonoBehaviour
             isWalking = false;
             focusedAttackActive = false;
             canRoll = false;
+            glideVisual.Stop();
+            myAnimator.SetBool("Gliding", false);
+            myAnimator.ResetTrigger("Glide to Attack");
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -722,6 +772,8 @@ public class monsterAttackSystem : MonoBehaviour
         {
             allMonsterParts[i].triggerUnbrace();
         }
+
+        myAnimator.ResetTrigger("Glide to Attack");
     }
 
     public void hit()

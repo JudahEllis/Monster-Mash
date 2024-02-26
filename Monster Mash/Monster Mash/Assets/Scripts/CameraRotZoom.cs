@@ -87,7 +87,7 @@ public class CameraRotZoom : MonoBehaviour
         cameraDistance = startCamDist;
 
         zoomMin = startCamDist - 7;
-        zoomMax = startCamDist + 7;
+        zoomMax = startCamDist + 20;
 
         _3rdPersonFollow = _vCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
 

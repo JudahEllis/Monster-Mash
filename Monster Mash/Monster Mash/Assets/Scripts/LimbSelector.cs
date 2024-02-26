@@ -38,6 +38,7 @@ public class LimbSelector : MonoBehaviour
     public GameObject limbToPlace = null;
 
     private Vector3 limbHomePos = Vector3.zero;
+    private Quaternion limbHomeRotation = Quaternion.identity;
 
     private bool firstIntersectTorso = true;
 
@@ -90,7 +91,8 @@ public class LimbSelector : MonoBehaviour
 
                     // the collider is necessary for raycasting, but once the part has been selected,
                     // it should no longer have a collider as that may cause problems
-                    hit.collider.enabled = false;
+                    //hit.collider.enabled = false;
+                    limbToPlace.GetComponentInChildren<Collider>().enabled = false;
 
                     //change what the MainCamera is looking at
                     //mainCamera.cullingMask = LayerMask.GetMask("UI");
@@ -100,7 +102,8 @@ public class LimbSelector : MonoBehaviour
 
                     //cursor_control.GetComponent<LimbOnTorso>().limbSelected = true;
 
-                    limbHomePos = limbToPlace.transform.position;
+                    limbHomePos = limbToPlace.transform.parent.position;
+                    limbHomeRotation = limbToPlace.transform.parent.rotation;
 
                     limbState.ChangeState(State.States.limbSelected);
 
@@ -112,7 +115,7 @@ public class LimbSelector : MonoBehaviour
 
     private void LimbSelected()
     {
-        limbToPlace.transform.position = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 70f));
+        limbToPlace.transform.parent.position = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 70f));
 
         Ray ray = editorCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -123,14 +126,10 @@ public class LimbSelector : MonoBehaviour
             // Check if the collider has a reference to the GameObject you want to detect clicks on
             if (hit.collider.CompareTag("Limbable"))
             {
-                //Debug.Log("This happened");
-
                 if (firstIntersectTorso)
                 {
                     // change layer so that the editor camera is looking at the body part
-                    //SetGameLayerRecursive(hit.collider.transform.parent.gameObject, LayerMask.NameToLayer("Parts"));
-
-                    SetGameLayerRecursive(limbToPlace, LayerMask.NameToLayer("Player"));
+                    SetGameLayerRecursive(limbToPlace.transform.parent.gameObject, LayerMask.NameToLayer("Player"));
 
                     firstIntersectTorso = false;
 
@@ -160,8 +159,9 @@ public class LimbSelector : MonoBehaviour
         {
             if (hit.collider.CompareTag("Limbable"))
             {
-                limbToPlace.transform.position = Vector3.Lerp(limbToPlace.transform.position, hit.point, 0.15f);
-                limbToPlace.transform.LookAt(-hit.normal);
+                //limbToPlace.transform.parent.position = Vector3.Lerp(limbToPlace.transform.parent.position, hit.point, 0.15f);
+                limbToPlace.transform.parent.position = Vector3.Lerp(limbToPlace.transform.parent.position, hit.point, 0.15f);
+                limbToPlace.transform.parent.LookAt(-hit.normal);
 
                 // Calculate the direction from the limb to the torso
                 Vector3 directionToTorso = hit.transform.position - hit.point;
@@ -171,26 +171,27 @@ public class LimbSelector : MonoBehaviour
 
                 targetRotation = Quaternion.RotateTowards(targetRotation, Quaternion.identity, 50);
 
-                limbToPlace.transform.rotation = targetRotation;
+                limbToPlace.transform.parent.rotation = targetRotation;
 
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    CreateLimb(hit, targetRotation);
-
-                    //Destroy(cursor_control.GetComponent<cursor_limbplacer>().limbToPlace);
+                    CreateLimb(hit, limbToPlace.transform.rotation);
 
                     //move back to home position
-                    //StartCoroutine(MoveLimbHome());
+                    StartCoroutine(MoveLimbHome());
+
+                    // reset torso intersection bool
+                    firstIntersectTorso = true;
 
                     //Change the state to no limb selected
                     limbState.ChangeState(State.States.noSelection);
                 }
 
             }
-            else
+            else if (hit.collider.CompareTag("Ground"))
             {
                 // change layer so that the editor camera is looking at the body part
-                SetGameLayerRecursive(limbToPlace, LayerMask.NameToLayer("UI"));
+                SetGameLayerRecursive(limbToPlace.transform.parent.gameObject, LayerMask.NameToLayer("UI"));
 
                 firstIntersectTorso = true;
 
@@ -203,12 +204,19 @@ public class LimbSelector : MonoBehaviour
     {
         while (Vector3.Distance(limbToPlace.transform.position, limbHomePos) > 0.05f)
         {
-            limbToPlace.transform.position = Vector3.Lerp(limbToPlace.transform.position, limbHomePos, 0.05f);
+            limbToPlace.transform.parent.position = Vector3.Lerp(limbToPlace.transform.parent.position, limbHomePos, 0.5f);
+            limbToPlace.transform.parent.rotation = limbHomeRotation;
             yield return null;
         }
 
         // once a limb has returned home, reactivate its collider
         limbToPlace.GetComponentInChildren<MeshCollider>().enabled = true;
+
+        // ensure that the main camera is the one looking at this limb
+        SetGameLayerRecursive(limbToPlace.transform.parent.gameObject, LayerMask.NameToLayer("UI"));
+
+        // no limb should be selected
+        limbToPlace = null;
 
         yield return new WaitForSeconds(0.5f);
     }
@@ -219,17 +227,19 @@ public class LimbSelector : MonoBehaviour
         {
             GameObject newLimb = Instantiate(limbToPlace, hit.point, Quaternion.identity);
 
-            Transform closestBone = FindClosestBone(hit);
+            newLimb.transform.localScale /= 13f;
 
             newLimb.transform.rotation = rot;
 
-            //trying this new thing
-            GameObject emptyParent = new GameObject();
-            emptyParent.transform.parent = closestBone;
-            emptyParent.transform.position = newLimb.transform.position;
-            emptyParent.transform.rotation = Quaternion.identity;
+            Transform closestBone = FindClosestBone(hit);
 
-            newLimb.transform.parent = emptyParent.transform; //closestBone
+            //trying this new thing
+            //GameObject emptyParent = new GameObject();
+            //emptyParent.transform.parent = closestBone;
+            //emptyParent.transform.position = newLimb.transform.position;
+            //emptyParent.transform.rotation = Quaternion.identity;
+
+            newLimb.transform.parent = closestBone; //emptyParent.transform
 
             SelectionManager.Instance.SetSelectedPrefab(null);
         }

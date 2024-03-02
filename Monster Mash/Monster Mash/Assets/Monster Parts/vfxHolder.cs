@@ -26,6 +26,13 @@ public class vfxHolder : MonoBehaviour
     public float spreadOfSpray;
     private vfxHolder[] subSprayVFXArray;
     private int subSprayVFXCount = 0;
+    public bool isDefaultSprayHolder;
+    private ParticleSystem[] defaultSprayVFXArray;
+    private int defaultSprayVFXCount;
+    public Transform defaultSprayHolder;
+    private Vector3 startingPoint = new Vector3(0, 0, 0);
+    private Quaternion startingRotation;
+
 
     public void grabReferences()
     {
@@ -79,6 +86,10 @@ public class vfxHolder : MonoBehaviour
         else if (isSprayHolder)
         {
             prepSprayVFX();
+        }
+        else if (isDefaultSprayHolder)
+        {
+            prepDefaultSprayVFX();
         }
     }
 
@@ -164,8 +175,29 @@ public class vfxHolder : MonoBehaviour
                 }
             }
         }
+    }
 
-        
+    public void prepDefaultSprayVFX()
+    {
+        if (isDefaultSprayHolder)
+        {
+            List<ParticleSystem> tempSprayVFX = new List<ParticleSystem>();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                tempSprayVFX.Add(transform.GetChild(i).GetComponent<ParticleSystem>());
+            }
+            defaultSprayVFXArray = new ParticleSystem[tempSprayVFX.Count];
+            for (int i = 0; i < defaultSprayVFXArray.Length; i++)
+            {
+                defaultSprayVFXArray[i] = tempSprayVFX[i];
+                //projectileVFXArray[i].GetComponent<projectile>().speed = projectileSpeed;
+            }
+
+            if (defaultSprayVFXArray[0] != null)
+            {
+                startingRotation = defaultSprayVFXArray[0].transform.localRotation;
+            }
+        }
     }
 
     #endregion
@@ -227,6 +259,25 @@ public class vfxHolder : MonoBehaviour
 
             subSprayVFXArray[subSprayVFXCount].unleashAllProjectiles();
         }
+    }
+
+    public void unleashAdditionalSprayVisual()
+    {
+        if (defaultSprayVFXCount == defaultSprayVFXArray.Length - 1)
+        {
+            defaultSprayVFXCount = 0;
+        }
+        else
+        {
+            defaultSprayVFXCount++;
+        }
+
+        defaultSprayVFXArray[defaultSprayVFXCount].transform.parent = defaultSprayHolder;
+        defaultSprayVFXArray[defaultSprayVFXCount].transform.localPosition = startingPoint;
+        defaultSprayVFXArray[defaultSprayVFXCount].transform.localRotation = startingRotation;
+        defaultSprayVFXArray[defaultSprayVFXCount].Stop();
+        defaultSprayVFXArray[defaultSprayVFXCount].transform.parent = null;
+        defaultSprayVFXArray[defaultSprayVFXCount].Play();
     }
 
     #endregion

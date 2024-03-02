@@ -37,12 +37,27 @@ public class monsterPart : MonoBehaviour
     public bool projectileNeutralAttack;
     public bool beamNeutralAttack;
     public GameObject neutralHitVFXHolder;
+    private Transform neutralHitVFXParent;
     public GameObject neutralMissVFXHolder;
+    private Transform neutralMissVFXParent;
+    public GameObject neutralDefaultSprayVFXHolder;
+    private Transform neutralDefaultSprayVFXParent;
+    private Vector3 neutralDefaultSprayVFXStoredPosition;
+    private Quaternion neutralDefaultSprayVFXStoredRotation;
     public Collider neutralCollider;
     private vfxHolder neutralHitVFXManager;
     private vfxHolder neutralMissVFXManager;
+    private vfxHolder neutralDefaultSprayVFXManager;
+    public Transform neutralForwardMuzzle;
+    public Transform neutralUpwardMuzzle;
+    public Transform neutralDownwardMuzzle;
+    public Transform neutralBackwardMuzzle;
     public Transform[] neutralAttackHitVFXArray;
     public Transform[] neutralAttackMissVFXArray;
+    public Transform[] neutralAttackDefaultVFXArray;
+    private Transform neutralVFXStoredParent;
+    private Vector3 neutralVFXStoredPosition;
+    private Quaternion neutralVFXStoredRotation;
     private int neutralVFXCount;
     private bool jabOrSlashLanded = false;
     //private Transform neutralVFXParent;
@@ -58,11 +73,21 @@ public class monsterPart : MonoBehaviour
     public bool reelHeavyAttack;
     public GameObject heavyHitVFXHolder;
     public GameObject heavyMissVFXHolder;
+    public GameObject heavyDefaultSprayVFXHolder;
     public Collider heavyCollider;
     private vfxHolder heavyHitVFXManager;
     private vfxHolder heavyMissVFXManager;
+    private vfxHolder heavyDefaultSprayVFXManager;
+    public Transform heavyForwardMuzzle;
+    public Transform heavyUpwardMuzzle;
+    public Transform heavyDownwardMuzzle;
+    public Transform heavyBackwardMuzzle;
     public Transform[] heavyAttackHitVFXArray;
     public Transform[] heavyAttackMissVFXArray;
+    public Transform[] heavyAttackDefaultVFXArray;
+    private Transform heavyVFXStoredParent;
+    private Vector3 heavyVFXStoredPosition;
+    private Quaternion heavyVFXStoredRotation;
     private int heavyVFXCount;
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -1597,7 +1622,36 @@ public class monsterPart : MonoBehaviour
 
             if (projectileNeutralAttack || sprayNeutralAttack)
             {
-                neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                if (attackAnimationID == 0 && neutralDownwardMuzzle != null)
+                {
+                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
+                    neutralDownwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    neutralVFXStoredPosition = neutralDownwardMuzzle.localPosition;
+                    neutralVFXStoredRotation = neutralDownwardMuzzle.localRotation;
+                    neutralHitVFXHolder.transform.localPosition = neutralVFXStoredPosition;
+                    neutralHitVFXHolder.transform.localRotation = neutralVFXStoredRotation;
+                    neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 1 && neutralForwardMuzzle != null)
+                {
+                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
+                    neutralForwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    neutralVFXStoredPosition = neutralForwardMuzzle.localPosition;
+                    neutralVFXStoredRotation = neutralForwardMuzzle.localRotation;
+                    neutralHitVFXHolder.transform.localPosition = neutralVFXStoredPosition;
+                    neutralHitVFXHolder.transform.localRotation = neutralVFXStoredRotation;
+                    neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 2 && neutralUpwardMuzzle != null)
+                {
+                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
+                    neutralUpwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    neutralVFXStoredPosition = neutralUpwardMuzzle.localPosition;
+                    neutralVFXStoredRotation = neutralUpwardMuzzle.localRotation;
+                    neutralHitVFXHolder.transform.localPosition = neutralVFXStoredPosition;
+                    neutralHitVFXHolder.transform.localRotation = neutralVFXStoredRotation;
+                    neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
             }
 
             neutralAttackHitVFXArray = new Transform[neutralHitVFXHolder.transform.childCount];
@@ -1621,6 +1675,54 @@ public class monsterPart : MonoBehaviour
             }
         }
 
+        if (neutralDefaultSprayVFXHolder != null)
+        {
+            if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            if (projectileNeutralAttack || sprayNeutralAttack)
+            {
+                if (attackAnimationID == 0 && neutralDownwardMuzzle != null)
+                {
+                    neutralVFXStoredParent = neutralDefaultSprayVFXHolder.transform.parent;
+                    neutralDownwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    neutralVFXStoredPosition = neutralDownwardMuzzle.localPosition;
+                    neutralVFXStoredRotation = neutralDownwardMuzzle.localRotation;
+                    neutralDefaultSprayVFXHolder.transform.localPosition = neutralVFXStoredPosition;
+                    neutralDefaultSprayVFXHolder.transform.localRotation = neutralVFXStoredRotation;
+                    neutralDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 1 && neutralForwardMuzzle != null)
+                {
+                    neutralVFXStoredParent = neutralDefaultSprayVFXHolder.transform.parent;
+                    neutralForwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    neutralVFXStoredPosition = neutralForwardMuzzle.localPosition;
+                    neutralVFXStoredRotation = neutralForwardMuzzle.localRotation;
+                    neutralDefaultSprayVFXHolder.transform.localPosition = neutralVFXStoredPosition;
+                    neutralDefaultSprayVFXHolder.transform.localRotation = neutralVFXStoredRotation;
+                    neutralDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 2 && neutralUpwardMuzzle != null)
+                {
+                    neutralVFXStoredParent = neutralDefaultSprayVFXHolder.transform.parent;
+                    neutralUpwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    neutralVFXStoredPosition = neutralUpwardMuzzle.localPosition;
+                    neutralVFXStoredRotation = neutralUpwardMuzzle.localRotation;
+                    neutralDefaultSprayVFXHolder.transform.localPosition = neutralVFXStoredPosition;
+                    neutralDefaultSprayVFXHolder.transform.localRotation = neutralVFXStoredRotation;
+                    neutralDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+            }
+
+            neutralAttackDefaultVFXArray = new Transform[neutralDefaultSprayVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackDefaultVFXArray.Length; i++)
+            {
+                neutralAttackDefaultVFXArray[i] = neutralDefaultSprayVFXHolder.transform.GetChild(i);
+            }
+        }
+
         if (heavyHitVFXHolder != null)
         {
             if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
@@ -1628,9 +1730,38 @@ public class monsterPart : MonoBehaviour
                 heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack)
+            if (projectileNeutralAttack || sprayNeutralAttack)
             {
-                heavyHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                if (attackAnimationID == 0 && heavyDownwardMuzzle != null)
+                {
+                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
+                    heavyDownwardMuzzle.transform.parent = heavyVFXStoredParent;
+                    heavyVFXStoredPosition = heavyDownwardMuzzle.localPosition;
+                    heavyVFXStoredRotation = heavyDownwardMuzzle.localRotation;
+                    heavyHitVFXHolder.transform.localPosition = heavyVFXStoredPosition;
+                    heavyHitVFXHolder.transform.localRotation = heavyVFXStoredRotation;
+                    heavyHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 1 && heavyForwardMuzzle != null)
+                {
+                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
+                    heavyForwardMuzzle.transform.parent = heavyVFXStoredParent;
+                    heavyVFXStoredPosition = heavyForwardMuzzle.localPosition;
+                    heavyVFXStoredRotation = heavyForwardMuzzle.localRotation;
+                    heavyHitVFXHolder.transform.localPosition = heavyVFXStoredPosition;
+                    heavyHitVFXHolder.transform.localRotation = heavyVFXStoredRotation;
+                    heavyHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 2 && heavyUpwardMuzzle != null)
+                {
+                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
+                    heavyUpwardMuzzle.transform.parent = neutralVFXStoredParent;
+                    heavyVFXStoredPosition = heavyUpwardMuzzle.localPosition;
+                    heavyVFXStoredRotation = heavyUpwardMuzzle.localRotation;
+                    heavyHitVFXHolder.transform.localPosition = heavyVFXStoredPosition;
+                    heavyHitVFXHolder.transform.localRotation = heavyVFXStoredRotation;
+                    heavyHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
             }
 
             heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
@@ -1651,6 +1782,54 @@ public class monsterPart : MonoBehaviour
             for (int i = 0; i < heavyAttackMissVFXArray.Length; i++)
             {
                 heavyAttackMissVFXArray[i] = heavyMissVFXHolder.transform.GetChild(i);
+            }
+        }
+
+        if (heavyDefaultSprayVFXHolder != null)
+        {
+            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            if (projectileNeutralAttack || sprayNeutralAttack)
+            {
+                if (attackAnimationID == 0 && heavyDownwardMuzzle != null)
+                {
+                    heavyVFXStoredParent = heavyDefaultSprayVFXHolder.transform.parent;
+                    heavyDownwardMuzzle.transform.parent = heavyVFXStoredParent;
+                    heavyVFXStoredPosition = heavyDownwardMuzzle.localPosition;
+                    heavyVFXStoredRotation = heavyDownwardMuzzle.localRotation;
+                    heavyDefaultSprayVFXHolder.transform.localPosition = heavyVFXStoredPosition;
+                    heavyDefaultSprayVFXHolder.transform.localRotation = heavyVFXStoredRotation;
+                    heavyDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 1 && heavyForwardMuzzle != null)
+                {
+                    heavyVFXStoredParent = heavyDefaultSprayVFXHolder.transform.parent;
+                    heavyForwardMuzzle.transform.parent = heavyVFXStoredParent;
+                    heavyVFXStoredPosition = heavyForwardMuzzle.localPosition;
+                    heavyVFXStoredRotation = heavyForwardMuzzle.localRotation;
+                    heavyDefaultSprayVFXHolder.transform.localPosition = heavyVFXStoredPosition;
+                    heavyDefaultSprayVFXHolder.transform.localRotation = heavyVFXStoredRotation;
+                    heavyDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+                else if (attackAnimationID == 2 && heavyUpwardMuzzle != null)
+                {
+                    heavyVFXStoredParent = heavyDefaultSprayVFXHolder.transform.parent;
+                    heavyUpwardMuzzle.transform.parent = heavyVFXStoredParent;
+                    heavyVFXStoredPosition = heavyUpwardMuzzle.localPosition;
+                    heavyVFXStoredRotation = heavyUpwardMuzzle.localRotation;
+                    heavyDefaultSprayVFXHolder.transform.localPosition = heavyVFXStoredPosition;
+                    heavyDefaultSprayVFXHolder.transform.localRotation = heavyVFXStoredRotation;
+                    heavyDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+                }
+            }
+
+            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
+            {
+                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
             }
         }
     }
@@ -1727,7 +1906,18 @@ public class monsterPart : MonoBehaviour
         }
         else if (sprayNeutralAttack)
         {
+            //neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
+
+            if (neutralDefaultSprayVFXHolder != null)
+            {
+                //neutralDefaultSprayVFXHolder.transform.parent = mainTorso.gameObject.transform;
+            }
+
             neutralHitVFXManager.unleashSpray();
+            if (neutralDefaultSprayVFXManager)
+            {
+                neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
+            }
         }
         else if (projectileNeutralAttack && neutralAttackHitVFXArray.Length != 0)
         {
@@ -2103,6 +2293,20 @@ public class monsterPart : MonoBehaviour
                 }
                 */
             }
+        }
+
+        if (neutralHitVFXHolder != null)
+        {
+            //neutralHitVFXHolder.transform.parent = neutralHitVFXParent;
+            //neutralHitVFXParent.transform.localPosition = neutralHitVFXStoredPosition;
+            //neutralHitVFXParent.transform.localRotation = neutralHitVFXStoredRotation;
+        }
+
+        if (neutralDefaultSprayVFXHolder != null)
+        {
+            //neutralDefaultSprayVFXHolder.transform.parent = neutralDefaultSprayVFXParent;
+            //neutralDefaultSprayVFXParent.transform.localPosition = neutralDefaultSprayVFXStoredPosition;
+            //neutralDefaultSprayVFXParent.transform.localRotation = neutralDefaultSprayVFXStoredRotation;
         }
     }
 

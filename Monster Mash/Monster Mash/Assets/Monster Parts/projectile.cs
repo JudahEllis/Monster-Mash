@@ -32,9 +32,18 @@ public class projectile : MonoBehaviour
         movementModifier = 1;
         impactCalled = false;
         startingRotation = transform.localRotation;
-        impactVisual.SetActive(false);
-        mainVisual.SetActive(true);
-        trailVisual.SetActive(true);
+        if (mainVisual != null)
+        {
+            mainVisual.SetActive(true);
+        }
+        if (impactVisual != null)
+        {
+            impactVisual.SetActive(false);
+        }
+        if (trailVisual != null)
+        {
+            trailVisual.SetActive(true);
+        }
         baseCollider.enabled = true;
         /*
         if (trailVisual.GetComponent<ParticleSystem>() != null)
@@ -62,16 +71,31 @@ public class projectile : MonoBehaviour
     {
         movementModifier = 0;
         updateVelocity();
-        mainVisual.SetActive(false);
-        impactVisual.SetActive(true);
-        baseCollider.enabled = false;
-        if (trailVisual.GetComponent<ParticleSystem>() != null)
+        if (mainVisual != null)
         {
-            trailVisual.GetComponent<ParticleSystem>().Stop();
+            mainVisual.SetActive(false);
+        }
+        if (impactVisual != null)
+        {
+            impactVisual.SetActive(true);
+        }
+        baseCollider.enabled = false;
+        if (trailVisual != null)
+        {
+            if (trailVisual.GetComponent<ParticleSystem>() != null)
+            {
+                trailVisual.GetComponent<ParticleSystem>().Stop();
+            }
         }
         yield return new WaitForSeconds(timeFromImpactToDisable);
-        impactVisual.SetActive(false);
-        trailVisual.SetActive(false);
+        if (impactVisual != null)
+        {
+            impactVisual.SetActive(false);
+        }
+        if (trailVisual != null)
+        {
+            trailVisual.SetActive(false);
+        }
         resetPosition();
         yield return new WaitForSeconds(1);
         this.gameObject.SetActive(false);

@@ -549,7 +549,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void glide()
     {
-        if (isGrounded == false)
+        if (isGrounded == false && isWinged)
         {
             if (isGliding == false)
             {

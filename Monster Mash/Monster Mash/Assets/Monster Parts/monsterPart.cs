@@ -664,11 +664,11 @@ public class monsterPart : MonoBehaviour
 
         if (isTailLimb)
         {
-            headCommand = "Forward Attack";
-            torsoCommandOverride = "Lower Attack";
-            requiresBackwardStance = false;
+            //headCommand = "Forward Attack";
+            torsoCommandOverride = "Upper Attack";
+            requiresBackwardStance = true;
             requiresForwardStance = false;
-            requiresRightStance = true;
+            requiresRightStance = false;
             requiresLeftStance = false;
         }
 
@@ -1043,7 +1043,7 @@ public class monsterPart : MonoBehaviour
 
         if (hasHeadCommand)
         {
-            connectedMonsterPart.SetTrigger(headCommand);
+            connectedMonsterPart.SetTrigger(headCommand);//current issue with making pieces connected to the torso affect the head with attacks
         }
     }
 
@@ -1308,6 +1308,7 @@ public class monsterPart : MonoBehaviour
     {
         if (isGroundedLimb)
         {
+            /*
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
                 myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
@@ -1322,6 +1323,36 @@ public class monsterPart : MonoBehaviour
 
                 myAnimator.SetBool("Walking", false);
                 myAnimator.SetBool("Running", false);
+            }
+            */
+
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
+                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            {
+                if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Launching Backward Brace");
+                    myAnimator.SetBool("Needs Launch", true);
+                }
+                else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Launching Backward Brace");
+                    myAnimator.SetBool("Needs Launch", true);
+                }
+
+                myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
+            }
+            else if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
+            {
+                if (isRightSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (isLeftSidedLimb && isAttacking == false)
+                {
+                    myAnimator.SetTrigger("Airborn Brace");
+                }
             }
         }
         else if (isArm)
@@ -1472,7 +1503,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyLegStance()
     {
-        if (isGroundedLimb && requiresBackwardStance == false)
+        if (isGroundedLimb) // && requiresBackwardStance == false
         {
             myAnimator.SetTrigger("Switch Stance");
             hasHeavyBrace = true;
@@ -1538,10 +1569,11 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Walking", false);
 
-            if (hasHeavyBrace)
+            if (hasHeavyBrace || myAnimator.GetBool("Needs Launch"))
             {
                 myAnimator.SetTrigger("Switch Stance Quick");
                 hasHeavyBrace = false;
+                myAnimator.SetBool("Needs Launch", false);
             }
         }
 
@@ -2293,20 +2325,6 @@ public class monsterPart : MonoBehaviour
                 }
                 */
             }
-        }
-
-        if (neutralHitVFXHolder != null)
-        {
-            //neutralHitVFXHolder.transform.parent = neutralHitVFXParent;
-            //neutralHitVFXParent.transform.localPosition = neutralHitVFXStoredPosition;
-            //neutralHitVFXParent.transform.localRotation = neutralHitVFXStoredRotation;
-        }
-
-        if (neutralDefaultSprayVFXHolder != null)
-        {
-            //neutralDefaultSprayVFXHolder.transform.parent = neutralDefaultSprayVFXParent;
-            //neutralDefaultSprayVFXParent.transform.localPosition = neutralDefaultSprayVFXStoredPosition;
-            //neutralDefaultSprayVFXParent.transform.localRotation = neutralDefaultSprayVFXStoredRotation;
         }
     }
 

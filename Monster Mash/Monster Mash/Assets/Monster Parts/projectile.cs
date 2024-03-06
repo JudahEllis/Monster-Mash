@@ -8,6 +8,11 @@ public class projectile : MonoBehaviour
     public float timeFromImpactToDisable = 2;
     public float timeUntilAutoDisable = 20;
     private int movementModifier = 1;
+    private bool upwardDraftActivated = false;
+    public bool needsUpwardDraft;
+    public float timeUntilUpwardDraft = 0;
+    public float upwardDraftRotationSpeed = 0;
+    public Quaternion intendedRotation;
     public GameObject mainVisual;
     public GameObject trailVisual;
     public GameObject impactVisual;
@@ -31,6 +36,7 @@ public class projectile : MonoBehaviour
         StopAllCoroutines();
         movementModifier = 1;
         impactCalled = false;
+        upwardDraftActivated = false;
         startingRotation = transform.localRotation;
         if (mainVisual != null)
         {
@@ -54,6 +60,7 @@ public class projectile : MonoBehaviour
         resetPosition();
         updateVelocity();
         StartCoroutine(autoDisable());
+        StartCoroutine(updraftTimer());
     }
 
     private void updateVelocity()
@@ -70,6 +77,7 @@ public class projectile : MonoBehaviour
     IEnumerator impactEffect()
     {
         movementModifier = 0;
+        upwardDraftActivated = false;
         updateVelocity();
         if (mainVisual != null)
         {
@@ -107,6 +115,30 @@ public class projectile : MonoBehaviour
         if (impactCalled == false)
         {
             impact();
+        }
+    }
+
+    public void Update()
+    {
+        if (upwardDraftActivated)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, intendedRotation, upwardDraftRotationSpeed * Time.deltaTime);
+
+            if (transform.rotation == intendedRotation)
+            {
+                upwardDraftActivated = false;
+            }
+
+            updateVelocity();
+        }
+    }
+
+    IEnumerator updraftTimer()
+    {
+        yield return new WaitForSeconds(timeUntilUpwardDraft);
+        if (needsUpwardDraft)
+        {
+            upwardDraftActivated = true;
         }
     }
 }

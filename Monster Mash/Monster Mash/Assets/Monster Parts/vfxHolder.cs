@@ -281,4 +281,16 @@ public class vfxHolder : MonoBehaviour
     }
 
     #endregion
+
+    public void faceRightDirection(bool isFacingRight)
+    {
+        for (int i = 0; i < damageGivingVFX.Length; i++)
+        {
+            if (damageGivingObjects[i].GetComponent<projectile>())
+            {
+                damageGivingObjects[i].GetComponent<projectile>().facingRight = isFacingRight;
+            }
+
+        }
+    }
 }

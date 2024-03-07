@@ -378,6 +378,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
             dashSplat.transform.eulerAngles = leftDashSplatRotation;
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].facingRight = false;
+            }
         }
         else
         {
@@ -385,6 +389,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
             dashSplat.transform.eulerAngles = rightDashSplatRotation;
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].facingRight = true;
+            }
         }
     }
 

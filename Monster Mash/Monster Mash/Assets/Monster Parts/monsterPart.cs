@@ -143,6 +143,7 @@ public class monsterPart : MonoBehaviour
     private bool isAttacking = false;
     private bool attackFocusOn = false;
     private bool isRunning = false;
+    public bool facingRight;
     //private int jumpsAllotted;
     //private int regularJumpAmount = 2;
     //private int wingedJumpAmount = 4;
@@ -1953,6 +1954,7 @@ public class monsterPart : MonoBehaviour
         }
         else if (projectileNeutralAttack && neutralAttackHitVFXArray.Length != 0)
         {
+            heavyHitVFXManager.faceRightDirection(facingRight);
             neutralHitVFXManager.unleashSingleProjectile();
         }
         else if (beamNeutralAttack)
@@ -1989,6 +1991,7 @@ public class monsterPart : MonoBehaviour
         }
         else if (projectileHeavyAttack && heavyAttackHitVFXArray.Length != 0)
         {
+            heavyHitVFXManager.faceRightDirection(facingRight);
             heavyHitVFXManager.unleashSingleProjectile();
         }
         else if (beamHeavyAttack)

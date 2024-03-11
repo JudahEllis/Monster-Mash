@@ -13,8 +13,8 @@ public class monsterPart : MonoBehaviour
     private Animator myAnimator;
     public int monsterPartHealth = 100;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
-    public int monsterPartID;
-    public int attackAnimationID;
+    public int monsterPartID = 1;
+    public int attackAnimationID = 1;
     public bool connected = true;
 
     //also because there is a pretty big oversight right now for "right" sided limbs that may end up being repositioned or rotated to act as a "left" sided limb
@@ -103,7 +103,7 @@ public class monsterPart : MonoBehaviour
     private bool grabbedStatusEffect;
 
     [Header("Monster Part Positioning Info")]
-    public bool isJointed;
+    public bool isJointed = true;
     public bool isRightShoulderLimb;
     public bool isLeftShoudlerLimb;
     public bool isRightPelvisLimb;

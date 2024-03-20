@@ -16,6 +16,10 @@ public class monsterAttackSystem : MonoBehaviour
     private bool focusedAttackActive = false;
     private bool canRoll = true;
     private bool canDashAttack = true;
+    float timeSinceLastCall;
+    private int flourishCounter = 0;
+    bool requiresFlourish = false;
+    bool requiresTwirl = true;
 
     private Animator myAnimator;
     private Animator mainTorso;
@@ -180,6 +184,12 @@ public class monsterAttackSystem : MonoBehaviour
     }
 
     #region Attacks
+
+    private void Update()
+    {
+        timeSinceLastCall += Time.deltaTime;
+    }
+
     public void attack(int attackSlot)
     {
         if (attackSlotMonsterParts[attackSlot] != null && focusedAttackActive == false)
@@ -190,38 +200,69 @@ public class monsterAttackSystem : MonoBehaviour
             }
             else if (attackSlotMonsterID[attackSlot] == 1)
             {
+                if (focusedAttackActive == false)
+                {
+                    flourishCounter++;
+                    if (timeSinceLastCall <= 1f)
+                    {
+                        if (flourishCounter >= 3)
+                        {
+                            requiresFlourish = true;
+                            flourishCounter = 0;
+                        }
+                    }
+                    else
+                    {
+                        flourishCounter = 1;
+                    }
+                    timeSinceLastCall = 0;
+                }
+
+                if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1 || attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
+                {
+                    requiresTwirl = true;
+                }
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2 || attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
+                {
+                    requiresTwirl = false;
+                }
+
                 if (isGrounded)
                 {
                     if (focusedAttackActive == false)
                     {
                         attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
-                        //isWalking = false;
 
-                        //if we decide to allow for heavy charging while running then this would be moved out of attack function
-                        //instead this bracing would only be called once we have a neutral or heavy decision
                         #region Bracing for Attacks 
-
-                        if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                        if (requiresFlourish)
                         {
-                            braceForRightImpact();
+                            braceForFlourishImpact();
                         }
-
-                        if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                        else
                         {
-                            braceForLeftImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                            {
+                                braceForRightImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
-                        {
-                            braceForForwardImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                            {
+                                braceForLeftImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
-                        {
-                            braceForBackwardImpact();
+                            if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
+                            {
+                                braceForForwardImpact();
+                            }
+
+                            if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
+                            {
+                                braceForBackwardImpact();
+                            }
                         }
 
                         isRunning = false;
+                        requiresFlourish = false;
                         #endregion
                     }
                 }
@@ -234,27 +275,36 @@ public class monsterAttackSystem : MonoBehaviour
 
                         #region Bracing for Attacks
 
-                        if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                        if (requiresFlourish && isGliding == false)
                         {
-                            braceForRightImpact();
+                            //roll
+                            braceForFlourishImpact();
                         }
-
-                        if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                        else
                         {
-                            braceForLeftImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                            {
+                                braceForRightImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
-                        {
-                            braceForForwardImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                            {
+                                braceForLeftImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
-                        {
-                            braceForBackwardImpact();
+                            if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
+                            {
+                                braceForForwardImpact();
+                            }
+
+                            if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
+                            {
+                                braceForBackwardImpact();
+                            }
                         }
 
                         isRunning = false;
+                        requiresFlourish = false;
                         #endregion
 
                         if (isGliding)
@@ -766,6 +816,23 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void braceForFlourishImpact()
+    {
+        if (requiresTwirl)
+        {
+            myAnimator.SetTrigger("Flourish Twirl");
+        }
+        else
+        {
+            myAnimator.SetTrigger("Flourish Roll");
+        }
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerFlourishStance();
+        }
+    }
+
     public void switchBraceStance()
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
@@ -782,6 +849,15 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         myAnimator.ResetTrigger("Glide to Attack");
+
+        if (requiresTwirl)
+        {
+            myAnimator.ResetTrigger("Flourish Twirl");
+        }
+        else
+        {
+            myAnimator.ResetTrigger("Flourish Roll");
+        }
     }
 
     public void hit()
@@ -805,6 +881,11 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Idle Bounce Allowed", false);
         myAnimator.ResetTrigger("Back to Prior State");
         //myAnimator.SetTrigger("Back to Prior State");
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].bounceCorrections(false);
+        }
     }
 
     public void attackFocusOff()
@@ -823,7 +904,12 @@ public class monsterAttackSystem : MonoBehaviour
         {
            allMonsterParts[i].resetBracing();
         }
-        
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].bounceCorrections(true);
+        }
+
     }
 
     #endregion

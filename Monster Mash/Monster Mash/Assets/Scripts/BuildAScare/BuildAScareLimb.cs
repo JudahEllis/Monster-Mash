@@ -7,6 +7,8 @@ public class BuildAScareLimb : MonoBehaviour
 {
     bool isSelected = false;
 
+     bool isMirror = false;
+
     PlayerInput input;
 
     InputAction moveLimb;
@@ -46,9 +48,8 @@ public class BuildAScareLimb : MonoBehaviour
 
             Vector3 movemnt = xMovement + yMovement;
 
-            //moveLimb.ReadValue<Vector2>()
-
             limbController.Move(movemnt * Time.deltaTime * 2);
+
         }
     }
 }

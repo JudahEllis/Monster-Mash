@@ -1510,6 +1510,144 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Build-A-Scare",
+            "id": "11e851a1-dc83-4a4b-9e08-895c29c31220",
+            "actions": [
+                {
+                    "name": "Move Part",
+                    "type": "Value",
+                    "id": "032aa579-e6f5-4ba4-88e1-0a656f41bc53",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3a59a869-1cc3-40a8-ba80-0da53e4648b3",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XboxController;AllGamepads;KeyboardMouse",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "WASD",
+                    "id": "e80fd2f8-5017-432a-8b17-7282b1d69dfa",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Part",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "6ec21b29-1195-41f6-9362-5db7b8389455",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "9cfaa4a3-95a1-4501-b9a6-e8ddcbbf3602",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "7adbb6c0-73d2-4b37-b91f-5c3cd522df0a",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "008df508-097b-431a-8b04-d6a5d0acce26",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "DPad",
+                    "id": "5f6750aa-3634-443a-a0e0-ae4c8258b779",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Part",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "b17543ba-4b68-40fa-ae43-08ffa1a888bb",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "2e0aca5d-5e5e-4b79-9eae-f23b61dbbefa",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "ff75cdf0-6144-4e03-82f0-896b18a079b3",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "b2a0c003-6d6c-4dae-ab19-e3c6353f3366",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Move Part",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         }
     ],
     "controlSchemes": [

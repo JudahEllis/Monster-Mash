@@ -123,37 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &17150069
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 17150070}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal04_D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &17150070
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 17150069}
-  m_LocalRotation: {x: 0.0000007853982, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0821891, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1609763607}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &26612548
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,38 +706,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 41611780}
   m_CullTransparentMesh: 1
---- !u!1 &48270781
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 48270782}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal04_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &48270782
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 48270781}
-  m_LocalRotation: {x: 0.008776979, y: 0.01776327, z: 0.70658714, w: 0.70734864}
-  m_LocalPosition: {x: -0.0000782, y: -0.0936585, z: 0.0011916}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 331753740}
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &56163704
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,38 +872,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 68498335}
   m_CullTransparentMesh: 1
---- !u!1 &72535787
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 72535788}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal06_D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &72535788
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72535787}
-  m_LocalRotation: {x: -0.00000008726645, y: 0.00000017453293, z: -0.00000008726645,
-    w: 1}
-  m_LocalPosition: {x: -0.081134096, y: 0, z: 0.000000099999994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1217514873}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &72866643
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,9 +926,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -1032,9 +943,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -1073,6 +990,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!95 &72866645
@@ -1201,9 +1119,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -1212,9 +1136,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -1253,6 +1183,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &107611992
@@ -1346,9 +1277,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -1357,9 +1294,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -1398,6 +1341,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1001 &110829597
@@ -1490,37 +1434,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 110829597}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &134993135
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 134993136}
-  m_Layer: 0
-  m_Name: Arm07_bn_Pupil_L
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &134993136
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134993135}
-  m_LocalRotation: {x: 0.08361086, y: -0.4106682, z: -0.101899706, w: 0.9022069}
-  m_LocalPosition: {x: -0.0969328, y: 0.037315097, z: -0.1065039}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &141272263
 GameObject:
   m_ObjectHideFlags: 0
@@ -1987,38 +1900,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 235488526}
   m_CullTransparentMesh: 1
---- !u!1 &259894118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 259894119}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal01_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &259894119
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 259894118}
-  m_LocalRotation: {x: 0.70733947, y: -0.7067855, z: -0.0063553494, w: 0.009209136}
-  m_LocalPosition: {x: -0.000081399994, y: 0.0991736, z: -0.0004004}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1319276676}
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &270066624
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,9 +2021,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -2151,9 +2038,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -2192,6 +2085,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &296943175
@@ -2939,76 +2833,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 329161553}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &331753739
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 331753740}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal04_B
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &331753740
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331753739}
-  m_LocalRotation: {x: -0.00000008726616, y: -0.0000006981317, z: 0.00000043633224,
-    w: 1}
-  m_LocalPosition: {x: -0.1418289, y: 0, z: -0.000000099999994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1609763607}
-  m_Father: {fileID: 48270782}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &353613955 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5640838857052836422, guid: 42527dca0083c284fb1faceae9da54ce,
     type: 3}
   m_PrefabInstance: {fileID: 872396950}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &360063130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 360063131}
-  m_Layer: 0
-  m_Name: Arm07_bn_Mouth
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &360063131
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 360063130}
-  m_LocalRotation: {x: 0.0039630635, y: -0.001004373, z: 0.25112882, w: 0.96794504}
-  m_LocalPosition: {x: -0.1305057, y: -0.058871195, z: -0.00047529998}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &369802581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3934,7 +3764,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &374736937
 Transform:
   m_ObjectHideFlags: 0
@@ -3996,6 +3826,7 @@ MonoBehaviour:
   - {fileID: 2108825512}
   allMonsterParts: []
   dashSplat: {fileID: 0}
+  glideVisual: {fileID: 0}
 --- !u!1 &382315960
 GameObject:
   m_ObjectHideFlags: 0
@@ -4476,9 +4307,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -4487,9 +4324,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -4528,6 +4371,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &442711600
@@ -4664,39 +4508,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 442711600}
   m_CullTransparentMesh: 1
---- !u!1 &518767657
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 518767658}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal06_B
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &518767658
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 518767657}
-  m_LocalRotation: {x: 0.00000017453377, y: 0.000003228859, z: -0.00000026179995,
-    w: 1}
-  m_LocalPosition: {x: -0.151943, y: 0.000000099999994, z: 0.00000039999998}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1217514873}
-  m_Father: {fileID: 985486751}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &615314981
 GameObject:
   m_ObjectHideFlags: 0
@@ -5309,9 +5120,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -5320,9 +5137,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -5361,6 +5184,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!95 &680124768
@@ -5399,37 +5223,6 @@ Transform:
   m_Father: {fileID: 369802582}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 44.367, z: -9.679}
---- !u!1 &680194484
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 680194485}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal05_D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &680194485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 680194484}
-  m_LocalRotation: {x: 0, y: -0.00000017453293, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0826744, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1857426385}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &682147545
 GameObject:
   m_ObjectHideFlags: 0
@@ -6038,9 +5831,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -6049,9 +5848,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -6090,105 +5895,9 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
---- !u!1 &753341452
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 753341453}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal01_C
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &753341453
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 753341452}
-  m_LocalRotation: {x: -0.00000017448217, y: -0.000005759588, z: 0.000008813911, w: 1}
-  m_LocalPosition: {x: -0.0630617, y: -0.000000099999994, z: -0.00000019999999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1235720324}
-  m_Father: {fileID: 1319276676}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &776602508
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 776602509}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal03_D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &776602509
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776602508}
-  m_LocalRotation: {x: -1.523087e-14, y: -0.00000017453293, z: -0.000000087266464,
-    w: 1}
-  m_LocalPosition: {x: -0.080791794, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1772488425}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &784095395
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 784095396}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal05_B
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &784095396
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 784095395}
-  m_LocalRotation: {x: -0.00000008727379, y: -0.000006457718, z: -0.0000011344646,
-    w: 1}
-  m_LocalPosition: {x: -0.14225589, y: 0, z: -0.000000099999994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1857426385}
-  m_Father: {fileID: 2130573648}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &787764831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6845,9 +6554,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -6856,9 +6571,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -6897,72 +6618,9 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
---- !u!1 &858335568
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 858335569}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal02_D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &858335569
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 858335568}
-  m_LocalRotation: {x: -3.046174e-14, y: -0.000000087266464, z: -0.00000034906586,
-    w: 1}
-  m_LocalPosition: {x: -0.0794912, y: 0.000000099999994, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1784805532}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &868111373
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 868111374}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal02_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &868111374
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 868111373}
-  m_LocalRotation: {x: 0.60832137, y: -0.60675514, z: 0.36253408, w: 0.36105734}
-  m_LocalPosition: {x: -0.0000782, y: 0.0446862, z: -0.08246859}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1993514662}
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &872396950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7357,37 +7015,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 874551778}
   m_CullTransparentMesh: 1
---- !u!1 &900674565
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 900674566}
-  m_Layer: 0
-  m_Name: Arm07_bn_Pupil_R
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &900674566
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900674565}
-  m_LocalRotation: {x: -0.012232276, y: 0.41572636, z: -0.14814104, w: 0.8972604}
-  m_LocalPosition: {x: -0.0977632, y: 0.0365668, z: 0.105337694}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &919619214
 GameObject:
   m_ObjectHideFlags: 0
@@ -7613,9 +7240,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -7624,9 +7257,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -7665,6 +7304,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &935815836
@@ -7876,9 +7516,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -7887,9 +7533,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -7928,6 +7580,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!4 &950049995
@@ -8036,9 +7689,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -8047,9 +7706,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -8088,6 +7753,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &974201600
@@ -8225,38 +7891,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 974201600}
   m_CullTransparentMesh: 1
---- !u!1 &985486750
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 985486751}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal06_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &985486751
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985486750}
-  m_LocalRotation: {x: 0.6109862, y: -0.6104749, z: -0.35623315, w: -0.35653087}
-  m_LocalPosition: {x: -0.0000713, y: 0.0420957, z: 0.0744944}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 518767658}
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1003593705
 GameObject:
   m_ObjectHideFlags: 0
@@ -8731,9 +8365,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -8742,9 +8382,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -8783,6 +8429,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1001 &1111335530
@@ -9332,9 +8979,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -9343,9 +8996,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -9384,6 +9043,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!4 &1148448506
@@ -9807,101 +9467,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1191923341}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1217514872
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1217514873}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal06_C
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1217514873
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1217514872}
-  m_LocalRotation: {x: 5.3460357e-12, y: -0.0000015707964, z: 0.000003403392, w: 1}
-  m_LocalPosition: {x: -0.0641875, y: 0, z: -0.000000099999994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 72535788}
-  m_Father: {fileID: 518767658}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1235720323
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1235720324}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal01_D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1235720324
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1235720323}
-  m_LocalRotation: {x: -0.0000006981317, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0830813, y: 0, z: 0.000000099999994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 753341453}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1267393702
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1267393703}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal03_B
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1267393703
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1267393702}
-  m_LocalRotation: {x: -4.4169526e-13, y: 0.0000025307274, z: 0.00000017453293, w: 1}
-  m_LocalPosition: {x: -0.1440755, y: -0.000000099999994, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1772488425}
-  m_Father: {fileID: 1300301072}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1269043248
 GameObject:
   m_ObjectHideFlags: 0
@@ -9992,9 +9557,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -10003,9 +9574,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -10044,6 +9621,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!4 &1276196851 stripped
@@ -10187,70 +9765,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1298169416}
   m_CullTransparentMesh: 1
---- !u!1 &1300301071
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1300301072}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal03_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1300301072
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1300301071}
-  m_LocalRotation: {x: 0.34173772, y: -0.37639433, z: 0.5982588, w: 0.619378}
-  m_LocalPosition: {x: -0.0000805, y: -0.0471775, z: -0.08533169}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1267393703}
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1319276675
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1319276676}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal01_B
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1319276676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1319276675}
-  m_LocalRotation: {x: -1.5535488e-12, y: 0.0000059341196, z: 0.00000026179939, w: 1}
-  m_LocalPosition: {x: -0.1436591, y: 0.000000099999994, z: 0.00000019999999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 753341453}
-  m_Father: {fileID: 259894119}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1341697571
 GameObject:
   m_ObjectHideFlags: 0
@@ -11115,7 +10629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1526667625
 Animator:
   serializedVersion: 4
@@ -11172,9 +10686,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -11183,9 +10703,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -11224,6 +10750,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!4 &1526667627
@@ -11233,7 +10760,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1526667624}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11457,38 +10984,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1567535785}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1609763606
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1609763607}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal04_C
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1609763607
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609763606}
-  m_LocalRotation: {x: 6.4807357e-12, y: -0.0000032288592, z: 0.0000020071286, w: 1}
-  m_LocalPosition: {x: -0.0643934, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 17150070}
-  m_Father: {fileID: 331753740}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1615505479
 GameObject:
   m_ObjectHideFlags: 0
@@ -12211,71 +11706,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761383632}
   m_CullTransparentMesh: 1
---- !u!1 &1772488424
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1772488425}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal03_C
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1772488425
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1772488424}
-  m_LocalRotation: {x: 5.4831134e-13, y: -0.00000034906586, z: 0.0000015707964, w: 1}
-  m_LocalPosition: {x: -0.064528696, y: 0, z: -0.00000019999999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 776602509}
-  m_Father: {fileID: 1267393703}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1784805531
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1784805532}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal02_C
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1784805532
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1784805531}
-  m_LocalRotation: {x: 0.00000008726871, y: -0.00000043633187, z: 0.0000051487214,
-    w: 1}
-  m_LocalPosition: {x: -0.0638756, y: -0.000000099999994, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 858335569}
-  m_Father: {fileID: 1993514662}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1796588326
 GameObject:
   m_ObjectHideFlags: 0
@@ -12495,9 +11925,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -12506,9 +11942,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -12547,6 +11989,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!95 &1823692813
@@ -12569,71 +12012,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1 &1857426384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1857426385}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal05_C
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1857426385
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1857426384}
-  m_LocalRotation: {x: -0.00000008726688, y: 0.000000087266045, z: 0.0000047996555,
-    w: 1}
-  m_LocalPosition: {x: -0.0627518, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 680194485}
-  m_Father: {fileID: 784095396}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1857582527
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1857582528}
-  m_Layer: 0
-  m_Name: Arm07_bn_Saw (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1857582528
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1857582527}
-  m_LocalRotation: {x: 0.000000014901161, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2053851531}
-  m_Father: {fileID: 8017547206567748208}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1903120173
 GameObject:
   m_ObjectHideFlags: 0
@@ -13002,9 +12380,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -13013,9 +12397,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -13054,6 +12444,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &1957361858
@@ -13190,38 +12581,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957361858}
   m_CullTransparentMesh: 1
---- !u!1 &1993514661
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1993514662}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal02_B
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1993514662
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993514661}
-  m_LocalRotation: {x: 1.0890072e-12, y: 0.0000009599311, z: -0.000001134464, w: 1}
-  m_LocalPosition: {x: -0.1472799, y: -0.000000099999994, z: -0.000000099999994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1784805532}
-  m_Father: {fileID: 868111374}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2024846638
 GameObject:
   m_ObjectHideFlags: 0
@@ -13389,46 +12748,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2025740659}
   m_CullTransparentMesh: 1
---- !u!1 &2053851530
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2053851531}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerBase
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2053851531
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053851530}
-  m_LocalRotation: {x: 0.707814, y: 0.00049683603, z: -0.00051982113, w: 0.70639855}
-  m_LocalPosition: {x: -0.12778449, y: -0.000000099999994, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 259894119}
-  - {fileID: 868111374}
-  - {fileID: 1300301072}
-  - {fileID: 48270782}
-  - {fileID: 2130573648}
-  - {fileID: 985486751}
-  - {fileID: 360063131}
-  - {fileID: 134993136}
-  - {fileID: 900674566}
-  m_Father: {fileID: 1857582528}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2066024222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13626,9 +12945,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -13637,9 +12962,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -13678,6 +13009,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &2108825508
@@ -13770,9 +13102,15 @@ MonoBehaviour:
   beamNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
+  neutralForwardMuzzle: {fileID: 0}
+  neutralUpwardMuzzle: {fileID: 0}
+  neutralDownwardMuzzle: {fileID: 0}
+  neutralBackwardMuzzle: {fileID: 0}
   neutralAttackHitVFXArray: []
   neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
@@ -13781,9 +13119,15 @@ MonoBehaviour:
   reelHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
+  heavyForwardMuzzle: {fileID: 0}
+  heavyUpwardMuzzle: {fileID: 0}
+  heavyDownwardMuzzle: {fileID: 0}
+  heavyBackwardMuzzle: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -13822,6 +13166,7 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  facingRight: 0
   myIdleVFX: []
   referencesToIgnore: []
 --- !u!1 &2118004390
@@ -13883,38 +13228,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2130573647
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2130573648}
-  m_Layer: 0
-  m_Name: Arm07_bn_FlowerPetal05_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2130573648
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130573647}
-  m_LocalRotation: {x: -0.37626532, y: 0.3632861, z: 0.60630435, w: 0.5990348}
-  m_LocalPosition: {x: -0.0000791, y: -0.042956598, z: 0.0845335}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 784095396}
-  m_Father: {fileID: 2053851531}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2134687220
 GameObject:
@@ -25634,8 +24947,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7702152342736626999}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0765481, y: -0.00000029999998, z: -0.000000099999994}
+  m_LocalRotation: {x: 0.000000014901158, y: -2.3283059e-10, z: -0.00000001088483,
+    w: 1}
+  m_LocalPosition: {x: -0.07654823, y: 0.0000000207001, z: -0.000000010193617}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -35028,8 +34342,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613631042581008619}
-  m_LocalRotation: {x: -0, y: -0, z: -1.4551915e-11, w: 1}
-  m_LocalPosition: {x: -0.14566843, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.14566846, y: 0.0000000077332025, z: 0.00000000512955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -36394,12 +35708,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8769748676106667925}
   m_LocalRotation: {x: -0.4658354, y: 0.46858698, z: 0.532319, w: 0.529207}
-  m_LocalPosition: {x: -0.19313535, y: 0, z: 0}
+  m_LocalPosition: {x: -0.19313642, y: 0.000000009820042, z: -4.4383341e-10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8286936350683599463}
-  - {fileID: 1857582528}
   m_Father: {fileID: 4498827810722970773}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -36934,8 +36247,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4220666620663996159}
-  m_LocalRotation: {x: 0.000000014901161, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.000000119209275, y: -0.000000119209275, z: -0.00000019371507,
+    w: 1}
+  m_LocalPosition: {x: -0.000000013225838, y: 0.00000005968408, z: 0.00000005560514}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

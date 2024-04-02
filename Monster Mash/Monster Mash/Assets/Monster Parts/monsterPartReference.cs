@@ -11,6 +11,7 @@ public class monsterPartReference : MonoBehaviour
     public bool isHurtbox;
     public bool isProjectile;
     public bool isJabOrSlash;
+    public bool isReel;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -26,6 +27,11 @@ public class monsterPartReference : MonoBehaviour
                 if (isJabOrSlash && isHitbox)
                 {
                     partReference.triggerJabOrSlashHitDetect();
+                }
+
+                if (isReel)
+                {
+                    
                 }
             }
         }

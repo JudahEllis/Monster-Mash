@@ -89,6 +89,15 @@ public class monsterPart : MonoBehaviour
     private Vector3 heavyVFXStoredPosition;
     private Quaternion heavyVFXStoredRotation;
     private int heavyVFXCount;
+    //Jab and Slash Info
+    //Projectile Info
+    //Spray Info
+    //Reel Attack Info
+    private int reelAttackBuiltUpPower = 1;
+    private int reelAttackCurrentThreshold = 0;
+    private bool powerUpCheckAllowed = true;
+    private monsterPartReference reelAttackBoneReference;
+    //Status Effects
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
     public bool poisonedStatusEffect;
@@ -1878,6 +1887,7 @@ public class monsterPart : MonoBehaviour
 
     private void setUpVFX()
     {
+        #region Neutral Hit VFX Holder
         if (neutralHitVFXHolder != null)
         {
             if (neutralHitVFXHolder.GetComponent<vfxHolder>() != null)
@@ -1935,7 +1945,9 @@ public class monsterPart : MonoBehaviour
                 neutralAttackHitVFXArray[i] = neutralHitVFXHolder.transform.GetChild(i);
             }
         }
+        #endregion
 
+        #region Neutral Miss VFX Holder
         if (neutralMissVFXHolder != null)
         {
             if (neutralMissVFXHolder.GetComponent<vfxHolder>() != null)
@@ -1949,7 +1961,9 @@ public class monsterPart : MonoBehaviour
                 neutralAttackMissVFXArray[i] = neutralMissVFXHolder.transform.GetChild(i);
             }
         }
+        #endregion
 
+        #region Neutral Default Spray Holder
         if (neutralDefaultSprayVFXHolder != null)
         {
             if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
@@ -2007,7 +2021,9 @@ public class monsterPart : MonoBehaviour
                 neutralAttackDefaultVFXArray[i] = neutralDefaultSprayVFXHolder.transform.GetChild(i);
             }
         }
+        #endregion
 
+        #region Heavy Hit VFX Holder
         if (heavyHitVFXHolder != null)
         {
             if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
@@ -2065,7 +2081,9 @@ public class monsterPart : MonoBehaviour
                 heavyAttackHitVFXArray[i] = heavyHitVFXHolder.transform.GetChild(i);
             }
         }
+        #endregion
 
+        #region Heavy Miss VFX Holder
         if (heavyMissVFXHolder != null)
         {
             if (heavyMissVFXHolder.GetComponent<vfxHolder>() != null)
@@ -2137,7 +2155,15 @@ public class monsterPart : MonoBehaviour
                 heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
             }
         }
+        #endregion
+
+        if (reelHeavyAttack)
+        {
+            reelAttackBoneReference = heavyCollider.gameObject.transform.parent.GetComponent<monsterPartReference>();
+        }
     }
+
+    //Attack Specific Functions
 
     public void triggerJabOrSlashHitDetect() //marks whether or not the hit VFX is needed
     {
@@ -2235,6 +2261,43 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void triggerHeavyAttackPowerUp() //built up in wind up animation
+    {
+        if (reelHeavyAttack)
+        {
+            reelAttackBuiltUpPower++;
+            print("power up");
+            print("built up power" + " " + reelAttackBuiltUpPower);
+            powerUpCheckAllowed = true;
+            //print("threshold" + " " + reelAttackCurrentThreshold);
+        }
+    }
+
+    public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
+    {
+        if (reelHeavyAttack && powerUpCheckAllowed)
+        {
+            reelAttackCurrentThreshold++;
+            print("power checked");
+            //print("built up power" + " " + reelAttackBuiltUpPower);
+            print("threshold" + " " + reelAttackCurrentThreshold);
+
+            if (reelAttackCurrentThreshold == reelAttackBuiltUpPower)
+            {
+                //stop the reel, it has gone far enough in relation to how long button was held down
+                reelAttackBuiltUpPower = 1; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
+                reelAttackCurrentThreshold = 0;
+                powerUpCheckAllowed = false;
+                myAnimator.ResetTrigger("Reel Back");
+                myAnimator.SetTrigger("Reel Back");
+                print("power reset");
+                //print("built up power" + " " + reelAttackBuiltUpPower);
+                //print("threshold" + " " + reelAttackCurrentThreshold);
+                //print("stop reeling");
+            }
+        }
+    }
+
     public void triggerHeavyAttackVisuals()
     {
         if (jabHeavyAttack)
@@ -2265,6 +2328,10 @@ public class monsterPart : MonoBehaviour
         {
             heavyHitVFXManager.faceRightDirection(facingRight);
             heavyHitVFXManager.unleashSingleProjectile();
+        }
+        else if (reelHeavyAttack)
+        {
+            
         }
         else if (beamHeavyAttack)
         {

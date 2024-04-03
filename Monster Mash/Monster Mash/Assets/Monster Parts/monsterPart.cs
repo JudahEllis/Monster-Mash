@@ -93,7 +93,7 @@ public class monsterPart : MonoBehaviour
     //Projectile Info
     //Spray Info
     //Reel Attack Info
-    private int reelAttackBuiltUpPower = 1;
+    private int reelAttackBuiltUpPower = 0;
     private int reelAttackCurrentThreshold = 0;
     private bool powerUpCheckAllowed = true;
     private monsterPartReference reelAttackBoneReference;
@@ -1007,51 +1007,6 @@ public class monsterPart : MonoBehaviour
             fullActiveHeavy = false;
             triggerNeutralOrHeavyRefresh(false);
         }
-        /*
-        //We'' be simplifying this section down once we know 100% whats happening with dash attacks
-        if (connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Idle") ||
-            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Fall") ||
-            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Walk") || 
-            connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Run")) 
-        {
-            if (attackFocusOn == false && myAnimator != null)
-            {
-                isAttacking = true;
-                myAnimator.SetTrigger(animationName);
-                myMainSystem.attackFocusOn();
-                attackFocusOn = true;
-                runToAttackCorrections();
-                attackMarkedHeavy = false;
-                heavyAttackInMotion = false;
-                fullActiveHeavy = false;
-                triggerNeutralOrHeavyRefresh(false);
-            }
-
-        }
-        else if (connectedMonsterPart.GetCurrentAnimatorStateInfo(0).IsName("Run") || connectedMonsterPart.GetBool("Running") == true)
-        {
-            if (attackAnimationID != 1 && isRunning == true && isGroundedLimb == true)
-            {
-                return;
-            }
-            else
-            {
-                if (attackFocusOn == false && myAnimator != null)
-                {
-                    isAttacking = true;
-                    myAnimator.SetTrigger(animationName);
-                    myMainSystem.attackFocusOn();
-                    attackFocusOn = true;
-                    runToAttackCorrections();
-                    attackMarkedHeavy = false;
-                    heavyAttackInMotion = false;
-                    fullActiveHeavy = false;
-                    triggerNeutralOrHeavyRefresh(false);
-                }
-            }
-        }
-        */
     }
 
     public void triggerAttackAnticipation()
@@ -1736,6 +1691,7 @@ public class monsterPart : MonoBehaviour
         {
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
+            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
         }
         else
         {
@@ -2266,8 +2222,8 @@ public class monsterPart : MonoBehaviour
         if (reelHeavyAttack)
         {
             reelAttackBuiltUpPower++;
-            print("power up");
-            print("built up power" + " " + reelAttackBuiltUpPower);
+            //print("power up");
+            //print("built up power" + " " + reelAttackBuiltUpPower);
             powerUpCheckAllowed = true;
             //print("threshold" + " " + reelAttackCurrentThreshold);
         }
@@ -2278,19 +2234,21 @@ public class monsterPart : MonoBehaviour
         if (reelHeavyAttack && powerUpCheckAllowed)
         {
             reelAttackCurrentThreshold++;
-            print("power checked");
+            //print("power checked");
             //print("built up power" + " " + reelAttackBuiltUpPower);
-            print("threshold" + " " + reelAttackCurrentThreshold);
+            //print("threshold" + " " + reelAttackCurrentThreshold);
 
             if (reelAttackCurrentThreshold == reelAttackBuiltUpPower)
             {
                 //stop the reel, it has gone far enough in relation to how long button was held down
-                reelAttackBuiltUpPower = 1; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
+                //print("built up power" + " " + reelAttackBuiltUpPower);
+                //print("threshold" + " " + reelAttackCurrentThreshold);
+                reelAttackBuiltUpPower = 0; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
                 reelAttackCurrentThreshold = 0;
                 powerUpCheckAllowed = false;
                 myAnimator.ResetTrigger("Reel Back");
                 myAnimator.SetTrigger("Reel Back");
-                print("power reset");
+                //print("power reset");
                 //print("built up power" + " " + reelAttackBuiltUpPower);
                 //print("threshold" + " " + reelAttackCurrentThreshold);
                 //print("stop reeling");

@@ -96,7 +96,7 @@ public class monsterPart : MonoBehaviour
     private int reelAttackBuiltUpPower = 0;
     private int reelAttackCurrentThreshold = 0;
     private bool powerUpCheckAllowed = true;
-    private monsterPartReference reelAttackBoneReference;
+    private bool reelAttackLanded = false;
     //Status Effects
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -1745,9 +1745,25 @@ public class monsterPart : MonoBehaviour
                 myMainSystem.correctAttackDirection(0);
             }
 
-            if(jabNeutralAttack || jabHeavyAttack || slashNeutralAttack || slashHeavyAttack)
+            if (attackMarkedHeavy)
             {
-                triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
+
+                if (jabHeavyAttack || slashHeavyAttack)
+                {
+                    triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
+                }
+                else if (reelHeavyAttack)
+                {
+                    triggerReelCollisionsOn();
+                }
+            }
+            else
+            {
+
+                if (jabNeutralAttack || slashNeutralAttack)
+                {
+                    triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
+                }
             }
         }
     }
@@ -2112,15 +2128,11 @@ public class monsterPart : MonoBehaviour
             }
         }
         #endregion
-
-        if (reelHeavyAttack)
-        {
-            reelAttackBoneReference = heavyCollider.gameObject.transform.parent.GetComponent<monsterPartReference>();
-        }
     }
 
     //Attack Specific Functions
 
+    #region Jab and Slash Specific Functions
     public void triggerJabOrSlashHitDetect() //marks whether or not the hit VFX is needed
     {
         jabOrSlashLanded = true;
@@ -2168,6 +2180,7 @@ public class monsterPart : MonoBehaviour
         }
         
     }
+    #endregion
 
     public void triggerNeutralAttackVisuals() //called in attack animation
     {
@@ -2217,15 +2230,60 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    #region Reel Attack Specific Functions
+    public void triggerReelHitDetect() //marks whether or not the hit VFX is needed
+    {
+        //jabOrSlashLanded = true;
+        reelAttackLanded = true;
+        //play out VFX
+
+        if (attackMarkedHeavy == true)
+        {
+            //heavyHitVFXManager.unleashJabOrSlash();
+            triggerReelCollisionsOff();
+            reelAttackBuiltUpPower = 0; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
+            reelAttackCurrentThreshold = 0;
+            powerUpCheckAllowed = false;
+            myAnimator.ResetTrigger("Reel Back");
+            myAnimator.SetTrigger("Reel Back");
+        }
+    }
+
+    public void triggerReelCollisionsOn() //called in attack animation
+    {
+        //turn on neutral vfx holder
+        //jabOrSlashLanded = false;
+        reelAttackLanded = false;
+
+        if (attackMarkedHeavy == true && heavyCollider != null)
+        {
+            heavyCollider.enabled = true;
+        }
+
+        //print("reel collider turned back on");
+
+    }
+
+    public void triggerReelCollisionsOff() //called in attack animation
+    {
+        //turn off neutral vfx holder
+        //jabOrSlashLanded = false;
+        reelAttackLanded = false;
+
+        if (attackMarkedHeavy == true)
+        {
+            heavyCollider.enabled = false;
+        }
+
+    }
+    #endregion
+
     public void triggerHeavyAttackPowerUp() //built up in wind up animation
     {
         if (reelHeavyAttack)
         {
             reelAttackBuiltUpPower++;
-            //print("power up");
-            //print("built up power" + " " + reelAttackBuiltUpPower);
             powerUpCheckAllowed = true;
-            //print("threshold" + " " + reelAttackCurrentThreshold);
         }
     }
 
@@ -2234,24 +2292,15 @@ public class monsterPart : MonoBehaviour
         if (reelHeavyAttack && powerUpCheckAllowed)
         {
             reelAttackCurrentThreshold++;
-            //print("power checked");
-            //print("built up power" + " " + reelAttackBuiltUpPower);
-            //print("threshold" + " " + reelAttackCurrentThreshold);
 
             if (reelAttackCurrentThreshold == reelAttackBuiltUpPower)
             {
-                //stop the reel, it has gone far enough in relation to how long button was held down
-                //print("built up power" + " " + reelAttackBuiltUpPower);
-                //print("threshold" + " " + reelAttackCurrentThreshold);
                 reelAttackBuiltUpPower = 0; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
                 reelAttackCurrentThreshold = 0;
                 powerUpCheckAllowed = false;
                 myAnimator.ResetTrigger("Reel Back");
                 myAnimator.SetTrigger("Reel Back");
-                //print("power reset");
-                //print("built up power" + " " + reelAttackBuiltUpPower);
-                //print("threshold" + " " + reelAttackCurrentThreshold);
-                //print("stop reeling");
+                triggerReelCollisionsOff();
             }
         }
     }
@@ -2289,7 +2338,12 @@ public class monsterPart : MonoBehaviour
         }
         else if (reelHeavyAttack)
         {
-            
+            if (reelAttackLanded == false)
+            {
+                //miss visual
+                triggerReelCollisionsOff();
+
+            }
         }
         else if (beamHeavyAttack)
         {

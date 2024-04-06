@@ -19,7 +19,8 @@ public class monsterAttackSystem : MonoBehaviour
     float timeSinceLastCall;
     private int flourishCounter = 0;
     bool requiresFlourish = false;
-    bool requiresTwirl = true;
+    bool requiresFlourishingTwirl = false;
+    bool requiresFlourishingRoll = false;
 
     private Animator myAnimator;
     private Animator mainTorso;
@@ -218,13 +219,33 @@ public class monsterAttackSystem : MonoBehaviour
                     timeSinceLastCall = 0;
                 }
 
-                if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1 || attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
+                if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
                 {
-                    requiresTwirl = true;
+                    if (isGrounded)
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = false;
+                    }
+                    else
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = true;
+                    }
                 }
-                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2 || attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1)
                 {
-                    requiresTwirl = false;
+                    requiresFlourishingTwirl = true;
+                    requiresFlourishingRoll = false;
+                }
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
+                {
+                    requiresFlourishingTwirl = false;
+                    requiresFlourishingRoll = true;
+                }
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2)
+                {
+                    requiresFlourishingTwirl = true;
+                    requiresFlourishingRoll = false;
                 }
 
                 if (isGrounded)
@@ -234,7 +255,7 @@ public class monsterAttackSystem : MonoBehaviour
                         attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
 
                         #region Bracing for Attacks 
-                        if (requiresFlourish)
+                        if (requiresFlourish && (requiresFlourishingTwirl || requiresFlourishingRoll))
                         {
                             braceForFlourishImpact();
                         }
@@ -275,7 +296,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                         #region Bracing for Attacks
 
-                        if (requiresFlourish && isGliding == false)
+                        if (requiresFlourish && isGliding == false && (requiresFlourishingTwirl || requiresFlourishingRoll))
                         {
                             //roll
                             braceForFlourishImpact();
@@ -818,11 +839,22 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForFlourishImpact()
     {
-        if (requiresTwirl)
+        /*
+        if (requiresFlourishingTwirl)
         {
             myAnimator.SetTrigger("Flourish Twirl");
         }
         else
+        {
+            myAnimator.SetTrigger("Flourish Roll");
+        }
+        */
+
+        if (requiresFlourishingTwirl)
+        {
+            myAnimator.SetTrigger("Flourish Twirl");
+        }
+        else if (requiresFlourishingRoll)
         {
             myAnimator.SetTrigger("Flourish Roll");
         }
@@ -850,11 +882,11 @@ public class monsterAttackSystem : MonoBehaviour
 
         myAnimator.ResetTrigger("Glide to Attack");
 
-        if (requiresTwirl)
+        if (requiresFlourishingTwirl)
         {
             myAnimator.ResetTrigger("Flourish Twirl");
         }
-        else
+        else if(requiresFlourishingRoll)
         {
             myAnimator.ResetTrigger("Flourish Roll");
         }

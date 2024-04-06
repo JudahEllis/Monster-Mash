@@ -29,9 +29,10 @@ public class monsterPartReference : MonoBehaviour
                     partReference.triggerJabOrSlashHitDetect();
                 }
 
-                if (isReel)
+                if (isReel && isHitbox)
                 {
-                    
+                    partReference.triggerReelHitDetect(); //probably pass along monster part reference script of whatever this hits for "grabbing"
+                    //print("reel me in, scotty");
                 }
             }
         }

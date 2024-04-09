@@ -32,6 +32,7 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem glideVisual;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
+    public Collider stompCollider;
 
     public void awakenTheBeast()
     {
@@ -407,6 +408,18 @@ public class monsterAttackSystem : MonoBehaviour
             canDashAttack = true;
             canRoll = true;
         }
+    }
+
+    public void stompAttack()
+    {
+        stompCollider.enabled = true;
+        StartCoroutine(stompReset());
+    }
+
+    IEnumerator stompReset()
+    {
+        yield return new WaitForSeconds(0.2f);
+        stompCollider.enabled = false;
     }
 
 

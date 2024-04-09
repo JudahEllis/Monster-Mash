@@ -11,6 +11,7 @@ public class monsterPart : MonoBehaviour
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     private Animator myAnimator;
+    public Collider stompDetection;
     public int monsterPartHealth = 100;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
     public int monsterPartID = 1;
@@ -1747,8 +1748,11 @@ public class monsterPart : MonoBehaviour
 
             if (attackMarkedHeavy)
             {
-
-                if (jabHeavyAttack || slashHeavyAttack)
+                if (isGroundedLimb && attackAnimationID == 0)
+                {
+                    //myMainSystem.stompAttack();
+                }
+                else if (jabHeavyAttack || slashHeavyAttack)
                 {
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
                 }
@@ -1759,8 +1763,11 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-
-                if (jabNeutralAttack || slashNeutralAttack)
+                if (isGroundedLimb && attackAnimationID == 0)
+                {
+                    //myMainSystem.stompAttack();
+                }
+                else if (jabNeutralAttack || slashNeutralAttack)
                 {
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
                 }
@@ -2140,12 +2147,17 @@ public class monsterPart : MonoBehaviour
 
         if (attackMarkedHeavy == true)
         {
-            heavyHitVFXManager.unleashJabOrSlash();
+            if (heavyHitVFXManager != null)
+            {
+                heavyHitVFXManager.unleashJabOrSlash();
+            }
         }
         else
         {
-            neutralHitVFXManager.unleashJabOrSlash();
-
+            if (neutralHitVFXManager != null)
+            {
+                neutralHitVFXManager.unleashJabOrSlash();
+            }
         }
     }
 
@@ -2182,13 +2194,24 @@ public class monsterPart : MonoBehaviour
     }
     #endregion
 
+    public void triggerStompDetectorOn()
+    {
+        stompDetection.enabled = true;
+        myMainSystem.stompAttack();
+    }
+
+    public void triggerStompDetectionOff()
+    {
+        stompDetection.enabled = false;
+    }
+
     public void triggerNeutralAttackVisuals() //called in attack animation
     {
         if (jabNeutralAttack)
         {
             neutralCollider.enabled = false;
 
-            if (jabOrSlashLanded == false)
+            if (jabOrSlashLanded == false && neutralMissVFXHolder != null)
             {
                 //turn on miss visual if neutral vfx holder's script hasn't made contact
                 neutralMissVFXManager.unleashJabOrSlash();
@@ -2198,7 +2221,7 @@ public class monsterPart : MonoBehaviour
         {
             neutralCollider.enabled = false;
 
-            if (jabOrSlashLanded == false)
+            if (jabOrSlashLanded == false && neutralMissVFXHolder != null)
             {
                 //turn on miss visual if neutral vfx holder's script hasn't made contact
                 neutralMissVFXManager.unleashJabOrSlash();
@@ -2311,7 +2334,7 @@ public class monsterPart : MonoBehaviour
         {
             heavyCollider.enabled = false;
 
-            if (jabOrSlashLanded == false)
+            if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
             {
                 //turn on miss visual if neutral vfx holder's script hasn't made contact
                 heavyMissVFXManager.unleashJabOrSlash();
@@ -2321,7 +2344,7 @@ public class monsterPart : MonoBehaviour
         {
             heavyCollider.enabled = false;
 
-            if (jabOrSlashLanded == false)
+            if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
             {
                 //turn on miss visual if neutral vfx holder's script hasn't made contact
                 heavyMissVFXManager.unleashJabOrSlash();

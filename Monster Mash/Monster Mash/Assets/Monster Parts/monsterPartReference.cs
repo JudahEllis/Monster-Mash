@@ -33,7 +33,8 @@ public class monsterPartReference : MonoBehaviour
                 if (isReel && isHitbox)
                 {
                     partReference.triggerReelHitDetect(); //probably pass along monster part reference script of whatever this hits for "grabbing"
-                    //print("reel me in, scotty");
+                    Vector3 storedCollisionPoint = other.ClosestPoint(transform.position);
+                    mainSystem.grabbingActivated(other.GetComponent<monsterPartReference>().mainSystem, this.transform, storedCollisionPoint);
                 }
             }
         }
@@ -47,4 +48,5 @@ public class monsterPartReference : MonoBehaviour
             }
         }
     }
+
 }

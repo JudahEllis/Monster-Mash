@@ -155,6 +155,8 @@ public class monsterPart : MonoBehaviour
     private bool isRunning = false;
     public bool facingRight;
     public bool grounded = true;
+    private bool haveGrabbedAMonster;
+    private monsterPartReference grabbedMonster;
     //private int jumpsAllotted;
     //private int regularJumpAmount = 2;
     //private int wingedJumpAmount = 4;
@@ -1820,6 +1822,11 @@ public class monsterPart : MonoBehaviour
             {
                 mainTorso.SetBool("Attack to Idle", false);
             }
+
+            if (reelHeavyAttack)
+            {
+                myMainSystem.grabbingCanceled();
+            }
         }
     }
 
@@ -1858,6 +1865,15 @@ public class monsterPart : MonoBehaviour
         }
 
         myMainSystem.endBracing();
+
+        //if I have a grabbed person, maybe let them go? That would be nice
+
+        
+        if (reelHeavyAttack)
+        {
+            //myMainSystem.grabbingStabilized();
+        }
+        
     }
 
     #endregion

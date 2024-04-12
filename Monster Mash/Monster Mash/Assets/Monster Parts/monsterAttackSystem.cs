@@ -33,6 +33,10 @@ public class monsterAttackSystem : MonoBehaviour
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
     public Collider stompCollider;
+    private bool grabActivated;
+    public Transform nativeReel;
+    private Transform foreignReel;
+    private monsterAttackSystem foreignMonster;
 
     public void awakenTheBeast()
     {
@@ -140,6 +144,7 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < internalPartReferences.Length; i++)
         {
             listOfInternalReferences.Add(internalPartReferences[i]);
+            internalPartReferences[i].mainSystem = this;
         }
 
         for (int i = 0; i < internalVFXHolders.Length; i++)
@@ -190,6 +195,11 @@ public class monsterAttackSystem : MonoBehaviour
     private void Update()
     {
         timeSinceLastCall += Time.deltaTime;
+
+        if (grabActivated)
+        {
+            foreignReel.position = new Vector3(nativeReel.position.x, nativeReel.position.y, foreignReel.position.z);
+        }
     }
 
     public void attack(int attackSlot)
@@ -918,6 +928,40 @@ public class monsterAttackSystem : MonoBehaviour
 
         //The hit animations are going to flip torso back and forth from this animator (so that flipping directions doesnt affect back and forth hit animations)
         //It does need to know which way to start though so that it is facing the camera
+    }
+
+    public void grabbingActivated(monsterAttackSystem grabbedMonster, Transform reelBone ,Vector3 pointOfContact)
+    {
+        grabActivated = true;
+        foreignMonster = grabbedMonster;
+        foreignReel = foreignMonster.nativeReel;
+        foreignReel.parent = null;
+        foreignReel.position = pointOfContact;
+        nativeReel.position = pointOfContact;
+        nativeReel.parent = reelBone;
+        foreignMonster.transform.parent = foreignReel;
+    }
+
+    public void grabbingStabilized()
+    {
+        nativeReel.parent = this.transform;
+    }
+
+    public void grabbingCanceled()
+    {
+        // /*
+        if (grabActivated)
+        {
+            foreignMonster.transform.parent = null;
+            foreignReel.parent = foreignMonster.transform;
+            foreignReel = null;
+            foreignMonster = null;
+            nativeReel.parent = this.transform;
+            nativeReel.position = Vector3.zero;
+        }
+
+        grabActivated = false;
+        // */
     }
 
     public void attackFocusOn()

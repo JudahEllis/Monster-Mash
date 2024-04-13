@@ -893,7 +893,7 @@ public class monsterPart : MonoBehaviour
         Transform[] childrenInObject = GetComponentsInChildren<Transform>();
         for (int i = 0; i < childrenInObject.Length; i++)
         {
-            if (childrenInObject[i].gameObject.tag == "Hurtbox" || childrenInObject[i].gameObject.tag == "Hitbox")
+            if (childrenInObject[i].gameObject.tag == "Hurtbox" || childrenInObject[i].gameObject.tag == "Hitbox" || childrenInObject[i].gameObject.tag == "Stomp Box")
             {
                 hitboxesAndHurtboxes.Add(childrenInObject[i].gameObject);
                 childrenInObject[i].gameObject.SetActive(false);
@@ -1866,14 +1866,6 @@ public class monsterPart : MonoBehaviour
 
         myMainSystem.endBracing();
 
-        //if I have a grabbed person, maybe let them go? That would be nice
-
-        
-        if (reelHeavyAttack)
-        {
-            //myMainSystem.grabbingStabilized();
-        }
-        
     }
 
     #endregion
@@ -2308,6 +2300,9 @@ public class monsterPart : MonoBehaviour
         //turn off neutral vfx holder
         //jabOrSlashLanded = false;
         reelAttackLanded = false;
+        reelAttackBuiltUpPower = 0;
+        reelAttackCurrentThreshold = 0;
+        powerUpCheckAllowed = false;
 
         if (attackMarkedHeavy == true)
         {
@@ -2334,12 +2329,11 @@ public class monsterPart : MonoBehaviour
 
             if (reelAttackCurrentThreshold == reelAttackBuiltUpPower)
             {
-                reelAttackBuiltUpPower = 0; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
+                reelAttackBuiltUpPower = 0;
                 reelAttackCurrentThreshold = 0;
                 powerUpCheckAllowed = false;
                 myAnimator.ResetTrigger("Reel Back");
                 myAnimator.SetTrigger("Reel Back");
-                triggerReelCollisionsOff();
             }
         }
     }
@@ -2381,8 +2375,11 @@ public class monsterPart : MonoBehaviour
             {
                 //miss visual
                 triggerReelCollisionsOff();
-
             }
+
+            reelAttackBuiltUpPower = 0;
+            reelAttackCurrentThreshold = 0;
+            powerUpCheckAllowed = false;
         }
         else if (beamHeavyAttack)
         {

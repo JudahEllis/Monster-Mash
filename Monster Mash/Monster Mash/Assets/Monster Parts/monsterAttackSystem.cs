@@ -944,7 +944,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void grabbingStabilized()
     {
-        nativeReel.parent = this.transform;
+        nativeReel.parent = null;
     }
 
     public void grabbingCanceled()

@@ -512,7 +512,7 @@ public class monsterPart : MonoBehaviour
         {
             //we'll replace the useage of attack IDs here once we have gyroscopic understanding of limbs and then we can factor both
             //nothing wrong with it right now but if we have a forward attacking arm thats been rotated backwards then yeah we need something to account for that
-            if (attackAnimationID == -1) 
+            if (attackAnimationID == -1)
             {
                 torsoCommand = "Left Lower Attack";
                 requiresBackwardStance = false;
@@ -537,6 +537,25 @@ public class monsterPart : MonoBehaviour
                     {
                         headCommand = "Face Attack";
                         torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                }
+                else if (isArm && reelHeavyAttack && (attackAnimationID == 2 || attackAnimationID == 0))
+                {
+                    if (attackAnimationID == 0)
+                    {
+                        torsoCommand = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else
+                    {
+                        torsoCommand = "Upper Attack";
                         requiresBackwardStance = false;
                         requiresForwardStance = false;
                         requiresRightStance = true;
@@ -586,6 +605,25 @@ public class monsterPart : MonoBehaviour
                         requiresForwardStance = false;
                         requiresRightStance = true;
                         requiresLeftStance = false;
+                    }
+                }
+                else if (isArm && reelHeavyAttack && (attackAnimationID == 2 || attackAnimationID == 0))
+                {
+                    if (attackAnimationID == 0)
+                    {
+                        torsoCommand = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                    else
+                    {
+                        torsoCommand = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
                     }
                 }
                 else
@@ -800,6 +838,15 @@ public class monsterPart : MonoBehaviour
                     requiresLeftStance = false;
                 }
             }
+            else if (isArm && attackAnimationID == 2)
+            {
+                headCommand = "Face Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
+            }
             else
             {
                 if (attackAnimationID == -1)
@@ -845,6 +892,15 @@ public class monsterPart : MonoBehaviour
                     requiresRightStance = true;
                     requiresLeftStance = false;
                 }
+            }
+            else if (isArm && attackAnimationID == 2)
+            {
+                headCommand = "Face Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = false;
+                requiresLeftStance = true;
             }
             else
             {
@@ -1629,6 +1685,7 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.ResetTrigger("Unbrace");
                 myAnimator.SetTrigger("Unbrace");
+                myAnimator.ResetTrigger("Brace");
 
                 if (isWing)
                 {
@@ -1640,12 +1697,9 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.ResetTrigger("Unbrace");
                 myAnimator.SetTrigger("Unbrace");
+                myAnimator.ResetTrigger("Brace");
             }
 
-            if (isHead)
-            {
-
-            }
         }
         else
         {

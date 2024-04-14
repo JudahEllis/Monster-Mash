@@ -172,11 +172,14 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < attackSlotMonsterParts.Length; i++)
         {
-            attackSlotMonsterID[i] = attackSlotMonsterParts[i].monsterPartID; //this tells us what type of part class it is
-
-            if (attackSlotMonsterParts[i].isWing == true)
+            if (attackSlotMonsterParts[i] != null)
             {
-                isWinged = true;
+                attackSlotMonsterID[i] = attackSlotMonsterParts[i].monsterPartID; //this tells us what type of part class it is
+
+                if (attackSlotMonsterParts[i].isWing == true)
+                {
+                    isWinged = true;
+                }
             }
         }
 

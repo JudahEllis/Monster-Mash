@@ -16,16 +16,27 @@ public class monsterAttackSystem : MonoBehaviour
     private bool focusedAttackActive = false;
     private bool canRoll = true;
     private bool canDashAttack = true;
+    float timeSinceLastCall;
+    private int flourishCounter = 0;
+    bool requiresFlourish = false;
+    bool requiresFlourishingTwirl = false;
+    bool requiresFlourishingRoll = false;
 
     private Animator myAnimator;
     private Animator mainTorso;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
-    private monsterPart[] allMonsterParts;
+    public monsterPart[] allMonsterParts;
     public GameObject dashSplat;
+    public ParticleSystem glideVisual;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
+    public Collider stompCollider;
+    private bool grabActivated;
+    public Transform nativeReel;
+    private Transform foreignReel;
+    private monsterAttackSystem foreignMonster;
 
     public void awakenTheBeast()
     {
@@ -71,6 +82,7 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allWings.Add(allMonsterParts[i]);
                 hasWings = true;
+                isWinged = true;
             }
 
             if (allMonsterParts[i].isTorso)
@@ -110,6 +122,8 @@ public class monsterAttackSystem : MonoBehaviour
                     {
                         allWings[u].hasFlightedIdle = true;
                     }
+
+                    mainTorso.SetBool("Flighted Monster", isWinged);
                 }
             }
         }
@@ -117,28 +131,38 @@ public class monsterAttackSystem : MonoBehaviour
         #endregion
 
         monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
+        vfxHolder[] internalVFXHolders = GetComponentsInChildren<vfxHolder>();
+
+        for (int i = 0; i < internalVFXHolders.Length; i++)
+        {
+            internalVFXHolders[i].grabReferences();
+
+            for (int u = 0; u < internalVFXHolders[i].damageGivingVFX.Length; u++)
+            {
+                listOfInternalReferences.Add(internalVFXHolders[i].damageGivingVFX[u]);
+            }
+        }
 
         for (int i = 0; i < internalPartReferences.Length; i++)
         {
             listOfInternalReferences.Add(internalPartReferences[i]);
+            internalPartReferences[i].mainSystem = this;
         }
 
-        /*
-        //remove this, have collider to ignore info handled by individual monster parts
-        for (int u = 0; u < listOfInternalReferences.Count; u++)
+        for (int i = 0; i < internalVFXHolders.Length; i++)
         {
-            listOfInternalReferences[u].referencesToIgnore = listOfInternalReferences;
+            internalVFXHolders[i].referencesToIgnore = listOfInternalReferences;
+            internalVFXHolders[i].collisionOcclusion();
         }
-        */
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].mainTorso = mainTorso;
             allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
-            allMonsterParts[i].triggerCollisionLogic();
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
+            allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
             allMonsterParts[i].triggerIdle();
         }
 
@@ -150,11 +174,14 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < attackSlotMonsterParts.Length; i++)
         {
-            attackSlotMonsterID[i] = attackSlotMonsterParts[i].monsterPartID; //this tells us what type of part class it is
-
-            if (attackSlotMonsterParts[i].isWing == true)
+            if (attackSlotMonsterParts[i] != null)
             {
-                isWinged = true;
+                attackSlotMonsterID[i] = attackSlotMonsterParts[i].monsterPartID; //this tells us what type of part class it is
+
+                if (attackSlotMonsterParts[i].isWing == true)
+                {
+                    isWinged = true;
+                }
             }
         }
 
@@ -169,6 +196,17 @@ public class monsterAttackSystem : MonoBehaviour
     }
 
     #region Attacks
+
+    private void Update()
+    {
+        timeSinceLastCall += Time.deltaTime;
+
+        if (grabActivated)
+        {
+            foreignReel.position = new Vector3(nativeReel.position.x, nativeReel.position.y, foreignReel.position.z);
+        }
+    }
+
     public void attack(int attackSlot)
     {
         if (attackSlotMonsterParts[attackSlot] != null && focusedAttackActive == false)
@@ -179,36 +217,89 @@ public class monsterAttackSystem : MonoBehaviour
             }
             else if (attackSlotMonsterID[attackSlot] == 1)
             {
+                if (focusedAttackActive == false)
+                {
+                    flourishCounter++;
+                    if (timeSinceLastCall <= 1f)
+                    {
+                        if (flourishCounter >= 3)
+                        {
+                            requiresFlourish = true;
+                            flourishCounter = 0;
+                        }
+                    }
+                    else
+                    {
+                        flourishCounter = 1;
+                    }
+                    timeSinceLastCall = 0;
+                }
+
+                if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
+                {
+                    if (isGrounded)
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = false;
+                    }
+                    else
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = true;
+                    }
+                }
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1)
+                {
+                    requiresFlourishingTwirl = true;
+                    requiresFlourishingRoll = false;
+                }
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
+                {
+                    requiresFlourishingTwirl = false;
+                    requiresFlourishingRoll = true;
+                }
+                else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2)
+                {
+                    requiresFlourishingTwirl = true;
+                    requiresFlourishingRoll = false;
+                }
+
                 if (isGrounded)
                 {
                     if (focusedAttackActive == false)
                     {
                         attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
-                        //isWalking = false;
 
-                        #region Bracing for Attacks
-
-                        if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                        #region Bracing for Attacks 
+                        if (requiresFlourish && (requiresFlourishingTwirl || requiresFlourishingRoll))
                         {
-                            braceForRightImpact();
+                            braceForFlourishImpact();
                         }
-
-                        if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                        else
                         {
-                            braceForLeftImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                            {
+                                braceForRightImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
-                        {
-                            braceForForwardImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                            {
+                                braceForLeftImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
-                        {
-                            braceForBackwardImpact();
+                            if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
+                            {
+                                braceForForwardImpact();
+                            }
+
+                            if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
+                            {
+                                braceForBackwardImpact();
+                            }
                         }
 
                         isRunning = false;
+                        requiresFlourish = false;
                         #endregion
                     }
                 }
@@ -221,28 +312,42 @@ public class monsterAttackSystem : MonoBehaviour
 
                         #region Bracing for Attacks
 
-                        if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                        if (requiresFlourish && isGliding == false && (requiresFlourishingTwirl || requiresFlourishingRoll))
                         {
-                            braceForRightImpact();
+                            //roll
+                            braceForFlourishImpact();
                         }
-
-                        if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                        else
                         {
-                            braceForLeftImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresRightStance)
+                            {
+                                braceForRightImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
-                        {
-                            braceForForwardImpact();
-                        }
+                            if (attackSlotMonsterParts[attackSlot].requiresLeftStance)
+                            {
+                                braceForLeftImpact();
+                            }
 
-                        if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
-                        {
-                            braceForBackwardImpact();
+                            if (attackSlotMonsterParts[attackSlot].requiresForwardStance)
+                            {
+                                braceForForwardImpact();
+                            }
+
+                            if (attackSlotMonsterParts[attackSlot].requiresBackwardStance)
+                            {
+                                braceForBackwardImpact();
+                            }
                         }
 
                         isRunning = false;
+                        requiresFlourish = false;
                         #endregion
+
+                        if (isGliding)
+                        {
+                            glideToAttack();
+                        }
                     }
                     //Add to this later so that we can having bracing while attacking in the air
                 }
@@ -264,7 +369,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void dashAttack()
     {
-        if (isRunning && canDashAttack && canRoll && focusedAttackActive == false)
+        if ((isRunning || isGrounded == false) && canDashAttack && canRoll && focusedAttackActive == false)
         {
             isRunning = false;
             canRoll = false;
@@ -278,12 +383,16 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRoll(true);
+            allMonsterParts[i].triggerRoll(isGrounded);
         }
 
         myAnimator.SetFloat("Flipping Speed", 1);
         myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
+        isGliding = false;
+        glideVisual.Stop();
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Glide to Attack");
 
         yield return new WaitForSeconds(0.2f);
 
@@ -299,15 +408,33 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
-            allMonsterParts[i].triggerRoll(true);
+            allMonsterParts[i].triggerRoll(isGrounded);
         }
 
         myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
         dashSplat.SetActive(false);
         attackFocusOff();
-        canDashAttack = true;
-        canRoll = true;
+
+        yield return new WaitForSeconds(5f);
+
+        if (isGrounded)
+        {
+            canDashAttack = true;
+            canRoll = true;
+        }
+    }
+
+    public void stompAttack()
+    {
+        stompCollider.enabled = true;
+        StartCoroutine(stompReset());
+    }
+
+    IEnumerator stompReset()
+    {
+        yield return new WaitForSeconds(0.2f);
+        stompCollider.enabled = false;
     }
 
 
@@ -317,14 +444,17 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipCharacter()
     {
-        if (isRunning)
+        if (focusedAttackActive == false)
         {
-            screechingStop();
-            StartCoroutine(characterFlipDelay(true));
-        }
-        else
-        {
-            StartCoroutine(characterFlipDelay(false));
+            if (isRunning)
+            {
+                screechingStop();
+                StartCoroutine(characterFlipDelay(true));
+            }
+            else
+            {
+                StartCoroutine(characterFlipDelay(false));
+            }
         }
     }
 
@@ -347,6 +477,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
             dashSplat.transform.eulerAngles = leftDashSplatRotation;
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].facingRight = false;
+            }
         }
         else
         {
@@ -354,6 +488,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
             dashSplat.transform.eulerAngles = rightDashSplatRotation;
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].facingRight = true;
+            }
         }
     }
 
@@ -465,6 +603,8 @@ public class monsterAttackSystem : MonoBehaviour
             focusedAttackActive = false;
             isGliding = false;
             jumpsLeft--;
+            canDashAttack = true;
+            canRoll = true;
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -516,19 +656,24 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void glide()
     {
-        if (isGliding == false)
+        if (isGrounded == false && isWinged)
         {
-            isGliding = true;
-            focusedAttackActive = true;
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
+            if (isGliding == false)
             {
-                allMonsterParts[i].triggerGlide();
+                isGliding = true;
+                //focusedAttackActive = true;
+                glideVisual.Play();
+                myAnimator.SetBool("Gliding", true);
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerGlide();
+                }
             }
-        }
-        else
-        {
-            glideToFall();
+            else
+            {
+                glideToFall();
+            }
         }
     }
 
@@ -536,11 +681,22 @@ public class monsterAttackSystem : MonoBehaviour
     {
         focusedAttackActive = false;
         isGliding = false;
+        glideVisual.Stop();
+        myAnimator.ResetTrigger("Glide to Attack");
+        myAnimator.SetBool("Gliding", false);
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerFall();
         }
+    }
+
+    private void glideToAttack()
+    {
+        isGliding = false;
+        glideVisual.Stop();
+        myAnimator.SetTrigger("Glide to Attack");
+        myAnimator.SetBool("Gliding", false);
     }
 
     public void walkToFall()
@@ -588,11 +744,34 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = true;
             focusedAttackActive = false;
+            canDashAttack = true;
+            canRoll = true;
+            glideVisual.Stop();
+            myAnimator.SetBool("Gliding", false);
+            myAnimator.ResetTrigger("Glide to Attack");
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerLand();
+                allMonsterParts[i].triggerRoll(isGrounded);
             }
+            /*
+            if (isGliding)
+            {
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerRoll(isGrounded);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerLand();
+                }
+            }
+            */
+
+            isGliding = false;
 
             myAnimator.SetTrigger("Land");
 
@@ -612,6 +791,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    /*
     public bool IsAttacking()
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
@@ -624,6 +804,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         return false;
     }
+    */
 
     public void roll()
     {
@@ -634,6 +815,9 @@ public class monsterAttackSystem : MonoBehaviour
             isWalking = false;
             focusedAttackActive = false;
             canRoll = false;
+            glideVisual.Stop();
+            myAnimator.SetBool("Gliding", false);
+            myAnimator.ResetTrigger("Glide to Attack");
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -681,6 +865,34 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void braceForFlourishImpact()
+    {
+        /*
+        if (requiresFlourishingTwirl)
+        {
+            myAnimator.SetTrigger("Flourish Twirl");
+        }
+        else
+        {
+            myAnimator.SetTrigger("Flourish Roll");
+        }
+        */
+
+        if (requiresFlourishingTwirl)
+        {
+            myAnimator.SetTrigger("Flourish Twirl");
+        }
+        else if (requiresFlourishingRoll)
+        {
+            myAnimator.SetTrigger("Flourish Roll");
+        }
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerFlourishStance();
+        }
+    }
+
     public void switchBraceStance()
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
@@ -694,6 +906,17 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerUnbrace();
+        }
+
+        myAnimator.ResetTrigger("Glide to Attack");
+
+        if (requiresFlourishingTwirl)
+        {
+            myAnimator.ResetTrigger("Flourish Twirl");
+        }
+        else if(requiresFlourishingRoll)
+        {
+            myAnimator.ResetTrigger("Flourish Roll");
         }
     }
 
@@ -712,12 +935,51 @@ public class monsterAttackSystem : MonoBehaviour
         //It does need to know which way to start though so that it is facing the camera
     }
 
+    public void grabbingActivated(monsterAttackSystem grabbedMonster, Transform reelBone ,Vector3 pointOfContact)
+    {
+        grabActivated = true;
+        foreignMonster = grabbedMonster;
+        foreignReel = foreignMonster.nativeReel;
+        foreignReel.parent = null;
+        foreignReel.position = pointOfContact;
+        nativeReel.position = pointOfContact;
+        nativeReel.parent = reelBone;
+        foreignMonster.transform.parent = foreignReel;
+    }
+
+    public void grabbingStabilized()
+    {
+        nativeReel.parent = null;
+    }
+
+    public void grabbingCanceled()
+    {
+        // /*
+        if (grabActivated)
+        {
+            foreignMonster.transform.parent = null;
+            foreignReel.parent = foreignMonster.transform;
+            foreignReel = null;
+            foreignMonster = null;
+            nativeReel.parent = this.transform;
+            nativeReel.position = Vector3.zero;
+        }
+
+        grabActivated = false;
+        // */
+    }
+
     public void attackFocusOn()
     {
         focusedAttackActive = true;
         myAnimator.SetBool("Idle Bounce Allowed", false);
         myAnimator.ResetTrigger("Back to Prior State");
         //myAnimator.SetTrigger("Back to Prior State");
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].bounceCorrections(false);
+        }
     }
 
     public void attackFocusOff()
@@ -730,6 +992,18 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.ResetTrigger("Right Attack Release");
         myAnimator.ResetTrigger("Left Attack Release");
         myAnimator.SetTrigger("Back to Prior State");
+
+        
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+           allMonsterParts[i].resetBracing();
+        }
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].bounceCorrections(true);
+        }
+
     }
 
     #endregion

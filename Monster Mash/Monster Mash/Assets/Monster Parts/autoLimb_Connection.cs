@@ -25,7 +25,7 @@ public class autoLimb_Connection : MonoBehaviour
     public bool isChestTorsoConnection = false;
     public bool isBellyTorsoConnection = false;
 
-    public void enableColliders()
+    public void enableColliders() //rename this for easier outside knowledge
     {
         triggerBubble.enabled = true;
         StartCoroutine(limbConnectionAutoStop());

@@ -14,12 +14,13 @@ public class MultiplayerJoinManager : MonoBehaviour
     [SerializeField]
     private GameObject cursorParent;
 
-    // The Colors that are mapped to the UI Elements to visually show which player they are
-    [SerializeField]
-    private Color[] playerTokenColors;
-
     [SerializeField]
     private List<VirtualMouseInput> playerCursors;
+
+    [SerializeField]
+    public GameObject[] playerTubes;
+
+    public List<Transform> monsterSpawnPoints;
 
     [HideInInspector]
     public int charactersSelected;
@@ -38,9 +39,11 @@ public class MultiplayerJoinManager : MonoBehaviour
     {
         public GameObject selectedCharacter;
 
+        public GameObject characterModel;
+
         public int playerIndex;
 
-        public InputActionAsset actionAsset;
+        public GameObject playerInput;
     }
 
     public List<PlayerInformation> playerInfo;
@@ -50,6 +53,28 @@ public class MultiplayerJoinManager : MonoBehaviour
         playerInputController = FindObjectOfType<PlayerInputManager>();
 
         allowStartGame = false;
+
+        PlayerInput[] inputs = FindObjectsOfType<PlayerInput>();
+
+        foreach(VirtualMouseInput cursor in playerCursors)
+        {
+            MultiplayerCursor playerCursor = cursor.gameObject.GetComponent<MultiplayerCursor>();
+
+            int index = playerCursor.cursorIndex;
+
+            foreach(PlayerInput input in inputs)
+            {
+                if (index == input.playerIndex)
+                {
+                    AddPlayerToken(input);
+
+                    AssignCursorControls(input);
+
+                    AssignPlayerInformation(input);
+                }
+            }
+            
+        }
     }
 
     private void Start()
@@ -76,12 +101,16 @@ public class MultiplayerJoinManager : MonoBehaviour
     //As of right now assigns a color value but that can be swapped out for a sprite at a later date
     void AddPlayerToken(PlayerInput player)
     {
-        player.gameObject.transform.SetParent(cursorParent.transform, false);
+        playerCursors[player.playerIndex].gameObject.SetActive(true);
 
-        player.gameObject.GetComponent<RectTransform>().position = Vector3.zero;
+        playerCursors[player.playerIndex].gameObject.GetComponent<MultiplayerCursor>().Enabled(player);
 
-        player.gameObject.GetComponentInChildren<Image>().color = playerTokenColors[
-            playerInputController.playerCount - 1];
+        playerTubes[player.playerIndex].SetActive(true);
+
+        player.gameObject.transform.position = Vector3.zero;
+
+        allowStartGame = false;
+
     }
 
     //Assigns the newly Spawned in Cursors their respective Player's controller
@@ -92,9 +121,7 @@ public class MultiplayerJoinManager : MonoBehaviour
 
         InputActionMap controllerMap = playerInput.FindActionMap("UI Navagation");
 
-        VirtualMouseInput mouseUI = player.gameObject.GetComponent<VirtualMouseInput>();
-
-        playerCursors.Add(mouseUI);
+        VirtualMouseInput mouseUI = playerCursors[playerInputController.playerCount - 1]; ;
 
         InputAction moveAction = controllerMap.FindAction("Move Cursor  - Generic Gamepad");
 
@@ -112,15 +139,17 @@ public class MultiplayerJoinManager : MonoBehaviour
     //Function to Assign Variables Needed when Loading into Scenes of Gameplay
     void AssignPlayerInformation(PlayerInput player)
     {
-        player.gameObject.GetComponent<MultiplayerCursor>().joinManager = this;
+        player.gameObject.name = ("Player Input Controller" + playerInputController.playerCount);
 
-        player.gameObject.GetComponent<MultiplayerCursor>().inputManager = playerInputController;
+        playerCursors[playerInputController.playerCount - 1].gameObject.GetComponent<MultiplayerCursor>().joinManager = this;
+
+        playerCursors[playerInputController.playerCount - 1].gameObject.GetComponent<MultiplayerCursor>().inputManager = playerInputController;
 
         PlayerInformation controllerInfo = new PlayerInformation();
 
         controllerInfo.playerIndex = player.playerIndex;
 
-        controllerInfo.actionAsset = player.actions;
+        controllerInfo.playerInput = player.gameObject;
 
         playerInfo.Add(controllerInfo);
     }
@@ -129,12 +158,8 @@ public class MultiplayerJoinManager : MonoBehaviour
     void StartAction(InputAction.CallbackContext context)
     { 
         if(allowStartGame)
-        { 
-            characterSelectButtons.alpha = 0;
-            characterSelectButtons.blocksRaycasts = false;
-
-            stageSelectButtons.alpha = 1;
-            stageSelectButtons.blocksRaycasts = true;
+        {
+            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, 11, Camera.main.transform.position.z);
         }
     }
 

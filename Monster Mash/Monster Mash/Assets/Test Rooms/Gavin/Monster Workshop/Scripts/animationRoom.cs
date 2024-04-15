@@ -24,20 +24,25 @@ public class animationRoom : MonoBehaviour
     private bool facingLeft = true;
     public GameObject leftCloseRangeTarget;
     public GameObject leftMediumRangeTarget;
-    public GameObject leftLongeRangeTarget;
+    public GameObject leftLongRangeTarget;
     public GameObject rightCloseRangeTarget;
     public GameObject rightMediumRangeTarget;
     public GameObject rightLongRangeTarget;
     private int cameraNumber = -1; //facing left first
+    private bool floorActive = true;
 
     public void removeFloor()
     {
         floor.SetActive(false);
+        floorActive = false;
+        switchTarget();
     }
 
     public void bringBackFloor()
     {
         floor.SetActive(true);
+        floorActive = true;
+        switchTarget();
     }
 
     public void removeGroundedLimbCheck()
@@ -202,6 +207,7 @@ public class animationRoom : MonoBehaviour
         monsterPartCollection[selectedMonsterPart].disableOutline();
         reMappingUI.SetActive(false);
         animationTestingUI.SetActive(true);
+        switchTarget();
     }
 
     public void flipCamera()
@@ -223,6 +229,9 @@ public class animationRoom : MonoBehaviour
 
     public void closeCamera()
     {
+        //sceneCamera.ResetTrigger("Close Range");
+        sceneCamera.ResetTrigger("Medium Range");
+        sceneCamera.ResetTrigger("Long Range");
         sceneCamera.SetTrigger("Close Range");
 
         if (facingLeft)
@@ -239,6 +248,9 @@ public class animationRoom : MonoBehaviour
 
     public void mediumCamera()
     {
+        sceneCamera.ResetTrigger("Close Range");
+        //sceneCamera.ResetTrigger("Medium Range");
+        sceneCamera.ResetTrigger("Long Range");
         sceneCamera.SetTrigger("Medium Range");
 
         if (facingLeft)
@@ -255,6 +267,9 @@ public class animationRoom : MonoBehaviour
 
     public void longCamera()
     {
+        sceneCamera.ResetTrigger("Close Range");
+        sceneCamera.ResetTrigger("Medium Range");
+        //sceneCamera.ResetTrigger("Long Range");
         sceneCamera.SetTrigger("Long Range");
 
         if (facingLeft)
@@ -275,55 +290,109 @@ public class animationRoom : MonoBehaviour
         {
             leftCloseRangeTarget.SetActive(true);
             leftMediumRangeTarget.SetActive(false);
-            leftLongeRangeTarget.SetActive(false);
+            leftLongRangeTarget.SetActive(false);
             rightCloseRangeTarget.SetActive(false);
             rightMediumRangeTarget.SetActive(false);
             rightLongRangeTarget.SetActive(false);
+
+            if (floorActive)
+            {
+                leftCloseRangeTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
+            {
+                leftCloseRangeTarget.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         else if (cameraNumber == -2)
         {
             leftCloseRangeTarget.SetActive(false);
             leftMediumRangeTarget.SetActive(true);
-            leftLongeRangeTarget.SetActive(false);
+            leftLongRangeTarget.SetActive(false);
             rightCloseRangeTarget.SetActive(false);
             rightMediumRangeTarget.SetActive(false);
             rightLongRangeTarget.SetActive(false);
+
+            if (floorActive)
+            {
+                leftMediumRangeTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
+            {
+                leftMediumRangeTarget.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         else if (cameraNumber == -3)
         {
             leftCloseRangeTarget.SetActive(false);
             leftMediumRangeTarget.SetActive(false);
-            leftLongeRangeTarget.SetActive(true);
+            leftLongRangeTarget.SetActive(true);
             rightCloseRangeTarget.SetActive(false);
             rightMediumRangeTarget.SetActive(false);
             rightLongRangeTarget.SetActive(false);
+
+            if (floorActive)
+            {
+                leftLongRangeTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
+            {
+                leftLongRangeTarget.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         else if (cameraNumber == 1)
         {
             leftCloseRangeTarget.SetActive(false);
             leftMediumRangeTarget.SetActive(false);
-            leftLongeRangeTarget.SetActive(false);
+            leftLongRangeTarget.SetActive(false);
             rightCloseRangeTarget.SetActive(true);
             rightMediumRangeTarget.SetActive(false);
             rightLongRangeTarget.SetActive(false);
+
+            if (floorActive)
+            {
+                rightCloseRangeTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
+            {
+                rightCloseRangeTarget.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         else if (cameraNumber == 2)
         {
             leftCloseRangeTarget.SetActive(false);
             leftMediumRangeTarget.SetActive(false);
-            leftLongeRangeTarget.SetActive(false);
+            leftLongRangeTarget.SetActive(false);
             rightCloseRangeTarget.SetActive(false);
             rightMediumRangeTarget.SetActive(true);
             rightLongRangeTarget.SetActive(false);
+
+            if (floorActive)
+            {
+                rightMediumRangeTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
+            {
+                rightMediumRangeTarget.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         else if (cameraNumber == 3)
         {
             leftCloseRangeTarget.SetActive(false);
             leftMediumRangeTarget.SetActive(false);
-            leftLongeRangeTarget.SetActive(false);
+            leftLongRangeTarget.SetActive(false);
             rightCloseRangeTarget.SetActive(false);
             rightMediumRangeTarget.SetActive(false);
             rightLongRangeTarget.SetActive(true);
+
+            if (floorActive)
+            {
+                rightLongRangeTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
+            {
+                rightLongRangeTarget.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
     }
 }

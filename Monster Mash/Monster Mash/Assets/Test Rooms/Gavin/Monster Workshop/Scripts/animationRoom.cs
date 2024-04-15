@@ -29,7 +29,7 @@ public class animationRoom : MonoBehaviour
     public GameObject rightMediumRangeTarget;
     public GameObject rightLongRangeTarget;
     private int cameraNumber = -1; //facing left first
-    private bool floorActive;
+    private bool floorActive = true;
 
     public void removeFloor()
     {
@@ -207,6 +207,7 @@ public class animationRoom : MonoBehaviour
         monsterPartCollection[selectedMonsterPart].disableOutline();
         reMappingUI.SetActive(false);
         animationTestingUI.SetActive(true);
+        switchTarget();
     }
 
     public void flipCamera()

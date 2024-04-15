@@ -137,6 +137,8 @@ public class monsterPart : MonoBehaviour
     private bool hasTorsoCommandOverride = false; //refers to heads on torsos, torsos on torsos, torsos on heads on torsos, etc. that needs to move the main body
     private string headCommand = "";
     private bool hasHeadCommand = false;
+    private bool leftAttackOverride;
+    private bool rightAttackOverride;
 
     [Header("Internal Info - Don't Touch")]
     public bool attackMarkedHeavy = false;
@@ -152,11 +154,19 @@ public class monsterPart : MonoBehaviour
     public bool hasHeavyBrace = false;
     private bool isAttacking = false;
     private bool attackFocusOn = false;
+    private bool isWalking = false;
     private bool isRunning = false;
     public bool facingRight;
     public bool grounded = true;
     private bool haveGrabbedAMonster;
     private monsterPartReference grabbedMonster;
+    private bool forwardAttackQuickSwitch;
+    private bool lowerAttackQuickSwitch;
+    private bool upwardAttackQuickSwitch;
+    private bool leftUpperAttackQuickSwitch;
+    private bool rightUpperAttackQuickSwitch;
+    private bool leftLowerAttackQuickSwitch;
+    private bool rightLowerAttackQuickSwitch;
     //private int jumpsAllotted;
     //private int regularJumpAmount = 2;
     //private int wingedJumpAmount = 4;
@@ -510,6 +520,7 @@ public class monsterPart : MonoBehaviour
 
         if (isRightShoulderLimb)
         {
+            rightAttackOverride = true;
             //we'll replace the useage of attack IDs here once we have gyroscopic understanding of limbs and then we can factor both
             //nothing wrong with it right now but if we have a forward attacking arm thats been rotated backwards then yeah we need something to account for that
             if (attackAnimationID == -1)
@@ -524,6 +535,9 @@ public class monsterPart : MonoBehaviour
             {
                 if (isHorn)
                 {
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
                     if (attackAnimationID == 1)
                     {
                         headCommand = "Forward Attack";
@@ -543,11 +557,15 @@ public class monsterPart : MonoBehaviour
                         requiresLeftStance = false;
                     }
                 }
-                else if (isArm && reelHeavyAttack && (attackAnimationID == 2 || attackAnimationID == 0))
+                else if (isArm && reelHeavyAttack)
                 {
-                    if (attackAnimationID == 0)
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 1)
                     {
-                        torsoCommand = "Upper Attack";
+                        torsoCommand = "Right Upper Attack";
+                        upwardAttackQuickSwitch = true;
                         requiresBackwardStance = false;
                         requiresForwardStance = false;
                         requiresRightStance = true;
@@ -575,6 +593,7 @@ public class monsterPart : MonoBehaviour
 
         if (isLeftShoudlerLimb)
         {
+            leftAttackOverride = true;
 
             if (attackAnimationID == -1)
             {
@@ -588,6 +607,9 @@ public class monsterPart : MonoBehaviour
             {
                 if (isHorn)
                 {
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
                     if (attackAnimationID == 1)
                     {
                         headCommand = "Forward Attack";
@@ -607,11 +629,15 @@ public class monsterPart : MonoBehaviour
                         requiresLeftStance = false;
                     }
                 }
-                else if (isArm && reelHeavyAttack && (attackAnimationID == 2 || attackAnimationID == 0))
+                else if (isArm && reelHeavyAttack)
                 {
-                    if (attackAnimationID == 0)
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 1)
                     {
-                        torsoCommand = "Upper Attack";
+                        torsoCommand = "Left Upper Attack";
+                        upwardAttackQuickSwitch = true;
                         requiresBackwardStance = false;
                         requiresForwardStance = false;
                         requiresRightStance = false;
@@ -639,8 +665,32 @@ public class monsterPart : MonoBehaviour
 
         if (isRightPelvisLimb)
         {
+            rightAttackOverride = true;
 
-            if (attackAnimationID == -1)
+            if (isArm && reelHeavyAttack)
+            {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
+                if (attackAnimationID == 1)
+                {
+                    torsoCommand = "Right Lower Attack";
+                    upwardAttackQuickSwitch = true;
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+                else
+                {
+                    torsoCommand = "Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+            }
+            else if (attackAnimationID == -1)
             {
                 torsoCommand = "Left Upper Attack";
                 requiresBackwardStance = false;
@@ -668,8 +718,32 @@ public class monsterPart : MonoBehaviour
 
         if (isLeftPelvisLimb)
         {
+            leftAttackOverride = true;
 
-            if (attackAnimationID == -1)
+            if (isArm && reelHeavyAttack)
+            {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
+                if (attackAnimationID == 1)
+                {
+                    torsoCommand = "Left Lower Attack";
+                    upwardAttackQuickSwitch = true;
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+                else
+                {
+                    torsoCommand = "Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+            }
+            else if (attackAnimationID == -1)
             {
                 torsoCommand = "Right Upper Attack";
                 requiresBackwardStance = false;
@@ -703,6 +777,9 @@ public class monsterPart : MonoBehaviour
             requiresForwardStance = false;
             requiresRightStance = true;
             requiresLeftStance = false;
+
+            leftAttackOverride = false;
+            rightAttackOverride = false;
         }
 
         if (isBellyLimb)
@@ -712,6 +789,9 @@ public class monsterPart : MonoBehaviour
             requiresForwardStance = false;
             requiresRightStance = true;
             requiresLeftStance = false;
+
+            leftAttackOverride = false;
+            rightAttackOverride = false;
         }
 
         if (isTailLimb)
@@ -722,6 +802,9 @@ public class monsterPart : MonoBehaviour
             requiresForwardStance = false;
             requiresRightStance = false;
             requiresLeftStance = false;
+
+            leftAttackOverride = false;
+            rightAttackOverride = false;
         }
 
         if (isShoulderBladeLimb)
@@ -731,10 +814,16 @@ public class monsterPart : MonoBehaviour
             requiresForwardStance = true;
             requiresRightStance = false;
             requiresLeftStance = false;
+
+            leftAttackOverride = false;
+            rightAttackOverride = false;
         }
 
         if (isTopHeadLimb)
         {
+            leftAttackOverride = false;
+            rightAttackOverride = false;
+
             if (attackAnimationID == -1)
             {
                 headCommand = "Upward Attack";
@@ -781,6 +870,8 @@ public class monsterPart : MonoBehaviour
 
         if (isFacialLimb)
         {
+            leftAttackOverride = false;
+            rightAttackOverride = false;
 
             if (attackAnimationID == 2)
             {
@@ -817,8 +908,13 @@ public class monsterPart : MonoBehaviour
 
         if (isRightEarLimb)
         {
+            rightAttackOverride = true;
+
             if (isHorn)
             {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
                 if (attackAnimationID == 2)
                 {
                     headCommand = "Upward Attack";
@@ -838,14 +934,38 @@ public class monsterPart : MonoBehaviour
                     requiresLeftStance = false;
                 }
             }
+            else if (isArm && reelHeavyAttack)
+            {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
+                if (attackAnimationID == 1)
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+                else
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+            }
             else if (isArm && attackAnimationID == 2)
             {
                 headCommand = "Face Attack";
                 torsoCommandOverride = "Upper Attack";
                 requiresBackwardStance = false;
                 requiresForwardStance = false;
-                requiresRightStance = false;
-                requiresLeftStance = true;
+                requiresRightStance = true;
+                requiresLeftStance = false;
             }
             else
             {
@@ -872,8 +992,13 @@ public class monsterPart : MonoBehaviour
 
         if (isLeftEarLimb)
         {
+            leftAttackOverride = true;
+
             if (isHorn)
             {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
                 if (attackAnimationID == 2)
                 {
                     headCommand = "Upward Attack";
@@ -889,8 +1014,32 @@ public class monsterPart : MonoBehaviour
                     torsoCommandOverride = "Forward Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
-                    requiresRightStance = true;
-                    requiresLeftStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+            }
+            else if (isArm && reelHeavyAttack)
+            {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
+                if (attackAnimationID == 1)
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
+                }
+                else
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
                 }
             }
             else if (isArm && attackAnimationID == 2)
@@ -1781,6 +1930,8 @@ public class monsterPart : MonoBehaviour
             if (hasTorsoCommandOverride)
             {
                 mainTorso.SetBool("Ready to Swing", true);
+                mainTorso.ResetTrigger("Quick Forward Position");
+                mainTorso.ResetTrigger("Quick Upward Position");
                 mainTorso.SetBool("Walking", false);
                 mainTorso.SetBool("Running", false);
             }
@@ -1789,11 +1940,11 @@ public class monsterPart : MonoBehaviour
             fullActiveHeavy = true;
             myMainSystem.correctWalkingAttackAnimations();
 
-            if (isLeftSidedLimb)
+            if (leftAttackOverride)
             {
                 myMainSystem.correctAttackDirection(-1);
             }
-            else if (isRightSidedLimb)
+            else if (rightAttackOverride)
             {
                 myMainSystem.correctAttackDirection(1);
             }
@@ -1815,6 +1966,16 @@ public class monsterPart : MonoBehaviour
                 else if (reelHeavyAttack)
                 {
                     triggerReelCollisionsOn();
+
+
+                    if (forwardAttackQuickSwitch)
+                    {
+                        mainTorso.SetTrigger("Quick Forward Position");
+                    }
+                    else if (upwardAttackQuickSwitch)
+                    {
+                        mainTorso.SetTrigger("Quick Upward Position");
+                    }
                 }
             }
             else
@@ -1890,12 +2051,14 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Walking", false);
+            isWalking = false;
             isRunning = false;
         }
 
         if (isArm)
         {
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 
@@ -1903,6 +2066,7 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Walking", false);
+            isWalking = false;
             isRunning = false;
         }
     }
@@ -2324,7 +2488,7 @@ public class monsterPart : MonoBehaviour
 
         if (attackMarkedHeavy == true)
         {
-            //heavyHitVFXManager.unleashJabOrSlash();
+            heavyHitVFXManager.unleashReelInVisual();
             triggerReelCollisionsOff();
             reelAttackBuiltUpPower = 0; //the reason that this always starts at 1 is that just by initiating the heavy, players are given a power up
             reelAttackCurrentThreshold = 0;
@@ -2450,12 +2614,14 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Walking", true);
             myAnimator.SetBool("Running", false);
+            isWalking = true;
             isRunning = false;
         }
         else if (isHead || isWing || isTail)
         {
             myAnimator.SetBool("Walking", true);
             myAnimator.SetBool("Running", false);
+            isWalking = true;
             isRunning = false;
         }
     }
@@ -2464,16 +2630,17 @@ public class monsterPart : MonoBehaviour
     {
         if (isGroundedLimb || isTorso)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            if (isWalking)
             {
                 myAnimator.SetBool("Walking", false);
                 myAnimator.SetTrigger("Walk to Idle");
-
+                isWalking = false;
             }
         }
         else if (isHead || isWing || isTail)
         {
             myAnimator.SetBool("Walking", false);
+            isWalking = false;
         }
     }
 
@@ -2483,6 +2650,7 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Running", true);
             myAnimator.SetBool("Walking", false);
+            isWalking = false;
             isRunning = true;
         }
 
@@ -2498,6 +2666,7 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Running", true);
             myAnimator.SetBool("Walking", false);
+            isWalking = false;
             isRunning = true;
         }
     }
@@ -2506,11 +2675,10 @@ public class monsterPart : MonoBehaviour
     {
         if (isGroundedLimb || isTorso)
         {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            if (isRunning)
             {
                 myAnimator.SetBool("Running", false);
                 isRunning = false;
-
             }
         }
 
@@ -2547,6 +2715,7 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 
@@ -2555,6 +2724,7 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 
@@ -2575,6 +2745,7 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Walking", false);
                 myAnimator.SetBool("Running", false);
+                isWalking = false;
                 isRunning = false;
 
                 if (isWing || isHead)
@@ -2587,6 +2758,7 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Glide Activated", false);
                 myAnimator.SetBool("Running", false);
+                isWalking = false;
                 isRunning = false;
             }
 
@@ -2648,6 +2820,7 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 
@@ -2656,6 +2829,7 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 
@@ -2701,12 +2875,14 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 
         if (isArm)
         {
             myAnimator.SetBool("Running", false);
+            isWalking = false;
             isRunning = false;
         }
 

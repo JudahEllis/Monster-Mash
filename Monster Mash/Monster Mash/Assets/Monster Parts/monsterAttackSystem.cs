@@ -122,6 +122,8 @@ public class monsterAttackSystem : MonoBehaviour
                     {
                         allWings[u].hasFlightedIdle = true;
                     }
+
+                    mainTorso.SetBool("Flighted Monster", isWinged);
                 }
             }
         }

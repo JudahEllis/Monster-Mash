@@ -1523,6 +1523,69 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Rotate Character X",
+                    "type": "Value",
+                    "id": "d3042de4-c2fb-4913-9fd3-b03f49f7e1bd",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "UI Move",
+                    "type": "Value",
+                    "id": "fe8b15c9-0241-4626-8096-5cf222553b54",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "UI Select",
+                    "type": "Button",
+                    "id": "15a2c839-44bd-4b3e-b5ca-e8f43c7727e1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Hide/Show UI",
+                    "type": "Button",
+                    "id": "b4abb0a8-b230-4a11-854a-f09b2eb314ce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UI Point",
+                    "type": "PassThrough",
+                    "id": "08f21d3d-8494-4b69-b532-77ee888aa3ed",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "UI Mouse Click",
+                    "type": "PassThrough",
+                    "id": "0ad7c19b-4491-4b18-ab45-43032684d147",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Place Part",
+                    "type": "Button",
+                    "id": "7044e8d8-9689-4f0d-b635-5ddd26fe72a6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1593,59 +1656,191 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "DPad",
-                    "id": "5f6750aa-3634-443a-a0e0-ae4c8258b779",
-                    "path": "2DVector",
+                    "name": "",
+                    "id": "015964eb-989d-41ee-9be3-efd74f553f3c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "StickDeadzone",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Rotate Character X",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Middle Mouse Button + Mouse",
+                    "id": "745eb0bb-986b-4e8d-afa8-e2652755eaa6",
+                    "path": "OneModifier",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move Part",
+                    "action": "Rotate Character X",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
-                    "id": "b17543ba-4b68-40fa-ae43-08ffa1a888bb",
-                    "path": "<Gamepad>/dpad/up",
+                    "name": "modifier",
+                    "id": "c752f9f8-6e82-4230-94c8-9d8babd76da0",
+                    "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse;XboxController;AllGamepads",
-                    "action": "Move Part",
+                    "action": "Rotate Character X",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "down",
-                    "id": "2e0aca5d-5e5e-4b79-9eae-f23b61dbbefa",
-                    "path": "<Gamepad>/dpad/down",
+                    "name": "binding",
+                    "id": "5a4aab90-e01e-43a6-8c97-27b1116dcb15",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse;XboxController;AllGamepads",
-                    "action": "Move Part",
+                    "action": "Rotate Character X",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "left",
-                    "id": "ff75cdf0-6144-4e03-82f0-896b18a079b3",
-                    "path": "<Gamepad>/dpad/left",
+                    "name": "",
+                    "id": "e35e212f-64d9-4816-b0e7-6036c749783d",
+                    "path": "<Gamepad>/dpad",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse;XboxController;AllGamepads",
-                    "action": "Move Part",
+                    "action": "UI Move",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 },
                 {
-                    "name": "right",
-                    "id": "b2a0c003-6d6c-4dae-ab19-e3c6353f3366",
-                    "path": "<Gamepad>/dpad/right",
+                    "name": "",
+                    "id": "e3b5e097-20d8-4601-bffc-5ce9248e2459",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse;XboxController;AllGamepads",
-                    "action": "Move Part",
+                    "action": "UI Select",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dd9e1586-9f1e-450e-ba49-85d738c31733",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Hide/Show UI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1855c4c4-07f2-4e09-97e2-2646eb831e92",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Hide/Show UI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74534def-a912-4ba4-8cd9-13ffa6fbccb8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Mouse Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e99c989b-f990-430b-af57-db9579e80e14",
+                    "path": "<Pen>/tip",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Mouse Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b6929444-a796-4daa-9a7d-c7e532901b70",
+                    "path": "<Touchscreen>/touch*/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Mouse Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1da40eef-7225-452b-82d4-f478f575687f",
+                    "path": "<XRController>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Mouse Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b309bce6-3259-4391-8443-79d9d06ca457",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "949c42aa-4c50-4c55-9ff4-fee60f4752ed",
+                    "path": "<Pen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "24e40564-855d-4b29-8551-a7b1797c5ba2",
+                    "path": "<Touchscreen>/touch*/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "643a52dc-93d1-4f2b-a140-b37bea0f2dcc",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Place Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c203b9c3-e4ac-407a-9c3b-88a5c3c4640e",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Place Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

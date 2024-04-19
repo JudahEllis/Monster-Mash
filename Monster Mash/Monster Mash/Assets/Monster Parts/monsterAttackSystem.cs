@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class monsterAttackSystem : MonoBehaviour
@@ -38,18 +39,56 @@ public class monsterAttackSystem : MonoBehaviour
     private Transform foreignReel;
     private monsterAttackSystem foreignMonster;
 
+    public void removeAllLimbParenting() //we use this to remove all parenting during a full refresh
+    {
+        monsterPart[] monsterPartList = GetComponentsInChildren<monsterPart>();
+        for (int i = 0; i < monsterPartList.Length; i++)
+        {
+            if (monsterPartList[i].isTorso == false && monsterPartList[i].isHead == false && monsterPartList[i].monsterPartID == 0)
+            {
+                monsterPartList[i].transform.parent = null;
+            }
+        }
+
+        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
+        for (int i = 0; i < limbConnections.Length; i++)
+        {
+            limbConnections[i].clearAllMonsterPartMemory();
+        }
+    }
+
+    public void removeSpecificLimbParenting(monsterPart partToRemoveFromMonster) //we use this anytime a limb is grabbed/altered in editor
+    {
+        partToRemoveFromMonster.transform.parent = null;
+
+        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
+        for (int i = 0; i < limbConnections.Length; i++)
+        {
+            limbConnections[i].clearSpecificMonsterPartMemory(partToRemoveFromMonster);
+        }
+    }
+
+    //this has to be done before any sort of remapping
+    public void connectCurrentLimbs() //we are using connect Current limbs anytime a limb is added or when we need a full refresh
+    {
+        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
+        for (int i = 0; i < limbConnections.Length; i++)
+        {
+            limbConnections[i].enableColliders();
+        }
+    }
+
     public void awakenTheBeast()
     {
+        StartCoroutine(awakeningDelay());
+    }
+
+    IEnumerator awakeningDelay()
+    {
+        yield return new WaitForSeconds(1);
         myAnimator = this.GetComponent<Animator>();
         grabAttackSlotInfo();
         myAnimator.SetBool("Facing Right", facingRight);
-
-        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
-
-        for (int i = 0; i < limbConnections.Length; i++)
-        {
-            limbConnections[i].disableColliders(); //this essentially stops the scripts from looking to connect pieces at runtime
-        }
 
         allMonsterParts = GetComponentsInChildren<monsterPart>();
 
@@ -167,7 +206,6 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
-
     }
 
     public void grabAttackSlotInfo()
@@ -178,10 +216,13 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 attackSlotMonsterID[i] = attackSlotMonsterParts[i].monsterPartID; //this tells us what type of part class it is
 
+                /*
                 if (attackSlotMonsterParts[i].isWing == true)
                 {
                     isWinged = true;
                 }
+
+                */
             }
         }
 
@@ -192,6 +233,63 @@ public class monsterAttackSystem : MonoBehaviour
         else
         {
             jumpsLeft = jumpsAllowed_DoubleJump;
+        }
+    }
+
+    public void resetMonster(bool turnToTheRight)
+    {
+        jumpsLeft = 0;
+        Array.Clear(attackSlotMonsterID, 0, attackSlotMonsterID.Length);
+        facingRight = turnToTheRight;
+        myAnimator.SetBool("Facing Right", facingRight);
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator = null;
+        Array.Clear(allMonsterParts, 0, allMonsterParts.Length);
+        isWinged = false;
+        mainTorso.SetBool("Flighted Monster", false);
+        mainTorso = null;
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+
+            if (allMonsterParts[i].isWing)
+            {
+                allMonsterParts[i].hasFlightedIdle = false;
+            }
+
+            if (allMonsterParts[i].isLeg)
+            {
+                allMonsterParts[i].isLeadingLeg = false;
+            }
+        }
+
+        monsterPartReference[] internalPartReferences = GetComponentsInChildren<monsterPartReference>();
+        vfxHolder[] internalVFXHolders = GetComponentsInChildren<vfxHolder>();
+
+        for (int i = 0; i < internalPartReferences.Length; i++)
+        {
+            internalPartReferences[i].mainSystem = null;
+        }
+
+        listOfInternalReferences.Clear();
+
+
+        for (int i = 0; i < internalVFXHolders.Length; i++)
+        {
+            internalVFXHolders[i].referencesToIgnore = listOfInternalReferences;
+            internalVFXHolders[i].collisionOcclusion();
+        }
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].myMainSystem = null;
+            allMonsterParts[i].mainTorso = null;
+            allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
+            //gotta take care of all the alt versions of these functions for monster parts specifically
+            allMonsterParts[i].triggerAnimationSetUp();
+            allMonsterParts[i].triggerAnimationOffsets();
+            allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
+            allMonsterParts[i].triggerIdle();
         }
     }
 

@@ -9,7 +9,7 @@ public class animationRoom : MonoBehaviour
     public GameObject floor;
     public GameObject groundedLimbCheck;
     public monsterAttackSystem mainMonster;
-    private monsterPart[] monsterPartCollection;
+    public monsterPart[] monsterPartCollection;
     public GameObject reMappingStartUpButton;
     public GameObject reMappingUI;
     private int selectedMonsterPart = 0;
@@ -52,9 +52,31 @@ public class animationRoom : MonoBehaviour
 
     //
 
+    private void Awake()
+    {
+        resetAnimationRoom();
+    }
+
+    public void resetAnimationRoom()
+    {
+        reMappingStartUpButton.SetActive(true);
+        reMappingUI.SetActive(false);
+        //mainMonster.removeAllLimbParenting();
+        mainMonster.connectCurrentLimbs();
+        mainMonster.connectCurrentLimbs();//currently have this playing twice to grab first the torsos and then their heads
+    }
+
     public void startRemappingProcess()
     {
+        mainMonster.removeAllLimbParenting();
+        mainMonster.connectCurrentLimbs();//in order to give triggers time to reconnect, there needs to be at least a frame or 2 in between functions here
+        StartCoroutine(remappingProcessDelay());
+    }
+
+    IEnumerator remappingProcessDelay()
+    {
         reMappingStartUpButton.SetActive(false);
+        yield return new WaitForEndOfFrame();
         monsterPartCollection = mainMonster.GetComponentsInChildren<monsterPart>();
         monsterPartAttackDirections = new string[monsterPartCollection.Length];
         monsterPartNameCollection = new string[monsterPartCollection.Length];
@@ -67,8 +89,8 @@ public class animationRoom : MonoBehaviour
             monsterPartNameCollection[i] = monsterPartCollection[i].gameObject.name;
             monsterPartButtonInputs[i] = "";
         }
-
         monsterPartCollection[0].reenableOutline();
+        selectedMonsterPart = 0;
         reMappingUI.SetActive(true);
         monsterPartName.text = monsterPartNameCollection[selectedMonsterPart];
     }
@@ -204,6 +226,7 @@ public class animationRoom : MonoBehaviour
 
     public void activateTestAnimations()
     {
+        mainMonster.connectCurrentLimbs();
         monsterPartCollection[selectedMonsterPart].disableOutline();
         reMappingUI.SetActive(false);
         animationTestingUI.SetActive(true);

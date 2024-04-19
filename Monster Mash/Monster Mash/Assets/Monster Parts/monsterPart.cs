@@ -2502,6 +2502,7 @@ public class monsterPart : MonoBehaviour
     {
         //turn on neutral vfx holder
         //jabOrSlashLanded = false;
+        myAnimator.ResetTrigger("Reel Back");
         reelAttackLanded = false;
 
         if (attackMarkedHeavy == true && heavyCollider != null)

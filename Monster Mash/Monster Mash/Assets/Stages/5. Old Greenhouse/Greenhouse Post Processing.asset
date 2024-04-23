@@ -1,5 +1,45 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8771808229665975755
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdfbdbb87d3286943a057f7791b43141, type: 3}
+  m_Name: ChannelMixer
+  m_EditorClassIdentifier: 
+  active: 1
+  redOutRedIn:
+    m_OverrideState: 1
+    m_Value: 100
+  redOutGreenIn:
+    m_OverrideState: 1
+    m_Value: 0
+  redOutBlueIn:
+    m_OverrideState: 1
+    m_Value: 0
+  greenOutRedIn:
+    m_OverrideState: 1
+    m_Value: -6
+  greenOutGreenIn:
+    m_OverrideState: 1
+    m_Value: 124
+  greenOutBlueIn:
+    m_OverrideState: 1
+    m_Value: -20
+  blueOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 100
 --- !u!114 &-5126995684043409691
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -15,10 +55,10 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.97
+    m_Value: 1.23
   contrast:
     m_OverrideState: 1
-    m_Value: 6
+    m_Value: 3
   colorFilter:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -43,12 +83,12 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.93137324, y: 0.9485304, z: 1, w: 0.27118254}
+    m_Value: {x: 0.93137324, y: 0.9485304, z: 1, w: 0.035293765}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.9564488, z: 0.8257968, w: 0.119760476}
+    m_Value: {x: 1, y: 0.9645137, z: 0.8282215, w: 0.018665282}
   highlights:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 1, y: 0.9769785, z: 0.78648204, w: 0}
   shadowsStart:
     m_OverrideState: 0
@@ -81,6 +121,7 @@ MonoBehaviour:
   - {fileID: 8763559158942000081}
   - {fileID: 71894737707052172}
   - {fileID: 7717169639120580726}
+  - {fileID: -8771808229665975755}
 --- !u!114 &71894737707052172
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -155,10 +196,10 @@ MonoBehaviour:
     m_Value: 3.08
   aperture:
     m_OverrideState: 1
-    m_Value: 5.4
+    m_Value: 26.4
   focalLength:
     m_OverrideState: 1
-    m_Value: 55
+    m_Value: 127
   bladeCount:
     m_OverrideState: 1
     m_Value: 5

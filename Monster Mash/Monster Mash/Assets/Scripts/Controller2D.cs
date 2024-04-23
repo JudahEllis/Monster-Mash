@@ -58,7 +58,7 @@ public class Controller2D : MonoBehaviour
     private float jumpMultiplier = 14f; //similar to jumpForce but used in place while player is holding jump input for a higher jump
     private float fallMultiplier = 4f; //when player is falling, velocity.y is multiplied by this var
     private float gravityScale = 6.28f; //Rigidbody2D.gravityScale is set to this, i DO NOT set Physics2D.gravity to this because that's scary DONT GET CONFUSED HAHAHA
-    private float fastFallSpeed = 1.5f; //fast fall when player holds down midair
+    private float fastFallSpeed = 2.5f; //fast fall when player holds down midair
     private int midAirJumps = 1; //possession of wings might change this number, total of midair jumps allowed
     [SerializeField]private int jumpsLeft = 0; //tracks midair jumps left allowed
     [SerializeField]private bool grounded; //check this to see if player is grounded
@@ -177,7 +177,8 @@ public class Controller2D : MonoBehaviour
                 }
 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                jumpsLeft = midAirJumps;
+                //jumpsLeft = midAirJumps;
+                jumpsLeft--;
                 isJumping = true;
                 //print("isJump true");
                 jumpCounter = 0;
@@ -278,7 +279,7 @@ public class Controller2D : MonoBehaviour
         if (myHit && rb.velocity.y <= 0.0f)
         {
             grounded = true;
-            jumpsLeft = 1;
+            jumpsLeft = 1 + midAirJumps;
         } else
         {
             grounded = false;

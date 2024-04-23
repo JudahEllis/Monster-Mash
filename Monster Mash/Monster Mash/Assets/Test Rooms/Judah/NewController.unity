@@ -784,13 +784,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 684c8e732915fa545a5c4d104f94f1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  box: {fileID: 0}
+  footCircle: {fileID: 0}
+  footBox: {fileID: 0}
+  footIsBox: 1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1024
   playerNose: {fileID: 0}
   noFriction: {fileID: 0}
   fullFriction: {fileID: 0}
+  onEdge: 0
+  frontHit: 0
+  backHit: 0
   jumpsLeft: 0
   grounded: 0
   canPhase: 0
@@ -2414,7 +2419,7 @@ GameObject:
   - component: {fileID: 639572492}
   - component: {fileID: 639572491}
   - component: {fileID: 639572490}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Semisolid (1)
   m_TagString: semi_solid
   m_Icon: {fileID: 0}
@@ -2453,7 +2458,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.40035832}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2464,7 +2469,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 1}
+  m_Size: {x: 0.99999994, y: 0.19928336}
   m_EdgeRadius: 0
 --- !u!23 &639572492
 MeshRenderer:
@@ -2544,7 +2549,7 @@ GameObject:
   - component: {fileID: 718126089}
   - component: {fileID: 718126088}
   - component: {fileID: 718126092}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Semisolid
   m_TagString: semi_solid
   m_Icon: {fileID: 0}
@@ -2564,7 +2569,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.4270488}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2575,7 +2580,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 1}
+  m_Size: {x: 0.99999994, y: 0.1459024}
   m_EdgeRadius: 0
 --- !u!23 &718126089
 MeshRenderer:
@@ -3952,7 +3957,7 @@ GameObject:
   - component: {fileID: 1259660204}
   - component: {fileID: 1259660203}
   - component: {fileID: 1259660202}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Semisolid (2)
   m_TagString: semi_solid
   m_Icon: {fileID: 0}
@@ -3991,7 +3996,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.42704874}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4002,7 +4007,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 1}
+  m_Size: {x: 0.99999994, y: 0.14590248}
   m_EdgeRadius: 0
 --- !u!23 &1259660204
 MeshRenderer:
@@ -4083,7 +4088,7 @@ GameObject:
   - component: {fileID: 1390475956}
   m_Layer: 10
   m_Name: slope
-  m_TagString: Untagged
+  m_TagString: slope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4362,13 +4367,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 684c8e732915fa545a5c4d104f94f1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  box: {fileID: 1509377244}
+  footCircle: {fileID: 1509377244}
+  footBox: {fileID: 1509377242}
+  footIsBox: 1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1024
   playerNose: {fileID: 1553804553}
   noFriction: {fileID: 6200000, guid: c35c56575756fbd478f526fb10888d2a, type: 2}
   fullFriction: {fileID: 6200000, guid: 38e60d2d30167a04092fd71b8fedaf10, type: 2}
+  onEdge: 0
+  frontHit: 0
+  backHit: 0
   jumpsLeft: 0
   grounded: 0
   canPhase: 0
@@ -4487,13 +4497,13 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509377234}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.0774163}
+  m_Offset: {x: -0.007540643, y: -0.18925825}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4504,7 +4514,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.827372, y: 1.8451674}
+  m_Size: {x: 0.87261605, y: 1.7556937}
   m_EdgeRadius: 0
 --- !u!58 &1509377243
 CircleCollider2D:
@@ -4529,7 +4539,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509377234}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0

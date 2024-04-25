@@ -9,7 +9,10 @@ public class Controller2D : MonoBehaviour
     #region GetComponent & manually set variables/ miscellaneous
     private Rigidbody2D rb; //player rigidbody 2D
     private CapsuleCollider2D cap; //basically called to check player size info, frictionless for edge collision to prevent sticking
-    [SerializeField]private Collider2D box; //collider for ground, has friction, used for semi solid landing and ground check //change to circle as test for slopes
+    [SerializeField] private Collider2D footCircle; //circle collider foot shape for smooth slope movement
+    [SerializeField] private Collider2D footBox; //box collider foot shape for ledge landings and no-slip movement
+    private Collider2D footCurrent; //which foot shape is set currently, circle or box
+    [SerializeField] private bool footIsBox = true;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private Transform playerNose; //debugging visual indicator of player facing left or right, will be deprecated when art is present
     #endregion
@@ -19,7 +22,6 @@ public class Controller2D : MonoBehaviour
     private float playerRunSpeed = 15.6f; //run speed
     private float playerAirSpeed = 11.0f; //horizontal speed for forward airborne movement
     private float playerAirBackwardSpeed = 4.0f; //horizontal speed for backwards airborne movement
-    private float decelerate = 1f; //deceleration while skidding to stop (run to turn around)
     private float airDrag; //horizontal midair movement speed, used as a multiplier to velocity.x
     private float fastAirDrag = 0.95f; //airDrag is set to either of these (fast or slow), can add/adjust as needed
     private float slowAirDrag = 0.65f;
@@ -27,7 +29,6 @@ public class Controller2D : MonoBehaviour
     private Vector3 xMovement; //player velocity is set to this, all horizontal movement is applied thru this vector, vertical is added to this and calculated separate
     private bool facingRight = true; //tracks which way the player faces, doesnt actually rotate the gameobject because that's animation stuff
     private bool isRun = false; //tracks if player is running, player can only run when grounded
-    private bool isSkid = false; //tracks if skid coroutine is currently running, should only be active when grounded and skid condition
 
     //slope code vars
     private Vector2 capSize; //capCol.size
@@ -37,9 +38,15 @@ public class Controller2D : MonoBehaviour
     private float slopeSideAngle;
     private Vector3 slopeNormPerp; //aligned with slope angle
     private Vector3 slopeNormPerpOld;
-    private bool onSlope = false; //true if player is on slope
+    [SerializeField] private bool onSlope = false; //true if player is on slope
     [SerializeField] PhysicsMaterial2D noFriction;
     [SerializeField] PhysicsMaterial2D fullFriction;
+
+    //edge detection code
+    private float edgeDetectDist = 1.25f;
+    [SerializeField] private bool onEdge = false;
+    [SerializeField] bool frontHit = false;
+    [SerializeField] bool backHit = false;
     #endregion
 
     #region all jumping vars
@@ -51,8 +58,7 @@ public class Controller2D : MonoBehaviour
     private float jumpMultiplier = 14f; //similar to jumpForce but used in place while player is holding jump input for a higher jump
     private float fallMultiplier = 4f; //when player is falling, velocity.y is multiplied by this var
     private float gravityScale = 6.28f; //Rigidbody2D.gravityScale is set to this, i DO NOT set Physics2D.gravity to this because that's scary DONT GET CONFUSED HAHAHA
-    private bool groundedNoGravity = false; //true when the player is grounded so y velocity should not be affected
-    private float fastFallSpeed = 3f; //fast fall when player holds down midair
+    private float fastFallSpeed = 2.5f; //fast fall when player holds down midair
     private int midAirJumps = 1; //possession of wings might change this number, total of midair jumps allowed
     [SerializeField]private int jumpsLeft = 0; //tracks midair jumps left allowed
     [SerializeField]private bool grounded; //check this to see if player is grounded
@@ -79,7 +85,9 @@ public class Controller2D : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         cap = GetComponent<CapsuleCollider2D>();
-        //box = GetComponent<BoxCollider2D>();
+
+        FootBoxOn();
+        footCurrent = footBox;
 
         rb.gravityScale = gravityScale;
 
@@ -160,12 +168,6 @@ public class Controller2D : MonoBehaviour
         {
             if (grounded)
             {
-                if (isSkid) //makes sure skid coroutine is inactive
-                {
-                    StopCoroutine("SkidToStop");
-                    isSkid = false;
-                }
-
                 if (move != 0) //jumping from a stand still (NOT moving horizontally) will feel different from a FORWARD jump, kinda like smash bros
                 {
                     airDrag = fastAirDrag;
@@ -175,18 +177,15 @@ public class Controller2D : MonoBehaviour
                 }
 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                jumpsLeft = midAirJumps;
+                //jumpsLeft = midAirJumps;
+                jumpsLeft--;
                 isJumping = true;
-                print("isJump true");
+                //print("isJump true");
                 jumpCounter = 0;
 
             } else if (jumpsLeft > 0)
             {
-                if (isSkid)
-                {
-                    StopCoroutine("SkidToStop");
-                    isSkid = false;
-                }
+                OffEdge(); //ensure player is affected by physics as regular/ reset
 
                 if (move != 0)
                 {
@@ -213,7 +212,7 @@ public class Controller2D : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && isJumping)
         {
             jumpCounter += Time.deltaTime;
-            if (jumpCounter > jumpTime) { isJumping = false; print("isJump false"); }
+            if (jumpCounter > jumpTime) { isJumping = false; }
 
             float t = jumpCounter / jumpTime;
 
@@ -229,14 +228,15 @@ public class Controller2D : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space) && isJumping)
         {
-            print("isJump false");
+            //print("isJump false");
             isJumping = false;
         }
 
         if (Input.GetAxis("Vertical") < 0)
         {
             canPhase = true;
-            groundLayerMask &= ~semiSolidLayer; //semi_solid platform is removed from grounded check when canPhase == true
+            OffEdge();
+            //groundLayerMask &= ~semiSolidLayer; //semi_solid platform is removed from grounded check when canPhase == true
 
             if (rb.velocity.y < 0.0f)
             {
@@ -246,7 +246,7 @@ public class Controller2D : MonoBehaviour
         else
         {
             canPhase = false;
-            groundLayerMask |= semiSolidLayer; //semi_solid platform is added to grounded check when canPhase == false
+            //groundLayerMask |= semiSolidLayer; //semi_solid platform is added to grounded check when canPhase == false
 
             if (isOnSemiSolid)
             {
@@ -264,32 +264,62 @@ public class Controller2D : MonoBehaviour
     private void FixedUpdate()
     {
         IsGrounded(); //updates grounded variable
-        //DisableYMove();
-        DetectSlope(); //detects when player stands on slope
+        DetectSlope(); //detects when player stands on slope, effects xMovement accordingly
+        DetectEdge(); //detect if playing stands on platform edge, effects gravity
         ApplyMove(); //sets player velocity
     }
 
     private void IsGrounded() //updates grounded variable
     {
-        if (Physics2D.BoxCast(new Vector2(transform.position.x, cap.bounds.min.y), new Vector2(cap.bounds.size.x, 0.25f), 0, Vector2.down, 0.1f, groundLayerMask))
+        Vector2 boxSize = new Vector2(cap.bounds.size.x * 0.95f, 0.75f);
+
+        RaycastHit2D myHit = Physics2D.BoxCast(new Vector2(transform.position.x, cap.bounds.min.y),
+            boxSize, 0, Vector2.down, 0.1f, groundLayerMask);
+
+        if (myHit && rb.velocity.y <= 0.0f)
         {
             grounded = true;
-            jumpsLeft = 1;
+            jumpsLeft = 1 + midAirJumps;
         } else
         {
             grounded = false;
         }
-    }
 
-    private void DisableYMove() //checks if gravity should be disabled and sets it
-    {
-        if (grounded && !isJumping && Mathf.Abs(rb.velocity.x) > 0.0f)
-        {
-            rb.gravityScale = 0.0f;
-        } else
-        {
-            rb.gravityScale = gravityScale;
-        }
+        #region ya boy box
+        float castDistance = 0.1f;
+
+        Vector2 boxCenter = new Vector2(transform.position.x, cap.bounds.min.y);
+        Vector2 boxCastDirection = Vector2.down;
+
+        // Calculate the initial corner positions of the box
+        Vector2 bottomLeft = boxCenter - new Vector2(boxSize.x / 2, boxSize.y / 2);
+        Vector2 bottomRight = boxCenter + new Vector2(boxSize.x / 2, -boxSize.y / 2);
+        Vector2 topLeft = boxCenter - new Vector2(boxSize.x / 2, -boxSize.y / 2);
+        Vector2 topRight = boxCenter + new Vector2(boxSize.x / 2, boxSize.y / 2);
+
+        // Draw the box at its initial position
+        Debug.DrawLine(bottomLeft, bottomRight, Color.green);
+        Debug.DrawLine(bottomRight, topRight, Color.green);
+        Debug.DrawLine(topRight, topLeft, Color.green);
+        Debug.DrawLine(topLeft, bottomLeft, Color.green);
+
+        // Calculate and draw the box at its final position (after moving in the cast direction)
+        Vector2 endBottomLeft = bottomLeft + boxCastDirection * castDistance;
+        Vector2 endBottomRight = bottomRight + boxCastDirection * castDistance;
+        Vector2 endTopLeft = topLeft + boxCastDirection * castDistance;
+        Vector2 endTopRight = topRight + boxCastDirection * castDistance;
+
+        Debug.DrawLine(endBottomLeft, endBottomRight, Color.red);
+        Debug.DrawLine(endBottomRight, endTopRight, Color.red);
+        Debug.DrawLine(endTopRight, endTopLeft, Color.red);
+        Debug.DrawLine(endTopLeft, endBottomLeft, Color.red);
+
+        // Draw lines to show the cast direction and distance
+        Debug.DrawLine(bottomLeft, endBottomLeft, Color.blue);
+        Debug.DrawLine(bottomRight, endBottomRight, Color.blue);
+        Debug.DrawLine(topLeft, endTopLeft, Color.blue);
+        Debug.DrawLine(topRight, endTopRight, Color.blue);
+        #endregion
     }
 
     private bool HitWall(float direction) //check if player has anything in front
@@ -302,34 +332,29 @@ public class Controller2D : MonoBehaviour
         return false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("semi_solid"))
+        if (collision.gameObject.CompareTag("semi_solid") && onEdge)
         {
-            isOnSemiSolid = true;
-
-            lastSemi = collision.gameObject.GetComponent<BoxCollider2D>();
-
-            if (canPhase)
-            {
-                //PlatformEffector2D plat = collision.gameObject.GetComponent<PlatformEffector2D>();
-                Physics2D.IgnoreCollision(box, collision.gameObject.GetComponent<BoxCollider2D>(), true);
-                jumpsLeft = midAirJumps;
-                //box.enabled = false;
-            }
+            rb.velocity = new Vector2();
         }
     }
-    private void OnTriggerStay2D(Collider2D collision)
+
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("semi_solid"))
         {
-            print("on plat!");
             if (canPhase)
             {
-                //PlatformEffector2D plat = collision.gameObject.GetComponent<PlatformEffector2D>();
-                Physics2D.IgnoreCollision(box, collision.gameObject.GetComponent<BoxCollider2D>(), true);
-                //box.enabled = false;
+                OffEdge();
+                groundLayerMask &= ~semiSolidLayer; //semi_solid platform is removed from grounded check when canPhase == true
+                Physics2D.IgnoreCollision(footBox, collision.gameObject.GetComponent<BoxCollider2D>(), true);
+                Physics2D.IgnoreCollision(footCircle, collision.gameObject.GetComponent<BoxCollider2D>(), true);
             }
+        }
+        else if (collision.gameObject.CompareTag("slope") && grounded)
+        {
+            FootCircleOn();
         }
     }
 
@@ -339,9 +364,30 @@ public class Controller2D : MonoBehaviour
         {
             isOnSemiSolid = false;
 
-            //PlatformEffector2D plat = collision.gameObject.GetComponent<PlatformEffector2D>();
-            Physics2D.IgnoreCollision(box, collision.gameObject.GetComponent<BoxCollider2D>(), false);
-            //box.enabled = true;
+            Physics2D.IgnoreCollision(footBox, collision.gameObject.GetComponent<BoxCollider2D>(), false);
+            Physics2D.IgnoreCollision(footCircle, collision.gameObject.GetComponent<BoxCollider2D>(), false);
+        }
+    }
+
+    private void FootCircleOn() //turns off box collider, switches out for circle collider
+    {
+        if (footIsBox) //only run when circle is not yet on and switched
+        {
+            footCircle.enabled = true;
+            footCurrent = footCircle;
+            footBox.enabled = false;
+            footIsBox = false;
+        }
+    }
+
+    private void FootBoxOn() //turns off circle collider, switches out for box collider
+    {
+        if (!footIsBox) //onnly runs when box is not yet on and switched
+        {
+            footBox.enabled = true;
+            footCurrent = footBox;
+            footCircle.enabled = false;
+            footIsBox = true;
         }
     }
 
@@ -353,10 +399,16 @@ public class Controller2D : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             move = 1;
-        } else if (Input.GetKey(KeyCode.A))
+
+            if (grounded) facingRight = true;
+        }
+        else if (Input.GetKey(KeyCode.A))
         {
             move = -1;
-        } else
+
+            if (grounded) facingRight = false;
+        }
+        else
         {
             move = 0;
         }
@@ -368,7 +420,7 @@ public class Controller2D : MonoBehaviour
         {
             if (grounded)
             {
-                if ((key1result == 2 && move < 0) || (key2result == 2 && move > 0))
+                if ((key1result == 2) || (key2result == 2))
                 {
                     isRun = true;
                     xMovement = new Vector3(move * playerRunSpeed, 0.0f, 0.0f);
@@ -417,108 +469,28 @@ public class Controller2D : MonoBehaviour
 
     private void ApplyMove()
     {
-        if (!isSkid) //x movement
+        rb.velocity = xMovement + new Vector3(0.0f, rb.velocity.y, 0.0f);
+
+        if (grounded)
         {
-            /*if (grounded && onSlope)
-            {
-                //xMovement *= slopeNormPerp.x * -1;
-                //xMovement.y = playerSpeed * slopeNormPerp.y * -1;
-                
-            } else*/ if (grounded) {
-                if (xMovement.x > 0)
-                {
-                    facingRight = true;
-                }
-                else if (xMovement.x < 0)
-                {
-                    facingRight = false;
-                }
-            }
-
-            if (grounded && (isRun && (move < 0 && rb.velocity.x > 0) || (move > 0 && rb.velocity.x < 0)))
-            {
-                isSkid = true;
-                StartCoroutine("SkidToStop");
-            }
-            else
-            {
-                rb.velocity = xMovement + new Vector3(0.0f, rb.velocity.y, 0.0f);
-
-                Quaternion fromTo = Quaternion.FromToRotation(slopeNormPerpOld, slopeNormPerp);
-                rb.velocity = fromTo * rb.velocity;
-            }
+            Quaternion fromTo = Quaternion.FromToRotation(slopeNormPerpOld, slopeNormPerp);
+            rb.velocity = fromTo * rb.velocity;
         }
     }
-
-    private IEnumerator SkidToStop()
-    {
-        isSkid = true;
-
-        float startPos = transform.position.x;
-        float maxSkid = 3.0f;
-        int dir = 1;
-
-        if (rb.velocity.x > 0.0f) //find direction to skid
-        {
-            dir = 1;
-            facingRight = false; //face opposite of skid
-        }
-        else if (rb.velocity.x < 0)
-        {
-            dir = -1;
-            facingRight = true; //face opposite of skid
-        }
-
-        float endPos = transform.position.x + (maxSkid * dir);
-
-        float i = 0;
-
-        if (endPos > startPos)
-        {
-            while (endPos > transform.position.x)
-            {
-                if (i > 25)
-                {
-                    break;
-                }
-
-                i++;
-
-                rb.velocity = new Vector2(rb.velocity.x * Mathf.Pow(1f - decelerate * Time.deltaTime, 2f), rb.velocity.y);
-
-                yield return new WaitForFixedUpdate();
-            }
-        }
-        else
-        {
-            while (endPos < transform.position.x)
-            {
-                if (i > 25)
-                {
-                    break;
-                }
-
-                i++;
-
-                rb.velocity = new Vector2(rb.velocity.x * Mathf.Pow(1f - decelerate * Time.deltaTime, 2f), rb.velocity.y);
-
-                yield return new WaitForFixedUpdate();
-            }
-        }
-
-        rb.velocity = new Vector2(0, rb.velocity.y);
-
-        isSkid = false;
-        yield break;
-    }
-
 
     //slope code
     private void DetectSlope()
     {
-        Vector2 checkPos = transform.position - new Vector3(0.0f, capSize.y / 2);
-        DetectSlopeHorizontal(checkPos);
-        DetectSlopeVertical(checkPos);
+        if (grounded)
+        {
+            Vector2 checkPos = transform.position - new Vector3(0.0f, capSize.y / 2);
+            DetectSlopeHorizontal(checkPos);
+            DetectSlopeVertical(checkPos);
+        }
+        else
+        {
+            onSlope = false;
+        }
     }
 
     private void DetectSlopeHorizontal(Vector2 checkPos)
@@ -538,7 +510,6 @@ public class Controller2D : MonoBehaviour
         }
         else
         {
-            print("hell no");
             onSlope = false;
             slopeSideAngle = 0.0f;
         }
@@ -557,7 +528,6 @@ public class Controller2D : MonoBehaviour
 
             if (slopeDownAngle != slopeDownAngleOld || slopeDownAngle != 0f)
             {
-                print("slope = true");
                 onSlope = true;
             }
 
@@ -570,12 +540,62 @@ public class Controller2D : MonoBehaviour
         if (onSlope && move == 0)
         {
             rb.sharedMaterial = fullFriction;
-            print("hell yeah gamer");
         }
         else
         {
             rb.sharedMaterial = null;
         }
+    }
+
+    private void DetectEdge()
+    {
+        if (grounded && !canPhase)
+        {
+            float myDist = 0.65f;
+            Vector2 checkPos = transform.position - new Vector3(0.0f, capSize.y / 2);
+
+            RaycastHit2D hitFront = Physics2D.Raycast(checkPos + new Vector2(myDist, 0.0f), -transform.up, edgeDetectDist, groundLayerMask);
+            RaycastHit2D hitBack = Physics2D.Raycast(checkPos - new Vector2(myDist, 0.0f), -transform.up, edgeDetectDist, groundLayerMask);
+
+            Debug.DrawRay(checkPos + new Vector2(myDist, 0.0f), (-transform.up) * edgeDetectDist, Color.red);
+            Debug.DrawRay(checkPos - new Vector2(myDist, 0.0f), (-transform.up) * edgeDetectDist, Color.blue);
+
+            frontHit = hitFront;
+            backHit = hitBack;
+
+            if ((hitFront && !hitBack) || (!hitFront && hitBack))
+            {
+                OnEdge();
+            }
+            else
+            {
+                OffEdge();
+            }
+        }
+        else if (onEdge)
+        {
+            OffEdge();
+        }
+    }
+
+    private void OnEdge()
+    {
+        onEdge = true;
+
+        rb.gravityScale = 0.0f;
+        rb.velocity = new Vector2(rb.velocity.x, 0.0f);
+
+        FootBoxOn();
+        //rb.constraints |= RigidbodyConstraints2D.FreezePositionY;
+    }
+
+    private void OffEdge()
+    {
+        onEdge = false;
+        rb.gravityScale = gravityScale;
+
+        FootCircleOn();
+        //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
     }
     #endregion
 }

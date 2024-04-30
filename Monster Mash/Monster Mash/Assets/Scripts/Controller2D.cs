@@ -43,7 +43,7 @@ public class Controller2D : MonoBehaviour
     [SerializeField] PhysicsMaterial2D fullFriction;
 
     //edge detection code
-    private float edgeDetectDist = 1.25f;
+    private float edgeDetectDist = 0.95f;
     [SerializeField] private bool onEdge = false;
     [SerializeField] bool frontHit = false;
     [SerializeField] bool backHit = false;
@@ -271,7 +271,7 @@ public class Controller2D : MonoBehaviour
 
     private void IsGrounded() //updates grounded variable
     {
-        Vector2 boxSize = new Vector2(transform.localScale.x * 0.95f, transform.localScale.y * 0.75f);
+        Vector2 boxSize = new Vector2(transform.localScale.x * 0.95f, transform.localScale.y * 0.25f);
 
         RaycastHit2D myHit = Physics2D.BoxCast(new Vector2(transform.position.x, cap.bounds.min.y),
             boxSize, 0, Vector2.down, transform.localScale.y * 0.1f, groundLayerMask);
@@ -554,7 +554,7 @@ public class Controller2D : MonoBehaviour
         if (grounded && !canPhase)
         {
             float myDist = 0.65f;
-            Vector2 checkPos = transform.position - new Vector3(0.0f, capSize.y / 2);
+            Vector2 checkPos = new Vector3(transform.position.x, cap.bounds.min.y);
 
             RaycastHit2D hitFront = Physics2D.Raycast(checkPos + new Vector2(transform.localScale.x * myDist, 0.0f), 
                 -transform.up, transform.localScale.y * edgeDetectDist, groundLayerMask);

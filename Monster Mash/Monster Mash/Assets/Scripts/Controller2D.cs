@@ -271,10 +271,10 @@ public class Controller2D : MonoBehaviour
 
     private void IsGrounded() //updates grounded variable
     {
-        Vector2 boxSize = new Vector2(cap.bounds.size.x * 0.95f, 0.75f);
+        Vector2 boxSize = new Vector2(transform.localScale.x * 0.95f, transform.localScale.y * 0.75f);
 
         RaycastHit2D myHit = Physics2D.BoxCast(new Vector2(transform.position.x, cap.bounds.min.y),
-            boxSize, 0, Vector2.down, 0.1f, groundLayerMask);
+            boxSize, 0, Vector2.down, transform.localScale.y * 0.1f, groundLayerMask);
 
         if (myHit && rb.velocity.y <= 0.0f)
         {
@@ -495,8 +495,8 @@ public class Controller2D : MonoBehaviour
 
     private void DetectSlopeHorizontal(Vector2 checkPos)
     {
-        RaycastHit2D hitFront = Physics2D.Raycast(checkPos, transform.right, slopeDetectDistance, groundLayerMask);
-        RaycastHit2D hitBack = Physics2D.Raycast(checkPos, transform.localEulerAngles, slopeDetectDistance, groundLayerMask);
+        RaycastHit2D hitFront = Physics2D.Raycast(checkPos, transform.right, transform.localScale.x * slopeDetectDistance, groundLayerMask);
+        RaycastHit2D hitBack = Physics2D.Raycast(checkPos, transform.localEulerAngles, transform.localScale.x * slopeDetectDistance, groundLayerMask);
 
         if (hitFront)
         {
@@ -517,7 +517,9 @@ public class Controller2D : MonoBehaviour
 
     private void DetectSlopeVertical(Vector2 checkPos)
     {
-        RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, slopeDetectDistance, groundLayerMask);
+        RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, transform.localScale.y * slopeDetectDistance, groundLayerMask);
+        print("y: " + transform.localScale.y);
+        print("x: " + transform.localScale.x);
 
         if (hit)
         {
@@ -554,11 +556,14 @@ public class Controller2D : MonoBehaviour
             float myDist = 0.65f;
             Vector2 checkPos = transform.position - new Vector3(0.0f, capSize.y / 2);
 
-            RaycastHit2D hitFront = Physics2D.Raycast(checkPos + new Vector2(myDist, 0.0f), -transform.up, edgeDetectDist, groundLayerMask);
-            RaycastHit2D hitBack = Physics2D.Raycast(checkPos - new Vector2(myDist, 0.0f), -transform.up, edgeDetectDist, groundLayerMask);
+            RaycastHit2D hitFront = Physics2D.Raycast(checkPos + new Vector2(transform.localScale.x * myDist, 0.0f), 
+                -transform.up, transform.localScale.y * edgeDetectDist, groundLayerMask);
 
-            Debug.DrawRay(checkPos + new Vector2(myDist, 0.0f), (-transform.up) * edgeDetectDist, Color.red);
-            Debug.DrawRay(checkPos - new Vector2(myDist, 0.0f), (-transform.up) * edgeDetectDist, Color.blue);
+            RaycastHit2D hitBack = Physics2D.Raycast(checkPos - new Vector2(transform.localScale.x * myDist, 0.0f), 
+                -transform.up, transform.localScale.y * edgeDetectDist, groundLayerMask);
+
+            Debug.DrawRay(checkPos + new Vector2(transform.localScale.x * myDist, 0.0f), transform.localScale.y * (-transform.up) * edgeDetectDist, Color.red);
+            Debug.DrawRay(checkPos - new Vector2(transform.localScale.x * myDist, 0.0f), transform.localScale.y * (-transform.up) * edgeDetectDist, Color.blue);
 
             frontHit = hitFront;
             backHit = hitBack;

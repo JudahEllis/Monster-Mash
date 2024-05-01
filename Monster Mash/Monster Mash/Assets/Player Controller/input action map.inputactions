@@ -1534,6 +1534,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Camera Zoom",
+                    "type": "Value",
+                    "id": "e09f40c8-8ecd-40c2-800a-bd9c0a3bfa23",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "UI Move",
                     "type": "Value",
                     "id": "fe8b15c9-0241-4626-8096-5cf222553b54",
@@ -1582,6 +1591,51 @@
                     "name": "Place Part",
                     "type": "Button",
                     "id": "7044e8d8-9689-4f0d-b635-5ddd26fe72a6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PartIndexUp",
+                    "type": "Button",
+                    "id": "6af81031-a091-4268-9183-e7a921f40987",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PartIndexDown",
+                    "type": "Button",
+                    "id": "859fe99c-d267-4680-87d2-1791dd6c8ac4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Select Part",
+                    "type": "Button",
+                    "id": "5e46ac84-e369-4286-9d9d-35d9063f6eae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Clear Parts",
+                    "type": "Button",
+                    "id": "40edc21b-6fb3-4fc5-a037-57c7fd707ad0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Undo Part",
+                    "type": "Button",
+                    "id": "5dafa663-e485-4c70-8635-9bd0c8727476",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1680,9 +1734,9 @@
                 {
                     "name": "modifier",
                     "id": "c752f9f8-6e82-4230-94c8-9d8babd76da0",
-                    "path": "<Mouse>/middleButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "KeyboardMouse;XboxController;AllGamepads",
                     "action": "Rotate Character X",
                     "isComposite": false,
@@ -1839,6 +1893,138 @@
                     "processors": "",
                     "groups": "KeyboardMouse;XboxController;AllGamepads",
                     "action": "Place Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "992a1934-1b68-43e0-9708-b63e2e12629f",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "StickDeadzone",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Camera Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1dc38628-9802-4c1b-9c4d-072188d47631",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Camera Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "87447a88-ec4e-416a-9feb-24b40d89df89",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "PartIndexUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a7cb4e1-8b99-49d3-971a-553ae7727c36",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "PartIndexUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a078bff2-914e-4623-a32c-f0b9bab7f317",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "PartIndexDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c3739750-af06-49f6-880b-c108666765e2",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "PartIndexDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "716e6ed3-ba9a-438d-a455-f2abf2b60bf1",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Select Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ddb07ad-29dc-4721-af85-bb15842b28ac",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Select Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e4a4a3e-11ef-4b13-bef9-6bf8681d3f66",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Clear Parts",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "02dbc0c1-266a-471b-8633-2d84724e02cf",
+                    "path": "<Keyboard>/delete",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Clear Parts",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d29078d9-6ebe-4a66-b438-0458aabb7ae9",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Undo Part",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "af484dbc-b6c9-429a-b24d-594480380d8d",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse;XboxController;AllGamepads",
+                    "action": "Undo Part",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

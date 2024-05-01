@@ -12,6 +12,8 @@ public class animationRoom : MonoBehaviour
     public monsterPart[] monsterPartCollection;
     public GameObject reMappingStartUpButton;
     public GameObject reMappingUI;
+    public GameObject resetMappingUI;
+    public GameObject inputListener;
     private int selectedMonsterPart = 0;
     public GameObject animationTestingUI;
     public TMP_InputField buttonInput;
@@ -30,6 +32,7 @@ public class animationRoom : MonoBehaviour
     public GameObject rightLongRangeTarget;
     private int cameraNumber = -1; //facing left first
     private bool floorActive = true;
+    private bool monsterAwake = false;
 
     public void removeFloor()
     {
@@ -60,6 +63,10 @@ public class animationRoom : MonoBehaviour
     public void resetAnimationRoom()
     {
         reMappingStartUpButton.SetActive(true);
+        if (inputListener != null)
+        {
+            inputListener.SetActive(false);
+        }
         reMappingUI.SetActive(false);
         //mainMonster.removeAllLimbParenting();
         mainMonster.connectCurrentLimbs();
@@ -76,23 +83,42 @@ public class animationRoom : MonoBehaviour
     IEnumerator remappingProcessDelay()
     {
         reMappingStartUpButton.SetActive(false);
-        yield return new WaitForEndOfFrame();
-        monsterPartCollection = mainMonster.GetComponentsInChildren<monsterPart>();
-        monsterPartAttackDirections = new string[monsterPartCollection.Length];
-        monsterPartNameCollection = new string[monsterPartCollection.Length];
-        monsterPartButtonInputs = new string[monsterPartCollection.Length];
-
-        for (int i = 0; i < monsterPartCollection.Length; i++)
+        animationTestingUI.SetActive(false);
+        if (resetMappingUI != null)
         {
-            monsterPartCollection[i].setUpOutline();
-            monsterPartAttackDirections[i] = "";
-            monsterPartNameCollection[i] = monsterPartCollection[i].gameObject.name;
-            monsterPartButtonInputs[i] = "";
+            resetMappingUI.SetActive(false);
         }
+        if (inputListener != null)
+        {
+            inputListener.SetActive(true);
+        }
+        yield return new WaitForSeconds(1);
+
+        if (monsterAwake == false)
+        {
+            mainMonster.awakenTheBeast();
+            monsterAwake = true;
+
+            monsterPartCollection = mainMonster.GetComponentsInChildren<monsterPart>();
+            monsterPartAttackDirections = new string[monsterPartCollection.Length];
+            monsterPartNameCollection = new string[monsterPartCollection.Length];
+            monsterPartButtonInputs = new string[monsterPartCollection.Length];
+
+            for (int i = 0; i < monsterPartCollection.Length; i++)
+            {
+                monsterPartCollection[i].setUpOutline();
+                monsterPartAttackDirections[i] = "";
+                monsterPartNameCollection[i] = monsterPartCollection[i].gameObject.name;
+                monsterPartButtonInputs[i] = "";
+            }
+        }
+
         monsterPartCollection[0].reenableOutline();
         selectedMonsterPart = 0;
-        reMappingUI.SetActive(true);
+        attackDirection.text = monsterPartAttackDirections[selectedMonsterPart];
         monsterPartName.text = monsterPartNameCollection[selectedMonsterPart];
+        buttonInput.text = monsterPartButtonInputs[selectedMonsterPart];
+        reMappingUI.SetActive(true);
     }
 
     public void cyclePartsRight()
@@ -141,41 +167,105 @@ public class animationRoom : MonoBehaviour
 
         if (inputLetters == "A")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "A")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[0] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "A";
         }
         else if (inputLetters == "B")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "B")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[1] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "B";
         }
         else if (inputLetters == "X")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "X")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[2] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "X";
         }
         else if (inputLetters == "Y")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "Y")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[3] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "Y";
         }
         else if (inputLetters == "LB")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "LB")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[4] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "LB";
         }
         else if (inputLetters == "RB")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "RB")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[5] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "RB";
         }
         else if (inputLetters == "LT")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "LT")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[6] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "LT";
         }
         else if (inputLetters == "RT")
         {
+            for (int i = 0; i < monsterPartButtonInputs.Length; i++)
+            {
+                if (monsterPartButtonInputs[i] == "RT")
+                {
+                    monsterPartButtonInputs[i] = "";
+                }
+            }
+
             mainMonster.attackSlotMonsterParts[7] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "RT";
         }
@@ -224,12 +314,31 @@ public class animationRoom : MonoBehaviour
 
     }
 
+    public void textBeingUpdated()
+    {
+        inputListener.SetActive(false);
+    }
+
+    public void textDoneBeingUpdated()
+    {
+        inputListener.SetActive(true);
+    }
+
     public void activateTestAnimations()
     {
         mainMonster.connectCurrentLimbs();
+        mainMonster.grabAttackSlotInfo();
         monsterPartCollection[selectedMonsterPart].disableOutline();
         reMappingUI.SetActive(false);
+        if (resetMappingUI != null)
+        {
+            resetMappingUI.SetActive(true);
+        }
         animationTestingUI.SetActive(true);
+        if (inputListener != null)
+        {
+            inputListener.SetActive(true);
+        }
         switchTarget();
     }
 

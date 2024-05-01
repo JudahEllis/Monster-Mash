@@ -1169,7 +1169,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerIdle()
     {
-        if ((monsterPartID != 1 && isWing == false) || connected == false)
+        if (connected == false)
         {
             return;
         }

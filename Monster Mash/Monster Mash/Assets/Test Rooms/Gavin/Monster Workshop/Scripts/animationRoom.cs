@@ -70,13 +70,13 @@ public class animationRoom : MonoBehaviour
         reMappingUI.SetActive(false);
         //mainMonster.removeAllLimbParenting();
         mainMonster.connectCurrentLimbs();
-        mainMonster.connectCurrentLimbs();//currently have this playing twice to grab first the torsos and then their heads
+        //mainMonster.connectCurrentLimbs();//currently have this playing twice to grab first the torsos and then their heads
     }
 
     public void startRemappingProcess()
     {
-        mainMonster.removeAllLimbParenting();
-        mainMonster.connectCurrentLimbs();//in order to give triggers time to reconnect, there needs to be at least a frame or 2 in between functions here
+        //mainMonster.removeAllLimbParenting();
+        mainMonster.connectCurrentLimbs();
         StartCoroutine(remappingProcessDelay());
     }
 
@@ -177,6 +177,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[0] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "A";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "B")
         {
@@ -190,6 +192,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[1] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "B";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "X")
         {
@@ -203,6 +207,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[2] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "X";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "Y")
         {
@@ -216,6 +222,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[3] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "Y";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "LB")
         {
@@ -229,6 +237,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[4] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "LB";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "RB")
         {
@@ -242,6 +252,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[5] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "RB";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "LT")
         {
@@ -255,6 +267,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[6] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "LT";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else if (inputLetters == "RT")
         {
@@ -268,6 +282,8 @@ public class animationRoom : MonoBehaviour
 
             mainMonster.attackSlotMonsterParts[7] = monsterPartCollection[selectedMonsterPart];
             monsterPartButtonInputs[selectedMonsterPart] = "RT";
+            mainMonster.grabAttackSlotInfo();
+            monsterPartCollection[selectedMonsterPart].changeAttackAnimationAtRuntime();
         }
         else
         {

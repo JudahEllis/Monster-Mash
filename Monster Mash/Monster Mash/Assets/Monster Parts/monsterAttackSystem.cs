@@ -44,7 +44,7 @@ public class monsterAttackSystem : MonoBehaviour
         monsterPart[] monsterPartList = GetComponentsInChildren<monsterPart>();
         for (int i = 0; i < monsterPartList.Length; i++)
         {
-            if (monsterPartList[i].isTorso == false && monsterPartList[i].isHead == false && monsterPartList[i].monsterPartID == 0)
+            if (monsterPartList[i].isTorso == false && monsterPartList[i].isHead == false && monsterPartList[i].monsterPartID == 1)
             {
                 monsterPartList[i].transform.parent = null;
             }
@@ -77,6 +77,8 @@ public class monsterAttackSystem : MonoBehaviour
             limbConnections[i].enableColliders();
         }
     }
+
+
 
     public void awakenTheBeast()
     {

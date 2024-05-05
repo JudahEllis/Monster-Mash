@@ -190,10 +190,21 @@ public class monsterPart : MonoBehaviour
 
             myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
 
+            torsoCommand = "";
+            headCommand = "";
+            torsoCommandOverride = "";
+            upwardAttackQuickSwitch = false;
+            forwardAttackQuickSwitch = false;
+            requiresBackwardStance = false;
+            requiresForwardStance = false;
+            requiresRightStance = false;
+            requiresLeftStance = false;
+
             #region Attack Reaction Calculations
 
             if (isRightShoulderLimb)
             {
+                rightAttackOverride = true;
                 //we'll replace the useage of attack IDs here once we have gyroscopic understanding of limbs and then we can factor both
                 //nothing wrong with it right now but if we have a forward attacking arm thats been rotated backwards then yeah we need something to account for that
                 if (attackAnimationID == -1)
@@ -206,16 +217,67 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    torsoCommand = "Right Upper Attack";
-                    requiresBackwardStance = false;
-                    requiresForwardStance = false;
-                    requiresRightStance = true;
-                    requiresLeftStance = false;
+                    if (isHorn)
+                    {
+                        leftAttackOverride = false;
+                        rightAttackOverride = false;
+
+                        if (attackAnimationID == 1)
+                        {
+                            headCommand = "Forward Attack";
+                            torsoCommandOverride = "Forward Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                        else if (attackAnimationID == 2)
+                        {
+                            headCommand = "Face Attack";
+                            torsoCommandOverride = "Upper Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                    }
+                    else if (isArm && reelHeavyAttack)
+                    {
+                        leftAttackOverride = false;
+                        rightAttackOverride = false;
+
+                        if (attackAnimationID == 1)
+                        {
+                            torsoCommand = "Right Upper Attack";
+                            upwardAttackQuickSwitch = true;
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                        else
+                        {
+                            torsoCommand = "Upper Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                    }
+                    else
+                    {
+                        torsoCommand = "Right Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
                 }
             }
 
             if (isLeftShoudlerLimb)
             {
+                leftAttackOverride = true;
 
                 if (attackAnimationID == -1)
                 {
@@ -227,24 +289,106 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    torsoCommand = "Left Upper Attack";
-                    requiresBackwardStance = false;
-                    requiresForwardStance = false;
-                    requiresRightStance = false;
-                    requiresLeftStance = true;
+                    if (isHorn)
+                    {
+                        leftAttackOverride = false;
+                        rightAttackOverride = false;
+
+                        if (attackAnimationID == 1)
+                        {
+                            headCommand = "Forward Attack";
+                            torsoCommandOverride = "Forward Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                        else if (attackAnimationID == 2)
+                        {
+                            headCommand = "Face Attack";
+                            torsoCommandOverride = "Upper Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                    }
+                    else if (isArm && reelHeavyAttack)
+                    {
+                        leftAttackOverride = false;
+                        rightAttackOverride = false;
+
+                        if (attackAnimationID == 1)
+                        {
+                            torsoCommand = "Left Upper Attack";
+                            upwardAttackQuickSwitch = true;
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = false;
+                            requiresLeftStance = true;
+                        }
+                        else
+                        {
+                            torsoCommand = "Upper Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = false;
+                            requiresLeftStance = true;
+                        }
+                    }
+                    else
+                    {
+                        torsoCommand = "Left Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
                 }
             }
 
             if (isRightPelvisLimb)
             {
+                rightAttackOverride = true;
 
-                if (attackAnimationID == -1)
+                if (isArm && reelHeavyAttack)
+                {
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 1)
+                    {
+                        torsoCommand = "Right Lower Attack";
+                        upwardAttackQuickSwitch = true;
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else
+                    {
+                        torsoCommand = "Lower Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                }
+                else if (attackAnimationID == -1)
                 {
                     torsoCommand = "Left Upper Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
                     requiresRightStance = false;
                     requiresLeftStance = true;
+                }
+                else if (attackAnimationID == 0)
+                {
+                    torsoCommand = "Right Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
                 }
                 else
                 {
@@ -258,14 +402,46 @@ public class monsterPart : MonoBehaviour
 
             if (isLeftPelvisLimb)
             {
+                leftAttackOverride = true;
 
-                if (attackAnimationID == -1)
+                if (isArm && reelHeavyAttack)
+                {
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 1)
+                    {
+                        torsoCommand = "Left Lower Attack";
+                        upwardAttackQuickSwitch = true;
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                    else
+                    {
+                        torsoCommand = "Lower Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                }
+                else if (attackAnimationID == -1)
                 {
                     torsoCommand = "Right Upper Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
                     requiresRightStance = true;
                     requiresLeftStance = false;
+                }
+                else if (attackAnimationID == 0)
+                {
+                    torsoCommand = "Left Lower Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = false;
+                    requiresLeftStance = true;
                 }
                 else
                 {
@@ -285,6 +461,9 @@ public class monsterPart : MonoBehaviour
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
+
+                leftAttackOverride = false;
+                rightAttackOverride = false;
             }
 
             if (isBellyLimb)
@@ -294,16 +473,22 @@ public class monsterPart : MonoBehaviour
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
+
+                leftAttackOverride = false;
+                rightAttackOverride = false;
             }
 
             if (isTailLimb)
             {
-                torsoCommand = "Upper Attack";
-                //isRightSidedLimb = true;
-                requiresBackwardStance = false;
-                requiresForwardStance = true;
+                //headCommand = "Forward Attack";
+                torsoCommandOverride = "Upper Attack";
+                requiresBackwardStance = true;
+                requiresForwardStance = false;
                 requiresRightStance = false;
                 requiresLeftStance = false;
+
+                leftAttackOverride = false;
+                rightAttackOverride = false;
             }
 
             if (isShoulderBladeLimb)
@@ -313,10 +498,16 @@ public class monsterPart : MonoBehaviour
                 requiresForwardStance = true;
                 requiresRightStance = false;
                 requiresLeftStance = false;
+
+                leftAttackOverride = false;
+                rightAttackOverride = false;
             }
 
             if (isTopHeadLimb)
             {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
+
                 if (attackAnimationID == -1)
                 {
                     headCommand = "Upward Attack";
@@ -328,17 +519,43 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    headCommand = "Forward Attack";
-                    torsoCommandOverride = "Upper Attack";
-                    requiresBackwardStance = false;
-                    requiresForwardStance = false;
-                    requiresRightStance = true;
-                    requiresLeftStance = false;
+                    if (isHorn)
+                    {
+                        if (attackAnimationID == 1)
+                        {
+                            headCommand = "Forward Attack";
+                            torsoCommandOverride = "Forward Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                        else if (attackAnimationID == 2)
+                        {
+                            headCommand = "Face Attack";
+                            torsoCommandOverride = "Upper Attack";
+                            requiresBackwardStance = false;
+                            requiresForwardStance = false;
+                            requiresRightStance = true;
+                            requiresLeftStance = false;
+                        }
+                    }
+                    else
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
                 }
             }
 
             if (isFacialLimb)
             {
+                leftAttackOverride = false;
+                rightAttackOverride = false;
 
                 if (attackAnimationID == 2)
                 {
@@ -353,7 +570,7 @@ public class monsterPart : MonoBehaviour
                     }
                     else
                     {
-                        headCommand = "Forward Attack";
+                        headCommand = "Face Attack";
                         torsoCommandOverride = "Upper Attack";
                         requiresBackwardStance = false;
                         requiresForwardStance = false;
@@ -363,7 +580,7 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    headCommand = "Forward Attack";
+                    headCommand = "Face Attack";
                     torsoCommandOverride = "Upper Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
@@ -375,47 +592,169 @@ public class monsterPart : MonoBehaviour
 
             if (isRightEarLimb)
             {
+                rightAttackOverride = true;
 
-                if (attackAnimationID == -1)
+                if (isHorn)
                 {
-                    headCommand = "Left Attack";
-                    torsoCommandOverride = "Lower Attack";
-                    requiresBackwardStance = false;
-                    requiresForwardStance = false;
-                    requiresRightStance = false;
-                    requiresLeftStance = true;
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 2)
+                    {
+                        headCommand = "Upward Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                    else
+                    {
+                        headCommand = "Forward Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
                 }
-                else
+                else if (isArm && reelHeavyAttack)
                 {
-                    headCommand = "Right Attack";
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 1)
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                }
+                else if (isArm && attackAnimationID == 2)
+                {
+                    headCommand = "Face Attack";
                     torsoCommandOverride = "Upper Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
                     requiresRightStance = true;
                     requiresLeftStance = false;
+                }
+                else
+                {
+                    if (attackAnimationID == -1)
+                    {
+                        headCommand = "Left Attack";
+                        torsoCommandOverride = "Lower Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                    else
+                    {
+                        headCommand = "Right Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
                 }
             }
 
             if (isLeftEarLimb)
             {
+                leftAttackOverride = true;
 
-                if (attackAnimationID == -1)
+                if (isHorn)
                 {
-                    headCommand = "Right Attack";
-                    torsoCommandOverride = "Lower Attack";
-                    requiresBackwardStance = false;
-                    requiresForwardStance = false;
-                    requiresRightStance = true;
-                    requiresLeftStance = false;
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 2)
+                    {
+                        headCommand = "Upward Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                    else
+                    {
+                        headCommand = "Forward Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
                 }
-                else
+                else if (isArm && reelHeavyAttack)
                 {
-                    headCommand = "Left Attack";
+                    leftAttackOverride = false;
+                    rightAttackOverride = false;
+
+                    if (attackAnimationID == 1)
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                    else
+                    {
+                        headCommand = "Face Attack";
+                        torsoCommandOverride = "Upper Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
+                }
+                else if (isArm && attackAnimationID == 2)
+                {
+                    headCommand = "Face Attack";
                     torsoCommandOverride = "Upper Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
                     requiresRightStance = false;
                     requiresLeftStance = true;
+                }
+                else
+                {
+                    if (attackAnimationID == -1)
+                    {
+                        headCommand = "Right Attack";
+                        torsoCommandOverride = "Lower Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = true;
+                        requiresLeftStance = false;
+                    }
+                    else
+                    {
+                        headCommand = "Left Attack";
+                        torsoCommandOverride = "Forward Attack";
+                        requiresBackwardStance = false;
+                        requiresForwardStance = false;
+                        requiresRightStance = false;
+                        requiresLeftStance = true;
+                    }
                 }
             }
 
@@ -423,18 +762,32 @@ public class monsterPart : MonoBehaviour
             {
                 hasTorsoCommand = true;
             }
+            else
+            {
+                hasTorsoCommand = false;
+            }
 
             if (torsoCommandOverride != "")
             {
                 hasTorsoCommandOverride = true;
+            }
+            else
+            {
+                hasTorsoCommandOverride = false;
             }
 
             if (headCommand != "")
             {
                 hasHeadCommand = true;
             }
+            else
+            {
+                hasHeadCommand = false;
+            }
 
             #endregion
+
+            setUpVFX();
         }
     }
 
@@ -515,6 +868,16 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Has Flighted Idle", true);
         }
+
+        torsoCommand = "";
+        headCommand = "";
+        torsoCommandOverride = "";
+        upwardAttackQuickSwitch = false;
+        forwardAttackQuickSwitch = false;
+        requiresBackwardStance = false;
+        requiresForwardStance = false;
+        requiresRightStance = false;
+        requiresLeftStance = false;
 
         #region Attack Reaction Calculations
 
@@ -1078,15 +1441,27 @@ public class monsterPart : MonoBehaviour
         {
             hasTorsoCommand = true;
         }
+        else
+        {
+            hasTorsoCommand = false;
+        }
 
         if (torsoCommandOverride != "")
         {
             hasTorsoCommandOverride = true;
         }
+        else
+        {
+            hasTorsoCommandOverride = false;
+        }
 
         if (headCommand != "")
         {
             hasHeadCommand = true;
+        }
+        else
+        {
+            hasHeadCommand = false;
         }
 
         #endregion
@@ -2104,10 +2479,15 @@ public class monsterPart : MonoBehaviour
             {
                 if (attackAnimationID == 0 && neutralDownwardMuzzle != null)
                 {
+
                     neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
+                    //Store muzzle parents for resetting
+                    //store muzzle location for resetting
                     neutralDownwardMuzzle.transform.parent = neutralVFXStoredParent;
                     neutralVFXStoredPosition = neutralDownwardMuzzle.localPosition;
                     neutralVFXStoredRotation = neutralDownwardMuzzle.localRotation;
+                    //store vfx holder parents
+                    //store vfx holder location
                     neutralHitVFXHolder.transform.localPosition = neutralVFXStoredPosition;
                     neutralHitVFXHolder.transform.localRotation = neutralVFXStoredRotation;
                     neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;

@@ -39,7 +39,7 @@
                 {
                     "name": "",
                     "id": "f5c22727-e726-418a-80bc-0433b2af5667",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "XboxController",
@@ -50,7 +50,7 @@
                 {
                     "name": "",
                     "id": "dd525293-05db-43f6-be02-4ba8f802677b",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "XboxController",
@@ -61,7 +61,7 @@
                 {
                     "name": "",
                     "id": "dda800df-f511-4543-9469-29ac6b2d4463",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "XboxController",
@@ -233,6 +233,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "LeftStickClick",
+                    "type": "Button",
+                    "id": "559aeb51-7aa5-40f9-b603-f1704296b207",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -387,6 +396,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DPad Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e8b798aa-22c3-45a5-b2bd-9d014c9e2361",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftStickClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

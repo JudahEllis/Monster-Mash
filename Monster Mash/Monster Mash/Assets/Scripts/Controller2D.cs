@@ -18,8 +18,8 @@ public class Controller2D : MonoBehaviour
     #endregion
 
     #region horizontal movements variables
-    private float playerSpeed = 12.0f; //player walking speed
-    private float playerRunSpeed = 15.6f; //run speed
+    [SerializeField]private float playerSpeed = 12.0f; //player walking speed
+    [SerializeField]private float playerRunSpeed = 15.6f; //run speed
     private float playerAirSpeed = 11.0f; //horizontal speed for forward airborne movement
     private float playerAirBackwardSpeed = 4.0f; //horizontal speed for backwards airborne movement
     private float airDrag; //horizontal midair movement speed, used as a multiplier to velocity.x
@@ -41,6 +41,7 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private bool onSlope = false; //true if player is on slope
     [SerializeField] PhysicsMaterial2D noFriction;
     [SerializeField] PhysicsMaterial2D fullFriction;
+    private bool isOnSlope = false;
 
     //edge detection code
     private float edgeDetectDist = 0.95f;
@@ -50,13 +51,13 @@ public class Controller2D : MonoBehaviour
     #endregion
 
     #region all jumping vars
-    private float jumpForce = 10f; //player jump power/speed/force
-    private float midAirJumpForce = 26f; //jumpForce of midair jump duh 
+    [SerializeField]private float jumpForce = 10f; //player jump power/speed/force
+    [SerializeField]private float midAirJumpForce = 26f; //jumpForce of midair jump duh 
     private float jumpCounter; //tracks duration of jump button press when grounded (for holding jump button = higher jump) only works when grounded because i say so
-    private float jumpTime = 0.2f; //max duration of grounded jump
-    private bool isJumping = false; //for grounded jump, longer hold = higher jump, true when grounded jump is happening and player is still holding jump input
-    private float jumpMultiplier = 14f; //similar to jumpForce but used in place while player is holding jump input for a higher jump
-    private float fallMultiplier = 4f; //when player is falling, velocity.y is multiplied by this var
+    private float jumpTime = 0.3f; //max duration of grounded jump
+    [SerializeField]private bool isJumping = false; //for grounded jump, longer hold = higher jump, true when grounded jump is happening and player is still holding jump input
+    [SerializeField]private float jumpMultiplier = 14f; //similar to jumpForce but used in place while player is holding jump input for a higher jump
+    [SerializeField]private float fallMultiplier = 4f; //when player is falling, velocity.y is multiplied by this var
     private float gravityScale = 6.28f; //Rigidbody2D.gravityScale is set to this, i DO NOT set Physics2D.gravity to this because that's scary DONT GET CONFUSED HAHAHA
     private float fastFallSpeed = 2.5f; //fast fall when player holds down midair
     private int midAirJumps = 1; //possession of wings might change this number, total of midair jumps allowed
@@ -67,6 +68,14 @@ public class Controller2D : MonoBehaviour
     private LayerMask semiSolidLayer; //stored to change for grounded check
     [SerializeField]private bool isOnSemiSolid = false; //tracks when the player is on a semi solid platform
     private BoxCollider2D lastSemi; //BC2D of last semisolid stood on
+    [SerializeField] private bool jumpButtonReleased = false; //inputhandler doesn't have GetKeyDown, so i must manually check button releases
+    #endregion
+
+    #region input_handler stuffy stuff
+
+    private bool hasInputHandler = false;
+    private input_handler myInput;
+
     #endregion
 
     #region tracks double tapping of left and right inputs, soon to be deprecated 
@@ -93,6 +102,16 @@ public class Controller2D : MonoBehaviour
 
         capSize = cap.size;
 
+        if (FindObjectOfType<input_handler>())
+        {
+            myInput = FindObjectOfType<input_handler>();
+            hasInputHandler = true;
+        }
+        else
+        {
+            hasInputHandler = false;
+        }
+
         #region frictionless collider ignores collisions with semi solids
         semiSolids = GameObject.FindGameObjectsWithTag("semi_solid");
 
@@ -118,7 +137,7 @@ public class Controller2D : MonoBehaviour
         #endregion
 
         #region double tap input detection, soon to be deprecated
-        if (Input.GetKeyDown(keyToDetect1) && !Input.GetKey(keyToDetect2))
+        if (!hasInputHandler && (Input.GetKeyDown(keyToDetect1) && !Input.GetKey(keyToDetect2)))
         {
             if (key1WasPressed && Time.time - timeSinceLastPress1 < doubleTapTimeThreshold)
             {
@@ -139,7 +158,7 @@ public class Controller2D : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(keyToDetect2) && !Input.GetKey(keyToDetect1))
+        if (!hasInputHandler && (Input.GetKeyDown(keyToDetect2) && !Input.GetKey(keyToDetect1)))
         {
             if (key2WasPressed && Time.time - timeSinceLastPress2 < doubleTapTimeThreshold)
             {
@@ -164,9 +183,14 @@ public class Controller2D : MonoBehaviour
         MoveX(); //calls horizontal movement checks each frame
 
         #region jump logic! should probably be moved to a new function for real input handler implementation
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (hasInputHandler && !myInput.GetX_Button())
         {
-            if (grounded)
+            jumpButtonReleased = true;
+        }
+
+        if ((!hasInputHandler && Input.GetKeyDown(KeyCode.Space)) || (hasInputHandler && myInput.GetX_Button()))
+        {
+            if (grounded && jumpsLeft == 2)
             {
                 if (move != 0) //jumping from a stand still (NOT moving horizontally) will feel different from a FORWARD jump, kinda like smash bros
                 {
@@ -177,13 +201,12 @@ public class Controller2D : MonoBehaviour
                 }
 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                //jumpsLeft = midAirJumps;
                 jumpsLeft--;
                 isJumping = true;
-                //print("isJump true");
                 jumpCounter = 0;
+                jumpButtonReleased = false;
 
-            } else if (jumpsLeft > 0)
+            } else if (jumpsLeft > 0 && (!hasInputHandler || jumpButtonReleased))
             {
                 OffEdge(); //ensure player is affected by physics as regular/ reset
 
@@ -209,34 +232,16 @@ public class Controller2D : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.Space) && isJumping)
-        {
-            jumpCounter += Time.deltaTime;
-            if (jumpCounter > jumpTime) { isJumping = false; }
-
-            float t = jumpCounter / jumpTime;
-
-            float currentJumpM = jumpMultiplier;
-
-            if (t > 0.5f)
-            {
-                currentJumpM = jumpMultiplier * (1 - t);
-            }
-
-            rb.velocity = new Vector2(rb.velocity.x, jumpMultiplier);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space) && isJumping)
+        if (((!hasInputHandler && Input.GetKeyUp(KeyCode.Space)) || (hasInputHandler && !myInput.GetX_Button()))&& isJumping)
         {
             //print("isJump false");
             isJumping = false;
         }
 
-        if (Input.GetAxis("Vertical") < 0)
+        if ((!hasInputHandler && Input.GetAxis("Vertical") < 0) || (hasInputHandler && myInput.GetLeft_JoyStick().y <= -0.44f))
         {
             canPhase = true;
             OffEdge();
-            //groundLayerMask &= ~semiSolidLayer; //semi_solid platform is removed from grounded check when canPhase == true
 
             if (rb.velocity.y < 0.0f)
             {
@@ -246,12 +251,6 @@ public class Controller2D : MonoBehaviour
         else
         {
             canPhase = false;
-            //groundLayerMask |= semiSolidLayer; //semi_solid platform is added to grounded check when canPhase == false
-
-            if (isOnSemiSolid)
-            {
-                //Physics2D.IgnoreCollision(box, lastSemi, false);
-            }
 
             if (rb.velocity.y < 0.0f)
             {
@@ -276,13 +275,14 @@ public class Controller2D : MonoBehaviour
         RaycastHit2D myHit = Physics2D.BoxCast(new Vector2(transform.position.x, cap.bounds.min.y),
             boxSize, 0, Vector2.down, transform.localScale.y * 0.1f, groundLayerMask);
 
-        if (myHit && rb.velocity.y <= 0.0f)
+        if (myHit && !isJumping)//&& rb.velocity.y <= 0.0f)
         {
             grounded = true;
             jumpsLeft = 1 + midAirJumps;
         } else
         {
             grounded = false;
+            isOnSlope = false;
         }
 
         #region ya boy box
@@ -396,13 +396,13 @@ public class Controller2D : MonoBehaviour
     private void MoveX()
     {
         // Horizontal movement.
-        if (Input.GetKey(KeyCode.D))
+        if ((!hasInputHandler && Input.GetKey(KeyCode.D)) || (hasInputHandler && myInput.GetLeft_JoyStick().x > 0.15f))
         {
             move = 1;
 
             if (grounded) facingRight = true;
         }
-        else if (Input.GetKey(KeyCode.A))
+        else if ((!hasInputHandler && Input.GetKey(KeyCode.A)) || (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.15f))
         {
             move = -1;
 
@@ -420,7 +420,7 @@ public class Controller2D : MonoBehaviour
         {
             if (grounded)
             {
-                if ((key1result == 2) || (key2result == 2))
+                if ((!hasInputHandler && (key1result == 2 || key2result == 2)) || (hasInputHandler && myInput.GetLeft_Joystick_Click()))
                 {
                     isRun = true;
                     xMovement = new Vector3(move * playerRunSpeed, 0.0f, 0.0f);
@@ -469,9 +469,21 @@ public class Controller2D : MonoBehaviour
 
     private void ApplyMove()
     {
-        rb.velocity = xMovement + new Vector3(0.0f, rb.velocity.y, 0.0f);
+        float xInput = 1f;
 
-        if (grounded)
+        if (hasInputHandler)
+        {
+            Mathf.Abs(myInput.GetLeft_JoyStick().x);
+        }
+
+        if (hasInputHandler && (xInput >= 0.69f || (!grounded && xInput <= 0.15f)))
+        {
+            xInput = 1f;
+        }
+
+        rb.velocity = xMovement * xInput + new Vector3(0.0f, rb.velocity.y, 0.0f);
+
+        if (grounded && isOnSlope)
         {
             Quaternion fromTo = Quaternion.FromToRotation(slopeNormPerpOld, slopeNormPerp);
             rb.velocity = fromTo * rb.velocity;
@@ -518,8 +530,6 @@ public class Controller2D : MonoBehaviour
     private void DetectSlopeVertical(Vector2 checkPos)
     {
         RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, transform.localScale.y * slopeDetectDistance, groundLayerMask);
-        print("y: " + transform.localScale.y);
-        print("x: " + transform.localScale.x);
 
         if (hit)
         {
@@ -542,16 +552,18 @@ public class Controller2D : MonoBehaviour
         if (onSlope && move == 0)
         {
             rb.sharedMaterial = fullFriction;
+            isOnSlope = true;
         }
         else
         {
             rb.sharedMaterial = null;
+            isOnSlope = false;
         }
     }
 
     private void DetectEdge()
     {
-        if (grounded && !canPhase)
+        if (grounded && !canPhase && !isJumping && rb.velocity.y <= 0.0f)
         {
             float myDist = 0.65f;
             Vector2 checkPos = new Vector3(transform.position.x, cap.bounds.min.y);

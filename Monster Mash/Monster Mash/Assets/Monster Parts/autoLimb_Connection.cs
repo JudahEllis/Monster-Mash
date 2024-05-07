@@ -29,7 +29,7 @@ public class autoLimb_Connection : MonoBehaviour
     public void enableColliders() //rename this for easier outside knowledge
     {
         triggerBubble.enabled = true;
-        StartCoroutine(limbConnectionAutoStop());
+        //StartCoroutine(limbConnectionAutoStop());
     }
 
     IEnumerator limbConnectionAutoStop()
@@ -56,8 +56,99 @@ public class autoLimb_Connection : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        /*
+        if (other.gameObject.tag == "Connection - Monster Part")
+        {
+            if (other.gameObject.GetComponent<monsterPart>() != null)
+            {
+                monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
+
+                if (monsterPartMemory.Contains(monsterPartScript) == false)
+                {
+                    monsterPartMemory.Add(monsterPartScript);
+                }
+            }
+        }
+        */
+    }
+
+    public void connectMonsterParts()
+    {
+        for (int i = 0; i < monsterPartMemory.Count; i++)
+        {
+            monsterPartMemory[i].transform.parent = this.gameObject.transform;
+            monsterPartMemory[i].connectedMonsterPart = connectedBodyPiece;
+            monsterPartMemory[i].isJointed = true;
+            monsterPartMemory[i].isLeftEarLimb = isLeftHeadConnection;
+            monsterPartMemory[i].isRightEarLimb = isRightHeadConnection;
+            monsterPartMemory[i].isFacialLimb = isFaceConnection;
+            monsterPartMemory[i].isTopHeadLimb = isTopHeadConnection;
+            monsterPartMemory[i].isBacksideHeadLimb = isBackHeadConnection;
+            monsterPartMemory[i].isLeftShoudlerLimb = isLeftUpperTorsoConnection;
+            monsterPartMemory[i].isRightShoulderLimb = isRightUpperTorsoConnection;
+            monsterPartMemory[i].isNeckLimb = isNeckTorsoConnection;
+            monsterPartMemory[i].isLeftPelvisLimb = isLeftLowerTorsoConnection;
+            monsterPartMemory[i].isRightPelvisLimb = isRightLowerTorsoConnection;
+            monsterPartMemory[i].isTailLimb = isTailTorsoConnection;
+            monsterPartMemory[i].isShoulderBladeLimb = isShoulderBladeTorsoConnection;
+            monsterPartMemory[i].isChestLimb = isChestTorsoConnection;
+            monsterPartMemory[i].isBellyLimb = isBellyTorsoConnection;
+
+            //this section may be removed at a later date if we decide to separate left and right limbs as separate limbs and deserving of a hardcoded orientation
+            //Dont forget!!! Horns, Eyes, and Mouths need to be excluded from this grouping 
+
+            if (isLeftHeadConnection || isLeftUpperTorsoConnection || isLeftLowerTorsoConnection)
+            {
+                if (monsterPartMemory[i].isHorn == false)
+                {
+                    monsterPartMemory[i].isLeftSidedLimb = true;
+                    monsterPartMemory[i].isRightSidedLimb = false;
+                }
+                else
+                {
+                    monsterPartMemory[i].isRightSidedLimb = false;
+                    monsterPartMemory[i].isLeftSidedLimb = false;
+                }
+            }
+            else if (isRightHeadConnection || isRightUpperTorsoConnection || isRightLowerTorsoConnection)
+            {
+                if (monsterPartMemory[i].isHorn == false)
+                {
+                    monsterPartMemory[i].isRightSidedLimb = true;
+                    monsterPartMemory[i].isLeftSidedLimb = false;
+                }
+                else
+                {
+                    monsterPartMemory[i].isRightSidedLimb = false;
+                    monsterPartMemory[i].isLeftSidedLimb = false;
+                }
+            }
+            else
+            {
+                monsterPartMemory[i].isRightSidedLimb = false;
+                monsterPartMemory[i].isLeftSidedLimb = false;
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag == "Connection - Monster Part")
+        {
+            if (other.gameObject.GetComponent<monsterPart>() != null)
+            {
+                monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
+
+                if (monsterPartMemory.Contains(monsterPartScript) == false)
+                {
+                    monsterPartMemory.Add(monsterPartScript);
+                }
+            }
+        }
+
+        /*
         if (other.gameObject.tag == "Connection - Monster Part")
         {
             other.gameObject.transform.parent = this.gameObject.transform;
@@ -112,6 +203,23 @@ public class autoLimb_Connection : MonoBehaviour
                     }
                 }
                
+            }
+        }
+        */
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Connection - Monster Part")
+        {
+            if (other.gameObject.GetComponent<monsterPart>() != null)
+            {
+                monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
+
+                if (monsterPartMemory.Contains(monsterPartScript))
+                {
+                    monsterPartMemory.Remove(monsterPartScript);
+                }
             }
         }
     }

@@ -39,6 +39,20 @@ public class monsterAttackSystem : MonoBehaviour
     private Transform foreignReel;
     private monsterAttackSystem foreignMonster;
 
+    #region Monster Start Up
+
+    public void connectNecessaryLocomotionComponents()
+    {
+        //dash splat 
+        //spin control
+        //idle bounce
+        //stomp collider
+        //reel anchor
+        //WIND ZONE
+        //torso
+        //heads
+    }
+
     public void removeAllLimbParenting() //we use this to remove all parenting during a full refresh
     {
         monsterPart[] monsterPartList = GetComponentsInChildren<monsterPart>();
@@ -57,6 +71,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    /*
     public void removeSpecificLimbParenting(monsterPart partToRemoveFromMonster) //we use this anytime a limb is grabbed/altered in editor
     {
         partToRemoveFromMonster.transform.parent = null;
@@ -67,9 +82,9 @@ public class monsterAttackSystem : MonoBehaviour
             limbConnections[i].clearSpecificMonsterPartMemory(partToRemoveFromMonster);
         }
     }
+    */
 
-    //this has to be done before any sort of remapping
-    public void connectCurrentLimbs() //we are using connect Current limbs anytime a limb is added or when we need a full refresh
+    public void turnOnLimbConnectors()
     {
         autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
         for (int i = 0; i < limbConnections.Length; i++)
@@ -78,16 +93,26 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void turnOffLimbConnectors() //make sure to turn off the connectors before awakening the beast
+    {
+        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
+        for (int i = 0; i < limbConnections.Length; i++)
+        {
+            limbConnections[i].disableColliders();
+        }
+    }
 
+    public void connectCurrentLimbs()
+    {
+        autoLimb_Connection[] limbConnections = GetComponentsInChildren<autoLimb_Connection>();
+        for (int i = 0; i < limbConnections.Length; i++)
+        {
+            limbConnections[i].connectMonsterParts();
+        }
+    }
 
     public void awakenTheBeast()
     {
-        StartCoroutine(awakeningDelay());
-    }
-
-    IEnumerator awakeningDelay()
-    {
-        yield return new WaitForSeconds(1);
         myAnimator = this.GetComponent<Animator>();
         grabAttackSlotInfo();
         myAnimator.SetBool("Facing Right", facingRight);
@@ -294,6 +319,8 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerIdle();
         }
     }
+
+    #endregion
 
     #region Attacks
 

@@ -173,7 +173,7 @@ public class monsterPart : MonoBehaviour
     public ParticleSystem[] myIdleVFX;
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
 
-    #region Animation Team Tools
+    #region Build a Scare Tools
 
     public void changeAttackAnimationAtRuntime()
     {
@@ -200,6 +200,7 @@ public class monsterPart : MonoBehaviour
             requiresRightStance = false;
             requiresLeftStance = false;
 
+            //note to self, bring the attack calculations into its own function so that I dont have to keep copy and pasting it
             #region Attack Reaction Calculations
 
             if (isRightShoulderLimb)
@@ -793,9 +794,8 @@ public class monsterPart : MonoBehaviour
 
     public void setUpOutline()
     {
-        if (monsterPartID == 1 || isWing) //fix this, I dont like having to clarify that a wing isn't a ID 1 just so that it can jump
+        if (monsterPartID == 1)
         {
-            myIdleVFX = GetComponentsInChildren<ParticleSystem>();
             for (int i = 0; i < myIdleVFX.Length; i++)
             {
                 myIdleVFX[i].gameObject.SetActive(false);
@@ -1492,7 +1492,7 @@ public class monsterPart : MonoBehaviour
         }
         else
         {
-            myIdleVFX = GetComponentsInChildren<ParticleSystem>();
+            idleVFXSeparation();
         }
 
         for (int i = 0; i < hitboxesAndHurtboxes.Count; i++)
@@ -2463,10 +2463,33 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
-    #region Attack Effects
+    #region Attack Effects and VFX
+
+    private void idleVFXSeparation()
+    {
+        ParticleSystem[] tempVFXGrab = GetComponentsInChildren<ParticleSystem>();
+        List<GameObject> tempDefaultSprayVFX = new List<GameObject>(); //this is to catch any VFX from default spray holders which, unlike other attack VFX, are active at this time
+        for (int i = 0; i < tempVFXGrab.Length; i++)
+        {
+            if (tempVFXGrab[i].transform.parent.GetComponent<vfxHolder>() != null)
+            {
+                tempVFXGrab[i].gameObject.SetActive(false);
+                tempDefaultSprayVFX.Add(tempVFXGrab[i].gameObject);
+            }
+        }
+
+        myIdleVFX = GetComponentsInChildren<ParticleSystem>();
+
+
+        for (int i = 0; i < tempDefaultSprayVFX.Count; i++)
+        {
+            tempDefaultSprayVFX[i].SetActive(true);
+        }
+    }
 
     private void setUpVFX()
     {
+
         #region Neutral Hit VFX Holder
         if (neutralHitVFXHolder != null)
         {
@@ -2481,13 +2504,9 @@ public class monsterPart : MonoBehaviour
                 {
 
                     neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
-                    //Store muzzle parents for resetting
-                    //store muzzle location for resetting
                     neutralDownwardMuzzle.transform.parent = neutralVFXStoredParent;
                     neutralVFXStoredPosition = neutralDownwardMuzzle.localPosition;
                     neutralVFXStoredRotation = neutralDownwardMuzzle.localRotation;
-                    //store vfx holder parents
-                    //store vfx holder location
                     neutralHitVFXHolder.transform.localPosition = neutralVFXStoredPosition;
                     neutralHitVFXHolder.transform.localRotation = neutralVFXStoredRotation;
                     neutralHitVFXHolder.transform.parent = mainTorso.gameObject.transform;
@@ -3035,14 +3054,6 @@ public class monsterPart : MonoBehaviour
             isRunning = true;
         }
 
-        /*
-        if (isArm || isTail)
-        {
-            myAnimator.SetBool("Running", true);
-            isRunning = true;
-        }
-        */
-
         if (isHead || isWing || isArm || isTail)
         {
             myAnimator.SetBool("Running", true);
@@ -3076,9 +3087,7 @@ public class monsterPart : MonoBehaviour
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
-                //myAnimator.SetBool("Running", false);
                 myAnimator.SetTrigger("Run to Screech");
-                //isRunning = false;
 
             }
         }
@@ -3326,13 +3335,6 @@ public class monsterPart : MonoBehaviour
                     myAnimator.ResetTrigger("Switch Stance");
                     myAnimator.ResetTrigger("Switch Stance Quick");
                 }
-
-                /*
-                if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Brace") && myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") == false)
-                {
-                    myAnimator.SetTrigger("Unbrace");
-                }
-                */
             }
         }
     }
@@ -3347,12 +3349,4 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
-    /*
-    #region Judah's BS
-    public bool isAttackingCheck()
-    {
-        return isAttacking;
-    }
-    #endregion
-    */
 }

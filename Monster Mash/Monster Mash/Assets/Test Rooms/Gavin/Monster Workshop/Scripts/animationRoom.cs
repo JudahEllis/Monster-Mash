@@ -68,20 +68,13 @@ public class animationRoom : MonoBehaviour
             inputListener.SetActive(false);
         }
         reMappingUI.SetActive(false);
-        //mainMonster.removeAllLimbParenting();
-        mainMonster.connectCurrentLimbs();
-        //mainMonster.connectCurrentLimbs();//currently have this playing twice to grab first the torsos and then their heads
+        mainMonster.turnOnLimbConnectors();
     }
 
     public void startRemappingProcess()
     {
-        //mainMonster.removeAllLimbParenting();
+        mainMonster.turnOffLimbConnectors();
         mainMonster.connectCurrentLimbs();
-        StartCoroutine(remappingProcessDelay());
-    }
-
-    IEnumerator remappingProcessDelay()
-    {
         reMappingStartUpButton.SetActive(false);
         animationTestingUI.SetActive(false);
         if (resetMappingUI != null)
@@ -92,7 +85,6 @@ public class animationRoom : MonoBehaviour
         {
             inputListener.SetActive(true);
         }
-        yield return new WaitForSeconds(1);
 
         if (monsterAwake == false)
         {
@@ -342,7 +334,7 @@ public class animationRoom : MonoBehaviour
 
     public void activateTestAnimations()
     {
-        mainMonster.connectCurrentLimbs();
+        //mainMonster.connectCurrentLimbs();
         mainMonster.grabAttackSlotInfo();
         monsterPartCollection[selectedMonsterPart].disableOutline();
         reMappingUI.SetActive(false);

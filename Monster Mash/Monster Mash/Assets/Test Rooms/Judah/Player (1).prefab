@@ -146,17 +146,27 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   playerNose: {fileID: 658231308575423666}
+  playerCrawlSpeed: 0.33
+  playerSlowSpeed: 0.66
+  playerSpeed: 20
+  playerRunSpeed: 26
   onSlope: 0
   noFriction: {fileID: 6200000, guid: c35c56575756fbd478f526fb10888d2a, type: 2}
   fullFriction: {fileID: 6200000, guid: 38e60d2d30167a04092fd71b8fedaf10, type: 2}
   onEdge: 0
   frontHit: 0
   backHit: 0
+  jumpForce: 33
+  midAirJumpForce: 35
+  isJumping: 0
+  jumpMultiplier: 14
+  fallMultiplier: 7
   jumpsLeft: 0
   grounded: 0
   canPhase: 0
   semiSolids: []
   isOnSemiSolid: 0
+  jumpButtonReleased: 0
   keyToDetect1: 97
   keyToDetect2: 100
   doubleTapTimeThreshold: 0.3

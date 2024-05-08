@@ -18,6 +18,8 @@ public class Controller2D : MonoBehaviour
     #endregion
 
     #region horizontal movements variables
+    [SerializeField] private float playerCrawlSpeed = 0.33f;
+    [SerializeField]private float playerSlowSpeed = 0.66f;
     [SerializeField]private float playerSpeed = 12.0f; //player walking speed
     [SerializeField]private float playerRunSpeed = 15.6f; //run speed
     private float playerAirSpeed = 11.0f; //horizontal speed for forward airborne movement
@@ -396,13 +398,13 @@ public class Controller2D : MonoBehaviour
     private void MoveX()
     {
         // Horizontal movement.
-        if ((!hasInputHandler && Input.GetKey(KeyCode.D)) || (hasInputHandler && myInput.GetLeft_JoyStick().x > 0.15f))
+        if ((!hasInputHandler && Input.GetKey(KeyCode.D)) || (hasInputHandler && myInput.GetLeft_JoyStick().x > 0.1f))
         {
             move = 1;
 
             if (grounded) facingRight = true;
         }
-        else if ((!hasInputHandler && Input.GetKey(KeyCode.A)) || (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.15f))
+        else if ((!hasInputHandler && Input.GetKey(KeyCode.A)) || (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.1f))
         {
             move = -1;
 
@@ -473,12 +475,20 @@ public class Controller2D : MonoBehaviour
 
         if (hasInputHandler)
         {
-            Mathf.Abs(myInput.GetLeft_JoyStick().x);
+            xInput = Mathf.Abs(myInput.GetLeft_JoyStick().x);
         }
 
         if (hasInputHandler && (xInput >= 0.69f || (!grounded && xInput <= 0.15f)))
         {
             xInput = 1f;
+        }
+        else if (hasInputHandler && (xInput < 0.69f && xInput >= 0.4f))
+        {
+            xInput = playerSlowSpeed;
+        }
+        else if (hasInputHandler && (xInput < 0.4f && xInput > 0.15f))
+        {
+            xInput = playerCrawlSpeed;
         }
 
         rb.velocity = xMovement * xInput + new Vector3(0.0f, rb.velocity.y, 0.0f);

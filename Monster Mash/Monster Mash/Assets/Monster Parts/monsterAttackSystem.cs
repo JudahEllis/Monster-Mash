@@ -22,6 +22,8 @@ public class monsterAttackSystem : MonoBehaviour
     bool requiresFlourish = false;
     bool requiresFlourishingTwirl = false;
     bool requiresFlourishingRoll = false;
+    bool calm = false;
+    bool emoteActive = false;
 
     private Animator myAnimator;
     private Animator mainTorso;
@@ -31,6 +33,7 @@ public class monsterAttackSystem : MonoBehaviour
     public monsterPart[] allMonsterParts;
     public GameObject dashSplat;
     public ParticleSystem glideVisual;
+    public ParticleSystem gasVisual;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
     public Collider stompCollider;
@@ -233,6 +236,8 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
     }
 
     public void grabAttackSlotInfo()
@@ -270,6 +275,8 @@ public class monsterAttackSystem : MonoBehaviour
         facingRight = turnToTheRight;
         myAnimator.SetBool("Facing Right", facingRight);
         myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
         myAnimator = null;
         Array.Clear(allMonsterParts, 0, allMonsterParts.Length);
         isWinged = false;
@@ -634,6 +641,8 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
         else
         {
@@ -648,16 +657,21 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void stopWalking()
     {
-        if (isGrounded)
+        if (isWalking)
         {
-            isWalking = false;
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
+            if (isGrounded)
             {
-                allMonsterParts[i].triggerStopWalking();
-            }
+                isWalking = false;
 
-            myAnimator.SetBool("Idle Bounce Allowed", true);
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerStopWalking();
+                }
+
+                myAnimator.SetBool("Idle Bounce Allowed", true);
+                myAnimator.SetBool("Calm", false);
+                calm = false;
+            }
         }
     }
 
@@ -673,6 +687,8 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
         else
         {
@@ -687,24 +703,29 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void stopRunning()
     {
-        if (isGrounded)
+        if (isRunning)
         {
-            isRunning = false;
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
+            if (isGrounded)
             {
-                allMonsterParts[i].triggerStopRunning();
+                isRunning = false;
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerStopRunning();
+                }
+
+                myAnimator.SetBool("Idle Bounce Allowed", true);
+                myAnimator.SetBool("Calm", false);
+                calm = false;
             }
-
-            myAnimator.SetBool("Idle Bounce Allowed", true);
-        }
-        else
-        {
-            isRunning = false;
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
+            else
             {
-                allMonsterParts[i].triggerStopRunning();
+                isRunning = false;
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerStopRunning();
+                }
             }
         }
     }
@@ -740,6 +761,8 @@ public class monsterAttackSystem : MonoBehaviour
 
             myAnimator.SetTrigger("Jump");
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
         else
         {
@@ -842,6 +865,8 @@ public class monsterAttackSystem : MonoBehaviour
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
     }
 
@@ -862,6 +887,8 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetFloat("Flipping Speed", 1.5f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
     }
 
@@ -905,6 +932,8 @@ public class monsterAttackSystem : MonoBehaviour
             if (isRunning == false && isWalking == false)
             {
                 myAnimator.SetBool("Idle Bounce Allowed", true);
+                myAnimator.SetBool("Calm", false);
+                calm = false;
             }
 
             if (isWinged)
@@ -954,6 +983,8 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetFloat("Flipping Speed", 1.5f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
     }
 
@@ -1100,6 +1131,8 @@ public class monsterAttackSystem : MonoBehaviour
     {
         focusedAttackActive = true;
         myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
         myAnimator.ResetTrigger("Back to Prior State");
         //myAnimator.SetTrigger("Back to Prior State");
 
@@ -1115,6 +1148,8 @@ public class monsterAttackSystem : MonoBehaviour
         if (isGrounded)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
         }
         myAnimator.ResetTrigger("Right Attack Release");
         myAnimator.ResetTrigger("Left Attack Release");
@@ -1133,7 +1168,99 @@ public class monsterAttackSystem : MonoBehaviour
 
     }
 
+    public void calmedDown()
+    {
+        if (calm == false && isGrounded && emoteActive == false)
+        {
+            calm = true;
+            myAnimator.SetBool("Calm", true);
+
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].calmedDown();
+            }
+        }
+    }
+
     #endregion
+
+    //emotes
+    public void fierceEmote()
+    {
+        if (focusedAttackActive == false && isGrounded && emoteActive == false)
+        {
+            emoteActive = true;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].fierceEmote();
+            }
+        }
+    }
+
+    public void gasEmote()
+    {
+        if (focusedAttackActive == false && isGrounded && emoteActive == false)
+        {
+            emoteActive = true;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+            gasVisual.Stop();
+            gasVisual.Play();
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].gasEmote();
+            }
+        }
+    }
+
+    public void mockingEmote()
+    {
+        emoteActive = true;
+        calm = false;
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].mockingEmote();
+        }
+    }
+
+    public void danceEmote()
+    {
+        emoteActive = true;
+        calm = false;
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].danceEmote();
+        }
+    }
+
+    public void emoteEnded()
+    {
+        emoteActive = false;
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].emoteCorrections();
+        }
+        calmedDown();
+    }
+
+    public void forceEndEmote()
+    {
+        emoteActive = false;//maybe just put this bool everywhere in attacks/movement based actions/interruptions
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].emoteCorrections();
+        }
+    }
 
     #region Corrections
 

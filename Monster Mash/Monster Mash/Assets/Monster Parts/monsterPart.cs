@@ -2215,6 +2215,11 @@ public class monsterPart : MonoBehaviour
                 {
                     myAnimator.SetBool("Glide Activated", false);
                 }
+
+                if (isArm)
+                {
+                    myAnimator.SetBool("Swaying", false);
+                }
             }
 
             if (isMouth && myAnimator != null)
@@ -2416,6 +2421,11 @@ public class monsterPart : MonoBehaviour
             if (reelHeavyAttack)
             {
                 myMainSystem.grabbingCanceled();
+            }
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
             }
         }
     }
@@ -3021,13 +3031,23 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Calm", false);
             }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
-        else if (isHead || isWing || isTail)
+        else if (isHead || isWing || isTail || isArm)
         {
             myAnimator.SetBool("Walking", true);
             myAnimator.SetBool("Running", false);
             isWalking = true;
             isRunning = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
     }
 
@@ -3041,11 +3061,21 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetTrigger("Walk to Idle");
                 isWalking = false;
             }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
-        else if (isHead || isWing || isTail)
+        else if (isHead || isWing || isTail || isArm)
         {
             myAnimator.SetBool("Walking", false);
             isWalking = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
     }
 
@@ -3062,6 +3092,11 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Calm", false);
             }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
 
         if (isHead || isWing || isArm || isTail)
@@ -3070,6 +3105,11 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Walking", false);
             isWalking = false;
             isRunning = true;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
     }
 
@@ -3082,12 +3122,22 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Running", false);
                 isRunning = false;
             }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
 
         if (isArm || isHead || isWing || isTail)
         {
             myAnimator.SetBool("Running", false);
             isRunning = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
     }
 
@@ -3122,6 +3172,11 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Calm", false);
             }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
 
         if (isWing || isHead || isArm || isTail)
@@ -3131,6 +3186,11 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
 
         grounded = false;
@@ -3162,6 +3222,11 @@ public class monsterPart : MonoBehaviour
                 {
                     myAnimator.SetBool("Calm", false);
                 }
+
+                if (isTorso)
+                {
+                    myAnimator.SetBool("Teeter", false);
+                }
             }
 
             if (isArm)
@@ -3170,6 +3235,11 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Running", false);
                 isWalking = false;
                 isRunning = false;
+
+                if (isArm)
+                {
+                    myAnimator.SetBool("Swaying", false);
+                }
             }
 
             grounded = groundedWhenTriggered;
@@ -3237,6 +3307,11 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Calm", false);
             }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
 
         if (isWing || isHead || isArm || isTail)
@@ -3246,6 +3321,11 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
 
         grounded = false;
@@ -3292,11 +3372,17 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
 
         if (isArm)
         {
             myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Swaying", false);
             isWalking = false;
             isRunning = false;
         }
@@ -3351,8 +3437,27 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void teeterOnEdge()
+    {
+        if (isTorso)
+        {
+            myAnimator.SetBool("Teeter", true);
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.SetBool("Calm", true);
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Swaying", true);
+        }
+    }
+
     #endregion
 
+    #region Emote Animations
     public void fierceEmote()
     {
         if (isTorso)
@@ -3410,7 +3515,26 @@ public class monsterPart : MonoBehaviour
 
         if (isArm)
         {
-            myAnimator.SetBool("Emote On", true);
+            myAnimator.SetBool("Dancing", true);
+        }
+    }
+
+    public void jackEmote()
+    {
+        if (isTorso)
+        {
+            myAnimator.SetTrigger("Jack Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Swaying", true);
         }
     }
 
@@ -3422,13 +3546,37 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void triggerForceStopEmote()
+    {
+        if (isTorso)
+        {
+            myAnimator.SetTrigger("Force Stop Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.SetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Dancing", false);
+            myAnimator.SetBool("Swaying", false);
+        }
+    }
+
     public void emoteCorrections()
     {
         if (isArm)
         {
-            myAnimator.SetBool("Emote On", false);
+            myAnimator.SetBool("Dancing", false);
+            myAnimator.SetBool("Swaying", false);
         }
     }
+
+    #endregion
 
     #region Corrections
 
@@ -3455,6 +3603,11 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Idle Bounce Allowed", bounceAllowed);
             myAnimator.SetBool("Calm", !bounceAllowed);
+        }
+
+        if (isTorso)
+        {
+            myAnimator.SetBool("Teeter", false);
         }
     }
 

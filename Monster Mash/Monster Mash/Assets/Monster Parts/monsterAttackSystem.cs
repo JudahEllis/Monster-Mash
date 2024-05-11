@@ -32,7 +32,11 @@ public class monsterAttackSystem : MonoBehaviour
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     public monsterPart[] allMonsterParts;
+    private monsterPart[] allNonAttackingMonsterParts;
     public GameObject dashSplat;
+    public ParticleSystem partDestructionVisual;
+    public ParticleSystem destructionVisual;
+    public GameObject destructionPhysicsHelper;
     public ParticleSystem glideVisual;
     public ParticleSystem gasVisual;
     public ParticleSystem musicVisual;
@@ -1211,6 +1215,176 @@ public class monsterAttackSystem : MonoBehaviour
     public void exitedPlatformEdge()
     {
         onPlatformEdge = false;
+    }
+
+    #endregion
+
+    #region Health
+
+    public void popOffMonsterPart(monsterPart partRemoved)
+    {
+        for (int i = 0; i < attackSlotMonsterParts.Length; i++)
+        {
+            if (attackSlotMonsterParts[i] != null)
+            {
+                if (attackSlotMonsterParts[i] == partRemoved)
+                {
+                    partRemoved.disconnectThisPart();
+                    destructionPhysicsHelper.SetActive(true);
+                    StartCoroutine(removeMonsterPartFromStage(attackSlotMonsterParts[i].gameObject));
+                    //store some sort of parental and location data
+                    //bool saying disconnect
+                    //blank animation for part
+                    //remove part's parent
+                    //turn on its rigidbody
+                    //while we're at it, maybe just turn off the monster part script
+                }
+            }
+        }
+
+        healthCheck();
+    }
+
+    private void healthCheck()
+    {
+        int limbsStillActive = 0;
+        for (int i = 0; i < attackSlotMonsterParts.Length; i++)
+        {
+            if (attackSlotMonsterParts[i] != null)
+            {
+                if (attackSlotMonsterParts[i].connected)
+                {
+                    limbsStillActive++;
+                }
+            }
+        }
+
+        if (limbsStillActive == 0)
+        {
+            totalDestruction();
+        }
+        else
+        {
+            partDestructionVisual.Play();
+        }
+    }
+
+    public void totalDestruction()
+    {
+        //disconnect all parts
+        int connectedNonAttackingParts = 0;
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            if (allMonsterParts[i].connected)
+            {
+                connectedNonAttackingParts++;
+            }
+        }
+
+        allNonAttackingMonsterParts = new monsterPart[connectedNonAttackingParts];
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            if (allMonsterParts[i].connected)
+            {
+                allNonAttackingMonsterParts[i] = allMonsterParts[i];
+            }
+        }
+
+        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+        {
+            allNonAttackingMonsterParts[i].disconnectThisPart();
+        }
+
+        StartCoroutine(removeAllMonsterPartsFromStage());
+
+        destructionVisual.Play();
+        //spawn goo
+    }
+
+    private void turnOffAllMonsterPartPhysics()
+    {
+        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+        {
+            allNonAttackingMonsterParts[i].turnOffPhysics();
+        }
+    }
+
+
+    private void deactivateAllMonsterParts()
+    {
+        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+        {
+            allNonAttackingMonsterParts[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void reactivateAllMonsterParts()
+    {
+        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+        {
+            allNonAttackingMonsterParts[i].gameObject.SetActive(true);
+        }
+    }
+
+    IEnumerator removeMonsterPartFromStage(GameObject partToDisappear)
+    {
+        yield return new WaitForSeconds(0.1f);
+        destructionPhysicsHelper.SetActive(false);
+        yield return new WaitForSeconds(3);
+        partToDisappear.gameObject.SetActive(false);
+        partToDisappear.GetComponent<Rigidbody>().isKinematic = true;
+        yield return new WaitForSeconds(0.2f);
+        partToDisappear.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        partToDisappear.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        partToDisappear.SetActive(true);
+        yield return new WaitForSeconds(0.4f);
+        partToDisappear.SetActive(false);
+        yield return new WaitForSeconds(0.3f);
+        partToDisappear.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        partToDisappear.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        partToDisappear.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        partToDisappear.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        partToDisappear.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        partToDisappear.SetActive(false);
+
+    }
+
+    IEnumerator removeAllMonsterPartsFromStage()
+    {
+        yield return new WaitForSeconds(0.1f);
+        destructionPhysicsHelper.SetActive(false);
+        yield return new WaitForSeconds(8);
+        deactivateAllMonsterParts();
+        turnOffAllMonsterPartPhysics();
+        yield return new WaitForSeconds(0.2f);
+        reactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.5f);
+        deactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.2f);
+        reactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.4f);
+        deactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.3f);
+        reactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.1f);
+        deactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.1f);
+        reactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.1f);
+        deactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.1f);
+        reactivateAllMonsterParts();
+        yield return new WaitForSeconds(0.1f);
+        deactivateAllMonsterParts();
     }
 
     #endregion

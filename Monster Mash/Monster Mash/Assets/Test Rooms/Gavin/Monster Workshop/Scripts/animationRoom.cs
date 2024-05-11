@@ -350,6 +350,18 @@ public class animationRoom : MonoBehaviour
         switchTarget();
     }
 
+    public void popOffLimb()
+    {
+        mainMonster.popOffMonsterPart(monsterPartCollection[selectedMonsterPart]);
+        cyclePartsRight();
+    }
+
+    public void destroyMonster()
+    {
+        mainMonster.totalDestruction();
+        cyclePartsRight();
+    }
+
     public void flipCamera()
     {
         sceneCamera.SetTrigger("Flip Camera");

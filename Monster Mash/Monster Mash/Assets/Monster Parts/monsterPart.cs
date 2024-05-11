@@ -1578,6 +1578,11 @@ public class monsterPart : MonoBehaviour
     #region Attack Animations
     public void triggerAttack(string animationName)
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (attackFocusOn == false && myAnimator != null)
         {
             isAttacking = true;
@@ -1613,36 +1618,13 @@ public class monsterPart : MonoBehaviour
     #region Attack Bracing Animations
     public void triggerLeftAttackStance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb)
         {
-            /*
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Backward Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else if(myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-            */
             if (grounded)
             {
                 if (isRightSidedLimb && isAttacking == false)
@@ -1730,36 +1712,13 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRightAttackStance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb)
         {
-            /*
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Backward Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-            */
             if (grounded)
             {
                 if (isLeftSidedLimb && isAttacking == false)
@@ -1847,26 +1806,13 @@ public class monsterPart : MonoBehaviour
 
     public void triggerForwardStance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb)
         {
-            /*
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            */
-
             if (grounded)
             {
                 if (isLeftSidedLimb && isAttacking == false)
@@ -1953,39 +1899,13 @@ public class monsterPart : MonoBehaviour
 
     public void triggerBackwardStance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb)
         {
-            /*
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Launching Backward Brace");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Launching Backward Brace");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-            */
-
             if (grounded)
             {
                 if (isRightSidedLimb && isAttacking == false)
@@ -2074,38 +1994,14 @@ public class monsterPart : MonoBehaviour
 
     public void triggerFlourishStance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
+
         if (isGroundedLimb)
         {
-            /*
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Land") ||
-                myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk") || myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Flourish");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Flourish");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-            */
 
             if (grounded)
             {
@@ -2195,6 +2091,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerUnbrace()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isAttacking == false)
         {
             if (isGroundedLimb) // || isTorso
@@ -2287,6 +2188,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyLegStance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb) // && requiresBackwardStance == false
         {
             myAnimator.SetTrigger("Switch Stance");
@@ -2374,6 +2280,11 @@ public class monsterPart : MonoBehaviour
 
     public void walkToAttackCorrections()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             if (myAnimator.GetBool("Walking") == true)
@@ -2432,6 +2343,11 @@ public class monsterPart : MonoBehaviour
 
     public void runToAttackCorrections()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Running", false);
@@ -3020,6 +2936,11 @@ public class monsterPart : MonoBehaviour
     #region Movement Animations
     public void triggerWalk()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Walking", true);
@@ -3053,6 +2974,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerStopWalking()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb || isTorso)
         {
             if (isWalking)
@@ -3081,6 +3007,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRun()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Running", true);
@@ -3115,6 +3046,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerStopRunning()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb || isTorso)
         {
             if (isRunning)
@@ -3143,6 +3079,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerScreechingStop()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb || isTorso)
         {
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
@@ -3155,6 +3096,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerJump()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (myAnimator != null)
         {
             myAnimator.SetBool("Grounded", false);
@@ -3198,6 +3144,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRoll(bool groundedWhenTriggered)
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isLeg || isArm ||isTorso || isHead || isMouth || isWing || isTail)
         {
             if (myAnimator != null)
@@ -3248,6 +3199,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerWingFlap()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Upper Flap"); //change this so that its calculated at start with the other animations
@@ -3290,6 +3246,11 @@ public class monsterPart : MonoBehaviour
     //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)
     public void triggerFall()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (myAnimator != null)
         {
             myAnimator.SetBool("Grounded", false);
@@ -3333,6 +3294,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerLand()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (myAnimator != null)
         {
             myAnimator.SetBool("Grounded", true);
@@ -3349,6 +3315,10 @@ public class monsterPart : MonoBehaviour
 
     public void triggerGlide()
     {
+        if (connected == false)
+        {
+            return;
+        }
         if (isWing || isHead || isArm || isTail)
         {
             myAnimator.SetBool("Glide Activated", true);
@@ -3356,10 +3326,40 @@ public class monsterPart : MonoBehaviour
     }
     #endregion
 
+    #region Health
+
+    public void disconnectThisPart()
+    {
+        if (monsterPartID == 1)
+        {
+            connected = false;
+            myAnimator.SetTrigger("Blank State");
+            disableOutline();
+            this.transform.parent = null;
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        }
+    }
+
+    public void turnOffPhysics()
+    {
+        if (monsterPartID == 1)
+        {
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        }
+    }
+
+
+    #endregion
+
     #region Reaction Animations
 
     public void triggerHit()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (myAnimator != null)
         {
             myAnimator.SetTrigger("Hit");
@@ -3395,6 +3395,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerVisualDissappearance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         for (int i = 0; i < mySkinnedMeshRenderers.Length; i++)
         {
             mySkinnedMeshRenderers[i].enabled = false;
@@ -3413,6 +3418,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerVisualReappearance()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         for (int i = 0; i < mySkinnedMeshRenderers.Length; i++)
         {
             mySkinnedMeshRenderers[i].enabled = true;
@@ -3431,6 +3441,11 @@ public class monsterPart : MonoBehaviour
 
     public void calmedDown()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb)
         {
             myAnimator.SetBool("Calm", true);
@@ -3439,6 +3454,11 @@ public class monsterPart : MonoBehaviour
 
     public void teeterOnEdge()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetBool("Teeter", true);
@@ -3460,6 +3480,11 @@ public class monsterPart : MonoBehaviour
     #region Emote Animations
     public void fierceEmote()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Fierce Emote");
@@ -3474,6 +3499,11 @@ public class monsterPart : MonoBehaviour
 
     public void gasEmote()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Gas Emote");
@@ -3488,6 +3518,11 @@ public class monsterPart : MonoBehaviour
 
     public void mockingEmote()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Mocking Emote");
@@ -3502,6 +3537,11 @@ public class monsterPart : MonoBehaviour
 
     public void danceEmote()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Dance Emote");
@@ -3521,6 +3561,11 @@ public class monsterPart : MonoBehaviour
 
     public void jackEmote()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Jack Emote");
@@ -3540,6 +3585,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerEmoteEnd()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myMainSystem.emoteEnded();
@@ -3548,6 +3598,11 @@ public class monsterPart : MonoBehaviour
 
     public void triggerForceStopEmote()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isTorso)
         {
             myAnimator.SetTrigger("Force Stop Emote");
@@ -3569,6 +3624,11 @@ public class monsterPart : MonoBehaviour
 
     public void emoteCorrections()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isArm)
         {
             myAnimator.SetBool("Dancing", false);
@@ -3582,6 +3642,11 @@ public class monsterPart : MonoBehaviour
 
     public void resetBracing()
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isAttacking == false)
         {
             if (isGroundedLimb || isArm || (isMouth && myAnimator != null) || isWing || isTail)
@@ -3599,6 +3664,11 @@ public class monsterPart : MonoBehaviour
 
     public void bounceCorrections(bool bounceAllowed)
     {
+        if (connected == false)
+        {
+            return;
+        }
+
         if (isGroundedLimb)
         {
             myAnimator.SetBool("Idle Bounce Allowed", bounceAllowed);

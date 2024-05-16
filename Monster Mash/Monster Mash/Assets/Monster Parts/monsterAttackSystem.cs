@@ -32,7 +32,7 @@ public class monsterAttackSystem : MonoBehaviour
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     public monsterPart[] allMonsterParts;
-    private monsterPart[] allNonAttackingMonsterParts;
+    private List<monsterPart> nonMappedMonsterParts = new List<monsterPart>();
     public GameObject dashSplat;
     public ParticleSystem partDestructionVisual;
     public ParticleSystem destructionVisual;
@@ -377,7 +377,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
                 {
-                    if (isGrounded)
+                    if (isGrounded || attackSlotMonsterParts[attackSlot].isTail)
                     {
                         requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
@@ -395,8 +395,21 @@ public class monsterAttackSystem : MonoBehaviour
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
                 {
-                    requiresFlourishingTwirl = false;
-                    requiresFlourishingRoll = true;
+                    if (attackSlotMonsterParts[attackSlot].isTail)
+                    {
+                        requiresFlourishingTwirl = true;
+                        requiresFlourishingRoll = false;
+                    }
+                    else if (attackSlotMonsterParts[attackSlot].isLeg)
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = false;
+                    }
+                    else
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = true;
+                    }
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2)
                 {
@@ -577,6 +590,33 @@ public class monsterAttackSystem : MonoBehaviour
         stompCollider.enabled = false;
     }
 
+    public void rollingUpwardsAttack()
+    {
+        isGrounded = false;
+        isRunning = false;
+        isWalking = false;
+        canRoll = false;
+        glideVisual.Stop();
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Glide to Attack");
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerRollingUpwardsAttack();
+        }
+
+        myAnimator.SetFloat("Flipping Speed", 1f);
+        myAnimator.SetTrigger("Nonstop Roll");
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
+        forceEndEmote();
+    }
+
+    public void leapingUpwardAttack()
+    {
+
+    }
 
     #endregion
 
@@ -1271,30 +1311,18 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void totalDestruction()
     {
-        //disconnect all parts
-        int connectedNonAttackingParts = 0;
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             if (allMonsterParts[i].connected)
             {
-                connectedNonAttackingParts++;
+                nonMappedMonsterParts.Add(allMonsterParts[i]);
             }
         }
 
-        allNonAttackingMonsterParts = new monsterPart[connectedNonAttackingParts];
-
-        for (int i = 0; i < allMonsterParts.Length; i++)
+        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
         {
-            if (allMonsterParts[i].connected)
-            {
-                allNonAttackingMonsterParts[i] = allMonsterParts[i];
-            }
-        }
-
-        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
-        {
-            allNonAttackingMonsterParts[i].disconnectThisPart();
+            nonMappedMonsterParts[i].disconnectThisPart();
         }
 
         StartCoroutine(removeAllMonsterPartsFromStage());
@@ -1305,26 +1333,29 @@ public class monsterAttackSystem : MonoBehaviour
 
     private void turnOffAllMonsterPartPhysics()
     {
-        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+
+        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
         {
-            allNonAttackingMonsterParts[i].turnOffPhysics();
+            nonMappedMonsterParts[i].turnOffPhysics();
         }
     }
 
 
     private void deactivateAllMonsterParts()
     {
-        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+
+        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
         {
-            allNonAttackingMonsterParts[i].gameObject.SetActive(false);
+            nonMappedMonsterParts[i].gameObject.SetActive(false);
         }
     }
 
     private void reactivateAllMonsterParts()
     {
-        for (int i = 0; i < allNonAttackingMonsterParts.Length; i++)
+
+        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
         {
-            allNonAttackingMonsterParts[i].gameObject.SetActive(true);
+            nonMappedMonsterParts[i].gameObject.SetActive(true);
         }
     }
 

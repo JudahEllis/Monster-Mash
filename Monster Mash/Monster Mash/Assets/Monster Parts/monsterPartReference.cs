@@ -45,6 +45,7 @@ public class monsterPartReference : MonoBehaviour
             {
                 Vector3 storedCollisionPoint = other.ClosestPoint(transform.position);
                 other.GetComponent<collisionMaterial>().spawnVFX(storedCollisionPoint);
+                partReference.triggerStompDetectionOff();
             }
         }
     }

@@ -1675,9 +1675,9 @@ public class monsterPart : MonoBehaviour
             fullActiveHeavy = true;
             myMainSystem.correctWalkingAttackAnimations();
 
-            if (isTail && attackAnimationID == 2)
+            if (isTail && (attackAnimationID == 2 || attackAnimationID == 0))
             {
-                //roll upwards
+                //roll upwards OR roll downwards
             }
             else
             {
@@ -1706,6 +1706,10 @@ public class monsterPart : MonoBehaviour
                     if (isTail && attackAnimationID == 2)
                     {
                         myMainSystem.rollingUpwardsAttack();
+                    }
+                    else if (isTail && attackAnimationID == 0)
+                    {
+                        myMainSystem.rollingDownwardsAttack();
                     }
 
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
@@ -1848,7 +1852,7 @@ public class monsterPart : MonoBehaviour
 
     }
 
-    public void triggerRollingUpwardsAttack()
+    public void triggerRollingAttack()
     {
         if (connected == false)
         {
@@ -1869,6 +1873,7 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Grounded", false);
                 myAnimator.SetTrigger("Roll");
+                myAnimator.SetBool("Ready to Unroll", false);
             }
 
             if (isGroundedLimb || isTorso || isHead || isWing || isTail)
@@ -2669,7 +2674,7 @@ public class monsterPart : MonoBehaviour
             return;
         }
 
-        if (isLeg || isArm ||isTorso || isHead || isMouth || isWing || isTail)
+        if (isLeg || isArm ||isTorso || isHead || isMouth || isWing || isTail || isEye)
         {
             if (myAnimator != null)
             {
@@ -2714,6 +2719,7 @@ public class monsterPart : MonoBehaviour
             }
 
             grounded = groundedWhenTriggered;
+            stopInfiniteRoll();
         }
     }
 
@@ -2822,6 +2828,7 @@ public class monsterPart : MonoBehaviour
         if (myAnimator != null)
         {
             myAnimator.SetBool("Grounded", true);
+            myAnimator.ResetTrigger("Roll");
             myAnimator.SetTrigger("Land");
         }
 
@@ -2831,6 +2838,11 @@ public class monsterPart : MonoBehaviour
         }
 
         grounded = true;
+
+        if (isEye)
+        {
+            print("yep");
+        }
     }
 
     public void triggerGlide()
@@ -2843,6 +2855,8 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Glide Activated", true);
         }
+
+        stopInfiniteRoll();
     }
 
     #endregion
@@ -2912,6 +2926,8 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Glide Activated", false);
         }
+
+        stopInfiniteRoll();
     }
 
     public void triggerVisualDissappearance()
@@ -3199,6 +3215,19 @@ public class monsterPart : MonoBehaviour
         if (isTorso)
         {
             myAnimator.SetBool("Teeter", false);
+        }
+    }
+
+    public void stopInfiniteRoll()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Ready to Unroll", true);
         }
     }
 

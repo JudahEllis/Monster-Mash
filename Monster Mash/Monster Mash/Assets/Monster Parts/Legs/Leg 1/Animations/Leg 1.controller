@@ -442,13 +442,16 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded Limb
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Ready to Unroll
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1068581772828903647}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.5
   m_HasExitTime: 1
@@ -1159,6 +1162,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Grounded Limb
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Ready to Unroll
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2766939939500966617}
   m_Solo: 0
@@ -1392,7 +1398,7 @@ AnimatorStateMachine:
     m_Position: {x: 470, y: 660, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4363642675681988616}
-    m_Position: {x: 730, y: 590, z: 0}
+    m_Position: {x: 730, y: 630, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4308671916431534221}
     m_Position: {x: 960, y: -80, z: 0}
@@ -1425,7 +1431,7 @@ AnimatorStateMachine:
     m_Position: {x: 190, y: 670, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2497554388279136281}
-    m_Position: {x: 480, y: 240, z: 0}
+    m_Position: {x: 530, y: 230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5667317232705799304}
     m_Position: {x: 1980, y: 460, z: 0}
@@ -3814,6 +3820,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: Ready to Unroll
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 1
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -3969,6 +3981,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: Grounded
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Ready to Unroll
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -414500871207398292}
@@ -5814,13 +5829,16 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Is Leading Leg
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Ready to Unroll
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -9161927465232279993}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.5
   m_HasExitTime: 1

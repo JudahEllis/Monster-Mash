@@ -40,6 +40,7 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem glideVisual;
     public ParticleSystem gasVisual;
     public ParticleSystem musicVisual;
+    public ParticleSystem rollingAttackVisual;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
     public Collider stompCollider;
@@ -602,7 +603,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRollingUpwardsAttack();
+            allMonsterParts[i].triggerRollingAttack();
         }
 
         myAnimator.SetFloat("Flipping Speed", 1f);
@@ -611,6 +612,45 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Calm", false);
         calm = false;
         forceEndEmote();
+        StartCoroutine(rollingAttackTimer());
+    }
+
+    public void rollingDownwardsAttack()
+    {
+        isGrounded = false;
+        isRunning = false;
+        isWalking = false;
+        canRoll = false;
+        glideVisual.Stop();
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Glide to Attack");
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerRollingAttack();
+        }
+
+        myAnimator.SetFloat("Flipping Speed", 1f);
+        myAnimator.SetTrigger("Nonstop Roll");
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
+        forceEndEmote();
+        StartCoroutine(rollingAttackTimer());
+    }
+
+    IEnumerator rollingAttackTimer()
+    {
+        rollingAttackVisual.Play();
+        yield return new WaitForSeconds(0.5f);
+
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].stopInfiniteRoll();
+        }
+
+        rollingAttackVisual.Stop();
     }
 
     public void leapingUpwardAttack()

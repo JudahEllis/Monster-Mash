@@ -41,6 +41,7 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem gasVisual;
     public ParticleSystem musicVisual;
     public ParticleSystem rollingAttackVisual;
+    public ParticleSystem leapingAttackVisual;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
     public Collider stompCollider;
@@ -655,7 +656,26 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void leapingUpwardAttack()
     {
+        isGrounded = false;
+        isRunning = false;
+        isWalking = false;
+        canRoll = false;
+        glideVisual.Stop();
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Glide to Attack");
 
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerUpwardsLeapingAttack();
+        }
+
+        myAnimator.SetTrigger("Jump");
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
+        forceEndEmote();
+        leapingAttackVisual.Stop();
+        leapingAttackVisual.Play();
     }
 
     #endregion
@@ -756,9 +776,10 @@ public class monsterAttackSystem : MonoBehaviour
                     allMonsterParts[i].triggerStopWalking();
                 }
 
-                myAnimator.SetBool("Idle Bounce Allowed", true);
-                myAnimator.SetBool("Calm", false);
-                calm = false;
+                //myAnimator.SetBool("Idle Bounce Allowed", true);
+                //myAnimator.SetBool("Calm", false);
+                //calm = false;
+                calmedDown();
             }
         }
     }
@@ -1607,6 +1628,50 @@ public class monsterAttackSystem : MonoBehaviour
         if (isGrounded)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
+        }
+    }
+
+    public void correctLeapingAttackData()
+    {
+        if (isGrounded)
+        {
+            myAnimator.SetBool("Idle Bounce Allowed", true);
+        }
+    }
+
+    #endregion
+
+    #region Cutscene and Cinematic Specifics
+
+    public void getHeadAttention()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].headTurnToTarget();
+        }
+    }
+
+    public void loseHeadAttention()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].returnHeadToNormalState();
+        }
+    }
+
+    public void getTorsoAttention()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].torsoTurnToTarget();
+        }
+    }
+
+    public void loseTorsoAttention()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].returnTorsoToNormalState();
         }
     }
 

@@ -11,6 +11,7 @@ public class monsterPart : MonoBehaviour
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     private Animator myAnimator;
+    public bool requiresUniqueAnimationOffset;
     public Collider stompDetection;
     public int monsterPartHealth = 100;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
@@ -210,10 +211,12 @@ public class monsterPart : MonoBehaviour
     {
         if (monsterPartID == 1)
         {
+            /*
             for (int i = 0; i < myIdleVFX.Length; i++)
             {
                 myIdleVFX[i].gameObject.SetActive(false);
             }
+            */
 
             if (gameObject.GetComponent<Outline>() != null)
             {
@@ -960,34 +963,30 @@ public class monsterPart : MonoBehaviour
             return;
         }
 
-        if (isGroundedLimb)
+        if(myAnimator != null)
         {
-            if (isRightSidedLimb)
+            if (isGroundedLimb)
             {
-                myAnimator.SetFloat("Idle Offset", 0.0f);
-                myAnimator.SetFloat("Walk Offset", 0.0f);
-                myAnimator.SetFloat("Run Offset", 0.0f);
+                if (isRightSidedLimb)
+                {
+                    myAnimator.SetFloat("Idle Offset", 0.0f);
+                    myAnimator.SetFloat("Walk Offset", 0.0f);
+                    myAnimator.SetFloat("Run Offset", 0.0f);
+                }
+                else if (isLeftSidedLimb)
+                {
+                    float leftWalkOffset = myAnimator.GetFloat("Left Walk Offset");
+                    float leftRunOffset = myAnimator.GetFloat("Left Run Offset");
+                    myAnimator.SetFloat("Idle Offset", 0.5f);
+                    myAnimator.SetFloat("Walk Offset", leftWalkOffset);
+                    myAnimator.SetFloat("Run Offset", leftRunOffset);
+                }
             }
-            else if (isLeftSidedLimb)
+            else if (isArm || isHead || isMouth || isTail || isLeg || requiresUniqueAnimationOffset)
             {
-                float leftWalkOffset = myAnimator.GetFloat("Left Walk Offset");
-                float leftRunOffset = myAnimator.GetFloat("Left Run Offset");
-                myAnimator.SetFloat("Idle Offset", 0.5f);
-                myAnimator.SetFloat("Walk Offset", leftWalkOffset);
-                myAnimator.SetFloat("Run Offset", leftRunOffset);
+                float randomOffset = Random.Range(0, 0.5f);
+                myAnimator.SetFloat("Idle Offset", randomOffset);
             }
-        }
-        //this whole section needs an overhaul
-        //I need a better way to exclude parts from this idle offset thing
-        else if ((isRightSidedLimb || isLeftSidedLimb) && isHorn == false && isEye == false) 
-        {
-            float randomOffset = Random.Range(0, 0.5f);
-            myAnimator.SetFloat("Idle Offset", randomOffset);
-        }
-        else if(isMouth && myAnimator != null)
-        {
-            float randomOffset = Random.Range(0, 0.5f);
-            myAnimator.SetFloat("Idle Offset", randomOffset);
         }
     }
 
@@ -1675,9 +1674,14 @@ public class monsterPart : MonoBehaviour
             fullActiveHeavy = true;
             myMainSystem.correctWalkingAttackAnimations();
 
-            if (isTail && (attackAnimationID == 2 || attackAnimationID == 0))
+            //This section corrects rotation to make for better collisions, but some attacks skip this step because of special factors like leaping attacks
+            if (isTail && (attackAnimationID == 2 || attackAnimationID == 0) && attackMarkedHeavy)
             {
                 //roll upwards OR roll downwards
+            }
+            else if (isArm && (attackAnimationID == 2) && attackMarkedHeavy)
+            {
+                //leaping upwards
             }
             else
             {
@@ -1710,6 +1714,10 @@ public class monsterPart : MonoBehaviour
                     else if (isTail && attackAnimationID == 0)
                     {
                         myMainSystem.rollingDownwardsAttack();
+                    }
+                    else if (isArm && attackAnimationID == 2)
+                    {
+                        myMainSystem.leapingUpwardAttack();
                     }
 
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
@@ -1909,6 +1917,81 @@ public class monsterPart : MonoBehaviour
             }
 
             grounded = false;
+        }
+    }
+
+    public void triggerUpwardsLeapingAttack()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        grounded = false;
+
+        if (attackFocusOn)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Teeter", false);
+            isWalking = false;
+            isRunning = false;
+            return;
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetBool("Glide Activated", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isWalking = false;
+            isRunning = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
+
+            return;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Jump");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Calm", false);
+            isWalking = false;
+            isRunning = false;
+        }
+
+        if (isWing || isHead || isTail) //isArm
+        {
+            myAnimator.SetBool("Glide Activated", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isWalking = false;
+            isRunning = false;
+
+            if (isArm)
+            {
+                myAnimator.SetBool("Swaying", false);
+            }
         }
     }
 
@@ -3228,6 +3311,60 @@ public class monsterPart : MonoBehaviour
         if (myAnimator != null)
         {
             myAnimator.SetBool("Ready to Unroll", true);
+        }
+    }
+
+    #endregion
+
+    #region Cutscene and Cinematic Specifics
+
+    public void headTurnToTarget()
+    {
+        if (isHead)
+        {
+            myAnimator.SetBool("Force Idle on Start", true);
+            myAnimator.enabled = false;
+            //turn on some sort of script that moves the head bone independently
+        }
+    }
+
+    public void returnHeadToNormalState() 
+    {
+        if (isHead)
+        {
+            myAnimator.enabled = true;
+            //turn off head turning script
+            StartCoroutine(returningDelay());
+        }
+    }
+
+    public void torsoTurnToTarget()
+    {
+        if (isTorso)
+        {
+            myAnimator.SetBool("Force Idle on Start", true);
+            myAnimator.enabled = false;
+            //turn on some sort of script that moves the top or middle spine bone independently
+        }
+    }
+
+    public void returnTorsoToNormalState()
+    {
+        if (isTorso)
+        {
+            myAnimator.enabled = true;
+            //turn off head turning script
+            StartCoroutine(returningDelay());
+        }
+    }
+
+    IEnumerator returningDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (isTorso || isHead)
+        {
+            myAnimator.SetBool("Force Idle on Start", false);
         }
     }
 

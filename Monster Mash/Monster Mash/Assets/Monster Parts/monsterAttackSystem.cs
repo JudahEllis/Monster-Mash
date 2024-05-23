@@ -33,7 +33,8 @@ public class monsterAttackSystem : MonoBehaviour
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     public monsterPart[] allMonsterParts;
     private List<monsterPart> nonMappedMonsterParts = new List<monsterPart>();
-    public GameObject dashSplat;
+
+    [Header("VFX")]
     public ParticleSystem partDestructionVisual;
     public ParticleSystem destructionVisual;
     public GameObject destructionPhysicsHelper;
@@ -42,6 +43,12 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem musicVisual;
     public ParticleSystem rollingAttackVisual;
     public ParticleSystem leapingAttackVisual;
+    public ParticleSystem jumpVisual;
+    public ParticleSystem landVisual;
+    public vfxHolder runVFXHolder;
+
+    [Header("Attack Necessities")]
+    public GameObject dashSplat;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
     public Collider stompCollider;
@@ -212,11 +219,14 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < internalVFXHolders.Length; i++)
         {
-            internalVFXHolders[i].grabReferences();
-
-            for (int u = 0; u < internalVFXHolders[i].damageGivingVFX.Length; u++)
+            if (internalVFXHolders[i].isMonsterSystemVFXHolder == false)
             {
-                listOfInternalReferences.Add(internalVFXHolders[i].damageGivingVFX[u]);
+                internalVFXHolders[i].grabReferences();
+
+                for (int u = 0; u < internalVFXHolders[i].damageGivingVFX.Length; u++)
+                {
+                    listOfInternalReferences.Add(internalVFXHolders[i].damageGivingVFX[u]);
+                }
             }
         }
 
@@ -228,8 +238,15 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < internalVFXHolders.Length; i++)
         {
-            internalVFXHolders[i].referencesToIgnore = listOfInternalReferences;
-            internalVFXHolders[i].collisionOcclusion();
+            if (internalVFXHolders[i].isMonsterSystemVFXHolder == false)
+            {
+                internalVFXHolders[i].referencesToIgnore = listOfInternalReferences;
+                internalVFXHolders[i].collisionOcclusion();
+            }
+            else
+            {
+                internalVFXHolders[i].collisionOcclusion();//this is played just because the set up is wrapped in this function
+            }
         }
 
         for (int i = 0; i < allMonsterParts.Length; i++)
@@ -799,6 +816,7 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            releaseRunVFX();
         }
         else
         {
@@ -808,6 +826,14 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].triggerRun();
             }
+        }
+    }
+
+    public void releaseRunVFX()
+    {
+        if (isRunning)
+        {
+            runVFXHolder.releaseMonsterSystemVisual();
         }
     }
 
@@ -874,6 +900,7 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            releaseJumpVFX();
         }
         else
         {
@@ -911,8 +938,15 @@ public class monsterAttackSystem : MonoBehaviour
 
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
+                releaseJumpVFX();
             }
         }
+    }
+
+    public void releaseJumpVFX()
+    {
+        jumpVisual.Stop();
+        jumpVisual.Play();
     }
 
     public void glide()
@@ -1057,23 +1091,11 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 jumpsLeft = jumpsAllowed_DoubleJump;
             }
+
+            landVisual.Stop();
+            landVisual.Play();
         }
     }
-
-    /*
-    public bool IsAttacking()
-    {
-        for (int i = 0; i < allMonsterParts.Length; i++)
-        {
-            if (allMonsterParts[i].isAttackingCheck())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    */
 
     public void roll()
     {

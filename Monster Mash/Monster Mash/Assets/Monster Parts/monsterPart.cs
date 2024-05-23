@@ -2384,6 +2384,11 @@ public class monsterPart : MonoBehaviour
         stompDetection.enabled = false;
     }
 
+    public void triggerRunVisual()
+    {
+        myMainSystem.releaseRunVFX();
+    }
+
     public void triggerNeutralAttackVisuals() //called in attack animation
     {
         if (jabNeutralAttack)

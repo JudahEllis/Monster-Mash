@@ -34,6 +34,12 @@ public class vfxHolder : MonoBehaviour
     private Quaternion startingRotation;
     //
     public bool isReelInHolder;
+    //
+    public bool isMonsterSystemVFXHolder;
+    private ParticleSystem[] MonsterSystemVFXArray;
+    private int MonsterSystemVFXCount;
+    public Transform MonsterSystemVFXHolder;
+
 
 
     public void grabReferences()
@@ -92,6 +98,10 @@ public class vfxHolder : MonoBehaviour
         else if (isDefaultSprayHolder)
         {
             prepDefaultSprayVFX();
+        }
+        else if (isMonsterSystemVFXHolder)
+        {
+            prepMonsterSystemVFX();
         }
     }
 
@@ -202,6 +212,28 @@ public class vfxHolder : MonoBehaviour
         }
     }
 
+    public void prepMonsterSystemVFX()
+    {
+        if (isMonsterSystemVFXHolder)
+        {
+            List<ParticleSystem> tempSprayVFX = new List<ParticleSystem>();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                tempSprayVFX.Add(transform.GetChild(i).GetComponent<ParticleSystem>());
+            }
+            MonsterSystemVFXArray = new ParticleSystem[tempSprayVFX.Count];
+            for (int i = 0; i < MonsterSystemVFXArray.Length; i++)
+            {
+                MonsterSystemVFXArray[i] = tempSprayVFX[i];
+            }
+
+            if (MonsterSystemVFXArray[0] != null)
+            {
+                startingRotation = MonsterSystemVFXArray[0].transform.localRotation;
+            }
+        }
+    }
+
     #endregion
 
     #region Specialized Attacks
@@ -299,6 +331,25 @@ public class vfxHolder : MonoBehaviour
         hitVFX[hitVFXCount].transform.parent = null;
         hitVFX[hitVFXCount].transform.localScale = new Vector3(3f, 3f, 3f);
         hitVFX[hitVFXCount].SetActive(true);
+    }
+
+    public void releaseMonsterSystemVisual()
+    {
+        if (MonsterSystemVFXCount == MonsterSystemVFXArray.Length - 1)
+        {
+            MonsterSystemVFXCount = 0;
+        }
+        else
+        {
+            MonsterSystemVFXCount++;
+        }
+
+        //defaultSprayVFXArray[MonsterSystemVFXCount].transform.parent = defaultSprayHolder;
+        //defaultSprayVFXArray[MonsterSystemVFXCount].transform.localPosition = startingPoint;
+        //defaultSprayVFXArray[MonsterSystemVFXCount].transform.localRotation = startingRotation;
+        MonsterSystemVFXArray[MonsterSystemVFXCount].Stop();
+        //defaultSprayVFXArray[MonsterSystemVFXCount].transform.parent = null;
+        MonsterSystemVFXArray[MonsterSystemVFXCount].Play();
     }
 
     #endregion

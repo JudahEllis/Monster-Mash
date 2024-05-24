@@ -1626,6 +1626,7 @@ public class monsterPart : MonoBehaviour
         {
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
+            myMainSystem.heavyAttackActivated();
             triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
         }
         else
@@ -3050,14 +3051,88 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void triggerNeutralDamage()
+    {
+        if (connected == false || isDecor || isHorn)
+        {
+            return;
+        }
 
-    #endregion
+        if (attackFocusOn)
+        {
+            attackFocusOn = false;
+            isAttacking = false;
+            fullActiveHeavy = false;
+            attackMarkedHeavy = false;
+            heavyAttackInMotion = false;
+            connectedMonsterPart.SetBool("Attack to Idle", false);
+            connectedMonsterPart.SetBool("Ready to Swing", false);
 
-    #region Reaction Animations
+            if (hasTorsoCommandOverride)
+            {
+                mainTorso.SetBool("Attack to Idle", false);
+                mainTorso.SetBool("Ready to Swing", false);
+            }
+
+            if (reelHeavyAttack)
+            {
+                myMainSystem.grabbingCanceled();
+            }
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetTrigger("Neutral Damage");
+            isAttacking = false;
+        }
+
+        if (isGroundedLimb || isTorso || isHead || isTail)
+        {
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isWalking = false;
+            isRunning = false;
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+                myAnimator.ResetTrigger("Upper Flap");
+            }
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Swaying", false);
+            isWalking = false;
+            isRunning = false;
+        }
+
+        if (isWing)
+        {
+            myAnimator.SetBool("Glide Activated", false);
+            myAnimator.ResetTrigger("Big Flap");
+        }
+
+        stopInfiniteRoll();
+    }
+
+    public void triggerNeutralDamageRecovery()
+    {
+        if (connected == false || isDecor || isHorn)
+        {
+            return;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetTrigger("Recover");
+        }
+    }
 
     public void triggerHit()
     {
-        if (connected == false)
+        if (connected == false || isDecor || isHorn)
         {
             return;
         }
@@ -3096,6 +3171,10 @@ public class monsterPart : MonoBehaviour
 
         stopInfiniteRoll();
     }
+
+    #endregion
+
+    #region Reaction Animations
 
     public void triggerVisualDissappearance()
     {

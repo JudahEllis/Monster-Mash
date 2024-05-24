@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Arm 1 - Hit
+  m_Name: Arm 1 - Neutral Damage
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -47,15 +47,15 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.18333334
         value: {x: -12.573, y: -17.099, z: -12.197}
-        inSlope: {x: 0, y: 0, z: 4.7735214}
-        outSlope: {x: 0, y: 0, z: 4.7735214}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333334
-        value: {x: -2.7046509, y: -6.1304607, z: -11.9583235}
+        value: {x: -12.573, y: -17.099, z: -12.197}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -98,7 +98,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333334
-        value: {x: 29.137, y: -3.846, z: -1.692}
+        value: {x: 53.753, y: 48.11, z: 25.171}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -142,7 +142,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333334
-        value: {x: 6.843, y: -0.004, z: -2.203}
+        value: {x: -27.877, y: -41.473, z: 36.08}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -249,7 +249,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -2.7046509
+        value: -12.573
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -304,7 +304,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -6.1304607
+        value: -17.099
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -351,15 +351,15 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.18333334
         value: -12.197
-        inSlope: 4.7735214
-        outSlope: 4.7735214
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -11.9583235
+        value: -12.197
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -405,7 +405,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: 29.137
+        value: 53.753
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -452,7 +452,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -3.846
+        value: 48.11
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -499,7 +499,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -1.692
+        value: 25.171
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -546,7 +546,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: 6.843
+        value: -27.877
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -593,7 +593,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -0.004
+        value: -41.473
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -640,7 +640,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -2.203
+        value: 36.08
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -664,7 +664,7 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
     path: Monster Mash - Arm 1/Arm 1/Root/Pivot 1 - Shoulder Connection/Bone.002/Bone.003/Bone.004/Bone.005/Edit
-      Point 1/Pivot 2 - Elbow/Bone.007/Bone.008/Bone.009/Edit Point 2/Pivot 3 - Machinery
+      Point 1/Pivot 2 - Elbow
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -675,7 +675,7 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
     path: Monster Mash - Arm 1/Arm 1/Root/Pivot 1 - Shoulder Connection/Bone.002/Bone.003/Bone.004/Bone.005/Edit
-      Point 1/Pivot 2 - Elbow/Bone.007/Bone.008/Bone.009/Edit Point 2/Pivot 3 - Machinery
+      Point 1/Pivot 2 - Elbow
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -686,7 +686,7 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
     path: Monster Mash - Arm 1/Arm 1/Root/Pivot 1 - Shoulder Connection/Bone.002/Bone.003/Bone.004/Bone.005/Edit
-      Point 1/Pivot 2 - Elbow/Bone.007/Bone.008/Bone.009/Edit Point 2/Pivot 3 - Machinery
+      Point 1/Pivot 2 - Elbow
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -725,9 +725,9 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
+    attribute: m_LocalEulerAngles.x
     path: Monster Mash - Arm 1/Arm 1/Root/Pivot 1 - Shoulder Connection/Bone.002/Bone.003/Bone.004/Bone.005/Edit
-      Point 1/Pivot 2 - Elbow
+      Point 1/Pivot 2 - Elbow/Bone.007/Bone.008/Bone.009/Edit Point 2/Pivot 3 - Machinery
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -738,7 +738,7 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
     path: Monster Mash - Arm 1/Arm 1/Root/Pivot 1 - Shoulder Connection/Bone.002/Bone.003/Bone.004/Bone.005/Edit
-      Point 1/Pivot 2 - Elbow
+      Point 1/Pivot 2 - Elbow/Bone.007/Bone.008/Bone.009/Edit Point 2/Pivot 3 - Machinery
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -747,9 +747,9 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
+    attribute: m_LocalEulerAngles.z
     path: Monster Mash - Arm 1/Arm 1/Root/Pivot 1 - Shoulder Connection/Bone.002/Bone.003/Bone.004/Bone.005/Edit
-      Point 1/Pivot 2 - Elbow
+      Point 1/Pivot 2 - Elbow/Bone.007/Bone.008/Bone.009/Edit Point 2/Pivot 3 - Machinery
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

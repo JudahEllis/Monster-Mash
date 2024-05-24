@@ -15,6 +15,7 @@ public class monsterAttackSystem : MonoBehaviour
     private bool isRunning = false;
     private bool isGliding = false;
     private bool focusedAttackActive = false;
+    private bool heavyAttackActive = false;
     private bool canRoll = true;
     private bool canDashAttack = true;
     float timeSinceLastCall;
@@ -1214,22 +1215,6 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    public void hit()
-    {
-        isRunning = false;
-        isWalking = false;
-        focusedAttackActive = false;
-
-        for (int i = 0; i < allMonsterParts.Length; i++)
-        {
-            allMonsterParts[i].triggerHit();
-        }
-
-        forceEndEmote();
-        //The hit animations are going to flip torso back and forth from this animator (so that flipping directions doesnt affect back and forth hit animations)
-        //It does need to know which way to start though so that it is facing the camera
-    }
-
     public void grabbingActivated(monsterAttackSystem grabbedMonster, Transform reelBone ,Vector3 pointOfContact)
     {
         grabActivated = true;
@@ -1283,6 +1268,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void attackFocusOff()
     {
         focusedAttackActive = false;
+        heavyAttackActive = false;
         if (isGrounded)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
@@ -1304,6 +1290,11 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].bounceCorrections(true);
         }
 
+    }
+
+    public void heavyAttackActivated()
+    {
+        heavyAttackActive = true;
     }
 
     public void calmedDown()
@@ -1344,6 +1335,59 @@ public class monsterAttackSystem : MonoBehaviour
 
     #region Health
 
+    public void neutralDamage()
+    {
+        //this can interrupt running, walking, screeching turns, jumps, double jumps, wing flaps, lands, gliding, falling, neutral attacks, wind ups, emotes
+        //idles (active and calm), launching, other damage intakes, leaping upwards attacks, rolling upwards and downwards attacks, stomp attacks, teetering
+
+        //what isn't interrupted: heavy attacks, dash attacks, rolling
+
+        if (heavyAttackActive)
+        {
+            return;
+        }
+
+        isRunning = false;
+        isWalking = false;
+        focusedAttackActive = false;
+        calm = false;
+        myAnimator.SetTrigger("Neutral Damage");
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        myAnimator.ResetTrigger("Back to Prior State");
+        myAnimator.ResetTrigger("Right Attack Release");
+        myAnimator.ResetTrigger("Left Attack Release");
+        isGliding = false;
+        glideVisual.Stop();
+        myAnimator.ResetTrigger("Glide to Attack");
+        myAnimator.SetBool("Gliding", false);
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerNeutralDamage();
+            allMonsterParts[i].resetBracing();
+            allMonsterParts[i].bounceCorrections(true);
+        }
+
+        forceEndEmote();
+        StartCoroutine(neutralDamageRecoveryTimer());
+    }
+
+    IEnumerator neutralDamageRecoveryTimer()
+    {
+        yield return new WaitForSeconds(0.1f);
+        myAnimator.SetBool("Idle Bounce Allowed", isGrounded);
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerNeutralDamageRecovery();
+        }
+    }
+
+    public void heavyDamage()
+    {
+
+    }
     public void popOffMonsterPart(monsterPart partRemoved)
     {
         for (int i = 0; i < attackSlotMonsterParts.Length; i++)

@@ -2585,6 +2585,7 @@ public class monsterPart : MonoBehaviour
             if (isLeg)
             {
                 myAnimator.SetBool("Calm", false);
+                myAnimator.SetBool("Teeter", false);
             }
 
             if (isTorso)
@@ -2622,10 +2623,7 @@ public class monsterPart : MonoBehaviour
                 isWalking = false;
             }
 
-            if (isTorso)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
+            myAnimator.SetBool("Teeter", false);
         }
         else if (isHead || isWing || isTail || isArm)
         {
@@ -2658,10 +2656,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Calm", false);
             }
 
-            if (isTorso)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
+            myAnimator.SetBool("Teeter", false);
         }
 
         if (isHead || isWing || isArm || isTail)
@@ -2693,10 +2688,7 @@ public class monsterPart : MonoBehaviour
                 isRunning = false;
             }
 
-            if (isTorso)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
+            myAnimator.SetBool("Teeter", false);
         }
 
         if (isArm || isHead || isWing || isTail)
@@ -2744,28 +2736,25 @@ public class monsterPart : MonoBehaviour
         if (isGroundedLimb || isTorso)
         {
             myAnimator.SetBool("Walking", false);
-            myAnimator.SetBool("Running", false);
+            //myAnimator.SetBool("Running", false);
             isWalking = false;
-            isRunning = false;
+            //isRunning = false;
 
             if (isLeg)
             {
                 myAnimator.SetBool("Calm", false);
             }
 
-            if (isTorso)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
+            myAnimator.SetBool("Teeter", false);
         }
 
         if (isWing || isHead || isArm || isTail)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Walking", false);
-            myAnimator.SetBool("Running", false);
+            //myAnimator.SetBool("Running", false);
             isWalking = false;
-            isRunning = false;
+            //isRunning = false;
 
             if (isArm)
             {
@@ -2776,7 +2765,7 @@ public class monsterPart : MonoBehaviour
         grounded = false;
     }
 
-    public void triggerRoll(bool groundedWhenTriggered)
+    public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
     {
         if (connected == false || isDecor || isHorn)
         {
@@ -2803,10 +2792,18 @@ public class monsterPart : MonoBehaviour
 
         if (isGroundedLimb || isTorso || isHead || isWing || isTail)
         {
-            myAnimator.SetBool("Walking", false);
-            myAnimator.SetBool("Running", false);
-            isWalking = false;
-            isRunning = false;
+            if (trueRoll)
+            {
+                myAnimator.SetBool("Walking", false);
+                myAnimator.SetBool("Running", false);
+                isWalking = false;
+                isRunning = false;
+            }
+            else
+            {
+                myAnimator.SetBool("Walking", false);
+                isWalking = false;
+            }
 
             if (isWing || isHead)
             {
@@ -2816,6 +2813,7 @@ public class monsterPart : MonoBehaviour
             if (isLeg)
             {
                 myAnimator.SetBool("Calm", false);
+                myAnimator.SetBool("Teeter", false);
             }
 
             if (isTorso)
@@ -2827,13 +2825,17 @@ public class monsterPart : MonoBehaviour
         if (isArm)
         {
             myAnimator.SetBool("Glide Activated", false);
-            myAnimator.SetBool("Running", false);
-            isWalking = false;
-            isRunning = false;
+            myAnimator.SetBool("Swaying", false);
 
-            if (isArm)
+            if (trueRoll)
             {
-                myAnimator.SetBool("Swaying", false);
+                myAnimator.SetBool("Running", false);
+                isWalking = false;
+                isRunning = false;
+            }
+            else
+            {
+                isWalking = false;
             }
         }
 
@@ -2967,10 +2969,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Calm", false);
             }
 
-            if (isTorso)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
+            myAnimator.SetBool("Teeter", false);
         }
 
         if (isWing || isHead || isArm || isTail)
@@ -3025,6 +3024,108 @@ public class monsterPart : MonoBehaviour
         }
 
         stopInfiniteRoll();
+    }
+
+    public void triggerCrouch()
+    {
+        if (connected == false || isHorn || isDecor || isEye || isMouth)
+        {
+            return;
+        }
+
+        isWalking = false;
+        isRunning = false;
+
+        if (isTorso)
+        {
+            myAnimator.SetBool("Crouching", true);
+            myAnimator.SetTrigger("Crouch");
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.SetBool("Crouching", true);
+            myAnimator.SetTrigger("Crouch");
+            myAnimator.SetBool("Calm", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Crouching", true);
+            myAnimator.SetTrigger("Crouch");
+            myAnimator.SetBool("Swaying", false);
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+        }
+
+        if (isTail)
+        {
+            myAnimator.SetBool("Crouching", true);
+            myAnimator.SetTrigger("Crouch");
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+        }
+
+        if (isWing || isHead)
+        {
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+        }
+
+    }
+
+    public void triggerCrouchStop()
+    {
+        if (connected == false || isHorn || isDecor || isEye || isMouth)
+        {
+            return;
+        }
+
+        if (isTorso || isGroundedLimb || isArm || isTail)
+        {
+            myAnimator.SetBool("Crouching", false);
+        }
+    }
+
+    public void triggerForceFall()
+    {
+        if (connected == false || isHorn || isDecor || isEye || isMouth || grounded)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.SetBool("Force Falling", true);
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Force Falling", true);
+        }
+
+        if (isTail)
+        {
+            myAnimator.SetBool("Force Falling", true);
+        }
+
+    }
+
+    public void triggerForceFallStop()
+    {
+        if (connected == false || isHorn || isDecor || isEye || isMouth)
+        {
+            return;
+        }
+
+        if (isTorso || isArm || isTail)
+        {
+            myAnimator.SetBool("Force Falling", false);
+        }
     }
 
     #endregion
@@ -3098,6 +3199,11 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Teeter", false);
                 myAnimator.ResetTrigger("Upper Flap");
             }
+
+            if (isGroundedLimb)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
 
         if (isArm)
@@ -3150,7 +3256,7 @@ public class monsterPart : MonoBehaviour
             isWalking = false;
             isRunning = false;
 
-            if (isTorso)
+            if (isTorso || isGroundedLimb)
             {
                 myAnimator.SetBool("Teeter", false);
             }
@@ -3250,6 +3356,7 @@ public class monsterPart : MonoBehaviour
         if (isGroundedLimb)
         {
             myAnimator.SetBool("Calm", true);
+            myAnimator.SetBool("Teeter", true);
         }
 
         if (isArm)
@@ -3270,14 +3377,18 @@ public class monsterPart : MonoBehaviour
 
         if (isTorso)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Fierce Emote");
         }
 
         if (isGroundedLimb)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
+
+
     }
 
     public void gasEmote()
@@ -3289,11 +3400,13 @@ public class monsterPart : MonoBehaviour
 
         if (isTorso)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Gas Emote");
         }
 
         if (isGroundedLimb)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
@@ -3308,11 +3421,13 @@ public class monsterPart : MonoBehaviour
 
         if (isTorso)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Mocking Emote");
         }
 
         if (isGroundedLimb)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
@@ -3327,17 +3442,20 @@ public class monsterPart : MonoBehaviour
 
         if (isTorso)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Dance Emote");
         }
 
         if (isGroundedLimb)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
 
         if (isArm)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Dancing", true);
         }
     }
@@ -3351,17 +3469,20 @@ public class monsterPart : MonoBehaviour
 
         if (isTorso)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Jack Emote");
         }
 
         if (isGroundedLimb)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
 
         if (isArm)
         {
+            myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Swaying", true);
         }
     }

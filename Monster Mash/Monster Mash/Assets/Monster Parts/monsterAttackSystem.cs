@@ -14,6 +14,7 @@ public class monsterAttackSystem : MonoBehaviour
     private bool isWalking = false;
     private bool isRunning = false;
     private bool isGliding = false;
+    private bool isCrouching = false;
     private bool focusedAttackActive = false;
     private bool heavyAttackActive = false;
     private bool canRoll = true;
@@ -26,6 +27,8 @@ public class monsterAttackSystem : MonoBehaviour
     bool calm = false;
     bool emoteActive = false;
     public bool onPlatformEdge;
+    private bool damageLocked = false;
+    private bool forceFallingActivated = false;
 
     private Animator myAnimator;
     private Animator mainTorso;
@@ -369,6 +372,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void attack(int attackSlot)
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (attackSlotMonsterParts[attackSlot] != null && focusedAttackActive == false)
         {
             if (attackSlotMonsterID[attackSlot] == 0)
@@ -534,6 +542,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void attackCancel(int attackSlot)
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (attackSlotMonsterID[attackSlot] == 1)
         {
             attackSlotMonsterParts[attackSlot].triggerNeutralOrHeavyRefresh(true);
@@ -542,12 +555,18 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void dashAttack()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if ((isRunning || isGrounded == false) && canDashAttack && canRoll && focusedAttackActive == false)
         {
             isRunning = false;
             canRoll = false;
             canDashAttack = false;
             attackFocusOn();
+            stopForceFall();
             StartCoroutine(dashVisuals());
         }
     }
@@ -556,7 +575,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRoll(isGrounded);
+            allMonsterParts[i].triggerRoll(isGrounded, true);
         }
 
         myAnimator.SetFloat("Flipping Speed", 1);
@@ -581,7 +600,7 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
-            allMonsterParts[i].triggerRoll(isGrounded);
+            allMonsterParts[i].triggerRoll(isGrounded, true);
         }
 
         myAnimator.ResetTrigger("Roll");
@@ -600,6 +619,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void stompAttack()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         stompCollider.enabled = true;
         StartCoroutine(stompReset());
     }
@@ -612,6 +636,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void rollingUpwardsAttack()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         isGrounded = false;
         isRunning = false;
         isWalking = false;
@@ -631,11 +660,18 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Calm", false);
         calm = false;
         forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
         StartCoroutine(rollingAttackTimer());
     }
 
     public void rollingDownwardsAttack()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         isGrounded = false;
         isRunning = false;
         isWalking = false;
@@ -655,6 +691,8 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Calm", false);
         calm = false;
         forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
         StartCoroutine(rollingAttackTimer());
     }
 
@@ -674,6 +712,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void leapingUpwardAttack()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         isGrounded = false;
         isRunning = false;
         isWalking = false;
@@ -692,6 +735,8 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Calm", false);
         calm = false;
         forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
         leapingAttackVisual.Stop();
         leapingAttackVisual.Play();
     }
@@ -702,6 +747,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipCharacter()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (focusedAttackActive == false)
         {
             if (isRunning)
@@ -713,7 +763,14 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 StartCoroutine(characterFlipDelay(false));
             }
+
+            if (isCrouching)
+            {
+                myAnimator.SetBool("Idle Bounce Allowed", true);
+            }
+
             forceEndEmote();
+            forceStopCrouch();
         }
     }
 
@@ -756,8 +813,14 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void walk()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isGrounded)
         {
+            isRunning = false;
             isWalking = true;
 
             for (int i = 0; i < allMonsterParts.Length; i++)
@@ -769,6 +832,7 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            forceStopCrouch();
         }
         else
         {
@@ -783,6 +847,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void stopWalking()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isWalking)
         {
             if (isGrounded)
@@ -804,8 +873,14 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void run()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isGrounded)
         {
+            isWalking = false;
             isRunning = true;
 
             for (int i = 0; i < allMonsterParts.Length; i++)
@@ -817,6 +892,7 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            forceStopCrouch();
             releaseRunVFX();
         }
         else
@@ -840,6 +916,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void stopRunning()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isRunning)
         {
             if (isGrounded)
@@ -880,10 +961,15 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void jump()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isGrounded && jumpsLeft != 0)
         {
             isGrounded = false;
-            isRunning = false;
+            //isRunning = false;
             isWalking = false;
             focusedAttackActive = false;
             isGliding = false;
@@ -901,11 +987,14 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            forceStopCrouch();
             releaseJumpVFX();
+            stopForceFall();
         }
         else
         {
             doubleJump();
+            stopForceFall();
         }
     }
 
@@ -934,7 +1023,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerRoll(false);
+                    allMonsterParts[i].triggerRoll(false, false);
                 }
 
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -952,6 +1041,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void glide()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isGrounded == false && isWinged)
         {
             if (isGliding == false)
@@ -997,10 +1091,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void walkToFall()
     {
+
         if (isGrounded)
         {
             isGrounded = false;
-            isRunning = false;
+            //isRunning = false;
             isWalking = false;
             focusedAttackActive = false;
             isGliding = false;
@@ -1014,6 +1109,7 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            forceStopCrouch();
         }
     }
 
@@ -1022,13 +1118,13 @@ public class monsterAttackSystem : MonoBehaviour
         if (isGrounded)
         {
             isGrounded = false;
-            isRunning = false;
+            //isRunning = false;
             isWalking = false;
             focusedAttackActive = false;
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(false);
+                allMonsterParts[i].triggerRoll(false, false);
             }
 
             myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -1037,6 +1133,7 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            forceStopCrouch();
         }
     }
 
@@ -1051,10 +1148,11 @@ public class monsterAttackSystem : MonoBehaviour
             glideVisual.Stop();
             myAnimator.SetBool("Gliding", false);
             myAnimator.ResetTrigger("Glide to Attack");
+            stopForceFall();
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(isGrounded);
+                allMonsterParts[i].triggerRoll(isGrounded, false);
             }
             /*
             if (isGliding)
@@ -1100,6 +1198,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void roll()
     {
+        if (damageLocked)
+        {
+            return;
+        }
+
         if (isGrounded && canRoll)
         {
             isGrounded = true;
@@ -1113,7 +1216,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(true);
+                allMonsterParts[i].triggerRoll(true, true);
             }
 
             myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -1122,6 +1225,169 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Calm", false);
             calm = false;
             forceEndEmote();
+            forceStopCrouch();
+        }
+    }
+
+    public void toggleCrouch() //there's a separation here just for ease of access and in case the toggle gets weird 
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        //crouch can interrupt running, walking, landing, and emotes
+        //crouch cannout interrupt neutral or heavy attacks, windups, rolls, and jumps
+        if (focusedAttackActive == false && isGrounded)
+        {
+            if (isCrouching)
+            {
+                stopCrouching();
+            }
+            else
+            {
+                isCrouching = true;
+                isRunning = false;
+                isWalking = false;
+                //emoteActive = false;
+                calm = false;
+                myAnimator.SetBool("Idle Bounce Allowed", false);
+                myAnimator.SetBool("Calm", false);
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerCrouch();
+                }
+
+                forceEndEmote();
+                //gasVisual.Stop();
+                //musicVisual.Stop();
+            }
+        }
+    }
+
+    public void crouch()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        //crouch can interrupt running, walking, landing, and emotes
+        //crouch cannout interrupt neutral or heavy attacks, windups, rolls, and jumps
+        if (focusedAttackActive == false && isGrounded)
+        {
+            isCrouching = true;
+            isRunning = false;
+            isWalking = false;
+            //emoteActive = false;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerCrouch();
+            }
+
+            forceEndEmote();
+            //gasVisual.Stop();
+            //musicVisual.Stop();
+        }
+    }
+
+    public void stopCrouching()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        isCrouching = false;
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerCrouchStop();
+        }
+
+        myAnimator.SetBool("Idle Bounce Allowed", true);
+    }
+
+    private void forceStopCrouch()
+    {
+        isCrouching = false;
+
+        for (int i = 0; i < allMonsterParts.Length; i++) //wrap this in a bool
+        {
+            allMonsterParts[i].triggerCrouchStop();
+        }
+    }
+
+    public void forceFallToggle()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (isGrounded == false && focusedAttackActive == false)
+        {
+            if (forceFallingActivated)
+            {
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerForceFallStop();
+                }
+
+                forceFallingActivated = false;
+            }
+            else
+            {
+
+                for (int i = 0; i < allMonsterParts.Length; i++)
+                {
+                    allMonsterParts[i].triggerForceFall();
+                }
+
+                forceFallingActivated = true;
+            }
+        }
+    }
+
+    public void forceFall()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (isGrounded == false && forceFallingActivated == false && focusedAttackActive == false)
+        {
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerForceFall();
+            }
+
+            forceFallingActivated = true;
+        }
+    }
+
+    public void stopForceFall()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (isGrounded == false && forceFallingActivated)
+        {
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerForceFallStop();
+            }
+
+            forceFallingActivated = false;
         }
     }
 
@@ -1256,6 +1522,8 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Calm", false);
         calm = false;
         forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
         myAnimator.ResetTrigger("Back to Prior State");
         //myAnimator.SetTrigger("Back to Prior State");
 
@@ -1331,6 +1599,38 @@ public class monsterAttackSystem : MonoBehaviour
         onPlatformEdge = false;
     }
 
+    public void runIntoAWall()
+    {
+        if (isGrounded && isRunning)
+        {
+            isRunning = false;
+            isWalking = false;
+            focusedAttackActive = false;
+            calm = false;
+            myAnimator.SetTrigger("Neutral Damage");
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            myAnimator.ResetTrigger("Back to Prior State");
+            myAnimator.ResetTrigger("Right Attack Release");
+            myAnimator.ResetTrigger("Left Attack Release");
+            isGliding = false;
+            glideVisual.Stop();
+            myAnimator.ResetTrigger("Glide to Attack");
+            myAnimator.SetBool("Gliding", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerNeutralDamage();
+                allMonsterParts[i].resetBracing();
+                allMonsterParts[i].bounceCorrections(true);
+            }
+
+            forceEndEmote();
+            forceStopCrouch();
+            StartCoroutine(neutralDamageRecoveryTimer());
+        }
+    }
+
     #endregion
 
     #region Health
@@ -1347,6 +1647,7 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        damageLocked = true;
         isRunning = false;
         isWalking = false;
         focusedAttackActive = false;
@@ -1370,6 +1671,8 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
         StartCoroutine(neutralDamageRecoveryTimer());
     }
 
@@ -1377,6 +1680,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         myAnimator.SetBool("Idle Bounce Allowed", isGrounded);
+        damageLocked = false;
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
@@ -1388,6 +1692,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
 
     }
+
     public void popOffMonsterPart(monsterPart partRemoved)
     {
         for (int i = 0; i < attackSlotMonsterParts.Length; i++)
@@ -1550,7 +1855,12 @@ public class monsterAttackSystem : MonoBehaviour
     #region Emotes
     public void fierceEmote()
     {
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false)
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
         {
             emoteActive = true;
             calm = false;
@@ -1560,12 +1870,19 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].fierceEmote();
             }
+
+            forceStopCrouch();
         }
     }
 
     public void gasEmote()
     {
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false)
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
         {
             emoteActive = true;
             calm = false;
@@ -1577,12 +1894,19 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].gasEmote();
             }
+
+            forceStopCrouch();
         }
     }
 
     public void mockingEmote()
     {
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false)
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
         {
             emoteActive = true;
             calm = false;
@@ -1592,12 +1916,19 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].mockingEmote();
             }
+
+            forceStopCrouch();
         }
     }
 
     public void danceEmote()
     {
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false)
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
         {
             emoteActive = true;
             calm = false;
@@ -1609,12 +1940,19 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].danceEmote();
             }
+
+            forceStopCrouch();
         }
     }
 
     public void jackEmote()
     {
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false)
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
         {
             emoteActive = true;
             calm = false;
@@ -1624,6 +1962,8 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].jackEmote();
             }
+
+            forceStopCrouch();
         }
     }
 

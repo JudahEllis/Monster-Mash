@@ -21,6 +21,9 @@ public class monsterAttackSystem : MonoBehaviour
     private bool canDashAttack = true;
     float timeSinceLastCall;
     private int flourishCounter = 0;
+    private float timeSinceLastDamage;
+    private int damageComboCounter = 0;
+    private bool damageAnimationAltNeeded = false;
     bool requiresFlourish = false;
     bool requiresFlourishingTwirl = false;
     bool requiresFlourishingRoll = false;
@@ -29,6 +32,7 @@ public class monsterAttackSystem : MonoBehaviour
     public bool onPlatformEdge;
     private bool damageLocked = false;
     private bool forceFallingActivated = false;
+    private bool isLaunching = false;
 
     private Animator myAnimator;
     private Animator mainTorso;
@@ -362,7 +366,15 @@ public class monsterAttackSystem : MonoBehaviour
 
     private void Update()
     {
-        timeSinceLastCall += Time.deltaTime;
+        if (timeSinceLastCall < 10)
+        {
+            timeSinceLastCall += Time.deltaTime;
+        }
+
+        if (timeSinceLastDamage < 10)
+        {
+            timeSinceLastDamage += Time.deltaTime;
+        }
 
         if (grabActivated)
         {
@@ -376,6 +388,8 @@ public class monsterAttackSystem : MonoBehaviour
         {
             return;
         }
+
+        getOutOfLaunch();
 
         if (attackSlotMonsterParts[attackSlot] != null && focusedAttackActive == false)
         {
@@ -771,6 +785,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             forceEndEmote();
             forceStopCrouch();
+            getOutOfLaunch();
         }
     }
 
@@ -833,10 +848,12 @@ public class monsterAttackSystem : MonoBehaviour
             calm = false;
             forceEndEmote();
             forceStopCrouch();
+
         }
         else
         {
             isWalking = true;
+            getOutOfLaunch();
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -898,6 +915,7 @@ public class monsterAttackSystem : MonoBehaviour
         else
         {
             isRunning = true;
+            getOutOfLaunch();
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -1054,6 +1072,7 @@ public class monsterAttackSystem : MonoBehaviour
                 //focusedAttackActive = true;
                 glideVisual.Play();
                 myAnimator.SetBool("Gliding", true);
+                getOutOfLaunch();
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
@@ -1264,6 +1283,8 @@ public class monsterAttackSystem : MonoBehaviour
                 //musicVisual.Stop();
             }
         }
+
+        getOutOfLaunch();
     }
 
     public void crouch()
@@ -1294,6 +1315,8 @@ public class monsterAttackSystem : MonoBehaviour
             //gasVisual.Stop();
             //musicVisual.Stop();
         }
+
+        getOutOfLaunch();
     }
 
     public void stopCrouching()
@@ -1352,6 +1375,8 @@ public class monsterAttackSystem : MonoBehaviour
 
                 forceFallingActivated = true;
             }
+
+            getOutOfLaunch();
         }
     }
 
@@ -1371,6 +1396,8 @@ public class monsterAttackSystem : MonoBehaviour
 
             forceFallingActivated = true;
         }
+
+        getOutOfLaunch();
     }
 
     public void stopForceFall()
@@ -1389,6 +1416,8 @@ public class monsterAttackSystem : MonoBehaviour
 
             forceFallingActivated = false;
         }
+
+        getOutOfLaunch();
     }
 
     #endregion
@@ -1620,7 +1649,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerNeutralDamage();
+                allMonsterParts[i].triggerNeutralDamage(false);
                 allMonsterParts[i].resetBracing();
                 allMonsterParts[i].bounceCorrections(true);
             }
@@ -1662,17 +1691,49 @@ public class monsterAttackSystem : MonoBehaviour
         glideVisual.Stop();
         myAnimator.ResetTrigger("Glide to Attack");
         myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Recover");
+        forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
+
+        damageComboCounter++;
+
+        if (timeSinceLastDamage <= 0.5f)
+        {
+
+            if (damageComboCounter >= 3)
+            {
+                //if not a neutral projectile, neutral beam, or reel
+                //sent launching
+                knockback();
+                damageComboCounter = 0; //we're going to have to pass in a bool or int about what attack type it is to see if launching is appropriate
+                return;
+            }
+
+            if (damageAnimationAltNeeded)
+            {
+                damageAnimationAltNeeded = false;
+            }
+            else
+            {
+                damageAnimationAltNeeded = true;
+            }
+        }
+        else
+        {
+            damageComboCounter = 1;
+            damageAnimationAltNeeded = false;
+        }
+        timeSinceLastDamage = 0;
+
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerNeutralDamage();
+            allMonsterParts[i].triggerNeutralDamage(damageAnimationAltNeeded);//pass in a different int for what torso animation to play
             allMonsterParts[i].resetBracing();
             allMonsterParts[i].bounceCorrections(true);
         }
 
-        forceEndEmote();
-        forceStopCrouch();
-        stopForceFall();
         StartCoroutine(neutralDamageRecoveryTimer());
     }
 
@@ -1688,9 +1749,103 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    public void heavyDamage()
+    public void heavyDamage(bool hasKnockBack)
     {
+        //this can interrupt running, walking, screeching turns, jumps, double jumps, wing flaps, lands, gliding, falling, neutral attacks, wind ups, emotes
+        //idles (active and calm), launching, other damage intakes, leaping upwards attacks, rolling upwards and downwards attacks, stomp attacks, teetering
 
+        //what isn't interrupted: heavy attacks, dash attacks, rolling
+
+        if (heavyAttackActive)
+        {
+            return;
+        }
+
+        if (damageAnimationAltNeeded)
+        {
+            damageAnimationAltNeeded = false;
+        }
+        else
+        {
+            damageAnimationAltNeeded = true;
+        }
+
+        damageLocked = true;
+        isRunning = false;
+        isWalking = false;
+        focusedAttackActive = false;
+        calm = false;
+        myAnimator.SetTrigger("Heavy Damage");
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        myAnimator.ResetTrigger("Back to Prior State");
+        myAnimator.ResetTrigger("Right Attack Release");
+        myAnimator.ResetTrigger("Left Attack Release");
+        isGliding = false;
+        glideVisual.Stop();
+        myAnimator.ResetTrigger("Glide to Attack");
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Recover");
+
+        if (hasKnockBack)
+        {
+            knockback();
+        }
+        else
+        {
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerNeutralDamage(damageAnimationAltNeeded);
+                allMonsterParts[i].resetBracing();
+                allMonsterParts[i].bounceCorrections(true);
+            }
+        }
+
+        forceEndEmote();
+        forceStopCrouch();
+        stopForceFall();
+        StartCoroutine(heavyDamageRecoveryTimer());
+    }
+
+    IEnumerator heavyDamageRecoveryTimer()
+    {
+        yield return new WaitForSeconds(0.15f);
+        damageLocked = false;
+    }
+
+    public void knockback()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerLaunch();
+            allMonsterParts[i].resetBracing();
+            allMonsterParts[i].bounceCorrections(true);
+        }
+
+        isGrounded = false;
+        isLaunching = true;
+        myAnimator.SetTrigger("Launch");
+        StartCoroutine(spinTimer());
+    }
+
+    IEnumerator spinTimer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        myAnimator.SetTrigger("Spin");
+    }
+
+    public void getOutOfLaunch()
+    {
+        if (isLaunching)
+        {
+            isLaunching = false;
+            myAnimator.SetTrigger("Recover");
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerHeavyDamageRecovery();
+            }
+        }
     }
 
     public void popOffMonsterPart(monsterPart partRemoved)

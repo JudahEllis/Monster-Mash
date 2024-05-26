@@ -2946,7 +2946,7 @@ public class monsterPart : MonoBehaviour
     //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)
     public void triggerFall()
     {
-        if (connected == false || isDecor)
+        if (connected == false || isDecor || isHorn)
         {
             return;
         }
@@ -3152,7 +3152,7 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerNeutralDamage()
+    public void triggerNeutralDamage(bool damageAltNeeded)
     {
         if (connected == false || isDecor || isHorn)
         {
@@ -3184,6 +3184,105 @@ public class monsterPart : MonoBehaviour
         if (myAnimator != null)
         {
             myAnimator.SetTrigger("Neutral Damage");
+            myAnimator.ResetTrigger("Recover");
+            isAttacking = false;
+        }
+
+        if (isGroundedLimb || isTorso || isHead || isTail)
+        {
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            isWalking = false;
+            isRunning = false;
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Teeter", false);
+                myAnimator.ResetTrigger("Upper Flap");
+                myAnimator.SetBool("Damage Alt", damageAltNeeded);
+            }
+
+            if (isGroundedLimb)
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Swaying", false);
+            isWalking = false;
+            isRunning = false;
+        }
+
+        if (isWing)
+        {
+            myAnimator.SetBool("Glide Activated", false);
+            myAnimator.ResetTrigger("Big Flap");
+        }
+
+        stopInfiniteRoll();
+    }
+
+    public void triggerNeutralDamageRecovery()
+    {
+        if (connected == false || isDecor || isHorn)
+        {
+            return;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetTrigger("Recover");
+        }
+    }
+
+    public void triggerHeavyDamageRecovery()
+    {
+        if (connected == false || isDecor || isHorn)
+        {
+            return;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetTrigger("Recover");
+        }
+    }
+
+    public void triggerHeavyDamage()
+    {
+        if (connected == false || isDecor || isHorn)
+        {
+            return;
+        }
+
+        if (attackFocusOn)
+        {
+            attackFocusOn = false;
+            isAttacking = false;
+            fullActiveHeavy = false;
+            attackMarkedHeavy = false;
+            heavyAttackInMotion = false;
+            connectedMonsterPart.SetBool("Attack to Idle", false);
+            connectedMonsterPart.SetBool("Ready to Swing", false);
+
+            if (hasTorsoCommandOverride)
+            {
+                mainTorso.SetBool("Attack to Idle", false);
+                mainTorso.SetBool("Ready to Swing", false);
+            }
+
+            if (reelHeavyAttack)
+            {
+                myMainSystem.grabbingCanceled();
+            }
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetTrigger("Heavy Damage");
             isAttacking = false;
         }
 
@@ -3223,47 +3322,102 @@ public class monsterPart : MonoBehaviour
         stopInfiniteRoll();
     }
 
-    public void triggerNeutralDamageRecovery()
+    public void triggerDamageAirtime()
     {
         if (connected == false || isDecor || isHorn)
         {
             return;
         }
 
-        if (myAnimator != null)
+        if (isTorso)
         {
-            myAnimator.SetTrigger("Recover");
+            myAnimator.SetTrigger("Airtime");
         }
     }
 
-    public void triggerHit()
+    public void triggerLaunch()
     {
         if (connected == false || isDecor || isHorn)
         {
             return;
         }
 
-        if (myAnimator != null)
+        if (attackFocusOn)
         {
-            myAnimator.SetTrigger("Hit");
+            attackFocusOn = false;
             isAttacking = false;
+            fullActiveHeavy = false;
+            attackMarkedHeavy = false;
+            heavyAttackInMotion = false;
+            connectedMonsterPart.SetBool("Attack to Idle", false);
+            connectedMonsterPart.SetBool("Ready to Swing", false);
+
+            if (hasTorsoCommandOverride)
+            {
+                mainTorso.SetBool("Attack to Idle", false);
+                mainTorso.SetBool("Ready to Swing", false);
+            }
+
+            if (reelHeavyAttack)
+            {
+                myMainSystem.grabbingCanceled();
+            }
         }
 
-        if (isGroundedLimb || isTorso || isHead || isTail)
+        if (isTorso)
         {
-            myAnimator.SetBool("Walking", false);
-            myAnimator.SetBool("Running", false);
-            isWalking = false;
-            isRunning = false;
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetBool("Teeter", false);
+            myAnimator.ResetTrigger("Upper Flap");
+            myAnimator.SetTrigger("Launch");
+            myAnimator.ResetTrigger("Recover");
+            return;
+        }
 
-            if (isTorso || isGroundedLimb)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
+        if (isGroundedLimb)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetBool("Teeter", false);
+            myAnimator.SetTrigger("Launch");
+            myAnimator.ResetTrigger("Recover");
+            return;
         }
 
         if (isArm)
         {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Heavy Damage");
+            myAnimator.SetBool("Running", false);
+            myAnimator.SetBool("Swaying", false);
+            myAnimator.ResetTrigger("Recover");
+            isWalking = false;
+            isRunning = false;
+            return;
+        }
+
+        if (isHead || isTail)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Heavy Damage");
+            myAnimator.SetBool("Walking", false);
+            myAnimator.SetBool("Running", false);
+            myAnimator.ResetTrigger("Recover");
+            isWalking = false;
+            isRunning = false;
+            return;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", false);
+            myAnimator.SetTrigger("Neutral Damage");
+            myAnimator.ResetTrigger("Recover");
+            isAttacking = false;
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Swaying", false);
             isWalking = false;
@@ -3272,10 +3426,10 @@ public class monsterPart : MonoBehaviour
 
         if (isWing)
         {
+            myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Glide Activated", false);
+            myAnimator.ResetTrigger("Big Flap");
         }
-
-        stopInfiniteRoll();
     }
 
     #endregion

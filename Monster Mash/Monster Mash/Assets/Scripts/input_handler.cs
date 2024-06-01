@@ -374,16 +374,16 @@ public class input_handler : MonoBehaviour
     {
         MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        if (methodInfo != null || context.started || context.performed)
-        {
+        //if (methodInfo != null || context != null)
+        //{
             //methodInfo.Invoke(this, new object[] { context });
 
             leftStick = context.ReadValue<Vector2>();
-        }
-        else
-        {
-            leftStick = new Vector2();
-        }
+        //}
+        //else
+        //{
+            //leftStick = new Vector2();
+        //}
     }
 
     public void rightJoystick(CallbackContext context)

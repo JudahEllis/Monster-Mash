@@ -1495,17 +1495,27 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   playerNose: {fileID: 0}
+  playerCrawlSpeed: 0.33
+  playerSlowSpeed: 0.66
+  playerSpeed: 12
+  playerRunSpeed: 15.6
   onSlope: 0
   noFriction: {fileID: 0}
   fullFriction: {fileID: 0}
   onEdge: 0
   frontHit: 0
   backHit: 0
+  jumpForce: 10
+  midAirJumpForce: 26
+  isJumping: 0
+  jumpMultiplier: 14
+  fallMultiplier: 4
   jumpsLeft: 0
   grounded: 0
   canPhase: 0
   semiSolids: []
   isOnSemiSolid: 0
+  jumpButtonReleased: 0
   keyToDetect1: 97
   keyToDetect2: 100
   doubleTapTimeThreshold: 0.3
@@ -2873,6 +2883,11 @@ MonoBehaviour:
     inputFunction: attack3
   player: {fileID: 0}
   myCursor: {fileID: 0}
+  aButton: 0
+  bButton: 0
+  xButton: 0
+  yButton: 0
+  leftStick: {x: 0, y: 0}
 --- !u!4 &932804456
 Transform:
   m_ObjectHideFlags: 0
@@ -3077,6 +3092,11 @@ MonoBehaviour:
     inputFunction: 
   player: {fileID: 0}
   myCursor: {fileID: 0}
+  aButton: 0
+  bButton: 0
+  xButton: 0
+  yButton: 0
+  leftStick: {x: 0, y: 0}
 --- !u!114 &1008030565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5592,17 +5612,27 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   playerNose: {fileID: 2004473252}
+  playerCrawlSpeed: 0.33
+  playerSlowSpeed: 0.66
+  playerSpeed: 12
+  playerRunSpeed: 15.6
   onSlope: 0
   noFriction: {fileID: 6200000, guid: c35c56575756fbd478f526fb10888d2a, type: 2}
   fullFriction: {fileID: 6200000, guid: 38e60d2d30167a04092fd71b8fedaf10, type: 2}
   onEdge: 0
   frontHit: 0
   backHit: 0
+  jumpForce: 23
+  midAirJumpForce: 26
+  isJumping: 0
+  jumpMultiplier: 14
+  fallMultiplier: 4
   jumpsLeft: 0
   grounded: 0
   canPhase: 0
   semiSolids: []
   isOnSemiSolid: 0
+  jumpButtonReleased: 0
   keyToDetect1: 97
   keyToDetect2: 100
   doubleTapTimeThreshold: 0.3

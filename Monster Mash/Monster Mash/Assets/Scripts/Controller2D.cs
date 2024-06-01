@@ -19,7 +19,7 @@ public class Controller2D : MonoBehaviour
 
     #region horizontal movements variables
     [SerializeField] private float playerCrawlSpeed = 0.33f;
-    [SerializeField] private float playerSlowSpeed = 0.66f;
+    [SerializeField] private float playerSlowSpeed = 0.5f;
     [SerializeField] private float playerSpeed = 12.0f; //player walking speed
     [SerializeField] private float playerRunSpeed = 15.6f; //run speed
     private float playerAirSpeed = 11.0f; //horizontal speed for forward airborne movement
@@ -343,7 +343,7 @@ public class Controller2D : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("semi_solid") && onEdge)
         {
-            rb.velocity = new Vector2();
+            //rb.velocity = new Vector2();
         }
     }
 
@@ -425,9 +425,9 @@ public class Controller2D : MonoBehaviour
 
         if (!HitWall(move))
         {
-            if (grounded)
-            {
-                if ((!hasInputHandler && (key1result == 2 || key2result == 2)) || (hasInputHandler && myInput.GetLeft_Joystick_Click()))
+            //if (grounded)
+            //{
+                if ((!hasInputHandler && (key1result == 2 || key2result == 2)) || (hasInputHandler && myInput.GetLeft_Joystick_Click()) && grounded)
                 {
                     isRun = true;
                     xMovement = new Vector3(move * playerRunSpeed, 0.0f, 0.0f);
@@ -437,8 +437,8 @@ public class Controller2D : MonoBehaviour
                     isRun = false;
                     xMovement = new Vector3(move * playerSpeed, 0.0f, 0.0f);
                 }
-            }
-            else
+            //}
+            /*else
             {
                 if (move == 0 && Mathf.Approximately(rb.velocity.x, 0.0f)) // Jumping in place
                 {
@@ -475,7 +475,7 @@ public class Controller2D : MonoBehaviour
                     }
                 }
             }
-        }
+        */}
     }
 
     private void ApplyMove()

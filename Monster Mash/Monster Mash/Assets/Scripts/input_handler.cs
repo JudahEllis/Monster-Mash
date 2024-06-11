@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -60,7 +59,7 @@ public class input_handler : MonoBehaviour
     private void Start()
     {
 
-        if(playerInput.devices[0].name.Contains("Keyboard"))
+        if (playerInput.devices[0].name.Contains("Keyboard"))
         {
             keyboardMouseSetUp();
 
@@ -140,6 +139,8 @@ public class input_handler : MonoBehaviour
             controllerControls.FindAction("DPad Left").started += Dpad_LEFT;
 
             controllerControls.FindAction("DPad Right").started += Dpad_RIGHT;
+
+            controllerControls.FindAction("LeftStickClick").started += leftJoyStickClick;
         }
 
         print(controlType);
@@ -232,7 +233,7 @@ public class input_handler : MonoBehaviour
     */
     private void FixedUpdate()
     {
-        movePlayer();
+        //movePlayer();
     }
 
     //Establishes the correct button inputs available, whether in menus or combat and if a certain control set is being used
@@ -284,33 +285,57 @@ public class input_handler : MonoBehaviour
 
     public void A_button(CallbackContext context)
     {
-        if (context.started)
+        if (context.started || context.performed)
         {
             Invoke(currentControllerMap[0].inputFunction, 0f);
+
+            aButton = true;
+        }
+        else
+        {
+            aButton = false;
         }
     }
 
     public void B_button(CallbackContext context)
     {
-        if (context.started)
+        if (context.started || context.performed)
         {
             Invoke(currentControllerMap[1].inputFunction, 0f);
+
+            bButton = true;
+        }
+        else
+        {
+            bButton = false;
         }
     }
 
     public void X_button(CallbackContext context)
     {
-        if (context.started)
+        if (context.started || context.performed)
         {
             Invoke(currentControllerMap[2].inputFunction, 0f);
+
+            xButton = true;
+        }
+        else
+        {
+            xButton = false;
         }
     }
 
     public void Y_button(CallbackContext context)
     {
-        if (context.started)
+        if (context.started || context.performed)
         {
             Invoke(currentControllerMap[3].inputFunction, 0f);
+
+            yButton = true;
+        }
+        else
+        {
+            yButton = false;
         }
     }
 
@@ -349,10 +374,16 @@ public class input_handler : MonoBehaviour
     {
         MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        if (methodInfo != null)
-        {
-            methodInfo.Invoke(this, new object[] { context });
-        }
+        //if (methodInfo != null || context != null)
+        //{
+            //methodInfo.Invoke(this, new object[] { context });
+
+            leftStick = context.ReadValue<Vector2>();
+        //}
+        //else
+        //{
+            //leftStick = new Vector2();
+        //}
     }
 
     public void rightJoystick(CallbackContext context)
@@ -394,6 +425,30 @@ public class input_handler : MonoBehaviour
             Invoke(currentControllerMap[13].inputFunction, 0f);
         }
     }
+
+    public void leftJoyStickClick(CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            Invoke(currentControllerMap[14].inputFunction, 0f);
+            leftStickClick = true;
+        }
+        else
+        {
+            leftStickClick = false;
+        }
+    }
+    #endregion
+
+    #region Judah's Silly Input Vars hehehaha
+
+    [SerializeField] private bool aButton = false;
+    [SerializeField] private bool bButton = false;
+    [SerializeField] private bool xButton = false;
+    [SerializeField] private bool yButton = false;
+    [SerializeField] private Vector2 leftStick = new Vector2();
+    private bool leftStickClick = false;
+
     #endregion
 
     //A translator for communication between what our player presses and what actions take place on screen
@@ -620,7 +675,38 @@ public class input_handler : MonoBehaviour
 
     //A library of combat functions called by inputs. Essentially all the tangible events
     #region Combat Interaction
-    private void runPlayer(CallbackContext context)
+    //return functions to be accessed externally from Judah's movement controller script!
+    public bool GetA_Button()
+    {
+        return aButton;
+    }
+
+    public bool GetB_Button()
+    {
+        return bButton;
+    }
+
+    public bool GetX_Button()
+    {
+        return xButton;
+    }
+
+    public bool GetY_Button()
+    {
+        return yButton;
+    }
+
+    public Vector2 GetLeft_JoyStick()
+    {
+        return leftStick;
+    }
+
+    public bool GetLeft_Joystick_Click()
+    {
+        return leftStickClick;
+    }
+
+    /*private void runPlayer(CallbackContext context)
     {
         print("runninging");
         player.SetIsRun(context.performed);
@@ -645,80 +731,7 @@ public class input_handler : MonoBehaviour
             }
 
             player.Move(dir);
-        }
-        else if (controlType == "keyboardmouse") // A and D make horizontal Axis
-        {
-            float moveInput = movement.ReadValue<float>();
-
-            int dir = 0;
-
-            if (moveInput < 0)
-            {
-                dir = -1;
-            }
-            else if (moveInput > 0)
-            {
-                dir = 1;
-            }
-
-            player.Move(dir);
-        }
-    }
-
-    private void platformDrop(CallbackContext context)
-    {
-        if (controlType == "XBOX")
-        {
-            int dir = 0;
-
-            Vector2 moveInput = context.ReadValue<Vector2>();
-
-            if (moveInput.y < 0)
-            {
-            }
-
-            player.Move(dir);
-        }
-        else if (controlType == "keyboardmouse")
-        {
-            bool myInput = false;
-
-            if (context.performed)
-            {
-                myInput = true;
-            }
-
-            player.CanPlatformDrop(myInput);
-        }
-    }
-
-    private void jumpPlayer()
-    {
-        player.Jump();
-    }
-
-    private void attackPlayerContext(CallbackContext context)
-    {
-        if (context.started)
-        {
-            //player.Attack1();
-        }
-    }
-
-    private void attack1()
-    {
-        player.Attack1();
-    }
-
-    private void attack2()
-    {
-        player.Attack2();
-    }
-
-    private void attack3()
-    {
-        player.Attack3();
-    }
+        }*/
     #endregion
 
 }

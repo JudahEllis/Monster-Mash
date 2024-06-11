@@ -159,7 +159,6 @@ public class projectile : MonoBehaviour
             if (transform.rotation.x == intendedRotation.x)
             {
                 upwardDraftActivated = false;
-                print("finally");
             }
 
             updateVelocity();

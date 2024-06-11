@@ -12,28 +12,44 @@ public class BuildAScareManager : MonoBehaviour
 
     InputAction rotateAction;
 
+    InputAction zoomAction;
+
     [Header("General")]
 
     [SerializeField]
     Transform monsterEmpty;
 
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject currentlySelected;
     
     [SerializeField]
     Transform monsterRotation;
 
     [SerializeField]
-    CinemachineDollyCart cart;
+    CinemachineDollyCart rotCart;
+
+    [SerializeField]
+    CinemachineDollyCart zoomCart;
 
     bool monsterRotating = false;
 
     [SerializeField]
     Vector3 rotationVector;
 
+    [Range(2,5)]
+    public float cameraZoom = 5;
+
     [Header("MonsterData")]
 
     public MonsterData monsterInformation;
+
+    public List<GameObject> monsterGameObjects;
+
+    GameObject torsoObject;
+
+    public int currentIndex;
+
+    public Stack<UndoData> undoData;
 
     [Header("UI")]
 
@@ -79,13 +95,29 @@ public class BuildAScareManager : MonoBehaviour
 
         rotateAction = input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X");
 
+        zoomAction = input.actions.FindActionMap("Build-A-Scare").FindAction("Camera Zoom");
+
         input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X").Enable();
+
+        zoomAction.Enable();
 
         input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X").started += PauseSelection;
 
         input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X").canceled += UnpauseSelection;
 
         input.actions.FindActionMap("Build-A-Scare").FindAction("Hide/Show UI").started += HideShowUI;
+
+        input.actions.FindActionMap("Build-A-Scare").FindAction("PartIndexUp").canceled += PartIndexUp;
+
+        input.actions.FindActionMap("Build-A-Scare").FindAction("PartIndexDown").canceled += PartIndexDown;
+
+        input.actions.FindActionMap("Build-A-Scare").FindAction("Select Part").performed += SelectMonsterPart;
+
+        input.actions.FindActionMap("Build-A-Scare").FindAction("Clear Parts").performed += ClearMonsterParts;
+
+        input.actions.FindActionMap("Build-A-Scare").FindAction("Undo Part").performed += Undo;
+
+        undoData = new Stack<UndoData>();
     }
 
     private void OnDisable()
@@ -96,11 +128,25 @@ public class BuildAScareManager : MonoBehaviour
 
             input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X").Disable();
 
+            zoomAction.Disable();
+
             input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X").started -= PauseSelection;
 
             input.actions.FindActionMap("Build-A-Scare").FindAction("Rotate Character X").canceled -= UnpauseSelection;
 
             input.actions.FindActionMap("Build-A-Scare").FindAction("Hide/Show UI").started -= HideShowUI;
+
+            input.actions.FindActionMap("Build-A-Scare").FindAction("PartIndexUp").canceled -= PartIndexUp;
+
+            input.actions.FindActionMap("Build-A-Scare").FindAction("PartIndexDown").canceled -= PartIndexDown;
+
+            input.actions.FindActionMap("Build-A-Scare").FindAction("Select Part").performed -= SelectMonsterPart;
+
+            input.actions.FindActionMap("Build-A-Scare").FindAction("Clear Parts").performed -= ClearMonsterParts;
+
+            input.actions.FindActionMap("Build-A-Scare").FindAction("Undo Part").performed -= Undo;
+
+            undoData.Clear();
         }
     }
 
@@ -123,13 +169,15 @@ public class BuildAScareManager : MonoBehaviour
 
         monsterRotating = false;
 
-        cart.m_Speed = 0;
+        rotCart.m_Speed = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         RotateMonster();
+
+        ZoomCamera();
     }
 
     void RotateMonster()
@@ -138,9 +186,50 @@ public class BuildAScareManager : MonoBehaviour
         {
             Vector2 rotation = rotateAction.ReadValue<Vector2>();
 
-            cart.m_Speed = rotation.x * 1;
+            rotCart.m_Speed = rotation.x * 1;
 
-            monsterRotation.LookAt(cart.gameObject.transform.position);
+            monsterRotation.LookAt(rotCart.gameObject.transform.position);
+        }
+    }
+    void ZoomCamera()
+    {
+        float zoomPos = zoomAction.ReadValue<Vector2>().y;
+        zoomCart.m_Speed = zoomPos * 1;
+    }
+
+    void PartIndexUp(InputAction.CallbackContext context)
+    {
+        if(currentlySelected == null)
+        {
+            currentIndex++;
+
+            if (currentIndex > monsterGameObjects.Count - 1)
+            {
+                currentIndex = 0;
+            }
+        }
+    }
+
+    void PartIndexDown(InputAction.CallbackContext context)
+    {
+        if(currentlySelected == null)
+        {
+            currentIndex--;
+
+            if (currentIndex < 0)
+            {
+                currentIndex = monsterGameObjects.Count -1;
+            }
+        }
+    }
+
+    void SelectMonsterPart(InputAction.CallbackContext context)
+    {
+        if(uiHidden)
+        {
+            monsterGameObjects[currentIndex].GetComponent<BuildAScareLimb>().SelectObject();
+
+            currentlySelected = monsterGameObjects[currentIndex];
         }
     }
 
@@ -184,9 +273,51 @@ public class BuildAScareManager : MonoBehaviour
         }
     }
 
+    public void FlipPart()
+    {
+        if(currentlySelected != null)
+        {
+            Vector3 newScale = new Vector3(-currentlySelected.transform.localScale.x,
+                currentlySelected.transform.localScale.y,
+                currentlySelected.transform.localScale.z);
+
+            currentlySelected.transform.localScale = newScale;
+
+            if(currentlySelected.GetComponent<BuildAScareLimb>().flipped)
+            {
+                currentlySelected.GetComponent<BuildAScareLimb>().flipped = false;
+            }
+
+            else
+            {
+                currentlySelected.GetComponent<BuildAScareLimb>().flipped = true;
+            }
+        }
+    }
+
+    public void NewPart()
+    {
+        if(currentlySelected == null)
+        {
+            SwitchUI(limbInfo, armButtons, armButton);
+        }
+    }
+
     public void ScaleSlider()
     {
-        currentlySelected.transform.localScale = new Vector3(scaleSlider.value, scaleSlider.value, scaleSlider.value);
+        int modifier;
+
+        if(currentlySelected.GetComponent<BuildAScareLimb>().flipped)
+        {
+            modifier = -1;
+        }
+
+        else
+        {
+            modifier = 1;
+        }
+
+        currentlySelected.transform.localScale = new Vector3(scaleSlider.value * modifier, scaleSlider.value, scaleSlider.value);
     }
 
     bool uiHidden = true;
@@ -275,7 +406,21 @@ public class BuildAScareManager : MonoBehaviour
     {
         GameObject torso = Resources.Load(path) as GameObject;
 
-        Instantiate(torso, monsterEmpty);
+        GameObject spawnedTorso = Instantiate(torso, monsterEmpty);
+
+        MonsterPart torsoPart = new MonsterPart();
+
+        torsoPart.partPrefabPath = path;
+
+        torsoPart.partPosition = spawnedTorso.transform.localPosition;
+
+        torsoPart.partRotation = spawnedTorso.transform.localRotation;
+
+        torsoPart.partScale = spawnedTorso.transform.localScale;
+
+        monsterInformation.monsterParts.Add(torsoPart);
+
+        torsoObject = spawnedTorso;
 
         SwitchUI(torsoButtons, armButtons, armButton);
 
@@ -299,5 +444,42 @@ public class BuildAScareManager : MonoBehaviour
         currentlySelected = spawnedLimb;
 
         SwitchUI(armButtons, limbInfo, infoButton);
+    }
+
+    void ClearMonsterParts(InputAction.CallbackContext context)
+    {
+        if (currentlySelected != null)
+        {
+            currentlySelected.GetComponent<BuildAScareLimb>().Despawn();
+
+            currentlySelected = null;
+        }
+
+        foreach(GameObject obj in monsterGameObjects)
+        {
+            Destroy(obj);
+        }
+
+        Destroy(torsoObject.gameObject);
+
+        monsterGameObjects.Clear();
+
+        monsterInformation.monsterParts.Clear();
+
+        undoData.Clear();
+
+        SwitchUI(limbInfo, armButtons, armButton);
+
+        SwitchUI(armButtons, torsoButtons, bodyButton);
+    }
+
+    public void Undo(InputAction.CallbackContext context)
+    {
+        if(undoData.Count > 0 && currentlySelected == null)
+        {
+            undoData.Peek().monsterObj.GetComponent<BuildAScareLimb>().UndoPart(undoData.Peek().partData);
+
+            undoData.Pop();
+        }
     }
 }

@@ -7,6 +7,11 @@ public class BuildAScareLimb : MonoBehaviour
 {
     public bool isSelected = false;
 
+    [SerializeField]
+    bool canBePlaced;
+
+    public bool flipped = false;
+
     bool isMirror = false;
 
     PlayerInput input;
@@ -21,7 +26,9 @@ public class BuildAScareLimb : MonoBehaviour
     BuildAScareManager systemManager;
 
     int partIndex = -1;
-    
+
+    Transform attachPoint;
+
     void Start()
     {
 
@@ -41,12 +48,27 @@ public class BuildAScareLimb : MonoBehaviour
 
         limbController = GetComponent<CharacterController>();
 
+        limbController.radius = 0.1f;
+
+        limbController.height = 0.1f;
+
+        limbController.detectCollisions = false;
+
         monsterPart.partPrefabPath = path;
 
         systemManager = FindObjectOfType<BuildAScareManager>();
+
+        attachPoint = transform.GetChild(0);
+
+        //This line is TEMPORARY only until proper mesh detection for placement can be found
+        canBePlaced = true;
+
+        UndoData currentStatus = new UndoData(transform.localPosition, transform.localScale, transform.localRotation, this.gameObject);
+
+        systemManager.undoData.Push(currentStatus);
     }
 
-    void SelectObject()
+    public void SelectObject()
     {
         moveLimb = input.actions.FindActionMap("Build-A-Scare").FindAction("Move Part");
 
@@ -55,7 +77,7 @@ public class BuildAScareLimb : MonoBehaviour
         isSelected = true;
     }
 
-    void DeselectObject()
+    public void DeselectObject()
     {
         moveLimb = null;
 
@@ -68,24 +90,46 @@ public class BuildAScareLimb : MonoBehaviour
 
     void PlacePart(InputAction.CallbackContext context)
     {
-        moveLimb = null;
+        if(canBePlaced)
+        {
+            moveLimb = null;
 
-        isSelected = false;
+            isSelected = false;
 
-        SavePartData();
+            SavePartData();
 
-        systemManager.monsterInformation.monsterParts.Add(monsterPart);
+            input.actions.FindActionMap("Build-A-Scare").FindAction("Place Part").started -= PlacePart;
 
-        partIndex = systemManager.monsterInformation.monsterParts.IndexOf(monsterPart);
+            systemManager.currentlySelected = null;
+        }
+    }
 
-        input.actions.FindActionMap("Build-A-Scare").FindAction("Place Part").started -= PlacePart;
-
-        systemManager.currentlySelected = null;
+    public void Despawn()
+    {
+        Destroy(this.gameObject);
     }
 
     void FixedUpdate()
     {
         MoveLimb();
+
+        //CalculatePlacement();
+    }
+
+    void CalculatePlacement()
+    {
+        if(isSelected)
+        {
+            RaycastHit hit;
+
+            if(Physics.SphereCast(attachPoint.position, 0.1f, transform.up, out hit))
+            {
+                if(hit.transform.gameObject.CompareTag("Limb") && hit.transform.parent != this.gameObject)
+                {
+                    canBePlaced = true;
+                }
+            }
+        }
     }
 
     void MoveLimb()
@@ -111,6 +155,10 @@ public class BuildAScareLimb : MonoBehaviour
 
         monsterPart.partPosition = transform.localPosition;
 
+        UndoData currentStatus = new UndoData(monsterPart.partPosition, monsterPart.partScale, monsterPart.partRotation, this.gameObject);
+
+        systemManager.undoData.Push(currentStatus);
+
         if(partIndex != -1)
         {
             systemManager.monsterInformation.monsterParts[partIndex].partPosition = monsterPart.partPosition;
@@ -119,5 +167,23 @@ public class BuildAScareLimb : MonoBehaviour
 
             systemManager.monsterInformation.monsterParts[partIndex].partRotation = monsterPart.partRotation;
         }
+
+        else
+        {
+            systemManager.monsterInformation.monsterParts.Add(monsterPart);
+
+            systemManager.monsterGameObjects.Add(this.gameObject);
+
+            partIndex = systemManager.monsterInformation.monsterParts.IndexOf(monsterPart);
+        }
+    }
+
+    public void UndoPart(MonsterPart partData)
+    {
+        transform.localPosition = partData.partPosition;
+
+        transform.localScale = partData.partScale;
+
+        transform.localRotation = partData.partRotation;
     }
 }

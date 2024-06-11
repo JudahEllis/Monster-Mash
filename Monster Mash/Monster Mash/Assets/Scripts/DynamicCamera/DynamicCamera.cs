@@ -20,7 +20,13 @@ public class DynamicCamera : MonoBehaviour
 
     //The Min and Max Position of the cameras Follow Target
     [SerializeField]
-    Transform[] clampValues;
+    Transform[] clampValuesX;
+
+    [SerializeField]
+    Transform[] clampValuesY;
+
+    [SerializeField]
+    Transform[] clampValuesZ;
 
     //The Min and Max Transform on the stage. only calculated on the X-Axis
     //Both Objects should have the same values except for their X
@@ -32,11 +38,15 @@ public class DynamicCamera : MonoBehaviour
     [SerializeField]
     float maxDist;
 
+    [SerializeField]
+    AnimationCurve zClampCurve;
+
     void Start()
     {
-        dynamicCam.m_Lens.FieldOfView = 40f;
-
         maxDist = Vector3.Distance(stageClampValues[0].transform.position, stageClampValues[1].transform.position);
+
+        zClampCurve = new AnimationCurve(new Keyframe(0, clampValuesZ[1].position.z),
+            new Keyframe(1, clampValuesZ[0].position.z));
     }
 
     private void LateUpdate()
@@ -53,16 +63,16 @@ public class DynamicCamera : MonoBehaviour
             characterBounds.Encapsulate(player.position);
         }
 
-        Vector2 value = new Vector2(Mathf.Abs(characterBounds.center.normalized.x), Mathf.Abs(characterBounds.center.normalized.y)).normalized;
-
-        float clampX = Mathf.Clamp(characterBounds.center.x, clampValues[0].transform.position.x, clampValues[1].transform.position.x);
-
-        transform.position = new Vector3(clampX, transform.position.y, transform.position.z);
-
         float dist = Vector3.Distance(characterBounds.min, characterBounds.max);
 
         float normalizedDist = dist / maxDist;
 
-        dynamicCam.m_Lens.FieldOfView = camFovCurve.Evaluate(normalizedDist);
+        float clampX = Mathf.Clamp(characterBounds.center.x, clampValuesX[0].transform.position.x, clampValuesX[1].transform.position.x);
+
+        float clampY = Mathf.Clamp(characterBounds.center.y, clampValuesY[0].transform.position.y, clampValuesY[1].transform.position.y);
+
+        float clampZ = zClampCurve.Evaluate(normalizedDist);
+
+        transform.position = new Vector3(clampX, clampY, clampZ);
     }
 }

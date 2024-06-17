@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class monsterPart : MonoBehaviour
@@ -3691,6 +3692,18 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Dancing", false);
             myAnimator.SetBool("Swaying", false);
+        }
+    }
+
+    #endregion
+
+    #region Audio Triggers
+
+    public void playFootstepSFXOnAnimation()
+    {
+        if (isLeg && myMainSystem.SFXManager)
+        {
+            myMainSystem.SFXManager.footstepSFX(this);
         }
     }
 

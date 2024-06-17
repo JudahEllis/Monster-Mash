@@ -64,6 +64,7 @@ public class monsterAttackSystem : MonoBehaviour
     public Transform nativeReel;
     private Transform foreignReel;
     private monsterAttackSystem foreignMonster;
+    public SFXManager SFXManager;
 
     #region Monster Start Up
 
@@ -271,6 +272,8 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Idle Bounce Allowed", true);
         myAnimator.SetBool("Calm", false);
         calm = false;
+
+        SFXManager = FindObjectOfType<SFXManager>();
     }
 
     public void grabAttackSlotInfo()

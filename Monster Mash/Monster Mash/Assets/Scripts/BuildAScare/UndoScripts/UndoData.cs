@@ -5,13 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class UndoData
 {
-    public MonsterPart partData;
+    public MonsterPartData partData;
 
     public GameObject monsterObj;
 
     public UndoData(Vector3 position, Vector3 scale, Quaternion rotation, GameObject obj)
     {
-        partData = new MonsterPart();
+        partData = new MonsterPartData();
 
         partData.partPosition = position;
 

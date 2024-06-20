@@ -9,11 +9,15 @@ public class PlayerSpawnManager : MonoBehaviour
     private Transform[] playerSpawnLocations;
     void Start()
     {
+        /*
        foreach(MultiplayerJoinManager.PlayerInformation info in CharacterSelectManager.Instance.storedPlayerInformation)
         {
             int spawnIndex = CharacterSelectManager.Instance.storedPlayerInformation.IndexOf(info);
             SpawnPlayer(info.selectedCharacter, info.characterModel, playerSpawnLocations[spawnIndex], info.playerInput, info.playerIndex);
         }
+        */
+
+        FunTestSpawner();
     }
 
     // Update is called once per frame
@@ -43,5 +47,26 @@ public class PlayerSpawnManager : MonoBehaviour
 
         }
 
+    }
+
+    void FunTestSpawner()
+    {
+        MonsterTransfer transfer = FindObjectOfType<MonsterTransfer>();
+
+        for(int i = 0; i < transfer.selectedMonsters.Count; i++)
+        {
+            foreach(MonsterPartData partData in transfer.selectedMonsters[i].monsterParts)
+            {
+                GameObject partPrefab = Resources.Load(partData.partPrefabPath) as GameObject;
+
+                GameObject spawnedPart = Instantiate(partPrefab, playerSpawnLocations[i]);
+
+                spawnedPart.transform.localPosition = partData.partPosition;
+
+                spawnedPart.transform.localRotation = partData.partRotation;
+
+                spawnedPart.transform.localScale = partData.partScale;
+            }
+        }
     }
 }

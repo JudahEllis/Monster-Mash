@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class MonsterPart
+public class MonsterPartData
 {
     public string partPrefabPath;
 

@@ -408,7 +408,7 @@ public class BuildAScareManager : MonoBehaviour
 
         GameObject spawnedTorso = Instantiate(torso, monsterEmpty);
 
-        MonsterPart torsoPart = new MonsterPart();
+        MonsterPartData torsoPart = new MonsterPartData();
 
         torsoPart.partPrefabPath = path;
 

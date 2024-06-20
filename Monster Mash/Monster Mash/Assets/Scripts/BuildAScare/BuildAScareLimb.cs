@@ -21,7 +21,7 @@ public class BuildAScareLimb : MonoBehaviour
     CharacterController limbController;
 
     [SerializeField]
-    MonsterPart monsterPart;
+    MonsterPartData monsterPart;
 
     BuildAScareManager systemManager;
 
@@ -36,7 +36,7 @@ public class BuildAScareLimb : MonoBehaviour
 
     public void SpawnObject(string path)
     {
-        monsterPart = new MonsterPart();
+        monsterPart = new MonsterPartData();
 
         isSelected = true;
 
@@ -178,7 +178,7 @@ public class BuildAScareLimb : MonoBehaviour
         }
     }
 
-    public void UndoPart(MonsterPart partData)
+    public void UndoPart(MonsterPartData partData)
     {
         transform.localPosition = partData.partPosition;
 

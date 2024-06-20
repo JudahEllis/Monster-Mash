@@ -7,5 +7,5 @@ public class MonsterData
 {
     public string monsterName;
 
-    public List<MonsterPart> monsterParts;
+    public List<MonsterPartData> monsterParts;
 }

@@ -110,9 +110,9 @@ public class input_handler : MonoBehaviour
 
             InputActionMap controllerControls = playerInput.actions.FindActionMap(controlType);
 
-            movement = controllerControls.FindAction("Left Stick");
+            //movement = controllerControls.FindAction("Left Stick");
 
-            movement.Enable();
+            //movement.Enable();
 
             controllerControls.FindAction("A Button").started += A_button;
 
@@ -131,6 +131,8 @@ public class input_handler : MonoBehaviour
             controllerControls.FindAction("Right Bumper").started += rightBumper;
 
             controllerControls.FindAction("Right Stick").Enable();
+
+            controllerControls.FindAction("Left Stick").started += leftJoystick;
 
             controllerControls.FindAction("DPad Up").started += Dpad_UP;
 
@@ -231,9 +233,14 @@ public class input_handler : MonoBehaviour
     }
 
     */
-    private void FixedUpdate()
+    private void Update()
     {
         //movePlayer();
+
+        if (controlType == "XBOX")
+        {
+            leftStick = Gamepad.current.leftStick.ReadValue();
+        }
     }
 
     //Establishes the correct button inputs available, whether in menus or combat and if a certain control set is being used
@@ -372,13 +379,13 @@ public class input_handler : MonoBehaviour
 
     public void leftJoystick(CallbackContext context)
     {
-        MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        //MethodInfo methodInfo = GetType().GetMethod(currentControllerMap[8].inputFunction, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
         //if (methodInfo != null || context != null)
         //{
             //methodInfo.Invoke(this, new object[] { context });
 
-            leftStick = context.ReadValue<Vector2>();
+            //leftStick = context.ReadValue<Vector2>();
         //}
         //else
         //{

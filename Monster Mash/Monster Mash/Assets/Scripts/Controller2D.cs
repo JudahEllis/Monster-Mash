@@ -79,6 +79,8 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private monsterAttackSystem monsterAtt;
     [SerializeField] private bool hasMonsterAtt = false;
     [SerializeField] private bool monsterArtFacingRight = false;
+    [SerializeField] private bool monsterArtIsWalk = false;
+    [SerializeField] private bool monsterArtIsRun = false;
 
 #endregion
 
@@ -132,7 +134,6 @@ public class Controller2D : MonoBehaviour
         #endregion
 
         monsterAtt.flipCharacter();
-        monsterArtFacingRight = true;
     }
 
     private void Update()
@@ -205,6 +206,7 @@ public class Controller2D : MonoBehaviour
                 }
 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                monsterAtt.jump();
                 jumpsLeft--;
                 isJumping = true;
                 jumpCounter = 0;
@@ -225,6 +227,7 @@ public class Controller2D : MonoBehaviour
                 }
 
                 rb.velocity = new Vector2(rb.velocity.x, midAirJumpForce);
+                monsterAtt.jump();
                 jumpsLeft--;
 
                 if (move == 1)
@@ -252,6 +255,7 @@ public class Controller2D : MonoBehaviour
             if (rb.velocity.y < 0.0f)
             {
                 rb.velocity -= -Physics2D.gravity * fallMultiplier * fastFallSpeed * Time.deltaTime;
+                monsterAtt.forceFall();
             }
         }
         else
@@ -287,6 +291,11 @@ public class Controller2D : MonoBehaviour
 
         if (myHit && !isJumping)//&& rb.velocity.y <= 0.0f)
         {
+            if (!grounded)
+            {
+                monsterAtt.land();
+            }
+
             grounded = true;
             jumpsLeft = 1 + midAirJumps;
         }
@@ -430,6 +439,34 @@ public class Controller2D : MonoBehaviour
         }
     }
 
+    private void AnimatePlayerWalk(bool walk)
+    {
+        if (walk && !monsterArtIsWalk)
+        {
+            monsterArtIsWalk = true;
+            monsterAtt.walk();
+        }
+        else if (!walk && monsterArtIsWalk)
+        {
+            monsterArtIsWalk = false;
+            monsterAtt.stopWalking();
+        }
+    }
+
+    private void AnimatePlayerRun(bool run)
+    {
+        if (run && !monsterArtIsRun)
+        {
+            monsterArtIsRun = true;
+            monsterAtt.run();
+        }
+        else if (!run && monsterArtIsRun)
+        {
+            monsterArtIsRun = false;
+            monsterAtt.stopRunning();
+        }
+    }
+
     private void MoveX()
     {
         // Horizontal movement.
@@ -438,6 +475,7 @@ public class Controller2D : MonoBehaviour
             move = 1;
 
             if (grounded) facingRight = true;
+
         }
         else if ((!hasInputHandler && Input.GetKey(KeyCode.A)) || (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.1f))
         {
@@ -448,6 +486,9 @@ public class Controller2D : MonoBehaviour
         else
         {
             move = 0;
+
+            //AnimatePlayerWalk(false);
+            //AnimatePlayerWalk(false);
         }
 
         //disable move
@@ -515,19 +556,39 @@ public class Controller2D : MonoBehaviour
         if (hasInputHandler)
         {
             xInput = Mathf.Abs(myInput.GetLeft_JoyStick().x);
-        }
 
-        if (hasInputHandler && (xInput >= 0.69f || (!grounded && xInput <= 0.15f)))
-        {
-            xInput = 1f;
-        }
-        else if (hasInputHandler && (xInput < 0.69f && xInput >= 0.4f))
-        {
-            xInput = playerSlowSpeed;
-        }
-        else if (hasInputHandler && (xInput < 0.4f && xInput > 0.15f))
-        {
-            xInput = playerCrawlSpeed;
+            if (xInput >= 0.69f || (!grounded && xInput <= 0.15f))
+            {
+                xInput = 1f;
+
+                if (grounded)
+                {
+                    AnimatePlayerRun(true);
+                }
+            }
+            else if (xInput < 0.69f && xInput >= 0.4f)
+            {
+                xInput = playerSlowSpeed;
+
+                if (grounded)
+                {
+                    AnimatePlayerRun(true);
+                }
+            }
+            else if (xInput < 0.4f && xInput > 0.15f)
+            {
+                xInput = playerCrawlSpeed;
+
+                if (grounded)
+                {
+                    AnimatePlayerWalk(true);
+                }
+            }
+            else
+            {
+                AnimatePlayerWalk(false);
+                AnimatePlayerRun(false);
+            }
         }
 
         rb.velocity = xMovement * xInput + new Vector3(0.0f, rb.velocity.y, 0.0f);

@@ -199,6 +199,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156875}
   m_CullTransparentMesh: 1
+--- !u!1001 &25070840
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1775750684}
+    m_Modifications:
+    - target: {fileID: 5029714727828556000, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_Name
+      value: Monster Parts
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.094425
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 20bf8199c075781419861ece52e1a14b, type: 3}
 --- !u!1 &78467388
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,6 +854,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 334207717}
   m_CullTransparentMesh: 1
+--- !u!4 &417175161 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5029714727828556015, guid: 20bf8199c075781419861ece52e1a14b,
+    type: 3}
+  m_PrefabInstance: {fileID: 25070840}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &423433578
 GameObject:
   m_ObjectHideFlags: 0
@@ -5735,6 +5830,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 417175161}
   - {fileID: 2004473252}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -6329,7 +6425,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1775750684}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &2004473253
 MeshRenderer:

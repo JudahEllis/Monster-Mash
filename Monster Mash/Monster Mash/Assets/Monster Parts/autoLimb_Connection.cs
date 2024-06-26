@@ -29,6 +29,7 @@ public class autoLimb_Connection : MonoBehaviour
     public void enableColliders() //rename this for easier outside knowledge
     {
         triggerBubble.enabled = true;
+
         //StartCoroutine(limbConnectionAutoStop());
     }
 
@@ -138,7 +139,7 @@ public class autoLimb_Connection : MonoBehaviour
         if (other.gameObject.tag == "Connection - Monster Part")
         {
             if (other.gameObject.GetComponent<monsterPart>() != null)
-            {
+            { 
                 monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
 
                 if (monsterPartMemory.Contains(monsterPartScript) == false)

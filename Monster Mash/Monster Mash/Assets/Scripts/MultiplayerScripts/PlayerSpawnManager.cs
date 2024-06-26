@@ -7,6 +7,9 @@ public class PlayerSpawnManager : MonoBehaviour
 {
     [SerializeField]
     private Transform[] playerSpawnLocations;
+
+    [SerializeField]
+    private Transform players;
     void Start()
     {
         /*
@@ -53,13 +56,29 @@ public class PlayerSpawnManager : MonoBehaviour
     {
         MonsterTransfer transfer = FindObjectOfType<MonsterTransfer>();
 
-        for(int i = 0; i < transfer.selectedMonsters.Count; i++)
+        GameObject playerPrefab = Resources.Load("Fun-Test Parts/Monster/Player") as GameObject;
+
+        GameObject monsterEmpty = Resources.Load("Fun-Test Parts/Monster/MonsterEmpty") as GameObject;
+
+        for (int i = 0; i < transfer.selectedMonsters.Count; i++)
         {
-            foreach(MonsterPartData partData in transfer.selectedMonsters[i].monsterParts)
+            GameObject spawnedPlayer = Instantiate(playerPrefab, playerSpawnLocations[i].position, Quaternion.identity);
+
+            spawnedPlayer.transform.parent = players;
+
+            Transform monsterPartStorage = spawnedPlayer.transform.GetChild(1);
+
+            GameObject emptyMonster = Instantiate(monsterEmpty, monsterPartStorage);
+
+            Transform monsterPartVisualsSpawn = emptyMonster.transform.GetChild(0).GetChild(0);
+
+            monsterAttackSystem monsterControl = emptyMonster.GetComponent<monsterAttackSystem>();
+
+            foreach (MonsterPartData partData in transfer.selectedMonsters[i].monsterParts)
             {
                 GameObject partPrefab = Resources.Load(partData.partPrefabPath) as GameObject;
 
-                GameObject spawnedPart = Instantiate(partPrefab, playerSpawnLocations[i]);
+                GameObject spawnedPart = Instantiate(partPrefab, monsterPartVisualsSpawn);
 
                 spawnedPart.transform.localPosition = partData.partPosition;
 
@@ -67,6 +86,21 @@ public class PlayerSpawnManager : MonoBehaviour
 
                 spawnedPart.transform.localScale = partData.partScale;
             }
+
+            monsterControl.turnOnLimbConnectors();
+
+            StartCoroutine(Delay(monsterControl));
         }
+    }
+
+    IEnumerator Delay(monsterAttackSystem monsterControl)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        monsterControl.turnOffLimbConnectors();
+
+        monsterControl.connectCurrentLimbs();
+
+        monsterControl.awakenTheBeast();
     }
 }

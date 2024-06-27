@@ -6,7 +6,8 @@ using TMPro;
 
 public class Controller2D : MonoBehaviour
 {
-    #region GetComponent & manually set variables/ miscellaneous
+    #region Variable Declaration
+    //GetComponent & manually set variables/ miscellaneous
     private Rigidbody2D rb; //player rigidbody 2D
     private CapsuleCollider2D cap; //basically called to check player size info, frictionless for edge collision to prevent sticking
     [SerializeField] private Collider2D footCircle; //circle collider foot shape for smooth slope movement
@@ -15,9 +16,8 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private bool footIsBox = true;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private Transform playerNose; //debugging visual indicator of player facing left or right, will be deprecated when art is present
-    #endregion
 
-    #region horizontal movements variables
+    //horizontal movements variables
     [SerializeField] private float playerCrawlSpeed = 0.33f;
     [SerializeField] private float playerSlowSpeed = 0.5f;
     [SerializeField] private float playerSpeed = 12.0f; //player walking speed
@@ -50,9 +50,8 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private bool onEdge = false;
     [SerializeField] bool frontHit = false;
     [SerializeField] bool backHit = false;
-    #endregion
 
-    #region all jumping vars
+    //all jumping vars
     [SerializeField] private float jumpForce = 10f; //player jump power/speed/force
     [SerializeField] private float midAirJumpForce = 26f; //jumpForce of midair jump duh 
     private float jumpCounter; //tracks duration of jump button press when grounded (for holding jump button = higher jump) only works when grounded because i say so
@@ -71,12 +70,17 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private bool isOnSemiSolid = false; //tracks when the player is on a semi solid platform
     private BoxCollider2D lastSemi; //BC2D of last semisolid stood on
     [SerializeField] private bool jumpButtonReleased = false; //inputhandler doesn't have GetKeyDown, so i must manually check button releases
-    #endregion
 
-    #region input_handler stuffy stuff
-
+    //input_handler stuffy stuff
     private bool hasInputHandler = false;
     private input_handler myInput;
+
+    //anims/ Monster Attack System script stuff
+    [SerializeField] private monsterAttackSystem monsterAtt;
+    [SerializeField] private bool hasMonsterAtt = false;
+    [SerializeField] private bool monsterArtFacingRight = false;
+    [SerializeField] private bool monsterArtIsWalk = false;
+    [SerializeField] private bool monsterArtIsRun = false;
 
     #endregion
 
@@ -91,6 +95,8 @@ public class Controller2D : MonoBehaviour
     private int key1result;
     private int key2result;
     #endregion
+
+    #region Start & Updates
 
     private void Start()
     {
@@ -109,10 +115,19 @@ public class Controller2D : MonoBehaviour
             myInput = FindObjectOfType<input_handler>();
             hasInputHandler = true;
         }
-        else
+        else { hasInputHandler = false; }
+
+        if (transform.GetChild(1).GetComponentInChildren<monsterAttackSystem>())
         {
-            hasInputHandler = false;
+            print("locked in MonsterAttackSystem, Gamer!");
+            monsterAtt = transform.GetChild(1).GetComponentInChildren<monsterAttackSystem>();
         }
+
+        if (monsterAtt != null)
+        {
+            StartCoroutine("SetUpMonsterAttDelay");
+        }
+        else { hasMonsterAtt = false; }
 
         #region frictionless collider ignores collisions with semi solids
         semiSolids = GameObject.FindGameObjectsWithTag("semi_solid");
@@ -128,16 +143,7 @@ public class Controller2D : MonoBehaviour
 
     private void Update()
     {
-        #region debugging visual for player direction, soon to be deprecated
-        if (facingRight && playerNose != null)
-        {
-            playerNose.localPosition = new Vector2(0.5f, playerNose.localPosition.y);
-        }
-        else if (playerNose != null)
-        {
-            playerNose.localPosition = new Vector2(-0.5f, playerNose.localPosition.y);
-        }
-        #endregion
+        RotatePlayer();
 
         #region double tap input detection, soon to be deprecated
         if (!hasInputHandler && (Input.GetKeyDown(keyToDetect1) && !Input.GetKey(keyToDetect2)))
@@ -210,6 +216,7 @@ public class Controller2D : MonoBehaviour
                 jumpCounter = 0;
                 jumpButtonReleased = false;
 
+                if (hasMonsterAtt) monsterAtt.jump();
             }
             else if (jumpsLeft > 0 && (!hasInputHandler || jumpButtonReleased))
             {
@@ -235,6 +242,8 @@ public class Controller2D : MonoBehaviour
                 {
                     facingRight = false;
                 }
+
+                if (hasMonsterAtt) monsterAtt.jump();
             }
         }
 
@@ -252,6 +261,7 @@ public class Controller2D : MonoBehaviour
             if (rb.velocity.y < 0.0f)
             {
                 rb.velocity -= -Physics2D.gravity * fallMultiplier * fastFallSpeed * Time.deltaTime;
+                if (hasMonsterAtt) monsterAtt.forceFall();
             }
         }
         else
@@ -274,6 +284,10 @@ public class Controller2D : MonoBehaviour
         ApplyMove(); //sets player velocity
     }
 
+    #endregion
+
+    #region Collisions
+
     private void IsGrounded() //updates grounded variable
     {
         Vector2 boxSize = new Vector2(transform.localScale.x * 0.95f, transform.localScale.y * 0.25f);
@@ -283,6 +297,11 @@ public class Controller2D : MonoBehaviour
 
         if (myHit && !isJumping)//&& rb.velocity.y <= 0.0f)
         {
+            if (!grounded && hasMonsterAtt)
+            {
+                monsterAtt.land();
+            }
+
             grounded = true;
             jumpsLeft = 1 + midAirJumps;
         }
@@ -398,8 +417,62 @@ public class Controller2D : MonoBehaviour
         }
     }
 
+    #endregion
 
     #region horizontal movement functions
+
+    private void RotatePlayer()
+    {
+        if (facingRight && playerNose != null)
+        {
+            playerNose.localPosition = new Vector2(0.5f, playerNose.localPosition.y);
+
+            if (hasMonsterAtt && !monsterArtFacingRight)
+            {
+                monsterAtt.flipCharacter();
+                monsterArtFacingRight = true;
+            }
+        }
+        else if (playerNose != null)
+        {
+            playerNose.localPosition = new Vector2(-0.5f, playerNose.localPosition.y);
+
+            if (hasMonsterAtt && monsterArtFacingRight)
+            {
+                monsterAtt.flipCharacter();
+                monsterArtFacingRight = false;
+            }
+        }
+    }
+
+    private void AnimatePlayerWalk(bool walk)
+    {
+        if (hasMonsterAtt && walk && !monsterArtIsWalk)
+        {
+            monsterArtIsWalk = true;
+            monsterAtt.walk();
+        }
+        else if (hasMonsterAtt && !walk && monsterArtIsWalk)
+        {
+            monsterArtIsWalk = false;
+            monsterAtt.stopWalking();
+        }
+    }
+
+    private void AnimatePlayerRun(bool run)
+    {
+        if (hasMonsterAtt && run && !monsterArtIsRun)
+        {
+            monsterArtIsRun = true;
+            monsterAtt.run();
+        }
+        else if (hasMonsterAtt && !run && monsterArtIsRun)
+        {
+            monsterArtIsRun = false;
+            monsterAtt.stopRunning();
+        }
+    }
+
     private void MoveX()
     {
         // Horizontal movement.
@@ -408,6 +481,7 @@ public class Controller2D : MonoBehaviour
             move = 1;
 
             if (grounded) facingRight = true;
+
         }
         else if ((!hasInputHandler && Input.GetKey(KeyCode.A)) || (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.1f))
         {
@@ -418,6 +492,9 @@ public class Controller2D : MonoBehaviour
         else
         {
             move = 0;
+
+            //AnimatePlayerWalk(false);
+            //AnimatePlayerWalk(false);
         }
 
         //disable move
@@ -427,16 +504,16 @@ public class Controller2D : MonoBehaviour
         {
             //if (grounded)
             //{
-                if ((!hasInputHandler && (key1result == 2 || key2result == 2)) || (hasInputHandler && myInput.GetLeft_Joystick_Click()) && grounded)
-                {
-                    isRun = true;
-                    xMovement = new Vector3(move * playerRunSpeed, 0.0f, 0.0f);
-                }
-                else
-                {
-                    isRun = false;
-                    xMovement = new Vector3(move * playerSpeed, 0.0f, 0.0f);
-                }
+            if ((!hasInputHandler && (key1result == 2 || key2result == 2)) || (hasInputHandler && myInput.GetLeft_Joystick_Click()) && grounded)
+            {
+                isRun = true;
+                xMovement = new Vector3(move * playerRunSpeed, 0.0f, 0.0f);
+            }
+            else
+            {
+                isRun = false;
+                xMovement = new Vector3(move * playerSpeed, 0.0f, 0.0f);
+            }
             //}
             /*else
             {
@@ -475,7 +552,8 @@ public class Controller2D : MonoBehaviour
                     }
                 }
             }
-        */}
+        */
+        }
     }
 
     private void ApplyMove()
@@ -485,19 +563,39 @@ public class Controller2D : MonoBehaviour
         if (hasInputHandler)
         {
             xInput = Mathf.Abs(myInput.GetLeft_JoyStick().x);
-        }
 
-        if (hasInputHandler && (xInput >= 0.69f || (!grounded && xInput <= 0.15f)))
-        {
-            xInput = 1f;
-        }
-        else if (hasInputHandler && (xInput < 0.69f && xInput >= 0.4f))
-        {
-            xInput = playerSlowSpeed;
-        }
-        else if (hasInputHandler && (xInput < 0.4f && xInput > 0.15f))
-        {
-            xInput = playerCrawlSpeed;
+            if (xInput >= 0.69f || (!grounded && xInput <= 0.15f))
+            {
+                xInput = 1f;
+
+                if (grounded)
+                {
+                    AnimatePlayerRun(true);
+                }
+            }
+            else if (xInput < 0.69f && xInput >= 0.4f)
+            {
+                xInput = playerSlowSpeed;
+
+                if (grounded)
+                {
+                    AnimatePlayerRun(true);
+                }
+            }
+            else if (xInput < 0.4f && xInput > 0.15f)
+            {
+                xInput = playerCrawlSpeed;
+
+                if (grounded)
+                {
+                    AnimatePlayerWalk(true);
+                }
+            }
+            else
+            {
+                AnimatePlayerWalk(false);
+                AnimatePlayerRun(false);
+            }
         }
 
         rb.velocity = xMovement * xInput + new Vector3(0.0f, rb.velocity.y, 0.0f);
@@ -633,5 +731,18 @@ public class Controller2D : MonoBehaviour
         FootCircleOn();
         //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
     }
+    #endregion
+
+    #region MonsterAttackSystem
+
+    private IEnumerator SetUpMonsterAttDelay() //delays Controller2D from accessing MonsterAttackSystem Script before it is set up properly
+    {
+        yield return new WaitForSeconds(3f);
+
+        hasMonsterAtt = true;
+
+        yield break;
+    }
+
     #endregion
 }

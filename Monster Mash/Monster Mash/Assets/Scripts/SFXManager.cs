@@ -7,13 +7,24 @@ public class SFXManager : MonoBehaviour
 {
     [SerializeField] AudioClipRandomizer[] groundType;
     [SerializeField] AudioClipRandomizer[] weight;
+    [SerializeField] AudioClipRandomizer[] landWeight;
+    [SerializeField] AudioClipRandomizer[] baseSounds;
+    private List<AudioClipRandomizer> toPlay = new List<AudioClipRandomizer>();
+
+    private void playSFX()
+    {
+        foreach (AudioClipRandomizer clip in toPlay)
+        {
+            clip.PlaySFX();
+        }
+        toPlay.Clear();
+    }
 
     public void footstepSFX(monsterPart part)
     {
         if (part.isLeg)
         {
             RaycastHit hit;
-            List<AudioClipRandomizer> toPlay = new List<AudioClipRandomizer>();
             if (Physics.Raycast(part.transform.position, Vector3.down, out hit))
             {
                 MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
@@ -47,11 +58,29 @@ public class SFXManager : MonoBehaviour
             // adjust later when monster weight is added
             toPlay.Add(weight[0]);
 
-            foreach (AudioClipRandomizer clip in toPlay)
-            {
-                clip.PlaySFX();
-            }
+            playSFX();
 
         }
+    }
+
+    public void JumpSFX(monsterPart part)
+    {
+        if (part.isLeg)
+        {
+            footstepSFX(part);
+        }
+        toPlay.Add(baseSounds[0]);
+        playSFX();
+    }
+
+    public void LandSFX(monsterPart part)
+    {
+        if (part.isLeg)
+        {
+            footstepSFX(part);
+        }
+        toPlay.Add(landWeight[0]);
+        toPlay.Add(baseSounds[1]);
+        playSFX();
     }
 }

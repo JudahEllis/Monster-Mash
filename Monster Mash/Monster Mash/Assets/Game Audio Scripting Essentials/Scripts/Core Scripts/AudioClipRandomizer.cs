@@ -69,6 +69,7 @@ namespace GameAudioScriptingEssentials
 
             if (!_arcObjExists)
             {
+                _index = Random.Range(0, _audioClips.Length);
                 if (_noRepeats)
                 {
                     while (_lastIndex == _index)

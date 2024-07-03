@@ -1011,6 +1011,7 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             releaseJumpVFX();
             stopForceFall();
+            SFXManager.JumpSFX(allMonsterParts[0]); // for now just pick the first monster part until we can find the right one
         }
         else
         {
@@ -1215,6 +1216,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             landVisual.Stop();
             landVisual.Play();
+            SFXManager.LandSFX(allMonsterParts[0]);
         }
     }
 

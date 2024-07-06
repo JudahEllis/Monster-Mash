@@ -73,6 +73,12 @@ public class SFXManager : MonoBehaviour
         playSFX();
     }
 
+    public void DoubleJumpSFX(monsterPart part)
+    {
+        toPlay.Add(baseSounds[2]);
+        playSFX();
+    }
+
     public void LandSFX(monsterPart part)
     {
         if (part.isLeg)

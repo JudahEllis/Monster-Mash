@@ -1051,6 +1051,7 @@ public class monsterAttackSystem : MonoBehaviour
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
                 releaseJumpVFX();
+                SFXManager.DoubleJumpSFX(allMonsterParts[0]);   
             }
         }
     }

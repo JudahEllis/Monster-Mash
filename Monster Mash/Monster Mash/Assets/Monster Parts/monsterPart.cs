@@ -3706,6 +3706,14 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    public void playRunSFXOnAnimation()
+    {
+        if (isLeg && myMainSystem.SFXManager)
+        {
+            myMainSystem.SFXManager.runSFX(this);
+        }
+    }
+
     #endregion
 
     #region Corrections

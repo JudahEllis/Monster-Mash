@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class SFXManager : MonoBehaviour
 {
-    [SerializeField] AudioClipRandomizer[] groundType;
-    [SerializeField] AudioClipRandomizer[] weight;
+    [SerializeField] AudioClipRandomizer[] groundTypeWalk;
+    [SerializeField] AudioClipRandomizer[] groundTypeRun;
+    [SerializeField] AudioClipRandomizer[] walkWeight;
+    [SerializeField] AudioClipRandomizer[] runWeight;
     [SerializeField] AudioClipRandomizer[] landWeight;
     [SerializeField] AudioClipRandomizer[] baseSounds;
     private List<AudioClipRandomizer> toPlay = new List<AudioClipRandomizer>();
@@ -31,32 +33,75 @@ public class SFXManager : MonoBehaviour
                 string material = meshFilter.ToString();
                 if (material.Contains("table"))
                 {
-                    toPlay.Add(groundType[3]);
+                    toPlay.Add(groundTypeWalk[3]);
                 }
                 else if (material.Contains("pot"))
                 {
-                    toPlay.Add(groundType[2]);
+                    toPlay.Add(groundTypeWalk[2]);
                 }
                 else if (material.Contains("planter") || material.Contains("dirt"))
                 {
-                    toPlay.Add(groundType[0]);
+                    toPlay.Add(groundTypeWalk[0]);
                 }
                 else if (material.Contains("can"))
                 {
-                    toPlay.Add(groundType[1]);
+                    toPlay.Add(groundTypeWalk[1]);
                 }
                 else
                 {
-                    toPlay.Add(groundType[3]);
+                    toPlay.Add(groundTypeWalk[3]);
                 }
             }
             else
             {
-                toPlay.Add(groundType[3]);
+                toPlay.Add(groundTypeWalk[3]);
             }
 
             // adjust later when monster weight is added
-            toPlay.Add(weight[0]);
+            toPlay.Add(walkWeight[0]);
+
+            playSFX();
+
+        }
+    }
+
+    public void runSFX(monsterPart part)
+    {
+        if (part.isLeg)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(part.transform.position, Vector3.down, out hit))
+            {
+                MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
+                string material = meshFilter.ToString();
+                if (material.Contains("table"))
+                {
+                    toPlay.Add(groundTypeRun[3]);
+                }
+                else if (material.Contains("pot"))
+                {
+                    toPlay.Add(groundTypeRun[2]);
+                }
+                else if (material.Contains("planter") || material.Contains("dirt"))
+                {
+                    toPlay.Add(groundTypeRun[0]);
+                }
+                else if (material.Contains("can"))
+                {
+                    toPlay.Add(groundTypeRun[1]);
+                }
+                else
+                {
+                    toPlay.Add(groundTypeRun[3]);
+                }
+            }
+            else
+            {
+                toPlay.Add(groundTypeRun[3]);
+            }
+
+            // adjust later when monster weight is added
+            toPlay.Add(runWeight[0]);
 
             playSFX();
 

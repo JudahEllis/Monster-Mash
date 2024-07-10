@@ -8,6 +8,7 @@ public class monsterAttackSystem : MonoBehaviour
     public bool facingRight = false;
     public bool isGrounded = true;
     private bool isWinged = false;
+    private bool fullyFlighted = false;
     private int jumpsAllowed_DoubleJump = 2;
     private int jumpsAllowed_FlightedJump = 4;
     private int jumpsLeft = 0;
@@ -171,6 +172,18 @@ public class monsterAttackSystem : MonoBehaviour
                 }
             }
 
+            if (allMonsterParts[i].isGroundedLimb == false && allMonsterParts[i].isLeg)
+            {
+                if (allMonsterParts[i].isLeftSidedLimb)
+                {
+                    allMonsterParts[i].isLeadingLeg = false;
+                }
+                else
+                {
+                    allMonsterParts[i].isLeadingLeg = true;
+                }
+            }
+
             if (allMonsterParts[i].isWing)
             {
                 allWings.Add(allMonsterParts[i]);
@@ -182,6 +195,8 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 mainTorso = allMonsterParts[i].GetComponent<Animator>();
             }
+
+
         }
 
         if (hasRightGroundedLegs == true && hasLeftGroundedLegs == true)
@@ -216,6 +231,7 @@ public class monsterAttackSystem : MonoBehaviour
                         allWings[u].hasFlightedIdle = true;
                     }
 
+                    fullyFlighted = true;
                     mainTorso.SetBool("Flighted Monster", isWinged);
                 }
             }
@@ -316,6 +332,7 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator = null;
         Array.Clear(allMonsterParts, 0, allMonsterParts.Length);
         isWinged = false;
+        fullyFlighted = false;
         mainTorso.SetBool("Flighted Monster", false);
         mainTorso = null;
 
@@ -913,7 +930,11 @@ public class monsterAttackSystem : MonoBehaviour
             calm = false;
             forceEndEmote();
             forceStopCrouch();
-            releaseRunVFX();
+
+            if (fullyFlighted == false)
+            {
+                releaseRunVFX();
+            }
         }
         else
         {
@@ -1011,7 +1032,7 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             releaseJumpVFX();
             stopForceFall();
-            SFXManager.JumpSFX(allMonsterParts[0]); // for now just pick the first monster part until we can find the right one
+            //SFXManager.JumpSFX(allMonsterParts[0]); // for now just pick the first monster part until we can find the right one
         }
         else
         {
@@ -1051,7 +1072,7 @@ public class monsterAttackSystem : MonoBehaviour
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
                 releaseJumpVFX();
-                SFXManager.DoubleJumpSFX(allMonsterParts[0]);   
+                //SFXManager.DoubleJumpSFX(allMonsterParts[0]);   
             }
         }
     }
@@ -1217,7 +1238,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             landVisual.Stop();
             landVisual.Play();
-            SFXManager.LandSFX(allMonsterParts[0]);
+            //SFXManager.LandSFX(allMonsterParts[0]);
         }
     }
 
@@ -1602,6 +1623,17 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void calmedDown()
     {
+        if (fullyFlighted)
+        {
+            if(isGrounded)
+            {
+                myAnimator.SetBool("Idle Bounce Allowed", true);
+                myAnimator.SetBool("Calm", false);
+                calm = false;
+            }
+            return;
+        }
+
         if (calm == false && isGrounded && emoteActive == false)
         {
             calm = true;

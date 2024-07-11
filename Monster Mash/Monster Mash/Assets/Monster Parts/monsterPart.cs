@@ -150,6 +150,8 @@ public class monsterPart : MonoBehaviour
     public bool requiresForwardStance = false;
     public bool requiresBackwardStance = false;
     public bool isLeadingLeg;
+    public bool isFloatingGroundedLeg;
+    public bool isFloatingTorso;
     public bool hasFlightedIdle = false;
     public Outline visualForAnimationTests;
     public bool hasHeavyBrace = false;
@@ -265,6 +267,12 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Grounded Limb", false); //This is just so that loose legs do a spike kick instead of a stomp on ground
         }
+
+        if ((isLeg && isFloatingGroundedLeg) || (isTorso && isFloatingTorso))
+        {
+            myAnimator.SetBool("Has Floating Idle", true);
+        }
+
 
         if (isLeg || isArm || isTail || isHorn) //this will be expanded to include heads and horns
         {

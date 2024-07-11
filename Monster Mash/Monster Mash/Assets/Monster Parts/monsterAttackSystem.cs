@@ -9,6 +9,7 @@ public class monsterAttackSystem : MonoBehaviour
     public bool isGrounded = true;
     private bool isWinged = false;
     private bool fullyFlighted = false;
+    public bool isFloatingMonster = false;
     private int jumpsAllowed_DoubleJump = 2;
     private int jumpsAllowed_FlightedJump = 4;
     private int jumpsLeft = 0;
@@ -194,6 +195,7 @@ public class monsterAttackSystem : MonoBehaviour
             if (allMonsterParts[i].isTorso)
             {
                 mainTorso = allMonsterParts[i].GetComponent<Animator>();
+                allMonsterParts[i].isFloatingTorso = isFloatingMonster;// this is here just for monsters who are set to float even though they have grounded legs
             }
 
 
@@ -234,8 +236,40 @@ public class monsterAttackSystem : MonoBehaviour
                     fullyFlighted = true;
                     mainTorso.SetBool("Flighted Monster", isWinged);
                 }
+                else //this thing is just an orb basically
+                {
+                    for (int i = 0; i < allMonsterParts.Length; i++)
+                    {
+                        if (allMonsterParts[i].isTorso)
+                        {
+                            isFloatingMonster = true;
+                            allMonsterParts[i].isFloatingTorso = isFloatingMonster;
+                        }
+                    }
+                }
             }
         }
+
+
+        if (isFloatingMonster)
+        {
+            if (hasRightGroundedLegs)
+            {
+                for (int u = 0; u < allGroundedRightLegs.Count; u++)
+                {
+                    allGroundedRightLegs[u].isFloatingGroundedLeg = true;
+                }
+            }
+
+            if (hasLeftGroundedLegs)
+            {
+                for (int u = 0; u < allGroundedLeftLegs.Count; u++)
+                {
+                    allGroundedLeftLegs[u].isFloatingGroundedLeg = true;
+                }
+            }
+        }
+
 
         #endregion
 
@@ -286,10 +320,30 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
+        StartCoroutine(spawnRenactment());
         myAnimator.SetBool("Calm", false);
         calm = false;
 
         SFXManager = FindObjectOfType<SFXManager>();
+    }
+
+    IEnumerator spawnRenactment()
+    {
+        myAnimator.SetBool("Spawning In", true);
+        myAnimator.SetTrigger("Spawn In");
+        yield return new WaitForSeconds(0.2f);
+
+        fierceEmote();//something here to choose the emote
+        //gasEmote();
+        //danceEmote();
+        //jackEmote();
+        //mockingEmote();
+
+        yield return new WaitForSeconds(2f);
+        //myAnimator.SetBool("Idle Bounce Allowed", true);
+        //forceEndEmote();
+        myAnimator.SetBool("Spawning In", false);
+        myAnimator.ResetTrigger("Spawn In");
     }
 
     public void grabAttackSlotInfo()
@@ -788,6 +842,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         if (focusedAttackActive == false)
         {
+
             if (isRunning)
             {
                 screechingStop();
@@ -800,7 +855,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             if (isCrouching)
             {
-                myAnimator.SetBool("Idle Bounce Allowed", true);
+                //myAnimator.SetBool("Idle Bounce Allowed", true);
             }
 
             forceEndEmote();
@@ -1199,22 +1254,6 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 allMonsterParts[i].triggerRoll(isGrounded, false);
             }
-            /*
-            if (isGliding)
-            {
-                for (int i = 0; i < allMonsterParts.Length; i++)
-                {
-                    allMonsterParts[i].triggerRoll(isGrounded);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < allMonsterParts.Length; i++)
-                {
-                    allMonsterParts[i].triggerLand();
-                }
-            }
-            */
 
             isGliding = false;
 
@@ -1360,7 +1399,10 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerCrouchStop();
         }
 
-        myAnimator.SetBool("Idle Bounce Allowed", true);
+        if (isRunning == false && isWalking == false)
+        {
+            myAnimator.SetBool("Idle Bounce Allowed", true);
+        }
     }
 
     private void forceStopCrouch()
@@ -1593,7 +1635,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         focusedAttackActive = false;
         heavyAttackActive = false;
-        if (isGrounded)
+        if (isGrounded && isRunning == false)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
             myAnimator.SetBool("Calm", false);
@@ -1623,6 +1665,11 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void calmedDown()
     {
+        if (isRunning || isWalking)
+        {
+            return;
+        }
+
         if (fullyFlighted)
         {
             if(isGrounded)
@@ -1638,6 +1685,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             calm = true;
             myAnimator.SetBool("Calm", true);
+            myAnimator.SetBool("Idle Bounce Allowed", false);
 
             if (onPlatformEdge)
             {
@@ -2224,7 +2272,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void correctRollControl()
     {
         canRoll = true;
-        if (isGrounded)
+        if (isGrounded && isRunning == false)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }
@@ -2232,7 +2280,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void correctLeapingAttackData()
     {
-        if (isGrounded)
+        if (isGrounded && isRunning == false)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }

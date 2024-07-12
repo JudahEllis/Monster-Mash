@@ -44,6 +44,22 @@ public class monsterAttackSystem : MonoBehaviour
     public monsterPart[] allMonsterParts;
     private List<monsterPart> nonMappedMonsterParts = new List<monsterPart>();
 
+    [Header("Damage and Status Effects")]
+    public int health = 800;
+    private int monsterPartIndividualHealth = 0;
+    public bool burnedStatusEffect;
+    public bool electrifiedStatusEffect;
+    public bool poisonedStatusEffect;
+    public bool stinkyStatusEffect;
+    public bool hauntedStatusEffect;
+    public bool confusedStatusEffect;
+    public bool slimedStatusEffect;
+    public bool stunnedStatusEffect;
+    public bool frozenStatusEffect;
+    public bool squashedStatusEffect;
+    public bool slowedStatusEffect;
+    private bool grabbedStatusEffect;
+
     [Header("VFX")]
     public ParticleSystem partDestructionVisual;
     public ParticleSystem destructionVisual;
@@ -56,6 +72,7 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem jumpVisual;
     public ParticleSystem landVisual;
     public vfxHolder runVFXHolder;
+    public ParticleSystem floatingRunVisual;
 
     [Header("Attack Necessities")]
     public GameObject dashSplat;
@@ -463,6 +480,11 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        if (attackSlotMonsterParts[attackSlot].connected == false)
+        {
+            return;
+        }
+
         getOutOfLaunch();
 
         if (attackSlotMonsterParts[attackSlot] != null && focusedAttackActive == false)
@@ -539,6 +561,7 @@ public class monsterAttackSystem : MonoBehaviour
                     {
                         attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
 
+                        myAnimator.SetBool("Idle Bounce Allowed", false);
                         #region Bracing for Attacks 
                         if (requiresFlourish && (requiresFlourishingTwirl || requiresFlourishingRoll))
                         {
@@ -579,6 +602,7 @@ public class monsterAttackSystem : MonoBehaviour
                     {
                         attackSlotMonsterParts[attackSlot].triggerAttack("Airborn Attack");
 
+                        myAnimator.SetBool("Idle Bounce Allowed", false);
                         #region Bracing for Attacks
 
                         if (requiresFlourish && isGliding == false && (requiresFlourishingTwirl || requiresFlourishingRoll))
@@ -1494,6 +1518,8 @@ public class monsterAttackSystem : MonoBehaviour
     #region Reactions
     public void braceForRightImpact()
     {
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerRightAttackStance();
@@ -1502,6 +1528,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForLeftImpact()
     {
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerLeftAttackStance();
@@ -1510,6 +1538,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForForwardImpact()
     {
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerForwardStance();
@@ -1518,6 +1548,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void braceForBackwardImpact()
     {
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerBackwardStance();
@@ -1536,6 +1568,8 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetTrigger("Flourish Roll");
         }
         */
+
+        myAnimator.SetBool("Idle Bounce Allowed", false);
 
         if (requiresFlourishingTwirl)
         {
@@ -2272,7 +2306,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void correctRollControl()
     {
         canRoll = true;
-        if (isGrounded && isRunning == false)
+        if (isGrounded && isRunning == false && focusedAttackActive == false)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }
@@ -2280,7 +2314,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void correctLeapingAttackData()
     {
-        if (isGrounded && isRunning == false)
+        if (isGrounded && isRunning == false && focusedAttackActive == false)
         {
             myAnimator.SetBool("Idle Bounce Allowed", true);
         }

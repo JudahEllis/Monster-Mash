@@ -14,6 +14,21 @@ public class monsterPartReference : MonoBehaviour
     public bool isJabOrSlash;
     public bool isReel;
 
+    [Header("Damage and Status Effects")]
+    public int damage = 0;
+    public bool burnedStatusEffect;
+    public bool electrifiedStatusEffect;
+    public bool poisonedStatusEffect;
+    public bool stinkyStatusEffect;
+    public bool hauntedStatusEffect;
+    public bool confusedStatusEffect;
+    public bool slimedStatusEffect;
+    public bool stunnedStatusEffect;
+    public bool frozenStatusEffect;
+    public bool squashedStatusEffect;
+    public bool slowedStatusEffect;
+    private bool grabbedStatusEffect;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<monsterPartReference>() != null)

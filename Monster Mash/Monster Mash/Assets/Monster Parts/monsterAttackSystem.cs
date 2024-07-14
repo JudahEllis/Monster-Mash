@@ -65,8 +65,14 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem destructionVisual;
     public GameObject destructionPhysicsHelper;
     public ParticleSystem glideVisual;
+    public ParticleSystem fieryVisual;
     public ParticleSystem gasVisual;
     public ParticleSystem musicVisual;
+    public ParticleSystem spookyVisual;
+    public ParticleSystem vomitVisual;
+    public ParticleSystem sleepVisual;
+    public Animation hulaHoopVisual;
+    public ParticleSystem sneezeVisual;
     public ParticleSystem rollingAttackVisual;
     public ParticleSystem leapingAttackVisual;
     public ParticleSystem jumpVisual;
@@ -2242,10 +2248,257 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void thinkingEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].thinkingEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void booEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            spookyVisual.Stop();
+            spookyVisual.Play();
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].booEmote();
+            }
+
+            forceStopCrouch();
+        }
+
+    }
+
+    public void excerciseEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].excerciseEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void hulaEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            hulaHoopVisual.Stop();
+            hulaHoopVisual.Play();
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].hulaEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void vomitEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            vomitVisual.Stop();
+            vomitVisual.Play();
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].vomitEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void brianEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].brianEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void sleepEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+
+            if (facingRight)
+            {
+                //sleepVisual_Right.Stop();
+                //sleepVisual_Right.Play();
+                sleepVisual.Stop();
+                sleepVisual.Play();
+            }
+            else
+            {
+                sleepVisual.Stop();
+                sleepVisual.Play();
+            }
+
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].sleepEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void explosiveEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            fieryVisual.Stop();
+            fieryVisual.Play();
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].explosiveEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void laughingEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].laughingEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
+    public void sneezingEmote()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
+        {
+            emoteActive = true;
+            calm = false;
+            sneezeVisual.Stop();
+            sneezeVisual.Play();
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].sneezingEmote();
+            }
+
+            forceStopCrouch();
+        }
+    }
+
     public void emoteEnded()
     {
         emoteActive = false;
         musicVisual.Stop();
+        spookyVisual.Stop();
+        sleepVisual.Stop();
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].emoteCorrections();
@@ -2259,8 +2512,14 @@ public class monsterAttackSystem : MonoBehaviour
         {
             emoteActive = false;
             myAnimator.SetBool("Calm", false);
+            fieryVisual.Stop();
             gasVisual.Stop();
             musicVisual.Stop();
+            spookyVisual.Stop();
+            vomitVisual.Stop();
+            hulaHoopVisual.Stop();
+            sleepVisual.Stop();
+            sneezeVisual.Stop();
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].triggerForceStopEmote();

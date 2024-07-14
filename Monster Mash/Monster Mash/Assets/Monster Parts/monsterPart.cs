@@ -3720,6 +3720,12 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
+
+        if (isArm)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Swaying", true);
+        }
     }
 
     public void danceEmote()
@@ -3760,6 +3766,170 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Jack Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+
+        if (isArm)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Swaying", true);
+        }
+    }
+
+    public void thinkingEmote()
+    {
+
+    }
+
+    public void booEmote()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Boo Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+    }
+
+    public void excerciseEmote()
+    {
+
+    }
+
+    public void hulaEmote()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Hula Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+
+        if (isArm)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Swaying", true);
+        }
+    }
+
+    public void vomitEmote()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Vomit Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+    }
+
+    public void brianEmote()
+    {
+
+    }
+
+    public void sleepEmote()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Sleep Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+    }
+
+    public void explosiveEmote()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Boo Emote");
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Emote");
+            myAnimator.SetBool("Calm", false);
+        }
+
+        if (isArm)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Swaying", true);
+        }
+    }
+
+    public void laughingEmote()
+    {
+
+    }
+
+    public void sneezingEmote()
+    {
+        if (connected == false)
+        {
+            return;
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetTrigger("Sneeze Emote");
         }
 
         if (isGroundedLimb)
@@ -3826,6 +3996,12 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Dancing", false);
             myAnimator.SetBool("Swaying", false);
+        }
+
+        if (isGroundedLimb)
+        {
+            myAnimator.ResetTrigger("Force Stop Emote");
+            myAnimator.SetBool("Calm", true);
         }
     }
 

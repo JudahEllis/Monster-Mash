@@ -73,7 +73,7 @@ public class Controller2D : MonoBehaviour
 
     //input_handler stuffy stuff
     private bool hasInputHandler = false;
-    private input_handler myInput;
+    [SerializeField]private input_handler myInput;
 
     //anims/ Monster Attack System script stuff
     [SerializeField] private monsterAttackSystem monsterAtt;
@@ -100,6 +100,7 @@ public class Controller2D : MonoBehaviour
 
     private void Start()
     {
+
         rb = GetComponent<Rigidbody2D>();
         cap = GetComponent<CapsuleCollider2D>();
 
@@ -110,9 +111,9 @@ public class Controller2D : MonoBehaviour
 
         capSize = cap.size;
 
-        if (FindObjectOfType<input_handler>())
+        if (myInput == null && FindObjectOfType<input_handler>())
         {
-            myInput = FindObjectOfType<input_handler>();
+            //myInput = FindObjectOfType<input_handler>();
             hasInputHandler = true;
         }
         else { hasInputHandler = false; }

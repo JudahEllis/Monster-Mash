@@ -59,7 +59,7 @@ public class input_handler : MonoBehaviour
     private void Start()
     {
 
-        if (playerInput.devices[0].name.Contains("Keyboard"))
+        if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard")//playerInput.devices[0].name.Contains("Keyboard"))
         {
             keyboardMouseSetUp();
 
@@ -246,7 +246,7 @@ public class input_handler : MonoBehaviour
             mapHasSwitched = true;
             //print("current map: " + playerInput.currentActionMap);
             //switch input from starter to controller
-            playerInput.SwitchCurrentActionMap("XBOX");
+            //playerInput.SwitchCurrentActionMap("XBOX");
             controlType = "XBOX";
         }
     }
@@ -257,7 +257,7 @@ public class input_handler : MonoBehaviour
             mapHasSwitched = true;
             //print("trace: " + UnityEngine.StackTraceUtility.ExtractStackTrace());
             //switch input from starter to keyboard/mouse
-            playerInput.SwitchCurrentActionMap("keyboardmouse");
+            //playerInput.SwitchCurrentActionMap("keyboardmouse");
             controlType = "keyboardmouse";
             //print("current map: " + playerInput.currentActionMap);
         }

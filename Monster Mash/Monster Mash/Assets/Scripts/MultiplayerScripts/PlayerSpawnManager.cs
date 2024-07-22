@@ -56,6 +56,7 @@ public class PlayerSpawnManager : MonoBehaviour
     {
         MonsterTransfer transfer = FindObjectOfType<MonsterTransfer>();
 
+
         GameObject playerPrefab = Resources.Load("Fun-Test Parts/Monster/Player") as GameObject;
 
         GameObject monsterEmpty = Resources.Load("Fun-Test Parts/Monster/MonsterEmpty") as GameObject;

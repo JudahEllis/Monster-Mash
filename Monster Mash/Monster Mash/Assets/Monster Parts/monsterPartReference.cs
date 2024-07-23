@@ -27,7 +27,7 @@ public class monsterPartReference : MonoBehaviour
     public bool frozenStatusEffect;
     public bool squashedStatusEffect;
     public bool slowedStatusEffect;
-    private bool grabbedStatusEffect;
+    public bool grabbedStatusEffect;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -38,11 +38,13 @@ public class monsterPartReference : MonoBehaviour
                 if (isProjectile && isHitbox)
                 {
                     GetComponent<projectile>().impact();
+                    //print(damage);
                 }
 
                 if (isJabOrSlash && isHitbox)
                 {
                     partReference.triggerJabOrSlashHitDetect();
+                    //print(damage);
                 }
 
                 if (isReel && isHitbox)

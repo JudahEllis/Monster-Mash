@@ -90,6 +90,7 @@ public class monsterAttackSystem : MonoBehaviour
     private Transform foreignReel;
     private monsterAttackSystem foreignMonster;
     public SFXManager SFXManager;
+    public GameObject floorCheck;
 
     #region Monster Start Up
 
@@ -166,6 +167,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void awakenTheBeast()
     {
         myAnimator = this.GetComponent<Animator>();
+        floorCheck.SetActive(false);
         grabAttackSlotInfo();
         myAnimator.SetBool("Facing Right", facingRight);
 
@@ -486,7 +488,14 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
-        if (attackSlotMonsterParts[attackSlot].connected == false)
+        if (attackSlotMonsterParts[attackSlot] != null)
+        {
+            if (attackSlotMonsterParts[attackSlot].connected == false)
+            {
+                return;
+            }
+        }
+        else
         {
             return;
         }

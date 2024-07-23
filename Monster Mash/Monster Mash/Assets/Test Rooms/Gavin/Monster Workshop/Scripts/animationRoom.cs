@@ -7,7 +7,7 @@ using TMPro;
 public class animationRoom : MonoBehaviour
 {
     public GameObject floor;
-    public GameObject groundedLimbCheck;
+    //public GameObject groundedLimbCheck;
     public monsterAttackSystem mainMonster;
     public monsterPart[] monsterPartCollection;
     public GameObject reMappingStartUpButton;
@@ -50,7 +50,7 @@ public class animationRoom : MonoBehaviour
 
     public void removeGroundedLimbCheck()
     {
-        groundedLimbCheck.SetActive(false);
+        //groundedLimbCheck.SetActive(false);
     }
 
     //

@@ -187,7 +187,7 @@ public class monsterPart : MonoBehaviour
 
     public void changeAttackAnimationAtRuntime()
     {
-        if (isLeg || isArm || isTail || isHorn) //this will be expanded to include all monster parts
+        if (isLeg || isArm || isTail || isHorn || isEye) //this will be expanded to include all monster parts
         {
             if (isLeg && attackAnimationID == 2) //corrections for if up attack is selected with leg
             {
@@ -281,7 +281,7 @@ public class monsterPart : MonoBehaviour
         }
 
 
-        if (isLeg || isArm || isTail || isHorn) //this will be expanded to include heads and horns
+        if (isLeg || isArm || isTail || isHorn || isEye) //this will be expanded to include heads and horns
         {
             myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
         }
@@ -610,7 +610,7 @@ public class monsterPart : MonoBehaviour
 
         if (isChestLimb || isNeckLimb)
         {
-            torsoCommand = "Upper Attack";
+            torsoCommandOverride = "Forward Attack";
             //isRightSidedLimb = true;
             requiresBackwardStance = false;
             requiresForwardStance = false;
@@ -763,12 +763,25 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
-                headCommand = "Face Attack";
-                torsoCommandOverride = "Upper Attack";
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
+
+                if (isEye)
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Forward Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
+                else
+                {
+                    headCommand = "Face Attack";
+                    torsoCommandOverride = "Upper Attack";
+                    requiresBackwardStance = false;
+                    requiresForwardStance = false;
+                    requiresRightStance = true;
+                    requiresLeftStance = false;
+                }
             }
         }
         //Forgot back of the head attacks
@@ -877,7 +890,7 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    headCommand = "Forward Attack";
+                    headCommand = "Face Attack";
                     torsoCommandOverride = "Forward Attack";
                     requiresBackwardStance = false;
                     requiresForwardStance = false;
@@ -1019,7 +1032,7 @@ public class monsterPart : MonoBehaviour
     }
     #endregion
 
-    #region Collision Occlusion and Logic
+    #region Collision Occlusion and Collision Logic
 
     public void triggerCollisionLogic()
     {
@@ -1045,6 +1058,7 @@ public class monsterPart : MonoBehaviour
             heavyColliderReference = heavyCollider.gameObject.GetComponent<monsterPartReference>();
         }
 
+        statusEffectAndDamageCalculations();
     }
 
     #endregion
@@ -1680,6 +1694,17 @@ public class monsterPart : MonoBehaviour
         //most likely a canceled input after system already has registered the difference between input but before the attack has been unleashed
         //aka a canceled heavy attack
 
+        if (fullActiveHeavy && attackFocusOn && beamHeavyAttack)
+        {
+            if (inputCanceled)
+            {
+                //end functions + turn off visuals
+                triggerAttackToIdle();
+                StartCoroutine(beamAttackDelay());
+            }
+            return;
+        }
+
         if (fullActiveHeavy == false && attackFocusOn == true)
         {
             if (inputCanceled)
@@ -1702,8 +1727,20 @@ public class monsterPart : MonoBehaviour
         }
     }
 
+    IEnumerator beamAttackDelay()
+    {
+        yield return new WaitForSeconds(0.2f);
+        triggerAttackCorrections(); //delaying this to allow the body time to unbrace
+    }
+
     public void triggerNeutralOrHeavy()
     {
+        if (beamHeavyAttack && attackMarkedHeavy)
+        {
+            heavyAttackInMotion = true;
+            return;
+        }
+
         if (attackMarkedHeavy)
         {
             heavyAttackInMotion = true;
@@ -1786,6 +1823,8 @@ public class monsterPart : MonoBehaviour
 
             if (attackMarkedHeavy)
             {
+                heavyAttackPowerCalculation();
+
                 if (isGroundedLimb && attackAnimationID == 0)
                 {
                     //myMainSystem.stompAttack();
@@ -1805,10 +1844,7 @@ public class monsterPart : MonoBehaviour
                         myMainSystem.leapingUpwardAttack();
                     }
 
-                    heavyAttackPowerCalculation();
-                    heavyColliderReference.damage = damage;
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
-                    damageClearance();
                 }
                 else if (reelHeavyAttack)
                 {
@@ -1827,6 +1863,8 @@ public class monsterPart : MonoBehaviour
             }
             else
             {
+                neutralAttackPowerCalculation();
+
                 if (isGroundedLimb && attackAnimationID == 0)
                 {
                     //myMainSystem.stompAttack();
@@ -1834,10 +1872,7 @@ public class monsterPart : MonoBehaviour
                 else if (jabNeutralAttack || slashNeutralAttack)
                 {
                     //give damage info to colliders
-                    neutralAttackPowerCalculation();
-                    neutralColliderReference.damage = damage;
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
-                    damageClearance();
                 }
             }
         }
@@ -1949,6 +1984,7 @@ public class monsterPart : MonoBehaviour
         }
 
         myMainSystem.endBracing();
+        endRemainingVFX();
 
     }
 
@@ -2236,6 +2272,7 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Heavy Attack Power Up
+
     public void triggerHeavyAttackPowerUp() //built up in wind up animation
     {
         if (jabHeavyAttack)
@@ -2245,17 +2282,22 @@ public class monsterPart : MonoBehaviour
 
         if (slashHeavyAttack)
         {
-
+            builtUpAttackPower++;
         }
 
         if (projectileHeavyAttack)
         {
-
+            builtUpAttackPower++;
         }
 
         if (beamHeavyAttack)
         {
 
+        }
+
+        if (sprayNeutralAttack)
+        {
+            builtUpAttackPower++;
         }
 
         if (reelHeavyAttack)
@@ -2285,20 +2327,165 @@ public class monsterPart : MonoBehaviour
     private void neutralAttackPowerCalculation()
     {
         damage = baseNeutralAttackDamage;
-        print(damage);
+
+        if (jabHeavyAttack)
+        {
+            neutralColliderReference.damage = damage;
+        }
+        else if (slashHeavyAttack)
+        {
+            neutralColliderReference.damage = damage;
+        }
+        else if (projectileHeavyAttack)
+        {
+            neutralHitVFXManager.damage = damage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+        }
+        else if (beamHeavyAttack)
+        {
+
+        }
+        else if (sprayHeavyAttack)
+        {
+            neutralHitVFXManager.damage = damage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+        }
+
+        //print(damage);
+        damageClearance();
     }
 
     private void heavyAttackPowerCalculation()
     {
         damage = baseHeavyAttackDamage + (builtUpAttackPower * builtUpAddedDamage);
         builtUpAttackPower = 0;
-        print(damage);
+
+        if (jabHeavyAttack)
+        {
+            heavyColliderReference.damage = damage;
+        }
+        else if (slashHeavyAttack)
+        {
+            heavyColliderReference.damage = damage;
+        }
+        else if (projectileHeavyAttack)
+        {
+            heavyHitVFXManager.damage = damage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+        }
+        else if (beamHeavyAttack)
+        {
+
+        }
+        else if (sprayHeavyAttack)
+        {
+            heavyHitVFXManager.damage = damage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+        }
+
+        //print(damage);
+        damageClearance();
     }
     #endregion
 
     private void damageClearance()
     {
         damage = 0;
+    }
+    #endregion
+
+    #region Status Effects
+    private void statusEffectAndDamageCalculations()
+    {
+        if (jabNeutralAttack)
+        {
+            neutralColliderReference.damage = baseNeutralAttackDamage;
+        }
+        else if (slashNeutralAttack)
+        {
+            neutralColliderReference.damage = baseNeutralAttackDamage;
+        }
+        else if (projectileNeutralAttack)
+        {
+            neutralHitVFXManager.damage = baseNeutralAttackDamage;
+            neutralHitVFXManager.updateDamageOnProjectiles();
+        }
+        else if (sprayNeutralAttack)
+        {
+            neutralHitVFXManager.damage = baseNeutralAttackDamage;
+            neutralHitVFXManager.updateDamageOnSpray();
+        }
+
+        if (jabHeavyAttack)
+        {
+            heavyColliderReference.burnedStatusEffect = burnedStatusEffect;
+            heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
+            heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
+            heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
+            heavyColliderReference.hauntedStatusEffect = hauntedStatusEffect;
+            heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
+            heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
+            heavyColliderReference.stunnedStatusEffect = stunnedStatusEffect;
+            heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
+            heavyColliderReference.squashedStatusEffect = squashedStatusEffect;
+            heavyColliderReference.slowedStatusEffect = slowedStatusEffect;
+            heavyColliderReference.grabbedStatusEffect = grabbedStatusEffect;
+        }
+        else if (slashHeavyAttack)
+        {
+            heavyColliderReference.burnedStatusEffect = burnedStatusEffect;
+            heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
+            heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
+            heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
+            heavyColliderReference.hauntedStatusEffect = hauntedStatusEffect;
+            heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
+            heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
+            heavyColliderReference.stunnedStatusEffect = stunnedStatusEffect;
+            heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
+            heavyColliderReference.squashedStatusEffect = squashedStatusEffect;
+            heavyColliderReference.slowedStatusEffect = slowedStatusEffect;
+            heavyColliderReference.grabbedStatusEffect = grabbedStatusEffect;
+        }
+        else if (projectileHeavyAttack)
+        {
+            heavyHitVFXManager.damage = baseHeavyAttackDamage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+            heavyHitVFXManager.burnedStatusEffect = burnedStatusEffect;
+            heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
+            heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
+            heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
+            heavyHitVFXManager.hauntedStatusEffect = hauntedStatusEffect;
+            heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
+            heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
+            heavyHitVFXManager.stunnedStatusEffect = stunnedStatusEffect;
+            heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
+            heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
+            heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
+            heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
+            heavyHitVFXManager.updateStatusEffectsOnProjectiles();
+        }
+        else if (beamHeavyAttack)
+        {
+
+        }
+        else if (sprayHeavyAttack)
+        {
+            heavyHitVFXManager.damage = baseHeavyAttackDamage;
+            heavyHitVFXManager.updateDamageOnSpray();
+            heavyHitVFXManager.burnedStatusEffect = burnedStatusEffect;
+            heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
+            heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
+            heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
+            heavyHitVFXManager.hauntedStatusEffect = hauntedStatusEffect;
+            heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
+            heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
+            heavyHitVFXManager.stunnedStatusEffect = stunnedStatusEffect;
+            heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
+            heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
+            heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
+            heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
+            heavyHitVFXManager.updateStatusEffectsOnSpray();
+        }
     }
     #endregion
 
@@ -3463,6 +3650,7 @@ public class monsterPart : MonoBehaviour
             }
         }
         #endregion
+
     }
 
     public void triggerRunVisual()
@@ -3514,7 +3702,7 @@ public class monsterPart : MonoBehaviour
         }
         else if (beamNeutralAttack)
         {
-
+            neutralHitVFXManager.unleashBeamVisual();
         }
     }
 
@@ -3563,7 +3751,22 @@ public class monsterPart : MonoBehaviour
         }
         else if (beamHeavyAttack)
         {
+            heavyHitVFXManager.unleashBeamVisual();
+        }
+    }
 
+    public void endRemainingVFX()
+    {
+        if (beamNeutralAttack || beamHeavyAttack)
+        {
+            if (beamNeutralAttack)
+            {
+                neutralHitVFXManager.endBeamVisual();
+            }
+            else
+            {
+                heavyHitVFXManager.endBeamVisual();
+            }
         }
     }
 

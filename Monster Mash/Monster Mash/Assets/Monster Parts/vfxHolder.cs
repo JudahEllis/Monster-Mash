@@ -33,13 +33,31 @@ public class vfxHolder : MonoBehaviour
     private Vector3 startingPoint = new Vector3(0, 0, 0);
     private Quaternion startingRotation;
     //
+    public bool isBeamHolder;
+    public GameObject beam;
+    //
     public bool isReelInHolder;
     //
     public bool isMonsterSystemVFXHolder;
     private ParticleSystem[] MonsterSystemVFXArray;
     private int MonsterSystemVFXCount;
     public Transform MonsterSystemVFXHolder;
+    //
 
+    [Header("Damage and Status Effects")]
+    public int damage = 0;
+    public bool burnedStatusEffect;
+    public bool electrifiedStatusEffect;
+    public bool poisonedStatusEffect;
+    public bool stinkyStatusEffect;
+    public bool hauntedStatusEffect;
+    public bool confusedStatusEffect;
+    public bool slimedStatusEffect;
+    public bool stunnedStatusEffect;
+    public bool frozenStatusEffect;
+    public bool squashedStatusEffect;
+    public bool slowedStatusEffect;
+    public bool grabbedStatusEffect;
 
 
     public void grabReferences()
@@ -72,11 +90,80 @@ public class vfxHolder : MonoBehaviour
         {
             for (int i = 0; i < damageGivingVFX.Length; i++)
             {
-                damageGivingVFX[i].GetComponent<monsterPartReference>().referencesToIgnore = referencesToIgnore;
+                damageGivingVFX[i].referencesToIgnore = referencesToIgnore;
             }
         }
 
         additionalSetUp();
+    }
+
+    public void updateStatusEffectsOnProjectiles()
+    {
+        if (damageGivingVFX.Length > 0)
+        {
+            for (int i = 0; i < damageGivingVFX.Length; i++)
+            {
+                //damageGivingVFX[i].referencesToIgnore = referencesToIgnore;
+                damageGivingVFX[i].burnedStatusEffect = burnedStatusEffect;
+                damageGivingVFX[i].electrifiedStatusEffect = electrifiedStatusEffect;
+                damageGivingVFX[i].poisonedStatusEffect = poisonedStatusEffect;
+                damageGivingVFX[i].stinkyStatusEffect = stinkyStatusEffect;
+                damageGivingVFX[i].hauntedStatusEffect = hauntedStatusEffect;
+                damageGivingVFX[i].confusedStatusEffect = confusedStatusEffect;
+                damageGivingVFX[i].slimedStatusEffect = slimedStatusEffect;
+                damageGivingVFX[i].stunnedStatusEffect = stunnedStatusEffect;
+                damageGivingVFX[i].frozenStatusEffect = frozenStatusEffect;
+                damageGivingVFX[i].squashedStatusEffect = squashedStatusEffect;
+                damageGivingVFX[i].slowedStatusEffect = slowedStatusEffect;
+                damageGivingVFX[i].grabbedStatusEffect = grabbedStatusEffect;
+            }
+        }
+    }
+
+    public void updateStatusEffectsOnSpray()
+    {
+        if (subSprayVFXArray.Length > 0)
+        {
+            for (int i = 0; i < subSprayVFXArray.Length; i++)
+            {
+                subSprayVFXArray[i].burnedStatusEffect = burnedStatusEffect;
+                subSprayVFXArray[i].electrifiedStatusEffect = electrifiedStatusEffect;
+                subSprayVFXArray[i].poisonedStatusEffect = poisonedStatusEffect;
+                subSprayVFXArray[i].stinkyStatusEffect = stinkyStatusEffect;
+                subSprayVFXArray[i].hauntedStatusEffect = hauntedStatusEffect;
+                subSprayVFXArray[i].confusedStatusEffect = confusedStatusEffect;
+                subSprayVFXArray[i].slimedStatusEffect = slimedStatusEffect;
+                subSprayVFXArray[i].stunnedStatusEffect = stunnedStatusEffect;
+                subSprayVFXArray[i].frozenStatusEffect = frozenStatusEffect;
+                subSprayVFXArray[i].squashedStatusEffect = squashedStatusEffect;
+                subSprayVFXArray[i].slowedStatusEffect = slowedStatusEffect;
+                subSprayVFXArray[i].grabbedStatusEffect = grabbedStatusEffect;
+                subSprayVFXArray[i].updateDamageOnProjectiles();
+            }
+        }
+    }
+
+    public void updateDamageOnProjectiles()
+    {
+        if (damageGivingVFX.Length > 0)
+        {
+            for (int i = 0; i < damageGivingVFX.Length; i++)
+            {
+                damageGivingVFX[i].damage = damage;
+            }
+        }
+    }
+
+    public void updateDamageOnSpray()
+    {
+        if (subSprayVFXArray.Length > 0)
+        {
+            for (int i = 0; i < subSprayVFXArray.Length; i++)
+            {
+                subSprayVFXArray[i].damage = damage;
+                subSprayVFXArray[i].updateDamageOnProjectiles();
+            }
+        }
     }
 
     #region Additional Set Up
@@ -98,6 +185,10 @@ public class vfxHolder : MonoBehaviour
         else if (isDefaultSprayHolder)
         {
             prepDefaultSprayVFX();
+        }
+        else if (isBeamHolder)
+        {
+            prepBeamVFX();
         }
         else if (isMonsterSystemVFXHolder)
         {
@@ -212,6 +303,11 @@ public class vfxHolder : MonoBehaviour
         }
     }
 
+    public void prepBeamVFX()
+    {
+        beam = this.transform.GetChild(0).gameObject;
+    }
+
     public void prepMonsterSystemVFX()
     {
         if (isMonsterSystemVFXHolder)
@@ -312,6 +408,16 @@ public class vfxHolder : MonoBehaviour
         defaultSprayVFXArray[defaultSprayVFXCount].Stop();
         defaultSprayVFXArray[defaultSprayVFXCount].transform.parent = null;
         defaultSprayVFXArray[defaultSprayVFXCount].Play();
+    }
+
+    public void unleashBeamVisual()
+    {
+        beam.SetActive(true);
+    }
+
+    public void endBeamVisual()
+    {
+        beam.SetActive(false);
     }
 
     public void unleashReelInVisual()

@@ -92,11 +92,11 @@ public class BuildAScareLimb : MonoBehaviour
     {
         if(canBePlaced)
         {
-            moveLimb = null;
-
             isSelected = false;
 
             SavePartData();
+
+            moveLimb = null;
 
             input.actions.FindActionMap("Build-A-Scare").FindAction("Place Part").started -= PlacePart;
 
@@ -112,6 +112,8 @@ public class BuildAScareLimb : MonoBehaviour
     void FixedUpdate()
     {
         MoveLimb();
+
+        print(isSelected);
 
         //CalculatePlacement();
     }

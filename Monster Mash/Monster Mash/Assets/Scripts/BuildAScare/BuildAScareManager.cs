@@ -162,14 +162,19 @@ public class BuildAScareManager : MonoBehaviour
 
     void UnpauseSelection(InputAction.CallbackContext context)
     {
-        if (currentlySelected != null)
+        if(context.control.path != "/Mouse/delta")
         {
-            currentlySelected.GetComponent<BuildAScareLimb>().isSelected = true;
+            if (currentlySelected != null)
+            {
+                currentlySelected.GetComponent<BuildAScareLimb>().isSelected = true;
+            }
+
+            monsterRotating = false;
+
+            rotCart.m_Speed = 0;
+
+            print("Selection Unpaused");
         }
-
-        monsterRotating = false;
-
-        rotCart.m_Speed = 0;
     }
 
     // Update is called once per frame

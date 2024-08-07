@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9109825602377045208}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: MonsterVisuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 3557884330331734017}
   - component: {fileID: 3557884330331734018}
   - component: {fileID: 3557884330331734019}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -199,6 +199,9 @@ MonoBehaviour:
   semiSolids: []
   isOnSemiSolid: 0
   jumpButtonReleased: 0
+  hasInputHandler: 0
+  myInput: {fileID: 0}
+  playerIndex: 0
   monsterAtt: {fileID: 0}
   hasMonsterAtt: 0
   monsterArtFacingRight: 0
@@ -276,7 +279,7 @@ GameObject:
   - component: {fileID: 3557884330442496947}
   - component: {fileID: 3557884330442496945}
   - component: {fileID: 3557884330442496946}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

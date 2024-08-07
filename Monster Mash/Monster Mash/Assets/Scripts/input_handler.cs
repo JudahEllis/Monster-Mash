@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -13,6 +14,7 @@ public class input_handler : MonoBehaviour
     public PlayerInput playerInput;
 
     private InputAction movement;
+    private InputAction jump;
 
     [Header("----------------Gamepad Controller Support----------------")]
     public List<availableControllerInputs> currentControllerMap;
@@ -24,7 +26,7 @@ public class input_handler : MonoBehaviour
     public List<availableKeyboardInputs> currentKeyboardMap;
 
     //Judah Added some items hehe
-    [SerializeField] private Controller1 player;
+    [SerializeField] private Controller2D player;
     [SerializeField] private CustomCursor myCursor;
     private string controlType;
     private bool mapHasSwitched = false;
@@ -38,9 +40,9 @@ public class input_handler : MonoBehaviour
         }
         */
 
-        player = GetComponent<Controller1>();
+        //player = GetComponent<Controller1>();
 
-        //playerInput = GetComponent<PlayerInput>();
+        playerInput = GetComponent<PlayerInput>();
         //i changed this line because it was ruining my life
         //game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
         game_manager gameManager = FindObjectOfType<game_manager>();
@@ -54,14 +56,21 @@ public class input_handler : MonoBehaviour
                 break;
             }
         }
+
+        var players = FindObjectsOfType<Controller2D>();
+        var index = playerInput.playerIndex;
+        player = players.FirstOrDefault(m => m.GetPlayerIndex() == index);
+        player.myInput = GetComponent<input_handler>();
     }
 
     private void Start()
     {
 
-        if (playerInput.devices[0].name.Contains("Keyboard"))
+        if (playerInput.currentControlScheme == "KeyboardMouse")//playerInput.devices[0].name.Contains("Keyboard"))
         {
             keyboardMouseSetUp();
+
+            controlType = "keyboardmouse";
 
             InputActionMap keyboardControls = playerInput.actions.FindActionMap(controlType);
 
@@ -69,13 +78,13 @@ public class input_handler : MonoBehaviour
 
             movement.Enable();
 
-            keyboardControls.FindAction("Spacebar").started += Spacebar_key;
+            keyboardControls.FindAction("Spacebar").Enable();
 
             keyboardControls.FindAction("W").started += W_key;
 
             keyboardControls.FindAction("A").started += A_key;
 
-            keyboardControls.FindAction("S").started += S_key;
+            keyboardControls.FindAction("S").Enable();
 
             keyboardControls.FindAction("D").started += D_key;
 
@@ -104,9 +113,11 @@ public class input_handler : MonoBehaviour
             keyboardControls.FindAction("numPad3").started += numPad_3;
         }
 
-        else
+        else if (playerInput.currentControlScheme == "AllGamepads")
         {
             controllerSetUp();
+
+            controlType = "XBOX";
 
             InputActionMap controllerControls = playerInput.actions.FindActionMap(controlType);
 
@@ -118,7 +129,9 @@ public class input_handler : MonoBehaviour
 
             controllerControls.FindAction("B Button").started += B_button;
 
-            controllerControls.FindAction("X Button").started += X_button;
+            jump = controllerControls.FindAction("X Button");
+
+            jump.Enable();
 
             controllerControls.FindAction("Y Button").started += Y_button;
 
@@ -246,7 +259,7 @@ public class input_handler : MonoBehaviour
             mapHasSwitched = true;
             //print("current map: " + playerInput.currentActionMap);
             //switch input from starter to controller
-            playerInput.SwitchCurrentActionMap("XBOX");
+            //playerInput.SwitchCurrentActionMap("XBOX");
             controlType = "XBOX";
         }
     }
@@ -257,7 +270,7 @@ public class input_handler : MonoBehaviour
             mapHasSwitched = true;
             //print("trace: " + UnityEngine.StackTraceUtility.ExtractStackTrace());
             //switch input from starter to keyboard/mouse
-            playerInput.SwitchCurrentActionMap("keyboardmouse");
+            //playerInput.SwitchCurrentActionMap("keyboardmouse");
             controlType = "keyboardmouse";
             //print("current map: " + playerInput.currentActionMap);
         }
@@ -313,10 +326,10 @@ public class input_handler : MonoBehaviour
 
     public void X_button(CallbackContext context)
     {
-        if (context.started || context.performed)
-        {
-            Invoke(currentControllerMap[2].inputFunction, 0f);
+        float xValue = context.ReadValue<float>();
 
+        if (xValue > 0f)
+        {
             xButton = true;
         }
         else
@@ -470,6 +483,8 @@ public class input_handler : MonoBehaviour
         {
             methodInfo.Invoke(this, new object[] { context });
         }
+
+        leftStick = new Vector2(context.ReadValue<float>(), leftStick.y);
     }
 
     public void A_key(CallbackContext context)
@@ -488,6 +503,17 @@ public class input_handler : MonoBehaviour
         {
             methodInfo.Invoke(this, new object[] { context });
         }
+
+        float y = context.ReadValue<float>();
+
+        if (y > 0f)
+        {
+            leftStick = new Vector2(leftStick.x, -1);
+        }
+        else
+        {
+            leftStick = new Vector2(leftStick.x, 0);
+        }
     }
 
     public void D_key(CallbackContext context)
@@ -503,6 +529,17 @@ public class input_handler : MonoBehaviour
         if (context.started)
         {
             Invoke(currentKeyboardMap[5].inputFunction, 0f);
+        }
+
+        float xValue = context.ReadValue<float>();
+
+        if (xValue > 0f)
+        {
+            xButton = true;
+        }
+        else
+        {
+            xButton = false;
         }
     }
 

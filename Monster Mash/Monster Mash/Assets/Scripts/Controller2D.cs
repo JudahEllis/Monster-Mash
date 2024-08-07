@@ -72,8 +72,9 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private bool jumpButtonReleased = false; //inputhandler doesn't have GetKeyDown, so i must manually check button releases
 
     //input_handler stuffy stuff
-    private bool hasInputHandler = false;
-    private input_handler myInput;
+    [SerializeField]private bool hasInputHandler = false;
+    [SerializeField]public input_handler myInput;
+    [SerializeField]private int playerIndex = 0;
 
     //anims/ Monster Attack System script stuff
     [SerializeField] private monsterAttackSystem monsterAtt;
@@ -100,6 +101,7 @@ public class Controller2D : MonoBehaviour
 
     private void Start()
     {
+
         rb = GetComponent<Rigidbody2D>();
         cap = GetComponent<CapsuleCollider2D>();
 
@@ -109,13 +111,6 @@ public class Controller2D : MonoBehaviour
         rb.gravityScale = gravityScale;
 
         capSize = cap.size;
-
-        if (FindObjectOfType<input_handler>())
-        {
-            myInput = FindObjectOfType<input_handler>();
-            hasInputHandler = true;
-        }
-        else { hasInputHandler = false; }
 
         if (transform.GetChild(1).GetComponentInChildren<monsterAttackSystem>())
         {
@@ -143,51 +138,12 @@ public class Controller2D : MonoBehaviour
 
     private void Update()
     {
+        if (!hasInputHandler && myInput != null)
+        {
+            hasInputHandler = true;
+        }
+
         RotatePlayer();
-
-        #region double tap input detection, soon to be deprecated
-        if (!hasInputHandler && (Input.GetKeyDown(keyToDetect1) && !Input.GetKey(keyToDetect2)))
-        {
-            if (key1WasPressed && Time.time - timeSinceLastPress1 < doubleTapTimeThreshold)
-            {
-                // Key was double-tapped
-                Debug.Log("Key double-tapped");
-                key1result = 2;
-
-                key1WasPressed = false;
-            }
-            else
-            {
-                // Key was single-tapped
-                Debug.Log("Key single-tapped");
-                key1result = 1;
-
-                key1WasPressed = true;
-                timeSinceLastPress1 = Time.time;
-            }
-        }
-
-        if (!hasInputHandler && (Input.GetKeyDown(keyToDetect2) && !Input.GetKey(keyToDetect1)))
-        {
-            if (key2WasPressed && Time.time - timeSinceLastPress2 < doubleTapTimeThreshold)
-            {
-                // Key was double-tapped
-                Debug.Log("Key double-tapped");
-                key2result = 2;
-
-                key2WasPressed = false;
-            }
-            else
-            {
-                // Key was single-tapped
-                Debug.Log("Key single-tapped");
-                key2result = 1;
-
-                key2WasPressed = true;
-                timeSinceLastPress2 = Time.time;
-            }
-        }
-        #endregion
 
         MoveX(); //calls horizontal movement checks each frame
 
@@ -197,7 +153,7 @@ public class Controller2D : MonoBehaviour
             jumpButtonReleased = true;
         }
 
-        if ((!hasInputHandler && Input.GetKeyDown(KeyCode.Space)) || (hasInputHandler && myInput.GetX_Button()))
+        if (hasInputHandler && myInput.GetX_Button())
         {
             if (grounded && jumpsLeft == 2)
             {
@@ -218,7 +174,7 @@ public class Controller2D : MonoBehaviour
 
                 if (hasMonsterAtt) monsterAtt.jump();
             }
-            else if (jumpsLeft > 0 && (!hasInputHandler || jumpButtonReleased))
+            else if (jumpsLeft > 0 && jumpButtonReleased)
             {
                 OffEdge(); //ensure player is affected by physics as regular/ reset
 
@@ -247,13 +203,13 @@ public class Controller2D : MonoBehaviour
             }
         }
 
-        if (((!hasInputHandler && Input.GetKeyUp(KeyCode.Space)) || (hasInputHandler && !myInput.GetX_Button())) && isJumping)
+        if ((hasInputHandler && !myInput.GetX_Button()) && isJumping)
         {
             //print("isJump false");
             isJumping = false;
         }
 
-        if ((!hasInputHandler && Input.GetAxis("Vertical") < 0) || (hasInputHandler && myInput.GetLeft_JoyStick().y <= -0.44f))
+        if (hasInputHandler && myInput.GetLeft_JoyStick().y <= -0.44f)
         {
             canPhase = true;
             OffEdge();
@@ -476,14 +432,14 @@ public class Controller2D : MonoBehaviour
     private void MoveX()
     {
         // Horizontal movement.
-        if ((!hasInputHandler && Input.GetKey(KeyCode.D)) || (hasInputHandler && myInput.GetLeft_JoyStick().x > 0.1f))
+        if (hasInputHandler && myInput.GetLeft_JoyStick().x > 0.1f)
         {
             move = 1;
 
             if (grounded) facingRight = true;
 
         }
-        else if ((!hasInputHandler && Input.GetKey(KeyCode.A)) || (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.1f))
+        else if (hasInputHandler && myInput.GetLeft_JoyStick().x < -0.1f)
         {
             move = -1;
 
@@ -504,7 +460,7 @@ public class Controller2D : MonoBehaviour
         {
             //if (grounded)
             //{
-            if ((!hasInputHandler && (key1result == 2 || key2result == 2)) || (hasInputHandler && myInput.GetLeft_Joystick_Click()) && grounded)
+            if (hasInputHandler && myInput.GetLeft_Joystick_Click() && grounded)
             {
                 isRun = true;
                 xMovement = new Vector3(move * playerRunSpeed, 0.0f, 0.0f);
@@ -742,6 +698,19 @@ public class Controller2D : MonoBehaviour
         hasMonsterAtt = true;
 
         yield break;
+    }
+
+    #endregion
+
+    #region inputHandlerStuff
+
+    public void SetPlayerIndex(int i)
+    {
+        playerIndex = i;
+    }
+    public int GetPlayerIndex()
+    {
+        return playerIndex;
     }
 
     #endregion

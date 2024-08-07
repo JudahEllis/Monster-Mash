@@ -53,37 +53,22 @@ public class BuildAScareManager : MonoBehaviour
 
     [Header("UI")]
 
-    [SerializeField]
-    Animator cameraAnimator;
-
-    [SerializeField]
-    private CanvasGroup limbUI;
-
-    [SerializeField]
-    CanvasGroup torsoButtons;
-
-    [SerializeField]
-    CanvasGroup armButtons;
-
-    [SerializeField]
-    CanvasGroup limbInfo;
-
-    [SerializeField]
-    Slider scaleSlider;
-
     EventSystem eventSystem;
-    
-    [SerializeField]
-    GameObject buttonToSelect;
 
-    [SerializeField]
-    GameObject bodyButton;
+    //C# Events
 
-    [SerializeField]
-    GameObject armButton;
+    public delegate void EnableLimbUI();
 
-    [SerializeField]
-    GameObject infoButton;
+    public delegate void DisableLimbUI();
+
+    public static event EnableLimbUI enableLimbUI;
+
+    public static event DisableLimbUI disableLimbUI;
+
+    public delegate void ActivateTorso();
+
+    public static event ActivateTorso activateTorso;
+
 
     void Awake()
     {
@@ -172,8 +157,6 @@ public class BuildAScareManager : MonoBehaviour
             monsterRotating = false;
 
             rotCart.m_Speed = 0;
-
-            print("Selection Unpaused");
         }
     }
 
@@ -238,92 +221,9 @@ public class BuildAScareManager : MonoBehaviour
         }
     }
 
-   
+
 
     #region UI Functions
-
-    //Multiplier parameter is either 1 or negative 1 and effects if buttons adds or subtracts to rotation
-
-    //Rotation is iffy right now as it is not adding an even 45, it will be fixed
-    public void XRotate(float multiplier)
-    {
-        if (currentlySelected != null)
-        {
-            rotationVector = new Vector3(currentlySelected.transform.rotation.x + (45 * multiplier), 
-                currentlySelected.transform.rotation.y, currentlySelected.transform.rotation.z);
-
-            currentlySelected.transform.Rotate(rotationVector, Space.Self);
-        }
-    }
-
-    public void YRotate(float multiplier)
-    {
-        if (currentlySelected != null)
-        {
-            rotationVector = new Vector3(currentlySelected.transform.rotation.x,
-                currentlySelected.transform.rotation.y + (45 * multiplier), currentlySelected.transform.rotation.z);
-
-            currentlySelected.transform.Rotate(rotationVector, Space.Self);
-        }
-    }
-
-    public void ZRotate(float multiplier)
-    {
-        if (currentlySelected != null)
-        {
-            rotationVector = new Vector3(currentlySelected.transform.rotation.x,
-                currentlySelected.transform.rotation.y, currentlySelected.transform.rotation.z + (45 * multiplier));
-
-            currentlySelected.transform.Rotate(rotationVector, Space.Self);
-        }
-    }
-
-    public void FlipPart()
-    {
-        if(currentlySelected != null)
-        {
-            Vector3 newScale = new Vector3(-currentlySelected.transform.localScale.x,
-                currentlySelected.transform.localScale.y,
-                currentlySelected.transform.localScale.z);
-
-            currentlySelected.transform.localScale = newScale;
-
-            if(currentlySelected.GetComponent<BuildAScareLimb>().flipped)
-            {
-                currentlySelected.GetComponent<BuildAScareLimb>().flipped = false;
-            }
-
-            else
-            {
-                currentlySelected.GetComponent<BuildAScareLimb>().flipped = true;
-            }
-        }
-    }
-
-    public void NewPart()
-    {
-        if(currentlySelected == null)
-        {
-            SwitchUI(limbInfo, armButtons, armButton);
-        }
-    }
-
-    public void ScaleSlider()
-    {
-        int modifier;
-
-        if(currentlySelected.GetComponent<BuildAScareLimb>().flipped)
-        {
-            modifier = -1;
-        }
-
-        else
-        {
-            modifier = 1;
-        }
-
-        currentlySelected.transform.localScale = new Vector3(scaleSlider.value * modifier, scaleSlider.value, scaleSlider.value);
-    }
 
     bool uiHidden = true;
     void HideShowUI(InputAction.CallbackContext context)
@@ -332,76 +232,14 @@ public class BuildAScareManager : MonoBehaviour
         {
             uiHidden = false;
 
-            limbUI.alpha = 1;
-
-            limbUI.blocksRaycasts = true;
-
-            cameraAnimator.SetBool("limbUI", true);
-
-            if(input.devices[0] is Gamepad )
-            {
-                eventSystem.SetSelectedGameObject(buttonToSelect);
-            }
+            enableLimbUI();
         }
 
         else
         {
             uiHidden = true;
 
-            limbUI.alpha = 0;
-
-            limbUI.blocksRaycasts = false;
-
-            cameraAnimator.SetBool("limbUI", false);
-
-            eventSystem.SetSelectedGameObject(null);
-        }
-    }
-
-    void HideUI()
-    {
-        uiHidden = true;
-
-        limbUI.alpha = 0;
-
-        limbUI.blocksRaycasts = false;
-
-        cameraAnimator.SetBool("limbUI", false);
-
-        eventSystem.SetSelectedGameObject(null);
-    }
-
-    void ShowUI()
-    {
-        uiHidden = false;
-
-        limbUI.alpha = 1;
-
-        limbUI.blocksRaycasts = true;
-
-        cameraAnimator.SetBool("limbUI", true);
-
-        if (input.devices[0] is Gamepad)
-        {
-            eventSystem.SetSelectedGameObject(buttonToSelect);
-        }
-    }
-
-    void SwitchUI(CanvasGroup oldDisplay, CanvasGroup newDisplay, GameObject button)
-    {
-        buttonToSelect = button;
-
-        oldDisplay.alpha = 0;
-
-        oldDisplay.blocksRaycasts = false;
-
-        newDisplay.alpha = 1;
-
-        newDisplay.blocksRaycasts = true;
-
-        if (input.devices[0] is Gamepad)
-        {
-            eventSystem.SetSelectedGameObject(button);
+            disableLimbUI();
         }
     }
 
@@ -427,7 +265,7 @@ public class BuildAScareManager : MonoBehaviour
 
         torsoObject = spawnedTorso;
 
-        SwitchUI(torsoButtons, armButtons, armButton);
+        activateTorso();
 
         //Add Logic for Saving Torso as the First Part in the parts Array
     }
@@ -448,7 +286,7 @@ public class BuildAScareManager : MonoBehaviour
 
         currentlySelected = spawnedLimb;
 
-        SwitchUI(armButtons, limbInfo, infoButton);
+        //SwitchUI(armButtons, limbInfo, infoButton);
     }
 
     void ClearMonsterParts(InputAction.CallbackContext context)
@@ -473,9 +311,9 @@ public class BuildAScareManager : MonoBehaviour
 
         undoData.Clear();
 
-        SwitchUI(limbInfo, armButtons, armButton);
+        //SwitchUI(limbInfo, armButtons, armButton);
 
-        SwitchUI(armButtons, torsoButtons, bodyButton);
+        //SwitchUI(armButtons, torsoButtons, bodyButton);
     }
 
     public void Undo(InputAction.CallbackContext context)

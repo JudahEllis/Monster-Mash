@@ -112,18 +112,11 @@ public class Controller2D : MonoBehaviour
 
         capSize = cap.size;
 
-        /*if (myInput == null && FindObjectOfType<input_handler>())
-        {
-            //myInput = FindObjectOfType<input_handler>();
-            hasInputHandler = true;
-        }
-        else { hasInputHandler = false; }*/
-
-        /*if (transform.GetChild(1).GetComponentInChildren<monsterAttackSystem>())
+        if (transform.GetChild(1).GetComponentInChildren<monsterAttackSystem>())
         {
             print("locked in MonsterAttackSystem, Gamer!");
             monsterAtt = transform.GetChild(1).GetComponentInChildren<monsterAttackSystem>();
-        }*/
+        }
 
         if (monsterAtt != null)
         {
@@ -711,6 +704,10 @@ public class Controller2D : MonoBehaviour
 
     #region inputHandlerStuff
 
+    public void SetPlayerIndex(int i)
+    {
+        playerIndex = i;
+    }
     public int GetPlayerIndex()
     {
         return playerIndex;

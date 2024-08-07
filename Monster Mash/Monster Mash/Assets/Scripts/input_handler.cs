@@ -78,13 +78,13 @@ public class input_handler : MonoBehaviour
 
             movement.Enable();
 
-            keyboardControls.FindAction("Spacebar").started += Spacebar_key;
+            keyboardControls.FindAction("Spacebar").Enable();
 
             keyboardControls.FindAction("W").started += W_key;
 
             keyboardControls.FindAction("A").started += A_key;
 
-            keyboardControls.FindAction("S").started += S_key;
+            keyboardControls.FindAction("S").Enable();
 
             keyboardControls.FindAction("D").started += D_key;
 
@@ -483,6 +483,8 @@ public class input_handler : MonoBehaviour
         {
             methodInfo.Invoke(this, new object[] { context });
         }
+
+        leftStick = new Vector2(context.ReadValue<float>(), leftStick.y);
     }
 
     public void A_key(CallbackContext context)
@@ -501,6 +503,17 @@ public class input_handler : MonoBehaviour
         {
             methodInfo.Invoke(this, new object[] { context });
         }
+
+        float y = context.ReadValue<float>();
+
+        if (y > 0f)
+        {
+            leftStick = new Vector2(leftStick.x, -1);
+        }
+        else
+        {
+            leftStick = new Vector2(leftStick.x, 0);
+        }
     }
 
     public void D_key(CallbackContext context)
@@ -516,6 +529,17 @@ public class input_handler : MonoBehaviour
         if (context.started)
         {
             Invoke(currentKeyboardMap[5].inputFunction, 0f);
+        }
+
+        float xValue = context.ReadValue<float>();
+
+        if (xValue > 0f)
+        {
+            xButton = true;
+        }
+        else
+        {
+            xButton = false;
         }
     }
 

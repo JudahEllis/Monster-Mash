@@ -11,6 +11,8 @@ public class FunTestManager : MonoBehaviour
 
     MonsterTransfer transferData;
 
+    [SerializeField] private GameObject gameManager;
+
     void Start()
     {
         CompleteMonsters();
@@ -34,6 +36,8 @@ public class FunTestManager : MonoBehaviour
     public void StartMatch()
     {
         transferData.selectedMonsters = playerMonsters;
+
+        if (gameManager != null) gameManager.SetActive(true);
 
         SceneManager.LoadScene(0);
     }

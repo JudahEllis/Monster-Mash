@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25151235219750474}
   m_LocalRotation: {x: -0, y: 0.258819, z: -0, w: 0.9659259}
-  m_LocalPosition: {x: 0, y: -2.74, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.5535426, y: 2.5535426, z: 2.5535426}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9984,7 +9984,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127781651664518174}
   m_LocalRotation: {x: -0, y: 0.258819, z: -0, w: 0.9659259}
-  m_LocalPosition: {x: 0, y: -2.8541358, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5.289721, y: 5.2897224, z: 5.289721}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19854,7 +19854,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860066961257931475}
   m_LocalRotation: {x: -0.64332443, y: 0.575828, z: -0.29348543, w: 0.4103926}
-  m_LocalPosition: {x: 0.18, y: -3.1800015, z: -0.11}
+  m_LocalPosition: {x: 0.18, y: 0, z: -0.11}
   m_LocalScale: {x: 1.8289583, y: 1.8289582, z: 1.8289586}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19889,9 +19889,24 @@ MonoBehaviour:
   spreadOfSpray: 0
   isDefaultSprayHolder: 0
   defaultSprayHolder: {fileID: 0}
+  isBeamHolder: 0
+  beam: {fileID: 0}
   isReelInHolder: 0
   isMonsterSystemVFXHolder: 1
   MonsterSystemVFXHolder: {fileID: 0}
+  damage: 0
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  hauntedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  stunnedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
+  grabbedStatusEffect: 0
 --- !u!1 &2052953326998247597
 GameObject:
   m_ObjectHideFlags: 0
@@ -20012,6 +20027,19 @@ MonoBehaviour:
   isProjectile: 0
   isJabOrSlash: 0
   isReel: 0
+  damage: 0
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  hauntedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  stunnedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
+  grabbedStatusEffect: 0
 --- !u!54 &4044046481925755258
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -34705,6 +34733,7 @@ Transform:
   - {fileID: 5566602146961594653}
   - {fileID: 3103368713653920723}
   - {fileID: 5774795189021599403}
+  - {fileID: 1385101602000802770}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -34742,6 +34771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   isGrounded: 1
+  isFloatingMonster: 0
   onPlatformEdge: 0
   attackSlotMonsterParts:
   - {fileID: 0}
@@ -34753,21 +34783,41 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   allMonsterParts: []
+  health: 800
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  hauntedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  stunnedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
   partDestructionVisual: {fileID: 4162631348937326441}
   destructionVisual: {fileID: 6390150858147463454}
   destructionPhysicsHelper: {fileID: 4437264925533953973}
   glideVisual: {fileID: 3194715993772549130}
+  fieryVisual: {fileID: 0}
   gasVisual: {fileID: 5670288938317569295}
   musicVisual: {fileID: 5544496505422010652}
+  spookyVisual: {fileID: 0}
+  vomitVisual: {fileID: 0}
+  sleepVisual: {fileID: 0}
+  hulaHoopVisual: {fileID: 0}
+  sneezeVisual: {fileID: 0}
   rollingAttackVisual: {fileID: 8284503566793466682}
   leapingAttackVisual: {fileID: 8048122679199339494}
   jumpVisual: {fileID: 4699455637391607886}
   landVisual: {fileID: 5566602146947439709}
   runVFXHolder: {fileID: 5712804279022807224}
+  floatingRunVisual: {fileID: 0}
   dashSplat: {fileID: 2138470212535512794}
   stompCollider: {fileID: 5659501582033555223}
   nativeReel: {fileID: 6543314831390793097}
   SFXManager: {fileID: 0}
+  floorCheck: {fileID: 1385101602000802781}
 --- !u!1 &5844654283997483740
 GameObject:
   m_ObjectHideFlags: 0
@@ -49861,6 +49911,87 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1901493425782050876}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2548707114897887312
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5254383836839495749}
+    m_Modifications:
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.7206
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9659259
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.258819
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487489321918448525, guid: 330fc93c6618b2e49a56ba8253531a82,
+        type: 3}
+      propertyPath: m_Name
+      value: Grounded Limb Area
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 330fc93c6618b2e49a56ba8253531a82, type: 3}
+--- !u!4 &1385101602000802770 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3487489321918448514, guid: 330fc93c6618b2e49a56ba8253531a82,
+    type: 3}
+  m_PrefabInstance: {fileID: 2548707114897887312}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1385101602000802781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3487489321918448525, guid: 330fc93c6618b2e49a56ba8253531a82,
+    type: 3}
+  m_PrefabInstance: {fileID: 2548707114897887312}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3054997148304574522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50192,7 +50323,7 @@ PrefabInstance:
     - target: {fileID: 6710139492206580329, guid: 95b8d3d65b5d7f1409c4ed1723887826,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.36
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6710139492206580329, guid: 95b8d3d65b5d7f1409c4ed1723887826,
         type: 3}
@@ -51472,7 +51603,7 @@ PrefabInstance:
     - target: {fileID: 395031058681097018, guid: b2f0b8902a31c8a46a1c4bb24ed9ea36,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.97
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 395031058681097018, guid: b2f0b8902a31c8a46a1c4bb24ed9ea36,
         type: 3}

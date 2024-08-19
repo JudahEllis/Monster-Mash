@@ -100,6 +100,7 @@ public class autoLimb_Connection : MonoBehaviour
             //this section may be removed at a later date if we decide to separate left and right limbs as separate limbs and deserving of a hardcoded orientation
             //Dont forget!!! Horns, Eyes, and Mouths need to be excluded from this grouping 
 
+            /*
             if (isLeftHeadConnection || isLeftUpperTorsoConnection || isLeftLowerTorsoConnection)
             {
                 if (monsterPartMemory[i].isHorn == false)
@@ -131,6 +132,7 @@ public class autoLimb_Connection : MonoBehaviour
                 monsterPartMemory[i].isRightSidedLimb = false;
                 monsterPartMemory[i].isLeftSidedLimb = false;
             }
+            */
         }
     }
 

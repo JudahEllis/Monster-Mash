@@ -528,6 +528,7 @@ public class monsterAttackSystem : MonoBehaviour
                     timeSinceLastCall = 0;
                 }
 
+                //Redo this section to clean it up
                 if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
                 {
                     if (isGrounded || attackSlotMonsterParts[attackSlot].isTail)
@@ -543,8 +544,17 @@ public class monsterAttackSystem : MonoBehaviour
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1)
                 {
-                    requiresFlourishingTwirl = true;
-                    requiresFlourishingRoll = false;
+                    if (attackSlotMonsterParts[attackSlot].isLeg && attackSlotMonsterParts[attackSlot].isGroundedLimb)
+                    {
+                        requiresFlourishingTwirl = false;
+                        requiresFlourishingRoll = false;
+                    }
+                    else
+                    {
+                        requiresFlourishingTwirl = true;
+                        requiresFlourishingRoll = false;
+                    }
+
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
                 {
@@ -553,7 +563,7 @@ public class monsterAttackSystem : MonoBehaviour
                         requiresFlourishingTwirl = true;
                         requiresFlourishingRoll = false;
                     }
-                    else if (attackSlotMonsterParts[attackSlot].isLeg)
+                    else if (attackSlotMonsterParts[attackSlot].isLeg && attackSlotMonsterParts[attackSlot].isGroundedLimb)
                     {
                         requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
@@ -1291,7 +1301,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(isGrounded, false);
+                allMonsterParts[i].triggerLand();
             }
 
             isGliding = false;

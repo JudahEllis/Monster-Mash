@@ -15,6 +15,7 @@ public class projectile : MonoBehaviour
     public float timeFromImpactToDisable = 2;
     public float timeUntilAutoDisable = 20;
     private int movementModifier = 1;
+    public bool fadesAway;
     [Header("Additional VFX Properties")]
     public bool isCenterOfSpray;
     public bool needsUpwardDraft;
@@ -28,6 +29,7 @@ public class projectile : MonoBehaviour
     private bool upwardDraftActivated = false;
     private Quaternion intendedRotation;
     private Vector3 startingPoint = new Vector3(0, 0, 0);
+    private Vector3 startingSize = new Vector3(1, 1, 1);
     private Quaternion startingRotation;
     private bool impactCalled;
 
@@ -35,7 +37,7 @@ public class projectile : MonoBehaviour
     {
         transform.parent = projectileHolder;
         transform.localPosition = startingPoint;
-        //transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.localScale = startingSize;
         transform.localRotation = startingRotation;
 
         if (facingRight)
@@ -96,21 +98,30 @@ public class projectile : MonoBehaviour
         movementModifier = 0;
         upwardDraftActivated = false;
         updateVelocity();
-        if (mainVisual != null)
+        if (mainVisual != null && fadesAway == false)
         {
             mainVisual.SetActive(false);
         }
+        else
+        {
+            if (mainVisual.GetComponent<ParticleSystem>() != null)
+            {
+                mainVisual.GetComponent<ParticleSystem>().Stop();
+            }
+        }
+
         if (impactVisual != null)
         {
             impactVisual.SetActive(true);
 
-            /*
+            
             if (impactVisual.GetComponent<ParticleSystem>() != null)
             {
                 impactVisual.GetComponent<ParticleSystem>().Play();
             }
-            */
+            
         }
+
         baseCollider.enabled = false;
         if (trailVisual != null)
         {
@@ -122,15 +133,10 @@ public class projectile : MonoBehaviour
         yield return new WaitForSeconds(timeFromImpactToDisable);
         if (impactVisual != null)
         {
-            /*
-            if (impactVisual.GetComponent<ParticleSystem>() != null)
-            {
-                impactVisual.GetComponent<ParticleSystem>().Stop();
-            }
-            */
-
             impactVisual.SetActive(false);
+
         }
+
         if (trailVisual != null)
         {
             trailVisual.SetActive(false);

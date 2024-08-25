@@ -704,6 +704,10 @@ public class monsterAttackSystem : MonoBehaviour
             canDashAttack = false;
             attackFocusOn();
             stopForceFall();
+            if (SFXManager)
+            {
+                SFXManager.DashSFX();
+            }
             StartCoroutine(dashVisuals());
         }
     }
@@ -1136,7 +1140,11 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             releaseJumpVFX();
             stopForceFall();
-            //SFXManager.JumpSFX(allMonsterParts[0]); // for now just pick the first monster part until we can find the right one
+            if (SFXManager)
+            {
+                SFXManager.JumpSFX(allMonsterParts[0]); // for now just pick the first monster part until we can find the right one
+            }
+            
         }
         else
         {
@@ -1153,7 +1161,10 @@ public class monsterAttackSystem : MonoBehaviour
             {
                 isGliding = false;
                 jumpsLeft--;
-
+                if (SFXManager)
+                {
+                    SFXManager.DoubleJumpWingedSFX();
+                }
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
                     allMonsterParts[i].triggerWingFlap();
@@ -1176,7 +1187,11 @@ public class monsterAttackSystem : MonoBehaviour
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
                 releaseJumpVFX();
-                //SFXManager.DoubleJumpSFX(allMonsterParts[0]);   
+                if (SFXManager)
+                {
+                    SFXManager.DoubleJumpSFX(allMonsterParts[0]);
+                }
+                   
             }
         }
     }
@@ -1326,7 +1341,11 @@ public class monsterAttackSystem : MonoBehaviour
 
             landVisual.Stop();
             landVisual.Play();
-            //SFXManager.LandSFX(allMonsterParts[0]);
+            if (SFXManager)
+            {
+                SFXManager.LandSFX(allMonsterParts[0]);
+            }
+            
         }
     }
 

@@ -124,6 +124,12 @@ public class SFXManager : MonoBehaviour
         playSFX();
     }
 
+    public void DoubleJumpWingedSFX()
+    {
+        toPlay.Add(baseSounds[4]);
+        playSFX();
+    }
+
     public void LandSFX(monsterPart part)
     {
         if (part.isLeg)
@@ -132,6 +138,12 @@ public class SFXManager : MonoBehaviour
         }
         toPlay.Add(landWeight[0]);
         toPlay.Add(baseSounds[1]);
+        playSFX();
+    }
+
+    public void DashSFX()
+    {
+        toPlay.Add(baseSounds[3]);
         playSFX();
     }
 }

@@ -31,7 +31,7 @@ public class input_handler : MonoBehaviour
     private string controlType;
     private bool mapHasSwitched = false;
 
-    private void Awake()
+    private void Start()
     {
         /*
         if (FindObjectOfType<Controller1>())
@@ -42,11 +42,14 @@ public class input_handler : MonoBehaviour
 
         //player = GetComponent<Controller1>();
 
-        playerInput = GetComponent<PlayerInput>();
         //i changed this line because it was ruining my life
         //game_manager gameManager = GameObject.Find("Game Manager").GetComponent<game_manager>();
-        game_manager gameManager = FindObjectOfType<game_manager>();
-        gameManager.activePlayers.Add(this);
+
+        //game_manager gameManager = FindObjectOfType<game_manager>();
+
+        //gameManager.activePlayers.Add(this);
+
+        /*
         for (int i = 0; i < gameManager.activePlayers.Count; i++)
         {
             if (gameManager.activePlayers[i] == this)
@@ -57,17 +60,17 @@ public class input_handler : MonoBehaviour
             }
         }
 
-        var players = FindObjectsOfType<Controller2D>();
-        var index = playerInput.playerIndex;
-        player = players.FirstOrDefault(m => m.GetPlayerIndex() == index);
-        player.myInput = GetComponent<input_handler>();
-    }
+        */
 
-    private void Start()
-    {
+        //var players = FindObjectsOfType<Controller2D>();
+        //var index = playerInput.playerIndex;
+        //player = players.FirstOrDefault(m => m.GetPlayerIndex() == index);
+        //player.myInput = GetComponent<input_handler>();
 
-        if (playerInput.currentControlScheme == "KeyboardMouse")//playerInput.devices[0].name.Contains("Keyboard"))
+        if (playerInput.currentControlScheme == "KeyboardMouse")
         {
+            playerInput.SwitchCurrentActionMap("keyboardmouse");
+
             keyboardMouseSetUp();
 
             controlType = "keyboardmouse";
@@ -80,42 +83,46 @@ public class input_handler : MonoBehaviour
 
             keyboardControls.FindAction("Spacebar").Enable();
 
-            keyboardControls.FindAction("W").started += W_key;
+            keyboardControls.FindAction("W").performed += W_key;
 
-            keyboardControls.FindAction("A").started += A_key;
+            keyboardControls.FindAction("A").performed += A_key;
 
-            keyboardControls.FindAction("S").Enable();
+            keyboardControls.FindAction("S").performed += S_key;
 
-            keyboardControls.FindAction("D").started += D_key;
+            keyboardControls.FindAction("D").performed += D_key;
 
-            keyboardControls.FindAction("Q").started += Q_key;
+            keyboardControls.FindAction("Q").performed += Q_key;
 
-            keyboardControls.FindAction("E").started += E_key;
+            keyboardControls.FindAction("E").performed += E_key;
 
-            keyboardControls.FindAction("R").started += R_key;
+            keyboardControls.FindAction("R").performed += R_key;
 
-            keyboardControls.FindAction("F").started += F_key;
+            keyboardControls.FindAction("F").performed += F_key;
 
-            keyboardControls.FindAction("Left Shift").started += LeftShift_key;
+            keyboardControls.FindAction("Left Shift").performed += LeftShift_key;
 
-            keyboardControls.FindAction("Left Control").started += LeftControl_key;
+            keyboardControls.FindAction("Left Control").performed += LeftControl_key;
 
-            keyboardControls.FindAction("Left Mouse").started += Left_mouse;
+            keyboardControls.FindAction("Left Mouse").performed += Left_mouse;
 
-            keyboardControls.FindAction("Middle Mouse").started += Middle_mouse;
+            keyboardControls.FindAction("Middle Mouse").performed += Middle_mouse;
 
-            keyboardControls.FindAction("Right Mouse").started += Right_mouse;
+            keyboardControls.FindAction("Right Mouse").performed += Right_mouse;
 
-            keyboardControls.FindAction("numPad1").started += numPad_1;
+            keyboardControls.FindAction("numPad1").performed += numPad_1;
 
-            keyboardControls.FindAction("numPad2").started += numPad_2;
+            keyboardControls.FindAction("numPad2").performed += numPad_2;
 
-            keyboardControls.FindAction("numPad3").started += numPad_3;
+            keyboardControls.FindAction("numPad3").performed += numPad_3;
         }
 
         else if (playerInput.currentControlScheme == "AllGamepads")
         {
             controllerSetUp();
+
+            playerInput.SwitchCurrentActionMap("XBOX");
+
+            print(playerInput.currentActionMap);
 
             controlType = "XBOX";
 
@@ -125,38 +132,39 @@ public class input_handler : MonoBehaviour
 
             movement.Enable();
 
-            controllerControls.FindAction("A Button").started += A_button;
+            controllerControls.FindAction("A Button").performed += A_button;
 
-            controllerControls.FindAction("B Button").started += B_button;
+            controllerControls.FindAction("B Button").performed += B_button;
 
             jump = controllerControls.FindAction("X Button");
 
             jump.Enable();
 
-            controllerControls.FindAction("Y Button").started += Y_button;
+            controllerControls.FindAction("Y Button").performed += Y_button;
 
-            controllerControls.FindAction("Left Trigger").started += leftTrigger;
+            controllerControls.FindAction("Left Trigger").performed += leftTrigger;
 
-            controllerControls.FindAction("Right Trigger").started += rightTrigger;
+            controllerControls.FindAction("Right Trigger").performed += rightTrigger;
 
-            controllerControls.FindAction("Left Bumper").started += leftBumper;
+            controllerControls.FindAction("Left Bumper").performed += leftBumper;
 
-            controllerControls.FindAction("Right Bumper").started += rightBumper;
+            controllerControls.FindAction("Right Bumper").performed += rightBumper;
 
             controllerControls.FindAction("Right Stick").Enable();
 
-            controllerControls.FindAction("DPad Up").started += Dpad_UP;
+            controllerControls.FindAction("DPad Up").performed += Dpad_UP;
 
-            controllerControls.FindAction("DPad Down").started += Dpad_DOWN;
+            controllerControls.FindAction("DPad Down").performed += Dpad_DOWN;
 
-            controllerControls.FindAction("DPad Left").started += Dpad_LEFT;
+            controllerControls.FindAction("DPad Left").performed += Dpad_LEFT;
 
-            controllerControls.FindAction("DPad Right").started += Dpad_RIGHT;
+            controllerControls.FindAction("DPad Right").performed += Dpad_RIGHT;
 
-            controllerControls.FindAction("LeftStickClick").started += leftJoyStickClick;
+            controllerControls.FindAction("LeftStickClick").performed += leftJoyStickClick;
         }
 
         print(controlType);
+
     }
 
     /* On Disable
@@ -246,7 +254,7 @@ public class input_handler : MonoBehaviour
     */
     private void FixedUpdate()
     {
-        //movePlayer();
+        leftStick = movement.ReadValue<Vector2>();
     }
 
     //Establishes the correct button inputs available, whether in menus or combat and if a certain control set is being used
@@ -391,7 +399,7 @@ public class input_handler : MonoBehaviour
         //{
             //methodInfo.Invoke(this, new object[] { context });
 
-            leftStick = context.ReadValue<Vector2>();
+            leftStick = movement.ReadValue<Vector2>();
         //}
         //else
         //{
@@ -666,7 +674,7 @@ public class input_handler : MonoBehaviour
     #region Menu Interaction
     public void sayHi()
     {
-        print("hello!");
+        print("hello! " + gameObject.name);
     }
 
     public void sayBye()

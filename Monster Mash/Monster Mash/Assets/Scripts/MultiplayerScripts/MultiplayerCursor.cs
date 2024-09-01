@@ -34,6 +34,9 @@ public class MultiplayerCursor : MonoBehaviour
     public void Enabled(PlayerInput spawnedPlayer)
     {
         player = spawnedPlayer;
+
+        spawnedPlayer.SwitchCurrentActionMap("UI Navagation");
+
         cursor = GetComponent<VirtualMouseInput>();
 
         InputActionAsset playerInput = player.actions;
@@ -97,13 +100,13 @@ public class MultiplayerCursor : MonoBehaviour
         }
     }
 
-    public void SelectCharacter(GameObject character, GameObject selectedMonster)
+    public void SelectCharacter(MonsterData data, GameObject selectedMonster)
     { 
         if (joinManager.charactersSelected < inputManager.playerCount && !selectedCharacter)
         {
             joinManager.charactersSelected++;
 
-            joinManager.playerInfo[player.playerIndex].selectedCharacter = character;
+            joinManager.playerInfo[player.playerIndex].monster = data;
 
             joinManager.playerInfo[player.playerIndex].playerInput = player.gameObject;
 
@@ -132,7 +135,7 @@ public class MultiplayerCursor : MonoBehaviour
 
             joinManager.charactersSelected--;
 
-            joinManager.playerInfo[player.playerIndex].selectedCharacter = null;
+            joinManager.playerInfo[player.playerIndex].monster = null;
 
             joinManager.playerInfo[player.playerIndex].playerInput = null;
 

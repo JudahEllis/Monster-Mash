@@ -10,17 +10,9 @@ public class PlayerSpawnManager : MonoBehaviour
 
     [SerializeField]
     private Transform players;
-    void Start()
+    void Awake()
     {
-        /*
-       foreach(MultiplayerJoinManager.PlayerInformation info in CharacterSelectManager.Instance.storedPlayerInformation)
-        {
-            int spawnIndex = CharacterSelectManager.Instance.storedPlayerInformation.IndexOf(info);
-            SpawnPlayer(info.selectedCharacter, info.characterModel, playerSpawnLocations[spawnIndex], info.playerInput, info.playerIndex);
-        }
-        */
-
-        FunTestSpawner();
+       SpawnPlayers();
     }
 
     // Update is called once per frame
@@ -28,42 +20,22 @@ public class PlayerSpawnManager : MonoBehaviour
     {
         
     }
-
-    void SpawnPlayer(GameObject playerChar, GameObject playerModel, Transform spawnPoint, GameObject playerInput, int index)
+    void SpawnPlayers()
     {
-        GameObject spawnedPlayer = Instantiate(playerChar, spawnPoint.position, Quaternion.identity);
-
-        GameObject spawnedModel = Instantiate(playerModel, spawnedPlayer.transform);
-
-        Vector3 charLocation = new Vector3(0, -0.4f, 0);
-
-        spawnedModel.transform.localPosition = charLocation;
-
-        PlayerInput[] allInputs = FindObjectsOfType<PlayerInput>();
-
-        foreach(PlayerInput input in allInputs)
-        {
-            if(input.playerIndex == index)
-            {
-                spawnedPlayer.GetComponent<input_handler>().playerInput = input;
-            }
-
-        }
-
-    }
-
-    void FunTestSpawner()
-    {
-        MonsterTransfer transfer = FindObjectOfType<MonsterTransfer>();
+        CharacterSelectManager transfer = FindObjectOfType<CharacterSelectManager>();
 
 
         GameObject playerPrefab = Resources.Load("Fun-Test Parts/Monster/Player") as GameObject;
 
         GameObject monsterEmpty = Resources.Load("Fun-Test Parts/Monster/MonsterEmpty") as GameObject;
 
-        for (int i = 0; i < transfer.selectedMonsters.Count; i++)
+        for (int i = 0; i < transfer.storedPlayerInformation.Count; i++)
         {
             GameObject spawnedPlayer = Instantiate(playerPrefab, playerSpawnLocations[i].position, Quaternion.identity);
+
+            spawnedPlayer.name = ("Player_" + (transfer.storedPlayerInformation[i].playerIndex + 1));
+
+            spawnedPlayer.GetComponent<input_handler>().playerInput = transfer.storedPlayerInformation[i].playerInput.GetComponent<PlayerInput>();
 
             spawnedPlayer.transform.parent = players;
 
@@ -75,7 +47,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
             monsterAttackSystem monsterControl = emptyMonster.GetComponent<monsterAttackSystem>();
 
-            foreach (MonsterPartData partData in transfer.selectedMonsters[i].monsterParts)
+            foreach (MonsterPartData partData in transfer.storedPlayerInformation[i].monster.monsterParts)
             {
                 GameObject partPrefab = Resources.Load(partData.partPrefabPath) as GameObject;
 

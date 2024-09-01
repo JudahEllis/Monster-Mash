@@ -18,7 +18,15 @@ public class BuildAScareUIController : MonoBehaviour
     [SerializeField]
     private CanvasGroup limbUI;
 
+    [SerializeField]
+    CanvasGroup partEditorUI;
+
+    [SerializeField]
+    GameObject checkMarkButton;
+
     EventSystem eventSystem;
+
+    BuildAScareManager manager;
 
     [SerializeField]
     Image[] partTabDots;
@@ -45,6 +53,12 @@ public class BuildAScareUIController : MonoBehaviour
 
         BuildAScareManager.activateTorso += TorsoActive;
 
+        BuildAScareManager.activateLimb += SpawnLimb;
+
+        BuildAScareManager.partPlaced += PlaceLimb;
+
+        manager = FindObjectOfType<BuildAScareManager>();
+
         HideUI();
     }
 
@@ -56,9 +70,13 @@ public class BuildAScareUIController : MonoBehaviour
 
     void HideUI()
     {
+        manager.uiHidden = true;
+
         limbUI.alpha = 0;
 
         limbUI.blocksRaycasts = false;
+
+        limbUI.interactable = false;
 
         cameraAnimator.SetBool("limbUI", false);
 
@@ -81,9 +99,13 @@ public class BuildAScareUIController : MonoBehaviour
 
     void ShowUI()
     {
+        manager.uiHidden = false;
+
         limbUI.alpha = 1;
 
         limbUI.blocksRaycasts = true;
+
+        limbUI.interactable = true;
 
         cameraAnimator.SetBool("limbUI", true);
 
@@ -151,6 +173,28 @@ public class BuildAScareUIController : MonoBehaviour
             partTabButtons[i].interactable = true;
         }
     }
+    void ShowEditorUI()
+    {
+        partEditorUI.alpha = 1;
+
+        partEditorUI.blocksRaycasts = true;
+
+        if(input.devices[0] is Gamepad)
+        {
+            eventSystem.SetSelectedGameObject(checkMarkButton);
+        }
+    }
+
+    void HideEditorUI()
+    {
+        partEditorUI.alpha = 0;
+
+        partEditorUI.blocksRaycasts = false;
+
+        manager.partEditing = false;
+        
+        eventSystem.SetSelectedGameObject(null);
+    }
 
     void TorsoActive()
     {
@@ -173,6 +217,20 @@ public class BuildAScareUIController : MonoBehaviour
         UnlockButtons();
 
         currentTab = 1;
+    }
+
+    void SpawnLimb()
+    {
+        manager.partEditing = true;
+
+        HideUI();
+
+        ShowEditorUI();
+    }
+
+    void PlaceLimb()
+    {
+        HideEditorUI();
     }
 
     public void LimbTabButton(int tabNumber)

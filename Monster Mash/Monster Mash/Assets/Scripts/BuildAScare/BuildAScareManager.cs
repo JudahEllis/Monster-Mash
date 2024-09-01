@@ -55,6 +55,8 @@ public class BuildAScareManager : MonoBehaviour
 
     EventSystem eventSystem;
 
+    public bool partEditing = false;
+
     //C# Events
 
     public delegate void EnableLimbUI();
@@ -68,6 +70,14 @@ public class BuildAScareManager : MonoBehaviour
     public delegate void ActivateTorso();
 
     public static event ActivateTorso activateTorso;
+
+    public delegate void ActivateLimb();
+
+    public static event ActivateLimb activateLimb;
+
+    public delegate void PartPlaced();
+
+    public static event PartPlaced partPlaced;
 
 
     void Awake()
@@ -218,28 +228,32 @@ public class BuildAScareManager : MonoBehaviour
             monsterGameObjects[currentIndex].GetComponent<BuildAScareLimb>().SelectObject();
 
             currentlySelected = monsterGameObjects[currentIndex];
+
+            activateLimb();
         }
     }
 
 
 
     #region UI Functions
-
-    bool uiHidden = true;
+    public bool uiHidden = true;
     void HideShowUI(InputAction.CallbackContext context)
     {
-        if (uiHidden)
+        if(!partEditing)
         {
-            uiHidden = false;
+            if (uiHidden)
+            {
+                uiHidden = false;
 
-            enableLimbUI();
-        }
+                enableLimbUI();
+            }
 
-        else
-        {
-            uiHidden = true;
+            else
+            {
+                uiHidden = true;
 
-            disableLimbUI();
+                disableLimbUI();
+            }
         }
     }
 
@@ -286,7 +300,14 @@ public class BuildAScareManager : MonoBehaviour
 
         currentlySelected = spawnedLimb;
 
+        activateLimb();
+
         //SwitchUI(armButtons, limbInfo, infoButton);
+    }
+
+    public void PlacePart()
+    {
+        partPlaced();
     }
 
     void ClearMonsterParts(InputAction.CallbackContext context)

@@ -101,6 +101,8 @@ public class BuildAScareLimb : MonoBehaviour
             input.actions.FindActionMap("Build-A-Scare").FindAction("Place Part").started -= PlacePart;
 
             systemManager.currentlySelected = null;
+
+            systemManager.PlacePart();
         }
     }
 
@@ -113,8 +115,8 @@ public class BuildAScareLimb : MonoBehaviour
     {
         MoveLimb();
 
-        print(isSelected);
-
+        //print(isSelected);
+       
         //CalculatePlacement();
     }
 

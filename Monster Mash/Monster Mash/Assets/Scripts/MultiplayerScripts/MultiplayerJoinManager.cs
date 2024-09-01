@@ -37,7 +37,7 @@ public class MultiplayerJoinManager : MonoBehaviour
     [System.Serializable]
     public class PlayerInformation
     {
-        public GameObject selectedCharacter;
+        public MonsterData monster;
 
         public GameObject characterModel;
 

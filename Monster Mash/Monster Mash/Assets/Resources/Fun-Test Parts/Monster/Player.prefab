@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 3557884330331734017}
   - component: {fileID: 3557884330331734018}
   - component: {fileID: 3557884330331734019}
+  - component: {fileID: 5719077803909141881}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -200,7 +201,7 @@ MonoBehaviour:
   isOnSemiSolid: 0
   jumpButtonReleased: 0
   hasInputHandler: 0
-  myInput: {fileID: 0}
+  myInput: {fileID: 5719077803909141881}
   playerIndex: 0
   monsterAtt: {fileID: 0}
   hasMonsterAtt: 0
@@ -268,6 +269,153 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -1.18}
   serializedVersion: 2
   m_Radius: 0.6
+--- !u!114 &5719077803909141881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3557884330331734020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf5240b1a695a4ea64e5ede440b3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  playerInput: {fileID: 0}
+  currentControllerMap:
+  - inputName: A Button
+    inputFunction: sayHi
+  - inputName: B Button
+    inputFunction: 
+  - inputName: X Button
+    inputFunction: X_button
+  - inputName: Y Button
+    inputFunction: 
+  - inputName: Left Trigger
+    inputFunction: 
+  - inputName: Right Trigger
+    inputFunction: 
+  - inputName: Left Bumper
+    inputFunction: 
+  - inputName: Right Bumper
+    inputFunction: 
+  - inputName: Left Joystick
+    inputFunction: 
+  - inputName: Right Joystick
+    inputFunction: 
+  - inputName: D-Pad Up
+    inputFunction: 
+  - inputName: D-Pad Down
+    inputFunction: 
+  - inputName: D-Pad Left
+    inputFunction: 
+  - inputName: D-Pad Right
+    inputFunction: 
+  - inputName: Left Joystick Click
+    inputFunction: 
+  defaultControllerMap_Menu:
+  - inputName: A Button
+    inputFunction: 
+  - inputName: B Button
+    inputFunction: 
+  - inputName: X Button
+    inputFunction: 
+  - inputName: Y Button
+    inputFunction: 
+  - inputName: Left Trigger
+    inputFunction: 
+  - inputName: Right Trigger
+    inputFunction: 
+  - inputName: Left Bumper
+    inputFunction: 
+  - inputName: Right Bumper
+    inputFunction: 
+  - inputName: Left Joystick
+    inputFunction: 
+  - inputName: Right Joystick
+    inputFunction: 
+  - inputName: D-Pad Up
+    inputFunction: 
+  - inputName: D-Pad Down
+    inputFunction: 
+  - inputName: D-Pad Left
+    inputFunction: 
+  - inputName: D-Pad Right
+    inputFunction: 
+  - inputName: Start
+    inputFunction: 
+  defaultControllerMap_Combat:
+  - inputName: A Button
+    inputFunction: 
+  - inputName: B Button
+    inputFunction: 
+  - inputName: X Button
+    inputFunction: 
+  - inputName: Y Button
+    inputFunction: 
+  - inputName: Left Trigger
+    inputFunction: 
+  - inputName: Right Trigger
+    inputFunction: 
+  - inputName: Left Bumper
+    inputFunction: 
+  - inputName: Right Bumper
+    inputFunction: 
+  - inputName: Left Joystick
+    inputFunction: 
+  - inputName: Right Joystick
+    inputFunction: 
+  - inputName: D-Pad Up
+    inputFunction: 
+  - inputName: D-Pad Down
+    inputFunction: 
+  - inputName: D-Pad Left
+    inputFunction: 
+  - inputName: D-Pad Right
+    inputFunction: 
+  - inputName: Start
+    inputFunction: 
+  currentKeyboardMap:
+  - inputName: W
+    inputFunction: 
+  - inputName: Horizontal
+    inputFunction: 
+  - inputName: A
+    inputFunction: 
+  - inputName: S
+    inputFunction: 
+  - inputName: D
+    inputFunction: 
+  - inputName: Spacebar
+    inputFunction: 
+  - inputName: Q
+    inputFunction: 
+  - inputName: E
+    inputFunction: 
+  - inputName: R
+    inputFunction: 
+  - inputName: F
+    inputFunction: 
+  - inputName: Left_Shift
+    inputFunction: 
+  - inputName: Left_Control
+    inputFunction: 
+  - inputName: Left_Mouse
+    inputFunction: 
+  - inputName: MiddleMouse
+    inputFunction: 
+  - inputName: Right_Mouse
+    inputFunction: 
+  - inputName: MoveMouse
+    inputFunction: 
+  player: {fileID: 3557884330331734016}
+  myCursor: {fileID: 0}
+  aButton: 0
+  bButton: 0
+  xButton: 0
+  yButton: 0
+  leftStick: {x: 0, y: 0}
 --- !u!1 &3557884330442496948
 GameObject:
   m_ObjectHideFlags: 0

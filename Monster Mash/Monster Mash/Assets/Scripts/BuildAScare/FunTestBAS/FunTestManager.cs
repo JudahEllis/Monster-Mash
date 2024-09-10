@@ -39,7 +39,7 @@ public class FunTestManager : MonoBehaviour
 
         if (gameManager != null) gameManager.SetActive(true);
 
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(4);
     }
 
 }

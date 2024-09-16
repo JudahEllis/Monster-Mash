@@ -671,24 +671,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""b44544cc-225f-4261-8c6d-b452ba0e7943"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
                     ""id"": ""20d73ea1-c242-47d4-9f61-e1b8668f6fec"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""37b6fcb9-3fc8-4959-af03-bacc7e6bf609"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -742,7 +742,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_UIControls_TrackedDeviceOrientation = m_UIControls.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         // Monster Controls
         m_MonsterControls = asset.FindActionMap("Monster Controls", throwIfNotFound: true);
-        m_MonsterControls_Newaction = m_MonsterControls.FindAction("New action", throwIfNotFound: true);
+        m_MonsterControls_Move = m_MonsterControls.FindAction("Move", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -940,12 +940,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Monster Controls
     private readonly InputActionMap m_MonsterControls;
     private IMonsterControlsActions m_MonsterControlsActionsCallbackInterface;
-    private readonly InputAction m_MonsterControls_Newaction;
+    private readonly InputAction m_MonsterControls_Move;
     public struct MonsterControlsActions
     {
         private @PlayerControls m_Wrapper;
         public MonsterControlsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_MonsterControls_Newaction;
+        public InputAction @Move => m_Wrapper.m_MonsterControls_Move;
         public InputActionMap Get() { return m_Wrapper.m_MonsterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -955,16 +955,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_MonsterControlsActionsCallbackInterface != null)
             {
-                @Newaction.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnNewaction;
-                @Newaction.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnNewaction;
-                @Newaction.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnNewaction;
+                @Move.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
             }
             m_Wrapper.m_MonsterControlsActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
             }
         }
     }
@@ -1006,6 +1006,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public interface IMonsterControlsActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
     }
 }

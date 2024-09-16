@@ -893,6 +893,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
+  intendedActionMap: 
+  playerSpawnPoints: []
 --- !u!1 &1591073653
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,7 +1034,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2114953691}
+      - m_Target: {fileID: 2114953692}
         m_TargetAssemblyTypeName: stageSelectManager, Assembly-CSharp
         m_MethodName: SelectStage
         m_Mode: 3
@@ -1112,7 +1114,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2114953693}
   - component: {fileID: 2114953692}
-  - component: {fileID: 2114953691}
   m_Layer: 0
   m_Name: Stage Select Manager
   m_TagString: Untagged
@@ -1120,19 +1121,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2114953691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114953690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff279c9626c33946b48931a385df12c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageIndex: 0
 --- !u!114 &2114953692
 MonoBehaviour:
   m_ObjectHideFlags: 0

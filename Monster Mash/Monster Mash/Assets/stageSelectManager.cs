@@ -7,6 +7,8 @@ public class stageSelectManager : MonoBehaviour
 {
     //This can be changed to a string if needed
     public int stageIndex;
+    private bool busyLoading;
+
     public void ButtonSelected(MultiplayerCursor cursor)
     {
 
@@ -26,6 +28,10 @@ public class stageSelectManager : MonoBehaviour
 
     public void SelectStage(int stageIndex)
     {
-        SceneManager.LoadSceneAsync(stageIndex);
+        if (busyLoading == false)
+        {
+            busyLoading = true;
+            SceneManager.LoadSceneAsync(stageIndex);
+        }
     }
 }

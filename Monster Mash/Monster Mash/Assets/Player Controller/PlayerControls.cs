@@ -678,6 +678,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Roll"",
+                    ""type"": ""Value"",
+                    ""id"": ""a397b105-6e4e-4480-9244-19f1a759ce1c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""StickDeadzone"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -686,11 +695,66 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""37b6fcb9-3fc8-4959-af03-bacc7e6bf609"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""8ca17604-be3d-4604-b3cf-55b28d679d51"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""1c1efe38-c56b-4ada-bd51-4bfd5d65e748"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""595a6d63-d868-4800-a41a-663acd546da3"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8d9b5080-91f1-4eed-96b8-0bae561ec886"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""7ad42e02-6f85-4390-9a29-5bdee84bf9f1"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -743,6 +807,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // Monster Controls
         m_MonsterControls = asset.FindActionMap("Monster Controls", throwIfNotFound: true);
         m_MonsterControls_Move = m_MonsterControls.FindAction("Move", throwIfNotFound: true);
+        m_MonsterControls_Roll = m_MonsterControls.FindAction("Roll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -941,11 +1006,13 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_MonsterControls;
     private IMonsterControlsActions m_MonsterControlsActionsCallbackInterface;
     private readonly InputAction m_MonsterControls_Move;
+    private readonly InputAction m_MonsterControls_Roll;
     public struct MonsterControlsActions
     {
         private @PlayerControls m_Wrapper;
         public MonsterControlsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_MonsterControls_Move;
+        public InputAction @Roll => m_Wrapper.m_MonsterControls_Roll;
         public InputActionMap Get() { return m_Wrapper.m_MonsterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -958,6 +1025,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
+                @Roll.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRoll;
+                @Roll.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRoll;
+                @Roll.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRoll;
             }
             m_Wrapper.m_MonsterControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -965,6 +1035,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Roll.started += instance.OnRoll;
+                @Roll.performed += instance.OnRoll;
+                @Roll.canceled += instance.OnRoll;
             }
         }
     }
@@ -1007,5 +1080,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IMonsterControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnRoll(InputAction.CallbackContext context);
     }
 }

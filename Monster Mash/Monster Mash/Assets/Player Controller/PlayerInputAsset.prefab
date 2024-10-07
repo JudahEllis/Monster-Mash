@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 50361773}
   - component: {fileID: 50361772}
   - component: {fileID: 50361776}
-  - component: {fileID: 50361774}
+  - component: {fileID: 1237123509467320099}
+  - component: {fileID: 4897304324593584139}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -94,14 +95,14 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 50361769}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3c8ae5cb67e139941bcf1c163858ef58, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.0000001, y: 2.0000002}
   m_Direction: 0
---- !u!61 &50361774
+--- !u!61 &1237123509467320099
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,7 +115,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.6519002}
+  m_Offset: {x: -0.0038340986, y: -0.64962965}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -125,8 +126,24 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0000001, y: 0.6961999}
+  m_Size: {x: 0.56828827, y: 0.70074093}
   m_EdgeRadius: 0
+--- !u!58 &4897304324593584139
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50361769}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 3c8ae5cb67e139941bcf1c163858ef58, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.49696183}
+  serializedVersion: 2
+  m_Radius: 0.5030381
 --- !u!1 &1797420660767994441
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +339,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7392139866943783364}
         m_TargetAssemblyTypeName: playerController, Assembly-CSharp
-        m_MethodName: OnMove
+        m_MethodName: OnLeftStick
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -338,7 +355,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7392139866943783364}
         m_TargetAssemblyTypeName: playerController, Assembly-CSharp
-        m_MethodName: OnRoll
+        m_MethodName: OnRightStick
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -387,12 +404,13 @@ MonoBehaviour:
   solidGroundLayer:
     serializedVersion: 2
     m_Bits: 1024
+  facingRight: 0
   canMove: 1
   grounded: 0
-  isRolling: 1
-  canRoll: 1
-  isDashing: 0
-  canDash: 1
+  primedForBigJump: 0
+  numberOfJumps: 2
+  numberOfJumpsLeft: 2
+  grabbingWall: 0
   myRigidbody: {fileID: 4492483810748514835}
 --- !u!50 &4492483810748514835
 Rigidbody2D:

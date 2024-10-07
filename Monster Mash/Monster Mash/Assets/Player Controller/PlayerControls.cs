@@ -671,16 +671,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""b44544cc-225f-4261-8c6d-b452ba0e7943"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""Left Stick"",
                     ""type"": ""Value"",
                     ""id"": ""20d73ea1-c242-47d4-9f61-e1b8668f6fec"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""StickDeadzone"",
+                    ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Roll"",
+                    ""name"": ""Right Stick"",
                     ""type"": ""Value"",
                     ""id"": ""a397b105-6e4e-4480-9244-19f1a759ce1c"",
                     ""expectedControlType"": ""Vector2"",
@@ -691,24 +691,13 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""37b6fcb9-3fc8-4959-af03-bacc7e6bf609"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""Gamepad"",
                     ""id"": ""8ca17604-be3d-4604-b3cf-55b28d679d51"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""Right Stick"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -719,7 +708,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""Right Stick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -730,7 +719,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""Right Stick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -741,7 +730,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""Right Stick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -752,7 +741,62 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""Right Stick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""f0f8e462-d0c2-49e7-a456-8cbf2f72e20d"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Stick"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""42ad19b4-537f-496f-bd5c-c044b87f0fcf"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Stick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""dc2a17b8-0cdc-4b13-a39d-a6125b1238cb"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Stick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a265b2d3-4424-4da0-bd52-34876b55812c"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Stick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""6d6838d3-a2fc-4ab4-9fdf-4d6f676c7586"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Stick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -806,8 +850,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_UIControls_TrackedDeviceOrientation = m_UIControls.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         // Monster Controls
         m_MonsterControls = asset.FindActionMap("Monster Controls", throwIfNotFound: true);
-        m_MonsterControls_Move = m_MonsterControls.FindAction("Move", throwIfNotFound: true);
-        m_MonsterControls_Roll = m_MonsterControls.FindAction("Roll", throwIfNotFound: true);
+        m_MonsterControls_LeftStick = m_MonsterControls.FindAction("Left Stick", throwIfNotFound: true);
+        m_MonsterControls_RightStick = m_MonsterControls.FindAction("Right Stick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1005,14 +1049,14 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Monster Controls
     private readonly InputActionMap m_MonsterControls;
     private IMonsterControlsActions m_MonsterControlsActionsCallbackInterface;
-    private readonly InputAction m_MonsterControls_Move;
-    private readonly InputAction m_MonsterControls_Roll;
+    private readonly InputAction m_MonsterControls_LeftStick;
+    private readonly InputAction m_MonsterControls_RightStick;
     public struct MonsterControlsActions
     {
         private @PlayerControls m_Wrapper;
         public MonsterControlsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_MonsterControls_Move;
-        public InputAction @Roll => m_Wrapper.m_MonsterControls_Roll;
+        public InputAction @LeftStick => m_Wrapper.m_MonsterControls_LeftStick;
+        public InputAction @RightStick => m_Wrapper.m_MonsterControls_RightStick;
         public InputActionMap Get() { return m_Wrapper.m_MonsterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1022,22 +1066,22 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_MonsterControlsActionsCallbackInterface != null)
             {
-                @Move.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnMove;
-                @Roll.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRoll;
-                @Roll.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRoll;
-                @Roll.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRoll;
+                @LeftStick.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnLeftStick;
+                @LeftStick.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnLeftStick;
+                @LeftStick.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnLeftStick;
+                @RightStick.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRightStick;
+                @RightStick.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRightStick;
+                @RightStick.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRightStick;
             }
             m_Wrapper.m_MonsterControlsActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
-                @Roll.started += instance.OnRoll;
-                @Roll.performed += instance.OnRoll;
-                @Roll.canceled += instance.OnRoll;
+                @LeftStick.started += instance.OnLeftStick;
+                @LeftStick.performed += instance.OnLeftStick;
+                @LeftStick.canceled += instance.OnLeftStick;
+                @RightStick.started += instance.OnRightStick;
+                @RightStick.performed += instance.OnRightStick;
+                @RightStick.canceled += instance.OnRightStick;
             }
         }
     }
@@ -1079,7 +1123,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public interface IMonsterControlsActions
     {
-        void OnMove(InputAction.CallbackContext context);
-        void OnRoll(InputAction.CallbackContext context);
+        void OnLeftStick(InputAction.CallbackContext context);
+        void OnRightStick(InputAction.CallbackContext context);
     }
 }

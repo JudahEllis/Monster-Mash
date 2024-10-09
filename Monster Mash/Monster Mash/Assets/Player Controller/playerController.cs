@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class playerController : MonoBehaviour
 {
     public int playerIndex;
+    public monsterAttackSystem myMonster;
     public CapsuleCollider2D bodyCollider;
     public MeshRenderer standingVisual;
     public MeshRenderer ballVisual;

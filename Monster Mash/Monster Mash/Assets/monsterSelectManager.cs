@@ -20,9 +20,15 @@ public class monsterSelectManager : MonoBehaviour
     public Animation camera_MonsterToStageTransition;
     public GameObject portal;
 
+
+    public monsterAttackSystem[] tempMonsterLibrary;
+    public monsterAttackSystem player1SelectedMonster;
+
     private void Awake()
     {
         stageSelect = FindObjectOfType<stageSelectManager>();
+        tempMonsterLibrary = FindObjectsOfType<monsterAttackSystem>();
+        establishMonsterConnections();
     }
 
     public void activateStageSelect()
@@ -70,5 +76,24 @@ public class monsterSelectManager : MonoBehaviour
             eventHandler[i].enabled = true;
             firstButton.Select();
         }
+    }
+
+    public void establishMonsterConnections()
+    {
+        for (int i = 0; i < tempMonsterLibrary.Length; i++)
+        {
+            tempMonsterLibrary[i].turnOnLimbConnectors();
+        }
+    }
+
+    public void turnOnSelectedMonster(int monsterInLibrary)
+    {
+        monsterAttackSystem selectedMonster = tempMonsterLibrary[monsterInLibrary];
+        playerController player1 = GameObject.Find("Player 1").GetComponent<playerController>();
+        selectedMonster.transform.parent = player1.transform;
+        player1.myMonster = selectedMonster;
+        player1.myMonster.turnOffLimbConnectors();
+        player1.myMonster.connectCurrentLimbs();
+        player1.myMonster.awakenTheBeast();
     }
 }

@@ -13,8 +13,8 @@ public class monsterAttackSystem : MonoBehaviour
     private int jumpsAllowed_DoubleJump = 2;
     private int jumpsAllowed_FlightedJump = 4;
     private int jumpsLeft = 0;
-    private bool isWalking = false;
-    private bool isRunning = false;
+    public bool isWalking = false;
+    public bool isRunning = false;
     private bool isGliding = false;
     private bool isCrouching = false;
     private bool focusedAttackActive = false;
@@ -704,11 +704,27 @@ public class monsterAttackSystem : MonoBehaviour
             canDashAttack = false;
             attackFocusOn();
             stopForceFall();
-            if (SFXManager)
+            //StartCoroutine(dashVisuals());
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                SFXManager.DashSFX();
+                allMonsterParts[i].triggerRoll(isGrounded, true);
             }
-            StartCoroutine(dashVisuals());
+
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
+            myAnimator.ResetTrigger("Roll");
+            myAnimator.SetTrigger("Roll");
+            isGliding = false;
+            glideVisual.Stop();
+            myAnimator.SetBool("Gliding", false);
+            myAnimator.ResetTrigger("Glide to Attack");
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerVisualDissappearance();
+            }
+
+            dashSplat.SetActive(true);
         }
     }
 
@@ -719,7 +735,7 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerRoll(isGrounded, true);
         }
 
-        myAnimator.SetFloat("Flipping Speed", 1);
+        myAnimator.SetFloat("Flipping Speed", 2f);
         myAnimator.ResetTrigger("Roll");
         myAnimator.SetTrigger("Roll");
         isGliding = false;
@@ -727,7 +743,7 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Gliding", false);
         myAnimator.ResetTrigger("Glide to Attack");
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.02f);
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
@@ -735,9 +751,10 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         dashSplat.SetActive(true);
+    }
 
-        yield return new WaitForSeconds(0.4f);
-
+    public void endDashAttack()
+    {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
@@ -748,8 +765,6 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetTrigger("Roll");
         dashSplat.SetActive(false);
         attackFocusOff();
-
-        yield return new WaitForSeconds(5f);
 
         if (isGrounded)
         {
@@ -954,6 +969,55 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+
+    public void flipLeft()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false)
+        {
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
+            facingRight = false;
+            myAnimator.SetBool("Facing Right", facingRight);
+            myAnimator.SetTrigger("Flip to Left");
+            dashSplat.transform.eulerAngles = leftDashSplatRotation;
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].facingRight = false;
+            }
+            forceEndEmote();
+            forceStopCrouch();
+            getOutOfLaunch();
+        }
+    }
+
+    public void flipRight()
+    {
+        if (damageLocked)
+        {
+            return;
+        }
+
+        if (focusedAttackActive == false)
+        {
+            myAnimator.SetFloat("Flipping Speed", 1.5f);
+            facingRight = true;
+            myAnimator.SetBool("Facing Right", facingRight);
+            myAnimator.SetTrigger("Flip to Right");
+            dashSplat.transform.eulerAngles = rightDashSplatRotation;
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].facingRight = true;
+            }
+            forceEndEmote();
+            forceStopCrouch();
+            getOutOfLaunch();
+        }
+    }
+
     public void walk()
     {
         if (damageLocked)
@@ -1011,7 +1075,10 @@ public class monsterAttackSystem : MonoBehaviour
                 //myAnimator.SetBool("Idle Bounce Allowed", true);
                 //myAnimator.SetBool("Calm", false);
                 //calm = false;
-                calmedDown();
+                if (isRunning == false)
+                {
+                    calmedDown();
+                }
             }
         }
     }
@@ -1082,9 +1149,12 @@ public class monsterAttackSystem : MonoBehaviour
                     allMonsterParts[i].triggerStopRunning();
                 }
 
-                myAnimator.SetBool("Idle Bounce Allowed", true);
-                myAnimator.SetBool("Calm", false);
-                calm = false;
+                if (isWalking == false)
+                {
+                    myAnimator.SetBool("Idle Bounce Allowed", true);
+                    myAnimator.SetBool("Calm", false);
+                    calm = false;
+                }
             }
             else
             {
@@ -1120,7 +1190,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = false;
             //isRunning = false;
-            isWalking = false;
+            //isWalking = false;
             focusedAttackActive = false;
             isGliding = false;
             jumpsLeft--;
@@ -1140,10 +1210,6 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             releaseJumpVFX();
             stopForceFall();
-            if (SFXManager)
-            {
-                SFXManager.JumpSFX(allMonsterParts[0]); // for now just pick the first monster part until we can find the right one
-            }
             
         }
         else
@@ -1187,10 +1253,6 @@ public class monsterAttackSystem : MonoBehaviour
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
                 releaseJumpVFX();
-                if (SFXManager)
-                {
-                    SFXManager.DoubleJumpSFX(allMonsterParts[0]);
-                }
                    
             }
         }
@@ -1260,7 +1322,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             isGrounded = false;
             //isRunning = false;
-            isWalking = false;
+            //isWalking = false;
             focusedAttackActive = false;
             isGliding = false;
 
@@ -1341,10 +1403,6 @@ public class monsterAttackSystem : MonoBehaviour
 
             landVisual.Stop();
             landVisual.Play();
-            if (SFXManager)
-            {
-                SFXManager.LandSFX(allMonsterParts[0]);
-            }
             
         }
     }

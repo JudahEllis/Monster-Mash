@@ -9,7 +9,7 @@ public class playerController : MonoBehaviour
     public int playerIndex;
     public monsterAttackSystem myMonster;
     public CapsuleCollider2D bodyCollider;
-    public MeshRenderer standingVisual;
+    //public MeshRenderer standingVisual;
     public MeshRenderer ballVisual;
     public Transform groundCheck;
     public LayerMask solidGroundLayer;
@@ -27,12 +27,14 @@ public class playerController : MonoBehaviour
     Vector2 leftJoystickVector; //gives us direction on x axis
     float leftJoystickValue; //gives us nuance of input between magnitudes
     //
-    private float walkSpeed = 10f;
-    private float runSpeed = 38f;
+    private float walkSpeed = 5f;
+    private float runSpeed = 25f;
     private float groundedModifer = 1;
     private float airbornModifer = 0.75f;
     private float currentGroundedStateModifier = 1;
-    public bool canMove = true;
+    private bool canMove = true;
+    public bool isWalking = false;
+    public bool isRunning = false;
     //
     public bool grounded = false;
     bool canJump = true;
@@ -42,24 +44,24 @@ public class playerController : MonoBehaviour
     public int numberOfJumpsLeft = 2;
     private Vector2 jumpValue;
     private bool jumpValueHasBeenRead = true;
-    private float bigJumpPower = 80;
-    private float littleJumpPower = 60;
+    private float bigJumpPower = 65;//80
+    private float littleJumpPower = 45;//60
     private float gravityPower;
     //
-    private float rollSpeed = 50f;
+    private float rollSpeed = 50f;//50
     Vector2 rightJoystickVector; //gives us direction on x axis for roll
-    private bool isRolling = false;
+    public bool isRolling = false;
     private bool canRoll = true;
     //
-    private float dashSpeed = 60f;
-    private bool isDashing = false;
+    private float dashSpeed = 60f;//60
+    public bool isDashing = false;
     private bool canDash = true;
     //
     private bool ledgeHopAvailable = true;
     //
     public bool grabbingWall = false;
-    private float wallGrabbingGravityPower = 1;
-    private float wallJumpPower = 38f;
+    private float wallGrabbingGravityPower = 0.5f;
+    private float wallJumpPower = 28f;
 
     [SerializeField]
     private Rigidbody2D myRigidbody;
@@ -119,17 +121,6 @@ public class playerController : MonoBehaviour
         {
             if (canMove)
             {
-                /*
-                if (isGrounded() && grounded == false)
-                {
-                    land();
-                }
-
-                if (isGrounded() == false && grounded)
-                {
-                    grounded = false; //falling
-                }
-                */
 
                 if (isGrounded())
                 {
@@ -169,9 +160,23 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed, myRigidbody.velocity.y);
                         }
                     }
-                    else
+                    else if(leftJoystickValue < 0.1f)
                     {
                         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+
+                        if (isWalking)
+                        {
+                            isWalking = false;
+                            isRunning = false;
+                            stopWalkingVisual();
+                        }
+
+                        if (isRunning)
+                        {
+                            isRunning = false;
+                            isWalking = false;
+                            stopRunningVisual();
+                        }
                     }
                     #endregion
 
@@ -181,6 +186,7 @@ public class playerController : MonoBehaviour
                     if (grounded)
                     {
                         grounded = false;
+                        fallVisual();
                     }
 
                     #region Run and Walk in Air
@@ -214,17 +220,32 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed / 2, myRigidbody.velocity.y);
                         }
                     }
-                    else
+                    else if(leftJoystickValue < 0.1f)
                     {
                         myRigidbody.velocity = new Vector2(myRigidbody.velocity.x - 0.001f, myRigidbody.velocity.y);
+
+                        if (isWalking)
+                        {
+                            isWalking = false;
+                            isRunning = false;
+                            stopWalkingVisual();
+                            stopRunningVisual();
+                        }
+
+                        if (isRunning)
+                        {
+                            isRunning = false;
+                            isWalking = false;
+                            stopWalkingVisual();
+                            stopRunningVisual();
+                        }
                     }
                     #endregion
-
-                    
+   
                 }
 
 
-                
+                #region Jumping
                 if (leftJoystickVector.y > 0.25f && leftJoystickValue > 0.25f)
                 {
                     //big jump
@@ -253,13 +274,14 @@ public class playerController : MonoBehaviour
                 {
                     jumpButtonReset = true;
                 }
-                
+                #endregion
 
             }
 
 
             if (isRolling)
             {
+                #region Rolling Momentum
                 if (rightJoystickVector.x > 0.1f)
                 {
                     myRigidbody.velocity = new Vector2(1 * rollSpeed, myRigidbody.velocity.y);
@@ -268,10 +290,12 @@ public class playerController : MonoBehaviour
                 {
                     myRigidbody.velocity = new Vector2(-1 * rollSpeed, myRigidbody.velocity.y);
                 }
+                #endregion
             }
 
             if (isDashing && grabbingWall == false)
             {
+                #region Entering Wall Grab
                 if (rightJoystickVector.x > 0.1f)
                 {
                     myRigidbody.velocity = new Vector2(1 * dashSpeed, 0);
@@ -290,9 +314,12 @@ public class playerController : MonoBehaviour
                         wallGrab(-1);
                     }
                 }
+
+                #endregion
             }
             else if (grabbingWall)
             {
+                #region Exiting Wall Grab by land, slipping, or jumping
                 if (isGrounded() && grounded == false)
                 {
                     land();
@@ -307,13 +334,18 @@ public class playerController : MonoBehaviour
                     //jump left
                     wallJump(-1);
                     facingRight = false;
+                    flipLeftVisual();
+                    littleJumpVisual();
                 }
                 else if (facingRight == false && leftJoystickVector.x > 0.1f)
                 {
                     //jump right
                     wallJump(1);
                     facingRight = true;
+                    flipRightVisual();
+                    littleJumpVisual();
                 }
+                #endregion
             }
 
         }
@@ -332,15 +364,43 @@ public class playerController : MonoBehaviour
             jumpButtonReset = true;
         }
 
-        if (context.performed && grabbingWall == false)
+        if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
         {
             if (facingRight == false && leftJoystickVector.x > 0.1f)
             {
+                //face right
                 facingRight = true;
+                flipRightVisual();
             }
             else if (facingRight && leftJoystickVector.x < -0.1f)
             {
+                //face left
                 facingRight = false;
+                flipLeftVisual();
+            }
+        }
+
+        if (context.performed)
+        {
+            if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
+            {
+                //run
+                if (isRunning == false)
+                {
+                    isRunning = true;
+                    isWalking = false;
+                    startRunningVisual();
+                }
+            }
+            else if (leftJoystickVector.x > 0.1f || leftJoystickVector.x < -0.1f)
+            {
+                //walk
+                if (isWalking == false && isRunning == false)
+                {
+                    isWalking = true;
+                    isRunning = false;
+                    startWalkingVisual();
+                }
             }
         }
 
@@ -358,15 +418,14 @@ public class playerController : MonoBehaviour
         StopCoroutine(jumpRecharge());
         myRigidbody.gravityScale = gravityPower;
         bodyCollider.enabled = true;
-        standingVisual.enabled = true;
         ballVisual.enabled = false;
         canJump = true;
-        //jumpButtonReset = true;
         canDash = true;
         canRoll = true;
         grabbingWall = false;
         canMove = true;
         primedForBigJump = false;
+        landVisual();
     }
 
     private void bigJump()
@@ -379,6 +438,7 @@ public class playerController : MonoBehaviour
             primedForBigJump = true;
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, bigJumpPower);
             StartCoroutine(jumpRecharge());
+            bigJumpVisual();
         }
     }
 
@@ -392,6 +452,7 @@ public class playerController : MonoBehaviour
             primedForBigJump = true;
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, littleJumpPower);
             StartCoroutine(jumpRecharge());
+            littleJumpVisual();
         }
 
     }
@@ -408,9 +469,26 @@ public class playerController : MonoBehaviour
     #region Right Stick - Dash and Roll
     public void OnRightStick(InputAction.CallbackContext context)
     {
-        if (context.started)
+        rightJoystickVector = context.ReadValue<Vector2>();
+
+        if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
         {
-            rightJoystickVector = context.ReadValue<Vector2>();
+            if (facingRight == false && rightJoystickVector.x > 0.1f)
+            {
+                //face right
+                facingRight = true;
+                flipRightVisual();
+            }
+            else if (facingRight && rightJoystickVector.x < -0.1f)
+            {
+                //face left
+                facingRight = false;
+                flipLeftVisual();
+            }
+        }
+
+        if (context.performed && (canDash || canRoll))
+        {
 
             if (isGrounded())
             {
@@ -433,16 +511,6 @@ public class playerController : MonoBehaviour
                 }
             }
 
-
-            if (facingRight == false && rightJoystickVector.x > 0.1f)
-            {
-                facingRight = true;
-            }
-            else if (facingRight && rightJoystickVector.x < -0.1f)
-            {
-                facingRight = false;
-            }
-
         }
 
     }
@@ -455,13 +523,14 @@ public class playerController : MonoBehaviour
         canRoll = false;
         canDash = false;
         bodyCollider.enabled = false;
-        standingVisual.enabled = false;
-        ballVisual.enabled = true;
-        yield return new WaitForSeconds(0.25f);
+        //standingVisual.enabled = false;
+        //ballVisual.enabled = true;
+        rollVisual();
+        yield return new WaitForSeconds(0.125f);
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         bodyCollider.enabled = true;
-        standingVisual.enabled = true;
-        ballVisual.enabled = false;
+        //standingVisual.enabled = true;
+        //ballVisual.enabled = false;
         isRolling = false;
         isDashing = false;
         canMove = true;
@@ -484,23 +553,25 @@ public class playerController : MonoBehaviour
         canDash = false;
         canRoll = false;
         bodyCollider.enabled = false;
-        standingVisual.enabled = false;
-        ballVisual.enabled = true;
+        //standingVisual.enabled = false;
+        //ballVisual.enabled = true;
         myRigidbody.gravityScale = 0;
-        yield return new WaitForSeconds(0.25f);
+        startDashAttackVisual();
+        yield return new WaitForSeconds(0.2f);
 
         if (grabbingWall == false)
         {
             myRigidbody.gravityScale = gravityPower;
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
             bodyCollider.enabled = true;
-            standingVisual.enabled = true;
-            ballVisual.enabled = false;
+            //standingVisual.enabled = true;
+            //ballVisual.enabled = false;
             isDashing = false;
             isRolling = false;
             grabbingWall = false;
             canRoll = true;
             canMove = true;
+            endDashAttackVisual();
         }
     }
 
@@ -511,12 +582,13 @@ public class playerController : MonoBehaviour
 
     private bool wallToFloorCheck()
     {
-        return Physics2D.Raycast(transform.position, -transform.up, 12f, solidGroundLayer);
+        return Physics2D.Raycast(transform.position, -transform.up, 3f, solidGroundLayer);
     }
 
     private void wallGrab(int direction)
     {
         StopCoroutine(dashTime());
+        endDashAttackVisual();
         canMove = false;
         grabbingWall = true;
         canRoll = false;
@@ -535,8 +607,8 @@ public class playerController : MonoBehaviour
         myRigidbody.velocity = new Vector2(direction * wallJumpPower, littleJumpPower);
         StartCoroutine(jumpRecharge());
         bodyCollider.enabled = true;
-        standingVisual.enabled = true;
-        ballVisual.enabled = false;
+        //standingVisual.enabled = true;
+        //ballVisual.enabled = false;
         isDashing = false;
         isRolling = false;
         canRoll = true;
@@ -550,7 +622,7 @@ public class playerController : MonoBehaviour
         myRigidbody.gravityScale = gravityPower;
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         bodyCollider.enabled = true;
-        standingVisual.enabled = true;
+        //standingVisual.enabled = true;
         ballVisual.enabled = false;
         isDashing = false;
         isRolling = false;
@@ -563,4 +635,76 @@ public class playerController : MonoBehaviour
 
     #endregion
 
+    #region Monster Attack System Communication
+
+    private void flipLeftVisual()
+    {
+        myMonster.flipLeft();
+    }
+
+    private void flipRightVisual()
+    {
+        myMonster.flipRight();
+    }
+
+    private void startRunningVisual()
+    {
+        myMonster.run();
+    }
+
+    private void stopRunningVisual()
+    {
+        myMonster.stopRunning();
+    }
+
+    private void startWalkingVisual()
+    {
+        myMonster.walk();
+    }
+
+    private void stopWalkingVisual()
+    {
+        myMonster.stopWalking();
+    }
+
+    private void littleJumpVisual()
+    {
+        myMonster.jump();
+    }
+
+    private void bigJumpVisual()
+    {
+        myMonster.jump();
+    }
+
+    private void fallVisual()
+    {
+        myMonster.walkToFall();
+    }
+
+    private void landVisual()
+    {
+        myMonster.land();
+    }
+
+    private void startDashAttackVisual()
+    {
+        myMonster.dashAttack();
+    }
+
+    private void endDashAttackVisual()
+    {
+        myMonster.endDashAttack();
+    }
+
+    private void rollVisual()
+    {
+        myMonster.roll();
+    }
+
+    private void crouchVisual()
+    {
+        myMonster.crouch();
+    }
+    #endregion
 }

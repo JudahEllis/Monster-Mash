@@ -40,9 +40,11 @@ public class projectile : MonoBehaviour
     private bool keepGoing = true;
     private Vector3 homeStretch;
     public float autoEnd;
+    public float turnAround = 1f;
 
     private bool boomStart = true;
     private bool boomEnd = false;
+    public Transform muzzle;
 
     public void resetPosition()
     {
@@ -232,16 +234,20 @@ public class projectile : MonoBehaviour
                 {
                     boomStart = false;
                     StartCoroutine(Boomerang());
+                    StartCoroutine(BoomerangEnd());
                 }
             }
 
             if (boomEnd)
             {
-                print(Vector2.Distance(homeStretch, transform.position));
+                //print(Vector2.Distance(homeStretch, transform.position));
 
                 if (Vector2.Distance(homeStretch, transform.position) < 2)
                 {
+                    boomEnd = false;
                     keepGoing = false;
+                    impactCalled = false;
+                    //print("here we go boys");
                     StartCoroutine(autoDisable());
                 }
             }
@@ -252,7 +258,7 @@ public class projectile : MonoBehaviour
     {
         GetComponent<Rigidbody>().velocity *= 0f;
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(turnAround);
 
         homeStretch = projectileHolder.position;
 
@@ -270,6 +276,8 @@ public class projectile : MonoBehaviour
         yield return new WaitForSeconds(autoEnd);
 
         keepGoing = false;
+        impactCalled = false;
+        boomEnd = false;
 
         StartCoroutine(autoDisable());
 

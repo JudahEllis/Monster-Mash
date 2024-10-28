@@ -60,6 +60,7 @@ public class monsterPart : MonoBehaviour
     public bool sprayNeutralAttack;
     public bool projectileNeutralAttack;
     public bool beamNeutralAttack;
+    public bool boomerangNeutralAttack;
     public GameObject neutralHitVFXHolder;
     public GameObject neutralForwardSwingVFXHolder;
     public GameObject neutralBackwardSwingVFXHolder;
@@ -109,6 +110,7 @@ public class monsterPart : MonoBehaviour
     public bool projectileHeavyAttack;
     public bool beamHeavyAttack;
     public bool reelHeavyAttack;
+    public bool boomerangHeavyAttack;
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
     public GameObject heavyBackwardSwingVFXHolder;
@@ -1854,6 +1856,7 @@ public class monsterPart : MonoBehaviour
 
         if (attackMarkedHeavy)
         {
+
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
@@ -2418,6 +2421,11 @@ public class monsterPart : MonoBehaviour
             reelAttackBuiltUpPower++;
             powerUpCheckAllowed = true;
         }
+
+        if (boomerangHeavyAttack)
+        {
+            builtUpAttackPower++;
+        }
     }
 
     public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
@@ -2463,6 +2471,11 @@ public class monsterPart : MonoBehaviour
             neutralHitVFXManager.damage = damage;
             neutralHitVFXManager.updateDamageOnProjectiles();
         }
+        else if (boomerangNeutralAttack)
+        {
+            neutralHitVFXManager.damage = damage;
+            neutralHitVFXManager.updateDamageOnProjectiles();
+        }
 
         //print(damage);
         damageClearance();
@@ -2491,6 +2504,11 @@ public class monsterPart : MonoBehaviour
 
         }
         else if (sprayHeavyAttack)
+        {
+            heavyHitVFXManager.damage = damage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+        }
+        else if (boomerangHeavyAttack)
         {
             heavyHitVFXManager.damage = damage;
             heavyHitVFXManager.updateDamageOnProjectiles();
@@ -2527,6 +2545,11 @@ public class monsterPart : MonoBehaviour
         {
             neutralHitVFXManager.damage = baseNeutralAttackDamage;
             neutralHitVFXManager.updateDamageOnSpray();
+        }
+        else if (boomerangNeutralAttack)
+        {
+            neutralHitVFXManager.damage = baseNeutralAttackDamage;
+            neutralHitVFXManager.updateDamageOnProjectiles();
         }
 
         if (jabHeavyAttack)
@@ -2598,6 +2621,24 @@ public class monsterPart : MonoBehaviour
             heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
             heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
             heavyHitVFXManager.updateStatusEffectsOnSpray();
+        }
+        else if (boomerangHeavyAttack)
+        {
+            heavyHitVFXManager.damage = baseHeavyAttackDamage;
+            heavyHitVFXManager.updateDamageOnProjectiles();
+            heavyHitVFXManager.burnedStatusEffect = burnedStatusEffect;
+            heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
+            heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
+            heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
+            heavyHitVFXManager.hauntedStatusEffect = hauntedStatusEffect;
+            heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
+            heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
+            heavyHitVFXManager.stunnedStatusEffect = stunnedStatusEffect;
+            heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
+            heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
+            heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
+            heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
+            heavyHitVFXManager.updateStatusEffectsOnProjectiles();
         }
     }
     #endregion
@@ -3565,8 +3606,13 @@ public class monsterPart : MonoBehaviour
                 neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileNeutralAttack || sprayNeutralAttack)
+            if (projectileNeutralAttack || sprayNeutralAttack || boomerangNeutralAttack)
             {
+                if (boomerangNeutralAttack)
+                {
+                    neutralHitVFXManager.isBoomerangHolder = true;
+                }
+
                 neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
                 neutralVFXStoredPosition = transform.localPosition;
                 neutralVFXStoredRotation = transform.localRotation;
@@ -3712,7 +3758,7 @@ public class monsterPart : MonoBehaviour
                 neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileNeutralAttack || sprayNeutralAttack)
+            if (projectileNeutralAttack || sprayNeutralAttack || boomerangNeutralAttack)
             {
                 neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
                 neutralVFXStoredPosition = transform.localPosition;
@@ -3811,8 +3857,13 @@ public class monsterPart : MonoBehaviour
                 heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack)
+            if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
             {
+                if (boomerangHeavyAttack)
+                {
+                    heavyHitVFXManager.isBoomerangHolder = true;
+                }
+
                 heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
                 heavyVFXStoredPosition = transform.localPosition;
                 heavyVFXStoredRotation = transform.localRotation;
@@ -3955,7 +4006,7 @@ public class monsterPart : MonoBehaviour
                 heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack)
+            if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
             {
                 heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
                 heavyVFXStoredPosition = transform.localPosition;
@@ -4037,7 +4088,7 @@ public class monsterPart : MonoBehaviour
                 heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack)
+            if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
             {
                 heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
                 heavyVFXStoredPosition = transform.localPosition;
@@ -4156,6 +4207,16 @@ public class monsterPart : MonoBehaviour
         {
             neutralHitVFXManager.unleashBeamVisual();
         }
+        else if (boomerangNeutralAttack && neutralAttackHitVFXArray.Length != 0)
+        {
+            neutralHitVFXManager.faceRightDirection(facingRight);
+            neutralHitVFXManager.unleashSingleProjectile();
+
+            if (neutralDefaultSprayVFXManager)
+            {
+                neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
+            }
+        }
     }
 
     public void triggerNeutralSwingVisual()
@@ -4244,6 +4305,19 @@ public class monsterPart : MonoBehaviour
         else if (beamHeavyAttack)
         {
             heavyHitVFXManager.unleashBeamVisual();
+        }
+        else if (boomerangHeavyAttack && heavyAttackHitVFXArray.Length != 0)
+        {
+            heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
+            heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
+
+            heavyHitVFXManager.faceRightDirection(facingRight);
+            heavyHitVFXManager.unleashSingleProjectile();
+
+            if (heavyDefaultSprayVFXManager)
+            {
+                heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
+            }
         }
     }
 

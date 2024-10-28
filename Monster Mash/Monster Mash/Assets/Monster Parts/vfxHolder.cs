@@ -21,6 +21,13 @@ public class vfxHolder : MonoBehaviour
     private GameObject[] projectileVFXArray;
     private int projectileVFXCount;
     //
+    public bool isBoomerangHolder;
+    public float boomerHeight;
+    public float boomerDistance;
+    public float boomerAutoEnd;
+    public float boomerTurnAround = 0f;
+    public bool isReloaded = true;
+    //
     public bool isSprayHolder;
     public bool isSubSprayHolder;
     public float spreadOfSpray;
@@ -62,7 +69,7 @@ public class vfxHolder : MonoBehaviour
 
     public void grabReferences()
     {
-        if (isProjectileHolder || isSubSprayHolder)
+        if (isProjectileHolder || isSubSprayHolder || isBoomerangHolder)
         {
             List<monsterPartReference> tempVFXList = new List<monsterPartReference>();
 
@@ -194,6 +201,10 @@ public class vfxHolder : MonoBehaviour
         {
             prepMonsterSystemVFX();
         }
+        else if (isBoomerangHolder)
+        {
+            prepProjectileVFX();
+        }
     }
 
     public void prepJabOrSlashVFX()
@@ -218,12 +229,22 @@ public class vfxHolder : MonoBehaviour
 
     public void prepProjectileVFX()
     {
-        if (isProjectileHolder || isSubSprayHolder)
+        if (isProjectileHolder || isSubSprayHolder || isBoomerangHolder)
         {
             List<GameObject> tempProjectileVFX = new List<GameObject>();
             for (int i = 0; i < transform.childCount; i++)
             {
                 tempProjectileVFX.Add(transform.GetChild(i).gameObject);
+
+                if (isBoomerangHolder && transform.GetChild(i).gameObject.GetComponent<projectile>())
+                {
+                    projectile cp = transform.GetChild(i).gameObject.GetComponent<projectile>();
+                    cp.isBoomerang = true;
+                    cp.height = boomerHeight;
+                    cp.distance = boomerDistance;
+                    cp.autoEnd = boomerAutoEnd;
+                    cp.turnAround = boomerTurnAround;
+                }
             }
             projectileVFXArray = new GameObject[tempProjectileVFX.Count];
             for (int i = 0; i < projectileVFXArray.Length; i++)

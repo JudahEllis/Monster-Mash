@@ -34,17 +34,17 @@ public class projectile : MonoBehaviour
     private bool impactCalled;
 
     [Header("Boomerang")]
-    public bool isBoomerang;
-    public float angle;
-    public float distance;
+    [HideInInspector] public bool isBoomerang = false;
+    [HideInInspector] public float height;
+    [HideInInspector] public float distance;
+    [HideInInspector] public float autoEnd;
+    [HideInInspector] public float turnAround = 0f;
+    [SerializeField] private bool boomIsReload = false;
+
     private bool keepGoing = true;
     private Vector3 homeStretch;
-    public float autoEnd;
-    public float turnAround = 1f;
-
     private bool boomStart = true;
     private bool boomEnd = false;
-    public Transform muzzle;
 
     public void resetPosition()
     {
@@ -65,6 +65,7 @@ public class projectile : MonoBehaviour
 
     private void OnEnable()
     {
+        keepGoing = false;
         StopAllCoroutines();
         movementModifier = 1;
         impactCalled = false;
@@ -113,9 +114,12 @@ public class projectile : MonoBehaviour
     {
         if (!keepGoing)
         {
-            impactCalled = true;
+            StartCoroutine(impactEffect());
         }
-        StartCoroutine(impactEffect());
+        else
+        {
+            BoomerangTurnaround();
+        }
     }
 
     IEnumerator impactEffect()
@@ -183,6 +187,12 @@ public class projectile : MonoBehaviour
             }
             resetPosition();
             yield return new WaitForSeconds(1);
+
+            if (isBoomerang)
+            {
+                projectileHolder.gameObject.GetComponent<vfxHolder>().isReloaded = true;
+            }
+
             this.gameObject.SetActive(false);
         }
     }
@@ -227,14 +237,15 @@ public class projectile : MonoBehaviour
         {
             if (boomStart)
             {
+                projectileHolder.gameObject.GetComponent<vfxHolder>().isReloaded = false;
+
                 keepGoing = true;
-                GetComponent<Rigidbody>().velocity = transform.forward * speed * movementModifier;
+                
+                GetComponent<Rigidbody>().velocity = (transform.forward + new Vector3(0f, height)) * speed * movementModifier;
 
                 if (Vector2.Distance(startingPoint, transform.position) >= distance)
                 {
-                    boomStart = false;
-                    StartCoroutine(Boomerang());
-                    StartCoroutine(BoomerangEnd());
+                    BoomerangTurnaround();
                 }
             }
 
@@ -254,6 +265,12 @@ public class projectile : MonoBehaviour
         }
     }
 
+    private void BoomerangTurnaround()
+    {
+        boomStart = false;
+        StartCoroutine(Boomerang());
+        StartCoroutine(BoomerangEnd());
+    }
     IEnumerator Boomerang()
     {
         GetComponent<Rigidbody>().velocity *= 0f;

@@ -13,6 +13,7 @@ public class monsterPartReference : MonoBehaviour
     public bool isProjectile;
     public bool isJabOrSlash;
     public bool isReel;
+    public bool isBoomerang;
 
     [Header("Damage and Status Effects")]
     public int damage = 0;
@@ -35,7 +36,7 @@ public class monsterPartReference : MonoBehaviour
         {
             if (referencesToIgnore.Contains(other.GetComponent<monsterPartReference>()) == false)
             {
-                if (isProjectile && isHitbox)
+                if ((isProjectile || isBoomerang) && isHitbox)
                 {
                     GetComponent<projectile>().impact();
                     //print(damage);

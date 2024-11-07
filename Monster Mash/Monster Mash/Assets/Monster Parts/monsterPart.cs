@@ -270,7 +270,7 @@ public class monsterPart : MonoBehaviour
 
             visualForAnimationTests.OutlineMode = Outline.Mode.OutlineVisible;
             visualForAnimationTests.OutlineColor = Color.yellow;
-            visualForAnimationTests.OutlineWidth = 3f;
+            visualForAnimationTests.OutlineWidth = 1f;
             disableOutline();
             myAnimator = this.GetComponent<Animator>();
         }

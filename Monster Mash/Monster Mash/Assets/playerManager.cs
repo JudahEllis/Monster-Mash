@@ -10,6 +10,7 @@ public class playerManager : MonoBehaviour
     private PlayerInputManager playerInputManager;
     public List<playerController> players = new List<playerController>();
     private List<string> playerNumbersAvailable = new List<string>() { "Player 1" , "Player 2", "Player 3", "Player 4"};
+    public DynamicCamera battleCamera;
 
     public string intendedActionMap;
 
@@ -97,6 +98,14 @@ public class playerManager : MonoBehaviour
             }
         }
         #endregion
+
+        if (battleCamera != null)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                battleCamera.playerTransforms[i] = players[i].transform;
+            }
+        }
     }
 
     //This is for removing that dumb redundant unity error

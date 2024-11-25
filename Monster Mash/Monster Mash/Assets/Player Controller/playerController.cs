@@ -9,10 +9,15 @@ public class playerController : MonoBehaviour
     public int playerIndex;
     public monsterAttackSystem myMonster;
     public CapsuleCollider2D bodyCollider;
+    public CircleCollider2D smallBodyCollider;
+    public BoxCollider2D groundFrictionCollider;
+    public brainSFX mySFXBrain;
     //public MeshRenderer standingVisual;
     public MeshRenderer ballVisual;
     public Transform groundCheck;
+    public Transform headCheck;
     public LayerMask solidGroundLayer;
+    public LayerMask semiSolidGroundLayer;
     private PlayerInput playerInput;
     private PlayerControls playerControlsMap;
     private InputActionMap startingActionMap;
@@ -37,9 +42,13 @@ public class playerController : MonoBehaviour
     public bool isRunning = false;
     //
     public bool grounded = false;
+    //public bool onSemiSolid = false;
+    private bool isCrouching = false;
+    private bool isPhasingThroughPlatform;
+    private bool isFastFalling = false;
     bool canJump = true;
     bool jumpButtonReset = false;
-    public bool primedForBigJump = false;
+    //public bool primedForBigJump = false;
     public int numberOfJumps = 2;
     public int numberOfJumpsLeft = 2;
     private Vector2 jumpValue;
@@ -71,6 +80,7 @@ public class playerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerControlsMap = new PlayerControls();
         gravityPower = myRigidbody.gravityScale;
+        updateBrainSFX();
 
         startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
         UIcontrols = playerInput.actions.FindActionMap("UI Controls");
@@ -119,18 +129,31 @@ public class playerController : MonoBehaviour
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
         if (monsterControllerActive)
         {
+            if (isGrounded() || isSemiGrounded())
+            {
+                if (grounded == false)
+                {
+                    land();
+                }
+            }
+
             if (canMove)
             {
 
-                if (isGrounded())
+                if (isGrounded() || isSemiGrounded())
                 {
                     if (grounded == false)
                     {
                         land();
                     }
 
+                    if (isWalking == false && isRunning == false && isPhasingThroughPlatform == false && groundFrictionCollider.enabled == false)
+                    {
+                        turnOnFriction();
+                    }
+
                     #region Run and Walk on Ground
-                    if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
+                    if ((leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f))
                     {
                         //run
 
@@ -145,11 +168,11 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * runSpeed, myRigidbody.velocity.y);
                         }
                     }
-                    else if (leftJoystickVector.x > 0.1f || leftJoystickVector.x < -0.1f)
+                    else if ((leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f))
                     {
                         //walk
 
-                        if (leftJoystickVector.x > 0.1f)
+                        if (leftJoystickVector.x > 0.2f)
                         {
                             //right
                             myRigidbody.velocity = new Vector2(1 * walkSpeed, myRigidbody.velocity.y);
@@ -160,7 +183,7 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed, myRigidbody.velocity.y);
                         }
                     }
-                    else if(leftJoystickValue < 0.1f)
+                    else
                     {
                         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 
@@ -169,6 +192,7 @@ public class playerController : MonoBehaviour
                             isWalking = false;
                             isRunning = false;
                             stopWalkingVisual();
+                            turnOnFriction();
                         }
 
                         if (isRunning)
@@ -176,6 +200,8 @@ public class playerController : MonoBehaviour
                             isRunning = false;
                             isWalking = false;
                             stopRunningVisual();
+                            //turnOnFriction();
+                            StartCoroutine(slideToStop());
                         }
                     }
                     #endregion
@@ -186,6 +212,8 @@ public class playerController : MonoBehaviour
                     if (grounded)
                     {
                         grounded = false;
+                        isRunning = false;
+                        isWalking = false;
                         fallVisual();
                     }
 
@@ -205,11 +233,11 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * runSpeed / 1.8f, myRigidbody.velocity.y);
                         }
                     }
-                    else if (leftJoystickVector.x > 0.1f || leftJoystickVector.x < -0.1f)
+                    else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f)
                     {
                         //walk
 
-                        if (leftJoystickVector.x > 0.1f)
+                        if (leftJoystickVector.x > 0.2f)
                         {
                             //right
                             myRigidbody.velocity = new Vector2(1 * walkSpeed / 2, myRigidbody.velocity.y);
@@ -220,7 +248,7 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed / 2, myRigidbody.velocity.y);
                         }
                     }
-                    else if(leftJoystickValue < 0.1f)
+                    else
                     {
                         myRigidbody.velocity = new Vector2(myRigidbody.velocity.x - 0.001f, myRigidbody.velocity.y);
 
@@ -230,6 +258,7 @@ public class playerController : MonoBehaviour
                             isRunning = false;
                             stopWalkingVisual();
                             stopRunningVisual();
+                            turnOnFriction();
                         }
 
                         if (isRunning)
@@ -238,14 +267,27 @@ public class playerController : MonoBehaviour
                             isWalking = false;
                             stopWalkingVisual();
                             stopRunningVisual();
+                            turnOnFriction();
                         }
                     }
                     #endregion
    
                 }
 
+                if (isBelowSemiGround() && isGrounded() == false)
+                {
+                    if (isPhasingThroughPlatform == false)
+                    {
+                        phase();
+                        isPhasingThroughPlatform = true;
+                        isCrouching = false;
+                        isFastFalling = false;
+                    }
+                }
+
 
                 #region Jumping
+                /*
                 if (leftJoystickVector.y > 0.25f && leftJoystickValue > 0.25f)
                 {
                     //big jump
@@ -269,10 +311,83 @@ public class playerController : MonoBehaviour
                         }
                     }
                 }
+                */
+
+                if (leftJoystickVector.y > 0.2f)
+                {
+                    //big jump
+                    if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
+                    {
+                        bigJump();
+                    }
+                }
 
                 if (leftJoystickVector.y < 0.05f && jumpButtonReset == false)
                 {
                     jumpButtonReset = true;
+                }
+                #endregion
+
+                #region Crouching, Phasing through Platforms, and Fast Falling
+                if (leftJoystickVector.y < -0.9f && (leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
+                {
+                    //down stick -> either crouch or go through semi solid or fast fall
+                    if (isGrounded())
+                    {
+                        //crouch
+                        if (isCrouching == false)
+                        {
+                            startCrouchVisual();
+                            isCrouching = true;
+                            isPhasingThroughPlatform = false;
+                            isFastFalling = false;
+
+                            if (isRunning || isWalking)
+                            {
+                                isRunning = false;
+                                isWalking = false;
+                                StartCoroutine(slideToStop());
+                            }
+                            else
+                            {
+                                turnOnFriction();
+                            }
+                        }
+                    }
+                    else if (isSemiGrounded())
+                    {
+                        //fall through platform
+                        if (isPhasingThroughPlatform == false)
+                        {
+                            phase();
+                            phaseThroughPlatformVisual();
+                            isPhasingThroughPlatform = true;
+                            isCrouching = false;
+                            isFastFalling = false;
+                        }
+                    }
+                    else
+                    {
+                        //fast fall
+
+                        /*
+
+                        if (isFastFalling == false)
+                        {
+                            isFastFalling = true;
+                            isPhasingThroughPlatform = false;
+                            isCrouching = false;
+                        }
+                        */
+                    }
+                }
+                else
+                {
+                    if (isCrouching)
+                    {
+                        endCrouchVisual();
+                        isCrouching = false;
+                    }
                 }
                 #endregion
 
@@ -282,11 +397,11 @@ public class playerController : MonoBehaviour
             if (isRolling)
             {
                 #region Rolling Momentum
-                if (rightJoystickVector.x > 0.1f)
+                if (rightJoystickVector.x > 0.2f)
                 {
                     myRigidbody.velocity = new Vector2(1 * rollSpeed, myRigidbody.velocity.y);
                 }
-                else if (rightJoystickVector.x < -0.1f)
+                else if (rightJoystickVector.x < -0.2f)
                 {
                     myRigidbody.velocity = new Vector2(-1 * rollSpeed, myRigidbody.velocity.y);
                 }
@@ -320,7 +435,7 @@ public class playerController : MonoBehaviour
             else if (grabbingWall)
             {
                 #region Exiting Wall Grab by land, slipping, or jumping
-                if (isGrounded() && grounded == false)
+                if ((isGrounded() || isSemiGrounded()) && grounded == false)
                 {
                     land();
                 }
@@ -335,7 +450,7 @@ public class playerController : MonoBehaviour
                     wallJump(-1);
                     facingRight = false;
                     flipLeftVisual();
-                    littleJumpVisual();
+                    bigJumpVisual();
                 }
                 else if (facingRight == false && leftJoystickVector.x > 0.1f)
                 {
@@ -343,7 +458,7 @@ public class playerController : MonoBehaviour
                     wallJump(1);
                     facingRight = true;
                     flipRightVisual();
-                    littleJumpVisual();
+                    bigJumpVisual();
                 }
                 #endregion
             }
@@ -366,13 +481,13 @@ public class playerController : MonoBehaviour
 
         if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
         {
-            if (facingRight == false && leftJoystickVector.x > 0.1f)
+            if (facingRight == false && leftJoystickVector.x > 0.2f)
             {
                 //face right
                 facingRight = true;
                 flipRightVisual();
             }
-            else if (facingRight && leftJoystickVector.x < -0.1f)
+            else if (facingRight && leftJoystickVector.x < -0.2f)
             {
                 //face left
                 facingRight = false;
@@ -382,24 +497,33 @@ public class playerController : MonoBehaviour
 
         if (context.performed)
         {
+            if (isPhasingThroughPlatform == false && groundFrictionCollider.enabled && isCrouching == false)
+            {
+                turnOffFriction();
+            }
+
             if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
             {
                 //run
+
                 if (isRunning == false)
                 {
                     isRunning = true;
                     isWalking = false;
                     startRunningVisual();
+                    turnOffFriction();
                 }
             }
-            else if (leftJoystickVector.x > 0.1f || leftJoystickVector.x < -0.1f)
+            else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f)
             {
                 //walk
+
                 if (isWalking == false && isRunning == false)
                 {
                     isWalking = true;
                     isRunning = false;
                     startWalkingVisual();
+                    turnOffFriction();
                 }
             }
         }
@@ -411,41 +535,95 @@ public class playerController : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, solidGroundLayer);
     }
 
+    private bool isSemiGrounded()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, 0.5f, semiSolidGroundLayer);
+    }
+
+    private bool isBelowSemiGround()
+    {
+        return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
+    }
+
     private void land()
     {
         grounded = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
-        myRigidbody.gravityScale = gravityPower;
         bodyCollider.enabled = true;
-        ballVisual.enabled = false;
+        smallBodyCollider.enabled = true;
+        isPhasingThroughPlatform = false;
+        isFastFalling = false;
+        myRigidbody.gravityScale = gravityPower;
         canJump = true;
         canDash = true;
         canRoll = true;
         grabbingWall = false;
         canMove = true;
-        primedForBigJump = false;
+        isRunning = false;
+        isWalking = false;
+        //primedForBigJump = false;
         landVisual();
+        playLandSound();
+
+        if (isRunning || isWalking)
+        {
+            turnOffFriction();
+        }
+        else if (leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f)
+        {
+            turnOnFriction();
+        }
     }
 
     private void bigJump()
     {
         if (numberOfJumpsLeft > 0)
         {
+            if (numberOfJumpsLeft == numberOfJumps)
+            {
+                playJumpSound();
+                bigJumpVisual();
+            }
+            else
+            {
+                playDoubleJumpSound();
+                doubleJumpVisual();
+            }
+
             numberOfJumpsLeft--;
             grounded = false;
             jumpButtonReset = false;
-            primedForBigJump = true;
+            isRunning = false;
+            isWalking = false;
+            //primedForBigJump = true;
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, bigJumpPower);
             StartCoroutine(jumpRecharge());
-            bigJumpVisual();
+
+            if (isBelowSemiGround())
+            {
+                phase();
+                isPhasingThroughPlatform = true;
+                isCrouching = false;
+                isFastFalling = false;
+            }
         }
     }
 
+    /*
     private void littleJump()
     {
         if (numberOfJumpsLeft > 0)
         {
+            if (numberOfJumpsLeft == numberOfJumps)
+            {
+                playJumpSound();
+            }
+            else
+            {
+                playDoubleJumpSound();
+            }
+
             numberOfJumpsLeft--;
             grounded = false;
             jumpButtonReset = false;
@@ -453,9 +631,19 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, littleJumpPower);
             StartCoroutine(jumpRecharge());
             littleJumpVisual();
+            playJumpSound();
+
+            if (isBelowSemiGround())
+            {
+                phase();
+                isPhasingThroughPlatform = true;
+                isCrouching = false;
+                isFastFalling = false;
+            }
         }
 
     }
+    */
 
     IEnumerator jumpRecharge()
     {
@@ -473,13 +661,13 @@ public class playerController : MonoBehaviour
 
         if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
         {
-            if (facingRight == false && rightJoystickVector.x > 0.1f)
+            if (facingRight == false && rightJoystickVector.x > 0.2f)
             {
                 //face right
                 facingRight = true;
                 flipRightVisual();
             }
-            else if (facingRight && rightJoystickVector.x < -0.1f)
+            else if (facingRight && rightJoystickVector.x < -0.2f)
             {
                 //face left
                 facingRight = false;
@@ -490,11 +678,11 @@ public class playerController : MonoBehaviour
         if (context.performed && (canDash || canRoll))
         {
 
-            if (isGrounded())
+            if (isGrounded() || isSemiGrounded())
             {
-                if (canRoll)
+                if (canRoll && isRolling == false)
                 {
-                    if (rightJoystickVector.x > 0.1f || rightJoystickVector.x < -0.1f)
+                    if (rightJoystickVector.x > 0.2f || rightJoystickVector.x < -0.2f)
                     {
                         StartCoroutine(rollTime());
                     }
@@ -502,11 +690,24 @@ public class playerController : MonoBehaviour
             }
             else
             {
-                if (canDash)
+                if (canDash && isDashing == false)
                 {
-                    if (rightJoystickVector.x > 0.1f || rightJoystickVector.x < -0.1f)
+                    if (rightJoystickVector.x > 0.2f || rightJoystickVector.x < -0.2f)
                     {
                         StartCoroutine(dashTime());
+
+                        if (facingRight == false && rightJoystickVector.x > 0.2f)
+                        {
+                            //face right
+                            facingRight = true;
+                            flipRightVisual();
+                        }
+                        else if (facingRight && rightJoystickVector.x < -0.2f)
+                        {
+                            //face left
+                            facingRight = false;
+                            flipLeftVisual();
+                        }
                     }
                 }
             }
@@ -518,52 +719,66 @@ public class playerController : MonoBehaviour
     IEnumerator rollTime()
     {
         //start
+        turnOffFriction();
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         isRolling = true;
         canMove = false;
         canRoll = false;
         canDash = false;
         bodyCollider.enabled = false;
+        smallBodyCollider.enabled = true;
         //standingVisual.enabled = false;
         //ballVisual.enabled = true;
         rollVisual();
         yield return new WaitForSeconds(0.125f);
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         bodyCollider.enabled = true;
+        smallBodyCollider.enabled = true;
+        //turnOnFriction();
         //standingVisual.enabled = true;
         //ballVisual.enabled = false;
         isRolling = false;
         isDashing = false;
         canMove = true;
         canDash = true;
+        isRunning = false;
+        isWalking = false;
         StartCoroutine(rollRecharge());
         //stop
     }
 
     IEnumerator rollRecharge()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         canRoll = true;
     }
 
     IEnumerator dashTime()
     {
         //start
+        turnOffFriction();
         isDashing = true;
         canMove = false;
         canDash = false;
         canRoll = false;
         bodyCollider.enabled = false;
+        smallBodyCollider.enabled = true;
+        groundFrictionCollider.enabled = true;
         //standingVisual.enabled = false;
         //ballVisual.enabled = true;
         myRigidbody.gravityScale = 0;
         startDashAttackVisual();
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.25f);
+        isRunning = false;
+        isWalking = false;
 
         if (grabbingWall == false)
         {
             myRigidbody.gravityScale = gravityPower;
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
             bodyCollider.enabled = true;
+            smallBodyCollider.enabled = true;
+            //turnOnFriction();
             //standingVisual.enabled = true;
             //ballVisual.enabled = false;
             isDashing = false;
@@ -589,6 +804,7 @@ public class playerController : MonoBehaviour
     {
         StopCoroutine(dashTime());
         endDashAttackVisual();
+        wallGrabVisual();
         canMove = false;
         grabbingWall = true;
         canRoll = false;
@@ -622,8 +838,9 @@ public class playerController : MonoBehaviour
         myRigidbody.gravityScale = gravityPower;
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         bodyCollider.enabled = true;
+        smallBodyCollider.enabled = true;
         //standingVisual.enabled = true;
-        ballVisual.enabled = false;
+        //ballVisual.enabled = false;
         isDashing = false;
         isRolling = false;
         canRoll = true;
@@ -635,7 +852,7 @@ public class playerController : MonoBehaviour
 
     #endregion
 
-    #region Monster Attack System Communication
+    #region Monster Attack System Visual Communication
 
     private void flipLeftVisual()
     {
@@ -667,14 +884,19 @@ public class playerController : MonoBehaviour
         myMonster.stopWalking();
     }
 
-    private void littleJumpVisual()
+    private void bigJumpVisual()
     {
         myMonster.jump();
     }
 
-    private void bigJumpVisual()
+    private void doubleJumpVisual()
     {
-        myMonster.jump();
+        myMonster.doubleJump();
+    }
+
+    private void phaseThroughPlatformVisual()
+    {
+        myMonster.goThroughPlatform();
     }
 
     private void fallVisual()
@@ -687,6 +909,16 @@ public class playerController : MonoBehaviour
         myMonster.land();
     }
 
+    private void startCrouchVisual()
+    {
+        myMonster.crouch();
+    }
+
+    private void endCrouchVisual()
+    {
+        myMonster.stopCrouching();
+    }
+
     private void startDashAttackVisual()
     {
         myMonster.dashAttack();
@@ -695,6 +927,11 @@ public class playerController : MonoBehaviour
     private void endDashAttackVisual()
     {
         myMonster.endDashAttack();
+    }
+
+    private void wallGrabVisual()
+    {
+        myMonster.wallGrabbedCorrections();
     }
 
     private void rollVisual()
@@ -707,4 +944,125 @@ public class playerController : MonoBehaviour
         myMonster.crouch();
     }
     #endregion
+
+    #region Monster Attack System Audio Communication
+    private void updateBrainSFX()
+    {
+        mySFXBrain.updateBrainSounds();
+    }
+
+    private void playJumpSound()
+    {
+        /*
+        int randomJumpInt = UnityEngine.Random.Range(1, 3);
+
+        if (randomJumpInt == 1)
+        {
+            mySFXBrain.playJump1Sound();
+        }
+        else if (randomJumpInt == 2)
+        {
+            mySFXBrain.playJump2Sound();
+        }
+        else
+        {
+            mySFXBrain.playJump3Sound();
+        }
+        */
+        mySFXBrain.playJumpSound();
+    }
+
+    private void playDoubleJumpSound()
+    {
+        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 3);
+
+        if (randomDoubleJumpInt == 1)
+        {
+            mySFXBrain.playDoubleJump1Sound();
+        }
+        else if (randomDoubleJumpInt == 2)
+        {
+            mySFXBrain.playDoubleJump2Sound();
+        }
+        else
+        {
+            mySFXBrain.playDoubleJump3Sound();
+        }
+    }
+
+    private void playLandSound()
+    {
+        /*
+        int randomLandInt = UnityEngine.Random.Range(1, 3);
+
+        if (randomLandInt == 1)
+        {
+            mySFXBrain.playLand1Sound();
+        }
+        else if (randomLandInt == 2)
+        {
+            mySFXBrain.playLand2Sound();
+        }
+        else
+        {
+            mySFXBrain.playLand3Sound();
+        }
+        */
+
+        mySFXBrain.playLandSound();
+    }
+
+    #endregion
+
+    public void turnOnFriction()
+    {
+        if (isRunning || isWalking)
+        {
+            return;
+        }
+        else
+        {
+            groundFrictionCollider.enabled = true;
+        }
+    }
+
+    public void turnOffFriction()
+    {
+        groundFrictionCollider.enabled = false;
+    }
+
+    private void phase()
+    {
+        bodyCollider.enabled = false;
+        smallBodyCollider.enabled = false;
+        groundFrictionCollider.enabled = false;
+        isPhasingThroughPlatform = true;
+    }
+
+    private void antiPhase()
+    {
+        bodyCollider.enabled = true;
+        smallBodyCollider.enabled = true;
+        //groundFrictionCollider.enabled = true;
+        isPhasingThroughPlatform = false;
+    }
+
+    IEnumerator slideToStop()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
+        {
+            turnOnFriction();
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (isPhasingThroughPlatform && collision.gameObject.tag == "Semi Solid")
+        {
+            antiPhase();
+        }
+    }
 }

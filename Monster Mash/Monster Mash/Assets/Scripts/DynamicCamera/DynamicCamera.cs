@@ -43,13 +43,25 @@ public class DynamicCamera : MonoBehaviour
 
     void Start()
     {
+        
+    }
+
+    private void Awake()
+    {
         maxDist = Vector3.Distance(stageClampValues[0].transform.position, stageClampValues[1].transform.position);
 
         zClampCurve = new AnimationCurve(new Keyframe(0, clampValuesZ[1].position.z),
             new Keyframe(1, clampValuesZ[0].position.z));
+
+
     }
 
     private void LateUpdate()
+    {
+        
+    }
+
+    private void Update()
     {
         DynamicCameraFunction();
     }
@@ -73,6 +85,7 @@ public class DynamicCamera : MonoBehaviour
 
         float clampZ = zClampCurve.Evaluate(normalizedDist);
 
-        transform.position = new Vector3(clampX, clampY, clampZ);
+        //transform.position = new Vector3(clampX, clampY, clampZ);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(clampX, clampY, clampZ), 1);
     }
 }

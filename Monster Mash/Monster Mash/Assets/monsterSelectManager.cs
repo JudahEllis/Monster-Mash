@@ -11,6 +11,8 @@ public class monsterSelectManager : MonoBehaviour
     //public EventSystem eventHandler;
     public MultiplayerEventSystem[] eventHandler;
     private stageSelectManager stageSelect;
+    private int selectedStagetageNumber = 0;
+    public GameObject[] stageSelectionButtons;
 
     [SerializeField]
     public PlayerInputManager playerInputManager;
@@ -53,12 +55,59 @@ public class monsterSelectManager : MonoBehaviour
 
     public void cycleStageSelectionRight()
     {
-
+        if (selectedStagetageNumber < stageSelectionButtons.Length - 1)
+        {
+            stageSelectionButtons[selectedStagetageNumber].SetActive(false);
+            selectedStagetageNumber++;
+            stageSelectionButtons[selectedStagetageNumber].SetActive(true);
+            //selectNewButton(stageSelectionButtons[selectedStagetageNumber]);
+        }
+        else
+        {
+            stageSelectionButtons[selectedStagetageNumber].SetActive(false);
+            selectedStagetageNumber = 0;
+            stageSelectionButtons[selectedStagetageNumber].SetActive(true);
+            //selectNewButton(stageSelectionButtons[selectedStagetageNumber]);
+        }
     }
 
     public void cycleStageSelectionLeft()
     {
+        if (selectedStagetageNumber > 0)
+        {
+            stageSelectionButtons[selectedStagetageNumber].SetActive(false);
+            selectedStagetageNumber--;
+            stageSelectionButtons[selectedStagetageNumber].SetActive(true);
+            //selectNewButton(stageSelectionButtons[selectedStagetageNumber]);
+        }
+        else
+        {
+            stageSelectionButtons[selectedStagetageNumber].SetActive(false);
+            selectedStagetageNumber = stageSelectionButtons.Length - 1;
+            stageSelectionButtons[selectedStagetageNumber].SetActive(true);
+            //selectNewButton(stageSelectionButtons[selectedStagetageNumber]);
+        }
+    }
 
+    public void buttonDampening(Button menuButton)
+    {
+        StartCoroutine(buttonDampenTiming(menuButton));
+    }
+
+    public IEnumerator buttonDampenTiming(Button menuButton) //to stop "on click" from going off like 3 times
+    {
+        menuButton.interactable = false;
+        yield return new WaitForSeconds(0.2f);
+        menuButton.interactable = true;
+
+        for (int i = 0; i < eventHandler.Length; i++)
+        {
+            eventHandler[i].enabled = false;
+            Button firstButton = menuButton;
+            eventHandler[i].firstSelectedGameObject = firstButton.gameObject;
+            eventHandler[i].enabled = true;
+            firstButton.Select();
+        }
     }
 
     public void confirmStage()

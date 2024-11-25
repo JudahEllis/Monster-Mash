@@ -82,8 +82,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     [Header("Attack Necessities")]
     public GameObject dashSplat;
-    private Vector3 leftDashSplatRotation = new Vector3 (0, 210, 0);
-    private Vector3 rightDashSplatRotation = new Vector3(0, 270, 0);
+    private Vector3 leftDashSplatRotation = new Vector3 (0, 30, 0);
+    private Vector3 rightDashSplatRotation = new Vector3(0, -30, 0);
     public Collider stompCollider;
     private bool grabActivated;
     public Transform nativeReel;
@@ -690,6 +690,11 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void wallGrabbedCorrections()
+    {
+        canDashAttack = true;
+    }
+
     public void dashAttack()
     {
         if (damageLocked)
@@ -950,7 +955,7 @@ public class monsterAttackSystem : MonoBehaviour
             facingRight = false;
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
-            dashSplat.transform.eulerAngles = leftDashSplatRotation;
+            dashSplat.transform.localEulerAngles = leftDashSplatRotation;
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = false;
@@ -961,7 +966,7 @@ public class monsterAttackSystem : MonoBehaviour
             facingRight = true;
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
-            dashSplat.transform.eulerAngles = rightDashSplatRotation;
+            dashSplat.transform.localEulerAngles = rightDashSplatRotation;
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = true;
@@ -983,7 +988,7 @@ public class monsterAttackSystem : MonoBehaviour
             facingRight = false;
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
-            dashSplat.transform.eulerAngles = leftDashSplatRotation;
+            dashSplat.transform.localEulerAngles = leftDashSplatRotation;
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = false;
@@ -1007,7 +1012,7 @@ public class monsterAttackSystem : MonoBehaviour
             facingRight = true;
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
-            dashSplat.transform.eulerAngles = rightDashSplatRotation;
+            dashSplat.transform.localEulerAngles = rightDashSplatRotation;
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = true;
@@ -1186,6 +1191,31 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        isGrounded = false;
+        //isRunning = false;
+        //isWalking = false;
+        focusedAttackActive = false;
+        isGliding = false;
+        jumpsLeft--;
+        canDashAttack = true;
+        canRoll = true;
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerJump();
+        }
+
+        myAnimator.ResetTrigger("Jump");
+        myAnimator.SetTrigger("Jump");
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        myAnimator.SetBool("Calm", false);
+        calm = false;
+        forceEndEmote();
+        forceStopCrouch();
+        releaseJumpVFX();
+        stopForceFall();
+
+        /*
         if (isGrounded && jumpsLeft != 0)
         {
             isGrounded = false;
@@ -1217,10 +1247,14 @@ public class monsterAttackSystem : MonoBehaviour
             doubleJump();
             stopForceFall();
         }
+        */
     }
 
     public void doubleJump()
     {
+        stopForceFall();
+
+        /*
         if (isWinged)
         {
             if (jumpsLeft != 0)
@@ -1250,12 +1284,28 @@ public class monsterAttackSystem : MonoBehaviour
                     allMonsterParts[i].triggerRoll(false, false);
                 }
 
+                myAnimator.ResetTrigger("Roll");
                 myAnimator.SetFloat("Flipping Speed", 1.5f);
                 myAnimator.SetTrigger("Roll");
                 releaseJumpVFX();
                    
             }
         }
+        */
+
+        isGliding = false;
+        //jumpsLeft--;
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerRoll(false, false);
+        }
+
+        myAnimator.ResetTrigger("Roll");
+        myAnimator.SetFloat("Flipping Speed", 1.5f);
+        myAnimator.SetTrigger("Roll");
+        releaseJumpVFX();
+
     }
 
     public void releaseJumpVFX()

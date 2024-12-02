@@ -488,6 +488,12 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        if (!attackSlotMonsterParts[attackSlot].attackMarkedHeavy && attackSlotMonsterParts[attackSlot].needsReloadNeutral && !attackSlotMonsterParts[attackSlot].GetReloadNeutral())
+        {
+            print("cancelled!!!!");
+            return;
+        }
+
         if (attackSlotMonsterParts[attackSlot] != null)
         {
             if (attackSlotMonsterParts[attackSlot].connected == false)

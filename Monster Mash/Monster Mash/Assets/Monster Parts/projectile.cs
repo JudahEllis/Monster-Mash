@@ -34,12 +34,18 @@ public class projectile : MonoBehaviour
     private bool impactCalled;
 
     [Header("Boomerang")]
+    [SerializeField] public bool needsReload = false;
     [HideInInspector] public bool isBoomerang = false;
     [HideInInspector] public float height;
     [HideInInspector] public float distance;
     [HideInInspector] public float autoEnd;
     [HideInInspector] public float turnAround = 0f;
-    [SerializeField] private bool boomIsReload = false;
+    [SerializeField] private bool isReloaded = false;
+    [HideInInspector] public int neutralOrHeavy;
+    private monsterPart myMonsterPart;
+    private bool hasRequiredAsset = false;
+    private GameObject requiredAsset;
+
 
     private bool keepGoing = true;
     private Vector3 homeStretch;
@@ -65,6 +71,7 @@ public class projectile : MonoBehaviour
 
     private void OnEnable()
     {
+        isReloaded = false;
         keepGoing = false;
         StopAllCoroutines();
         movementModifier = 1;
@@ -103,6 +110,22 @@ public class projectile : MonoBehaviour
             boomStart = true;
             boomEnd = false;
         }
+
+        if (needsReload)
+        {
+            myMonsterPart = projectileHolder.gameObject.GetComponent<vfxHolder>().myMonsterPart;
+
+            hasRequiredAsset = projectileHolder.GetComponent<vfxHolder>().GetHasRequiredAsset();
+
+            if (neutralOrHeavy == 0) //is neutral attack
+            {
+                myMonsterPart.SetReloadNeutral(false);
+            }
+            else if (neutralOrHeavy == 1) //is heavy attack
+            {
+                myMonsterPart.SetReloadHeavy(false);
+            }
+        }
     }
 
     private void updateVelocity()
@@ -132,6 +155,22 @@ public class projectile : MonoBehaviour
             if (mainVisual != null && fadesAway == false)
             {
                 mainVisual.SetActive(false);
+
+                if (needsReload)
+                {
+                    projectileHolder.gameObject.GetComponent<vfxHolder>().isReloaded = true;
+
+                    if (neutralOrHeavy == 0) //is neutral attack
+                    {
+                        myMonsterPart.SetReloadNeutral(true);
+                    }
+                    else if (neutralOrHeavy == 1) //is heavy attack
+                    {
+                        myMonsterPart.SetReloadHeavy(true);
+                    }
+                }
+
+                isReloaded = true;
             }
             else
             {
@@ -188,11 +227,6 @@ public class projectile : MonoBehaviour
             resetPosition();
             yield return new WaitForSeconds(1);
 
-            if (isBoomerang)
-            {
-                projectileHolder.gameObject.GetComponent<vfxHolder>().isReloaded = true;
-            }
-
             this.gameObject.SetActive(false);
         }
     }
@@ -219,6 +253,11 @@ public class projectile : MonoBehaviour
             }
 
             updateVelocity();
+        }
+
+        if (hasRequiredAsset)
+        {
+            projectileHolder.GetComponent<vfxHolder>().SetBoomerangAsset(isReloaded);
         }
     }
 
@@ -301,46 +340,13 @@ public class projectile : MonoBehaviour
         yield break;
     }
 
-    /*IEnumerator MyBoomerang()
+    public bool GetReload()
     {
-        keepGoing = true;
-        GetComponent<Rigidbody>().velocity = transform.forward * speed * movementModifier;
+        return isReloaded;
+    }
 
-        while (Vector2.Distance(startingPoint, transform.position) < distance)
-        {
-            //transform.position += movementVector;
-
-            yield return new WaitForSeconds(0.01f);
-        }
-
-        GetComponent<Rigidbody>().velocity *= 0f;
-
-        yield return new WaitForSeconds(0.3f);
-
-        Vector3 homeStretch = projectileHolder.position;
-
-        Vector2 direction = (homeStretch - transform.position).normalized;
-
-        GetComponent<Rigidbody>().velocity = direction * speed;
-
-        int cycleTracker = 0;
-
-        while (Vector2.Distance(homeStretch, transform.position) > 2)
-        {
-            print(Vector2.Distance(homeStretch, transform.position));
-            cycleTracker++;
-
-            yield return new WaitForSeconds(0.01f);
-
-            if (cycleTracker > 400)
-            {
-                break;
-            }
-        }
-
-        keepGoing = false;
-        StartCoroutine(autoDisable());
-
-        yield break;
-    }*/
+    public void SetReload(bool reload)
+    {
+        isReloaded = reload;
+    }
 }

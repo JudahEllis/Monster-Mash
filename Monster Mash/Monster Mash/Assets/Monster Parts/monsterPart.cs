@@ -83,6 +83,9 @@ public class monsterPart : MonoBehaviour
     private vfxHolder neutralDefaultSprayVFXManager;
     private vfxHolder neutralStompVFXManager;
     public Transform neutralMuzzle;
+    public bool needsReloadNeutral; //for projectiles, determines if projectile must be reloaded before shooting again
+    [SerializeField] private bool isReloadedNeutral = true;
+    [SerializeField] private bool isReloadedHeavy = true;
     //public Transform neutralForwardMuzzle;
     //public Transform neutralUpwardMuzzle;
     //public Transform neutralDownwardMuzzle;
@@ -128,6 +131,7 @@ public class monsterPart : MonoBehaviour
     private vfxHolder heavyDefaultSprayVFXManager;
     private vfxHolder heavyStompVFXManager;
     public Transform heavyMuzzle;
+    public bool needsReloadHeavy; //for projectiles, determines if projectile must be reloaded before shooting again
     //public Transform heavyForwardMuzzle;
     //public Transform heavyUpwardMuzzle;
     //public Transform heavyDownwardMuzzle;
@@ -1848,6 +1852,25 @@ public class monsterPart : MonoBehaviour
 
     public void triggerNeutralOrHeavy()
     {
+        if (!attackMarkedHeavy && needsReloadNeutral )
+        {
+            if (!isReloadedNeutral)
+            {
+                triggerNeutralOrHeavyRefresh(true);
+                //triggerAttackToIdle();
+                //return;
+            }
+        }
+
+        if (attackMarkedHeavy && needsReloadHeavy)
+        {
+            if (!isReloadedHeavy)
+            {
+                triggerNeutralOrHeavyRefresh(true);
+                //return;
+            }
+        }
+
         if (beamHeavyAttack && attackMarkedHeavy)
         {
             heavyAttackInMotion = true;
@@ -1891,6 +1914,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackRelease()
     {
+
         if (isJointed)
         {
             connectedMonsterPart.SetBool("Ready to Swing", true);
@@ -4938,4 +4962,26 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
+    #region Judah Reloading Check Code //mostly for boomerangs
+
+    public bool GetReloadNeutral ()
+    {
+        return isReloadedNeutral;
+    }
+
+    public void SetReloadHeavy (bool reloaded)
+    {
+        isReloadedHeavy = reloaded;
+    }
+
+    public bool GetReloadHeavy()
+    {
+        return isReloadedHeavy;
+    }
+
+    public void SetReloadNeutral(bool reloaded)
+    {
+        isReloadedNeutral = reloaded;
+    }
+    #endregion
 }

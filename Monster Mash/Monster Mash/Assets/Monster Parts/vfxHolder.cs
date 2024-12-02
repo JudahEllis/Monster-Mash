@@ -27,6 +27,10 @@ public class vfxHolder : MonoBehaviour
     public float boomerAutoEnd;
     public float boomerTurnAround = 0f;
     public bool isReloaded = true;
+    public monsterPart myMonsterPart;
+    public int neutralOrHeavy; //0 == neutral, 1 == heavy
+    public GameObject turnOnAssetWhenReloaded;
+    private bool hasRequiredAsset = false;
     //
     public bool isSprayHolder;
     public bool isSubSprayHolder;
@@ -66,6 +70,22 @@ public class vfxHolder : MonoBehaviour
     public bool slowedStatusEffect;
     public bool grabbedStatusEffect;
 
+    private void OnEnable()
+    {
+        if (turnOnAssetWhenReloaded != null)
+        {
+            hasRequiredAsset = true;
+        }
+    }
+
+    public bool GetHasRequiredAsset()
+    {
+        return hasRequiredAsset;
+    }
+    public void SetBoomerangAsset(bool setActive)
+    {
+        turnOnAssetWhenReloaded.SetActive(setActive);
+    }
 
     public void grabReferences()
     {
@@ -244,6 +264,7 @@ public class vfxHolder : MonoBehaviour
                     cp.distance = boomerDistance;
                     cp.autoEnd = boomerAutoEnd;
                     cp.turnAround = boomerTurnAround;
+                    cp.neutralOrHeavy = neutralOrHeavy;
                 }
             }
             projectileVFXArray = new GameObject[tempProjectileVFX.Count];

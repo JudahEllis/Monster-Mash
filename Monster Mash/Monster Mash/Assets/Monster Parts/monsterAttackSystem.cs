@@ -82,6 +82,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     [Header("Attack Necessities")]
     public GameObject dashSplat;
+    public GameObject wallSplat;
     private Vector3 leftDashSplatRotation = new Vector3 (0, 30, 0);
     private Vector3 rightDashSplatRotation = new Vector3(0, -30, 0);
     public Collider stompCollider;
@@ -696,11 +697,6 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    public void wallGrabbedCorrections()
-    {
-        canDashAttack = true;
-    }
-
     public void dashAttack()
     {
         if (damageLocked)
@@ -783,6 +779,33 @@ public class monsterAttackSystem : MonoBehaviour
             canRoll = true;
         }
     }
+    public void wallGrabbedCorrections()
+    {
+        canDashAttack = true;
+    }
+
+    public void wallGrab()
+    {
+        dashSplat.SetActive(false);
+        wallSplat.SetActive(true);
+    }
+
+    public void endWallGrab()
+    {
+        wallSplat.SetActive(false);
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerVisualReappearance();
+        }
+
+        if (isGrounded)
+        {
+            canDashAttack = true;
+            canRoll = true;
+        }
+    }
+
 
     public void stompAttack()
     {
@@ -962,6 +985,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
             dashSplat.transform.localEulerAngles = leftDashSplatRotation;
+            if (wallSplat != null)
+            {
+                wallSplat.transform.localEulerAngles = leftDashSplatRotation;
+            }
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = false;
@@ -973,6 +1000,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
             dashSplat.transform.localEulerAngles = rightDashSplatRotation;
+            if (wallSplat != null)
+            {
+                wallSplat.transform.localEulerAngles = rightDashSplatRotation;
+            }
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = true;
@@ -987,6 +1018,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             return;
         }
+        myAnimator.ResetTrigger("Flip to Left");
 
         if (focusedAttackActive == false)
         {
@@ -995,6 +1027,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Left");
             dashSplat.transform.localEulerAngles = leftDashSplatRotation;
+            if (wallSplat != null)
+            {
+                wallSplat.transform.localEulerAngles = leftDashSplatRotation;
+            }
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = false;
@@ -1012,6 +1048,8 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        myAnimator.ResetTrigger("Flip to Right");
+
         if (focusedAttackActive == false)
         {
             myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -1019,6 +1057,10 @@ public class monsterAttackSystem : MonoBehaviour
             myAnimator.SetBool("Facing Right", facingRight);
             myAnimator.SetTrigger("Flip to Right");
             dashSplat.transform.localEulerAngles = rightDashSplatRotation;
+            if (wallSplat != null)
+            {
+                wallSplat.transform.localEulerAngles = rightDashSplatRotation;
+            }
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
                 allMonsterParts[i].facingRight = true;

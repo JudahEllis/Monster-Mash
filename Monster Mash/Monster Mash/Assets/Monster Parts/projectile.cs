@@ -155,7 +155,7 @@ public class projectile : MonoBehaviour
             if (mainVisual != null && fadesAway == false)
             {
                 mainVisual.SetActive(false);
-                print("main visual off 1");
+                //print("main visual off 1");
 
                 if (needsReload)
                 {

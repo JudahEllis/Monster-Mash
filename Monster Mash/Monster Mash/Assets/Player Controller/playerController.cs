@@ -45,7 +45,7 @@ public class playerController : MonoBehaviour
     public bool landDetectionReady = true;
     //public bool onSemiSolid = false;
     private bool isCrouching = false;
-    private bool isPhasingThroughPlatform;
+    public bool isPhasingThroughPlatform;
     private bool isFastFalling = false;
     bool canJump = true;
     bool jumpButtonReset = false;
@@ -57,6 +57,7 @@ public class playerController : MonoBehaviour
     private float bigJumpPower = 65;//80
     private float littleJumpPower = 45;//60
     private float gravityPower;
+    //public bool insideFloor = false;
     //
     private float rollSpeed = 50f;//50
     Vector2 rightJoystickVector; //gives us direction on x axis for roll
@@ -130,26 +131,20 @@ public class playerController : MonoBehaviour
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
         if (monsterControllerActive)
         {
-            if (isGrounded())
+            if (isGrounded() && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f))
             {
-                if (grounded == false && landDetectionReady)
+                if (grounded == false)
                 {
                     land();
                 }
             }
             else if (isSemiGrounded())
             {
-                if (grounded == false && landDetectionReady && isPhasingThroughPlatform == false)
+                if (grounded == false && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && isPhasingThroughPlatform == false && landDetectionReady)
                 {
                     land();
                 }
-                /*
-                else if (grounded == false && isPhasingThroughPlatform && leftJoystickVector.y > -0.9f)
-                {
-                    antiPhase();
-                    land();
-                }
-                */
+                
             }
 
             if (canMove)
@@ -158,11 +153,11 @@ public class playerController : MonoBehaviour
                 if (isGrounded() || isSemiGrounded())
                 {
 
-                    if (isWalking == false && isRunning == false && isPhasingThroughPlatform == false && groundFrictionCollider.enabled == false)
+                    if (isWalking == false && isRunning == false && isPhasingThroughPlatform == false && groundFrictionCollider.enabled == false && grounded)
                     {
                         turnOnFriction();
                     }
-
+                     
                     #region Run and Walk on Ground
                     if ((leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f))
                     {
@@ -198,7 +193,7 @@ public class playerController : MonoBehaviour
                     {
                         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 
-                        if (isWalking)
+                        if (isWalking && isPhasingThroughPlatform == false && grounded)
                         {
                             isWalking = false;
                             isRunning = false;
@@ -206,7 +201,7 @@ public class playerController : MonoBehaviour
                             turnOnFriction();
                         }
 
-                        if (isRunning)
+                        if (isRunning && isPhasingThroughPlatform == false && grounded)
                         {
                             isRunning = false;
                             isWalking = false;
@@ -263,22 +258,20 @@ public class playerController : MonoBehaviour
                     {
                         myRigidbody.velocity = new Vector2(myRigidbody.velocity.x - 0.001f, myRigidbody.velocity.y);
 
-                        if (isWalking)
+                        if (isWalking && isPhasingThroughPlatform == false)
                         {
                             isWalking = false;
                             isRunning = false;
                             stopWalkingVisual();
                             stopRunningVisual();
-                            turnOnFriction();
                         }
 
-                        if (isRunning)
+                        if (isRunning && isPhasingThroughPlatform == false)
                         {
                             isRunning = false;
                             isWalking = false;
                             stopWalkingVisual();
                             stopRunningVisual();
-                            turnOnFriction();
                         }
                     }
                     #endregion
@@ -340,7 +333,7 @@ public class playerController : MonoBehaviour
                 #endregion
 
                 #region Crouching, Phasing through Platforms, and Fast Falling
-                if (leftJoystickVector.y < -0.9f && (leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
+                if (leftJoystickVector.y < -0.6f && (leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
                 {
                     //down stick -> either crouch or go through semi solid or fast fall
                     if (isGrounded())
@@ -353,7 +346,7 @@ public class playerController : MonoBehaviour
                             isPhasingThroughPlatform = false;
                             isFastFalling = false;
 
-                            if (isRunning || isWalking)
+                            if ((isRunning || isWalking))
                             {
                                 isRunning = false;
                                 isWalking = false;
@@ -372,9 +365,11 @@ public class playerController : MonoBehaviour
                         {
                             phase();
                             phaseThroughPlatformVisual();
+                            grounded = false;
                             isPhasingThroughPlatform = true;
                             isCrouching = false;
                             isFastFalling = false;
+                            landDetectionReady = false;
                         }
                     }
                     else
@@ -403,6 +398,7 @@ public class playerController : MonoBehaviour
                     if (isPhasingThroughPlatform && isSemiGrounded())
                     {
                         isPhasingThroughPlatform = false;
+                        
                     }
                 }
                 #endregion
@@ -557,23 +553,16 @@ public class playerController : MonoBehaviour
         return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
     }
 
-    IEnumerator landDetectionDelay()
-    {
-        landDetectionReady = false;
-        yield return new WaitForSeconds(0.1f);
-        landDetectionReady = true;
-    }
-
     private void land()
     {
         grounded = true;
-        landDetectionReady = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
         bodyCollider.enabled = true;
         smallBodyCollider.enabled = true;
         isPhasingThroughPlatform = false;
         isFastFalling = false;
+        landDetectionReady = true;
         myRigidbody.gravityScale = gravityPower;
         canJump = true;
         canDash = true;
@@ -616,7 +605,7 @@ public class playerController : MonoBehaviour
                 doubleJumpVisual();
             }
 
-            numberOfJumpsLeft = numberOfJumps - 1;
+            numberOfJumpsLeft = numberOfJumpsLeft - 1;
             grounded = false;
             jumpButtonReset = false;
             isRunning = false;
@@ -624,7 +613,7 @@ public class playerController : MonoBehaviour
             //primedForBigJump = true;
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, bigJumpPower);
             StartCoroutine(jumpRecharge());
-            StartCoroutine(landDetectionDelay());
+            //StartCoroutine(landDetectionDelay());
 
             if (isBelowSemiGround())
             {
@@ -808,6 +797,7 @@ public class playerController : MonoBehaviour
         canMove = false;
         canDash = false;
         canRoll = false;
+        isPhasingThroughPlatform = false;
         bodyCollider.enabled = false;
         smallBodyCollider.enabled = true;
         groundFrictionCollider.enabled = true;
@@ -828,15 +818,36 @@ public class playerController : MonoBehaviour
         {
             wallGrab(-1);
         }
-        else
+        else if (grabbingWall == false)
         {
+
+            myRigidbody.gravityScale = gravityPower;
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            bodyCollider.enabled = true;
+            smallBodyCollider.enabled = true;
+            turnOnFriction();
+            //standingVisual.enabled = true;
+            //ballVisual.enabled = false;
+            isDashing = false;
+            isRolling = false;
+            canRoll = true;
+            canMove = true;
+            isPhasingThroughPlatform = false;
+            endDashAttackVisual();
+
+            if (isSemiGrounded())
+            {
+                land();
+            }
+
+            /*
             if (grabbingWall == false)
             {
                 myRigidbody.gravityScale = gravityPower;
                 myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
                 bodyCollider.enabled = true;
                 smallBodyCollider.enabled = true;
-                //turnOnFriction();
+                turnOnFriction();
                 //standingVisual.enabled = true;
                 //ballVisual.enabled = false;
                 isDashing = false;
@@ -845,6 +856,7 @@ public class playerController : MonoBehaviour
                 canMove = true;
                 endDashAttackVisual();
             }
+            */
         }
         
 
@@ -895,7 +907,6 @@ public class playerController : MonoBehaviour
     }
     private void wallJump(int direction)
     {
-
         myRigidbody.gravityScale = gravityPower;
         grabbingWall = false;
         jumpButtonReset = false;
@@ -1103,7 +1114,7 @@ public class playerController : MonoBehaviour
 
     public void turnOnFriction()
     {
-        if (isRunning || isWalking)
+        if (isRunning || isWalking || isPhasingThroughPlatform)
         {
             return;
         }
@@ -1138,18 +1149,28 @@ public class playerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
+        if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f && isPhasingThroughPlatform == false))
         {
-            turnOnFriction();
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            //turnOnFriction();
+            //myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isPhasingThroughPlatform && collision.gameObject.tag == "Semi Solid")
+        {
+            //insideFloor = true;
+            //phase();
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (isPhasingThroughPlatform && collision.gameObject.tag == "Semi Solid")
+        if (collision.gameObject.tag == "Semi Solid")
         {
-            //antiPhase();
+            //insideFloor = false;
+            landDetectionReady = true;
         }
     }
 }

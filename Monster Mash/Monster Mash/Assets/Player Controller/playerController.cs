@@ -703,20 +703,26 @@ public class playerController : MonoBehaviour
 
                     if (rightJoystickVector.x > 0.1f || rightJoystickVector.x < -0.1f)
                     {
-
+                        
                         if (facingRight == false && rightJoystickVector.x > 0.1f)
                         {
                             //face right
-                            facingRight = true;
-                            flipRightVisual();
+                            //facingRight = true;
+                            // flipRightVisual();
+                            backwardEntryTeleportalVisual();
                         }
                         else if (facingRight && rightJoystickVector.x < -0.1f)
                         {
                             //face left
-                            facingRight = false;
-                            flipLeftVisual();
+                            //facingRight = false;
+                            //flipLeftVisual();
+                            backwardEntryTeleportalVisual();
                         }
-
+                        else
+                        {
+                            forwardEntryTeleportalVisual();
+                        }
+                        
 
                         StartCoroutine(rollTime());
                     }
@@ -765,7 +771,8 @@ public class playerController : MonoBehaviour
         //standingVisual.enabled = false;
         //ballVisual.enabled = true;
         rollVisual();
-        yield return new WaitForSeconds(0.125f);
+        yield return new WaitForSeconds(0.2f);
+        reEntryTeleportalVisual();
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         bodyCollider.enabled = true;
         smallBodyCollider.enabled = true;
@@ -785,6 +792,7 @@ public class playerController : MonoBehaviour
     IEnumerator rollRecharge()
     {
         yield return new WaitForSeconds(1f);
+        resetTeleportalVisual();
         canRoll = true;
     }
 
@@ -1035,6 +1043,26 @@ public class playerController : MonoBehaviour
     private void rollVisual()
     {
         myMonster.roll();
+    }
+
+    private void forwardEntryTeleportalVisual()
+    {
+        myMonster.entryTeleportalVFX(true);
+    }
+
+    private void backwardEntryTeleportalVisual()
+    {
+        myMonster.entryTeleportalVFX(false);
+    }
+
+    private void reEntryTeleportalVisual()
+    {
+        myMonster.reEntryTeleportalVFX();
+    }
+
+    private void resetTeleportalVisual()
+    {
+        myMonster.resetTeleportalsVFX();
     }
 
     private void crouchVisual()

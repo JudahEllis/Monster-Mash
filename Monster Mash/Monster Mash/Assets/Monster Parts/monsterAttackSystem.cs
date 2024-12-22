@@ -79,6 +79,8 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem landVisual;
     public vfxHolder runVFXHolder;
     public ParticleSystem floatingRunVisual;
+    public GameObject forwardTeleportal;
+    public GameObject backwardTeleportal;
 
     [Header("Attack Necessities")]
     public GameObject dashSplat;
@@ -1528,7 +1530,7 @@ public class monsterAttackSystem : MonoBehaviour
                 allMonsterParts[i].triggerRoll(true, true);
             }
 
-            myAnimator.SetFloat("Flipping Speed", 1.5f);
+            myAnimator.SetFloat("Flipping Speed", 1f);
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Idle Bounce Allowed", false);
             myAnimator.SetBool("Calm", false);
@@ -1536,6 +1538,37 @@ public class monsterAttackSystem : MonoBehaviour
             forceEndEmote();
             forceStopCrouch();
         }
+    }
+
+    public void entryTeleportalVFX(bool facingInDirection)
+    {
+        if (facingInDirection)
+        {
+            forwardTeleportal.SetActive(true);
+        }
+        else
+        {
+            backwardTeleportal.SetActive(true);
+        }
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerVisualDissappearance();
+        }
+    }
+
+    public void reEntryTeleportalVFX()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerVisualReappearance();
+        }
+    }
+
+    public void resetTeleportalsVFX()
+    {
+        forwardTeleportal.SetActive(false);
+        backwardTeleportal.SetActive(false);
     }
 
     public void toggleCrouch() //there's a separation here just for ease of access and in case the toggle gets weird 

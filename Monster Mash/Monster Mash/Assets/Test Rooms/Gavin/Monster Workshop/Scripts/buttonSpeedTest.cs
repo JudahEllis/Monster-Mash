@@ -11,7 +11,8 @@ public class buttonSpeedTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            monster.attack(0);
+            int attackDirection = monster.attackSlotMonsterParts[0].attackAnimationID;
+            monster.attack(0, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.A))
@@ -21,7 +22,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            monster.attack(1);
+            int attackDirection = monster.attackSlotMonsterParts[1].attackAnimationID;
+            monster.attack(1, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.B))
@@ -31,7 +33,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            monster.attack(2);
+            int attackDirection = monster.attackSlotMonsterParts[2].attackAnimationID;
+            monster.attack(2, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.X))
@@ -41,7 +44,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            monster.attack(3);
+            int attackDirection = monster.attackSlotMonsterParts[3].attackAnimationID;
+            monster.attack(3, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.Y))
@@ -51,7 +55,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) //LB
         {
-            monster.attack(4);
+            int attackDirection = monster.attackSlotMonsterParts[4].attackAnimationID;
+            monster.attack(4, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha1)) //LB
@@ -61,7 +66,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha2)) //RB
         {
-            monster.attack(5);
+            int attackDirection = monster.attackSlotMonsterParts[5].attackAnimationID;
+            monster.attack(5, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha2)) //RB
@@ -71,7 +77,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3)) //LT
         {
-            monster.attack(6);
+            int attackDirection = monster.attackSlotMonsterParts[6].attackAnimationID;
+            monster.attack(6, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha3)) //LT
@@ -81,7 +88,8 @@ public class buttonSpeedTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha4)) //RT
         {
-            monster.attack(7);
+            int attackDirection = monster.attackSlotMonsterParts[7].attackAnimationID;
+            monster.attack(7, attackDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha4)) //RT

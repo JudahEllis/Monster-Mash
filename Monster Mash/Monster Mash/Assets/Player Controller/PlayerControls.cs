@@ -687,6 +687,42 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""A"",
+                    ""type"": ""Button"",
+                    ""id"": ""0931720f-ac71-4b1e-b0b8-a818a6cd45dd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""B"",
+                    ""type"": ""Button"",
+                    ""id"": ""3cdc195f-374b-492e-b773-50b25549cc67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""X"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a25f797-3bf3-4573-b7e0-963dc732dc10"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Y"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7810095-ed16-4c5c-a33d-f05b0488cf7d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -799,6 +835,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Left Stick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fef9c2c6-ba7a-4423-b329-5c529de37c7b"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bad41e0e-7bc3-484e-ae95-d44384f7b50e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed8ccd9a-e6f1-4580-bb25-8a414ee3f99f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""X"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2145679d-3a72-4863-ba96-a2da28adacbb"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Y"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -852,6 +932,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_MonsterControls = asset.FindActionMap("Monster Controls", throwIfNotFound: true);
         m_MonsterControls_LeftStick = m_MonsterControls.FindAction("Left Stick", throwIfNotFound: true);
         m_MonsterControls_RightStick = m_MonsterControls.FindAction("Right Stick", throwIfNotFound: true);
+        m_MonsterControls_A = m_MonsterControls.FindAction("A", throwIfNotFound: true);
+        m_MonsterControls_B = m_MonsterControls.FindAction("B", throwIfNotFound: true);
+        m_MonsterControls_X = m_MonsterControls.FindAction("X", throwIfNotFound: true);
+        m_MonsterControls_Y = m_MonsterControls.FindAction("Y", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1051,12 +1135,20 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private IMonsterControlsActions m_MonsterControlsActionsCallbackInterface;
     private readonly InputAction m_MonsterControls_LeftStick;
     private readonly InputAction m_MonsterControls_RightStick;
+    private readonly InputAction m_MonsterControls_A;
+    private readonly InputAction m_MonsterControls_B;
+    private readonly InputAction m_MonsterControls_X;
+    private readonly InputAction m_MonsterControls_Y;
     public struct MonsterControlsActions
     {
         private @PlayerControls m_Wrapper;
         public MonsterControlsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @LeftStick => m_Wrapper.m_MonsterControls_LeftStick;
         public InputAction @RightStick => m_Wrapper.m_MonsterControls_RightStick;
+        public InputAction @A => m_Wrapper.m_MonsterControls_A;
+        public InputAction @B => m_Wrapper.m_MonsterControls_B;
+        public InputAction @X => m_Wrapper.m_MonsterControls_X;
+        public InputAction @Y => m_Wrapper.m_MonsterControls_Y;
         public InputActionMap Get() { return m_Wrapper.m_MonsterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1072,6 +1164,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @RightStick.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRightStick;
                 @RightStick.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRightStick;
                 @RightStick.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnRightStick;
+                @A.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnA;
+                @A.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnA;
+                @A.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnA;
+                @B.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnB;
+                @B.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnB;
+                @B.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnB;
+                @X.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnX;
+                @X.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnX;
+                @X.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnX;
+                @Y.started -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnY;
+                @Y.performed -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnY;
+                @Y.canceled -= m_Wrapper.m_MonsterControlsActionsCallbackInterface.OnY;
             }
             m_Wrapper.m_MonsterControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -1082,6 +1186,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @RightStick.started += instance.OnRightStick;
                 @RightStick.performed += instance.OnRightStick;
                 @RightStick.canceled += instance.OnRightStick;
+                @A.started += instance.OnA;
+                @A.performed += instance.OnA;
+                @A.canceled += instance.OnA;
+                @B.started += instance.OnB;
+                @B.performed += instance.OnB;
+                @B.canceled += instance.OnB;
+                @X.started += instance.OnX;
+                @X.performed += instance.OnX;
+                @X.canceled += instance.OnX;
+                @Y.started += instance.OnY;
+                @Y.performed += instance.OnY;
+                @Y.canceled += instance.OnY;
             }
         }
     }
@@ -1125,5 +1241,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnLeftStick(InputAction.CallbackContext context);
         void OnRightStick(InputAction.CallbackContext context);
+        void OnA(InputAction.CallbackContext context);
+        void OnB(InputAction.CallbackContext context);
+        void OnX(InputAction.CallbackContext context);
+        void OnY(InputAction.CallbackContext context);
     }
 }

@@ -141,6 +141,7 @@ public class monsterSelectManager : MonoBehaviour
         playerController player1 = GameObject.Find("Player 1").GetComponent<playerController>();
         selectedMonster.transform.parent = player1.transform;
         player1.myMonster = selectedMonster;
+        player1.myMonster.myPlayer = player1;
         player1.myMonster.turnOffLimbConnectors();
         player1.myMonster.connectCurrentLimbs();
         player1.myMonster.awakenTheBeast();

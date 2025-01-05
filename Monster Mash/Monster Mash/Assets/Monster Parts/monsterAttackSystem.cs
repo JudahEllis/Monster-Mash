@@ -17,7 +17,7 @@ public class monsterAttackSystem : MonoBehaviour
     public bool isRunning = false;
     private bool isGliding = false;
     private bool isCrouching = false;
-    private bool focusedAttackActive = false;
+    public bool focusedAttackActive = false;
     private bool heavyAttackActive = false;
     private bool canRoll = true;
     private bool canDashAttack = true;
@@ -36,6 +36,7 @@ public class monsterAttackSystem : MonoBehaviour
     private bool forceFallingActivated = false;
     private bool isLaunching = false;
 
+    public playerController myPlayer;
     private Animator myAnimator;
     private Animator mainTorso;
     public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
@@ -484,7 +485,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    public void attack(int attackSlot)
+    public void attack(int attackSlot, int attackDirection)
     {
         if (damageLocked)
         {
@@ -548,7 +549,7 @@ public class monsterAttackSystem : MonoBehaviour
                     else
                     {
                         requiresFlourishingTwirl = false;
-                        requiresFlourishingRoll = true;
+                        requiresFlourishingRoll = false;
                     }
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1)
@@ -560,7 +561,7 @@ public class monsterAttackSystem : MonoBehaviour
                     }
                     else
                     {
-                        requiresFlourishingTwirl = true;
+                        requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
                     }
 
@@ -569,7 +570,7 @@ public class monsterAttackSystem : MonoBehaviour
                 {
                     if (attackSlotMonsterParts[attackSlot].isTail)
                     {
-                        requiresFlourishingTwirl = true;
+                        requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
                     }
                     else if (attackSlotMonsterParts[attackSlot].isLeg && attackSlotMonsterParts[attackSlot].isGroundedLimb)
@@ -580,12 +581,12 @@ public class monsterAttackSystem : MonoBehaviour
                     else
                     {
                         requiresFlourishingTwirl = false;
-                        requiresFlourishingRoll = true;
+                        requiresFlourishingRoll = false;
                     }
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2)
                 {
-                    requiresFlourishingTwirl = true;
+                    requiresFlourishingTwirl = false;
                     requiresFlourishingRoll = false;
                 }
 
@@ -593,7 +594,7 @@ public class monsterAttackSystem : MonoBehaviour
                 {
                     if (focusedAttackActive == false)
                     {
-                        attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack");
+                        attackSlotMonsterParts[attackSlot].triggerAttack("Ground Attack", attackDirection);
 
                         myAnimator.SetBool("Idle Bounce Allowed", false);
                         #region Bracing for Attacks 
@@ -634,7 +635,7 @@ public class monsterAttackSystem : MonoBehaviour
           
                     if (focusedAttackActive == false)
                     {
-                        attackSlotMonsterParts[attackSlot].triggerAttack("Airborn Attack");
+                        attackSlotMonsterParts[attackSlot].triggerAttack("Airborn Attack", attackDirection);
 
                         myAnimator.SetBool("Idle Bounce Allowed", false);
                         #region Bracing for Attacks
@@ -697,6 +698,8 @@ public class monsterAttackSystem : MonoBehaviour
         {
             attackSlotMonsterParts[attackSlot].triggerNeutralOrHeavyRefresh(true);
         }
+
+
     }
 
     public void dashAttack()
@@ -708,7 +711,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         if ((isRunning || isGrounded == false) && canDashAttack && canRoll && focusedAttackActive == false)
         {
-            isRunning = false;
+            //isRunning = false;
             canRoll = false;
             canDashAttack = false;
             attackFocusOn();
@@ -789,6 +792,10 @@ public class monsterAttackSystem : MonoBehaviour
     public void wallGrab()
     {
         dashSplat.SetActive(false);
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerVisualDissappearance();
+        }
         wallSplat.SetActive(true);
     }
 
@@ -935,6 +942,49 @@ public class monsterAttackSystem : MonoBehaviour
 
     #endregion
 
+    #region Player Controller Reactions i.e. Leaping with attacks
+    public void smallLeapAttackForward()
+    {
+        myPlayer.smallLeapAttackForward();
+    }
+
+    public void smallLeapAttackBackward()
+    {
+        myPlayer.smallLeapAttackBackward();
+    }
+
+    public void smallLeapAttackUpward()
+    {
+        myPlayer.smallLeapAttackUpward();
+    }
+
+    public void smallLeapAttackDownward()
+    {
+        myPlayer.smallLeapAttackDownward();
+    }
+
+    public void leapAttackForward()
+    {
+        myPlayer.leapAttackForward();
+    }
+
+    public void leapAttackBackward()
+    {
+        myPlayer.leapAttackBackward();
+    }
+
+    public void leapAttackUpward()
+    {
+        myPlayer.leapAttackUpward();
+    }
+
+    public void leapAttackDownward()
+    {
+        myPlayer.leapAttackDownward();
+    }
+
+    #endregion
+
     #region Movement
 
     public void flipCharacter()
@@ -1022,6 +1072,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
         myAnimator.ResetTrigger("Flip to Left");
 
+        /*
         if (focusedAttackActive == false)
         {
             myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -1041,6 +1092,24 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             getOutOfLaunch();
         }
+        */
+
+        myAnimator.SetFloat("Flipping Speed", 1.5f);
+        facingRight = false;
+        myAnimator.SetBool("Facing Right", facingRight);
+        myAnimator.SetTrigger("Flip to Left");
+        dashSplat.transform.localEulerAngles = leftDashSplatRotation;
+        if (wallSplat != null)
+        {
+            wallSplat.transform.localEulerAngles = leftDashSplatRotation;
+        }
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].facingRight = false;
+        }
+        forceEndEmote();
+        forceStopCrouch();
+        getOutOfLaunch();
     }
 
     public void flipRight()
@@ -1052,6 +1121,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         myAnimator.ResetTrigger("Flip to Right");
 
+        /*
         if (focusedAttackActive == false)
         {
             myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -1071,6 +1141,24 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             getOutOfLaunch();
         }
+        */
+
+        myAnimator.SetFloat("Flipping Speed", 1.5f);
+        facingRight = true;
+        myAnimator.SetBool("Facing Right", facingRight);
+        myAnimator.SetTrigger("Flip to Right");
+        dashSplat.transform.localEulerAngles = rightDashSplatRotation;
+        if (wallSplat != null)
+        {
+            wallSplat.transform.localEulerAngles = rightDashSplatRotation;
+        }
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].facingRight = true;
+        }
+        forceEndEmote();
+        forceStopCrouch();
+        getOutOfLaunch();
     }
 
     public void walk()
@@ -1507,6 +1595,43 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void lateLand()
+    {
+        isGrounded = true;
+        focusedAttackActive = false;
+        canDashAttack = true;
+        canRoll = true;
+        glideVisual.Stop();
+        myAnimator.SetBool("Gliding", false);
+        myAnimator.ResetTrigger("Glide to Attack");
+        stopForceFall();
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerLateLand();
+        }
+
+        isGliding = false;
+
+        //myAnimator.SetTrigger("Land");//
+
+        if (isRunning == false && isWalking == false)
+        {
+            myAnimator.SetBool("Idle Bounce Allowed", true);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
+        }
+
+        if (isWinged)
+        {
+            jumpsLeft = jumpsAllowed_FlightedJump;
+        }
+        else
+        {
+            jumpsLeft = jumpsAllowed_DoubleJump;
+        }
+    }
+
     public void roll()
     {
         if (damageLocked)
@@ -1896,6 +2021,11 @@ public class monsterAttackSystem : MonoBehaviour
         {
             allMonsterParts[i].bounceCorrections(false);
         }
+
+        if (myPlayer != null)
+        {
+            myPlayer.lockPlayerController();
+        }
     }
 
     public void attackFocusOff()
@@ -1921,6 +2051,11 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].bounceCorrections(true);
+        }
+
+        if (myPlayer != null)
+        {
+            myPlayer.unlockPlayerController();
         }
 
     }
@@ -2761,11 +2896,13 @@ public class monsterAttackSystem : MonoBehaviour
     {
         if (limbPlacement == -1) //punch sent from left limb while facing left --> full turn; punch sent from left limb while facing right --> half turn
         {
-            myAnimator.SetTrigger("Left Attack Release");
+            //myAnimator.SetTrigger("Left Attack Release");
+            myAnimator.SetTrigger("Forward Attack Release");
         }
         else if(limbPlacement == 1) //punch sent from right limb while facing right --> full turn; punch sent from right limb while facing left --> half turn
         {
-            myAnimator.SetTrigger("Right Attack Release");
+            //myAnimator.SetTrigger("Right Attack Release");
+            myAnimator.SetTrigger("Forward Attack Release");
         }
         else
         {

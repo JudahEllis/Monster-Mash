@@ -403,6 +403,70 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a397b105-6e4e-4480-9244-19f1a759ce1c
     m_ActionName: Monster Controls/Roll
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7392139866943783364}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
+        m_MethodName: onButtonA
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0931720f-ac71-4b1e-b0b8-a818a6cd45dd
+    m_ActionName: Monster Controls/A
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7392139866943783364}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
+        m_MethodName: onButtonB
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3cdc195f-374b-492e-b773-50b25549cc67
+    m_ActionName: Monster Controls/B
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7392139866943783364}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
+        m_MethodName: onButtonX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0a25f797-3bf3-4573-b7e0-963dc732dc10
+    m_ActionName: Monster Controls/X
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7392139866943783364}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
+        m_MethodName: onButtonY
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a7810095-ed16-4c5c-a33d-f05b0488cf7d
+    m_ActionName: Monster Controls/Y
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: Starting Action Map
@@ -451,10 +515,14 @@ MonoBehaviour:
   isWalking: 0
   isRunning: 0
   grounded: 0
+  landDetectionReady: 1
+  isPhasingThroughPlatform: 0
   numberOfJumps: 2
   numberOfJumpsLeft: 2
   isRolling: 0
+  canRoll: 1
   isDashing: 0
+  canDash: 1
   grabbingWall: 0
   myRigidbody: {fileID: 4492483810748514835}
 --- !u!50 &4492483810748514835

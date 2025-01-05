@@ -167,6 +167,14 @@ public class monsterPart : MonoBehaviour
     public bool isRightSidedLimb;
     public bool isLeftSidedLimb;
     public bool isGroundedLimb;
+    private string forwardInputTorsoCommand = "";
+    private string backwardInputTorsoCommand = "";
+    private string upwardInputTorsoCommand = "";
+    private string downwardInputTorsoCommand = "";
+    private string forwardInputHeadCommand = "";
+    private string backwardInputHeadCommand = "";
+    private string upwardInputHeadCommand = "";
+    private string downwardInputHeadCommand = "";
     private string torsoCommand = "";
     private bool hasTorsoCommand = false;
     private string torsoCommandOverride = "";
@@ -177,6 +185,7 @@ public class monsterPart : MonoBehaviour
     private bool rightAttackOverride;
 
     [Header("Internal Info - Don't Touch")]
+    public bool isBracing = false;
     public bool attackMarkedHeavy = false;
     private bool heavyAttackInMotion = false;
     private bool fullActiveHeavy = false;
@@ -191,7 +200,7 @@ public class monsterPart : MonoBehaviour
     public Outline visualForAnimationTests;
     public bool hasHeavyBrace = false;
     private bool isAttacking = false;
-    private bool attackFocusOn = false;
+    public bool attackFocusOn = false;
     private bool isWalking = false;
     public bool isRunning = false;
     public bool facingRight;
@@ -388,6 +397,156 @@ public class monsterPart : MonoBehaviour
 
     public void attackCalculations()
     {
+        if (isArm)
+        {
+            //arms can move in forwards, upwards, and downwards motions. We should make it so backwards moves will flip your character and perform a forwards
+            //pretty straight forward with forward attacks, simply move the torso and associated pieces forward
+            //upwards can be complicated, current plan is to have upwards neutrals do a little bounce while the heavies launch you up
+            //downwards have not been touched at all, lots of issues with what to do if you're grounded or on a semisolid. While in the air, heavies will send you downward superhero landing style
+            //it would actually be cool to have down attacks while grounded damage the floor (destructible floors?). We already need to redo downward torso animations to make it do more like a scorpion 
+
+            if (isRightShoulderLimb || isLeftShoudlerLimb || isChestLimb)
+            {
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+                hasTorsoCommand = true;
+                forwardInputTorsoCommand = "Forward Attack";
+                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
+                upwardInputTorsoCommand = "Upper Attack";
+                downwardInputTorsoCommand = "Downward Attack";
+                hasHeadCommand = false;
+                forwardInputHeadCommand = "";
+                backwardInputHeadCommand = "";
+                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Forward Attack";
+
+            }
+            else if (isRightPelvisLimb || isLeftPelvisLimb || isBellyLimb || isShoulderBladeLimb)
+            {
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+                hasTorsoCommand = true;
+                forwardInputTorsoCommand = "Lower Attack";
+                backwardInputTorsoCommand = "Lower Attack"; //make sure monster flips before attacking
+                upwardInputTorsoCommand = "Lower Attack";
+                downwardInputTorsoCommand = "Lower Attack";
+                hasHeadCommand = false;
+                forwardInputHeadCommand = "";
+                backwardInputHeadCommand = "";
+                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Forward Attack";
+            }
+            else if (isTailLimb)
+            {
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+                hasTorsoCommand = true;
+                forwardInputTorsoCommand = "Butt Attack";
+                backwardInputTorsoCommand = "Butt Attack"; //make sure monster flips before attacking
+                upwardInputTorsoCommand = "Forward Attack";
+                downwardInputTorsoCommand = "Lower Attack";
+                hasHeadCommand = false;
+                forwardInputHeadCommand = "";
+                backwardInputHeadCommand = "";
+                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Forward Attack";
+            }
+            else if (isRightEarLimb || isLeftEarLimb || isFacialLimb)
+            {
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+                hasTorsoCommand = true;
+                forwardInputTorsoCommand = "Forward Attack";
+                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
+                upwardInputTorsoCommand = "Upper Attack";
+                downwardInputTorsoCommand = "Downward Attack";
+                hasHeadCommand = false;
+                forwardInputHeadCommand = "Face Attack";
+                backwardInputHeadCommand = "Face Attack";
+                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Forward Attack";
+            }
+            else if (isTopHeadLimb)
+            {
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+                hasTorsoCommand = true;
+                forwardInputTorsoCommand = "Forward Attack";
+                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
+                upwardInputTorsoCommand = "Upper Attack";
+                downwardInputTorsoCommand = "Downward Attack";
+                hasHeadCommand = false;
+                forwardInputHeadCommand = "Forward Attack";
+                backwardInputHeadCommand = "Forward Attack";
+                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Forward Attack";
+            }
+            else if (isBacksideHeadLimb)
+            {
+                requiresBackwardStance = false;
+                requiresForwardStance = false;
+                requiresRightStance = true;
+                requiresLeftStance = false;
+                hasTorsoCommand = true;
+                forwardInputTorsoCommand = "Lower Attack";
+                backwardInputTorsoCommand = "Lower Attack"; //make sure monster flips before attacking
+                upwardInputTorsoCommand = "Upper Attack";
+                downwardInputTorsoCommand = "Lower Attack";
+                hasHeadCommand = false;
+                forwardInputHeadCommand = "Face Attack";
+                backwardInputHeadCommand = "Face Attack";
+                upwardInputHeadCommand = "Forward Attack";
+                upwardInputHeadCommand = "Upward Attack";
+            }
+
+            //missing head and face attacks
+
+        }
+
+        if (isLeg)
+        {
+            //legs can attack forwards, backwards, and downwards. We should come up with a way to do an upwards kick by spinning the character like fox
+            //downwards will be just like with arms where it can damage platforms (small aoe with stomps)
+            //we should make it so that kicks dont brace the other leg, just do a high kick like chun-li
+
+        }
+
+        if (isTail)
+        {
+            //tails can move backwards, upwards, and downwards. Upwards and downwards will spin the character in order to make sure contact is made
+            //forwards attack should flip character around or potentially do spin manuevers with the non shooty ones
+            //for anywhere thats not the hind quarters, treat the tail you would like a leg with body movements
+        }
+
+        if (isHorn)
+        {
+            //horns just attack in forwards direction with torso or head sending attack upwards or downwards. Backwards will flip character. Downwards is impossible
+            //limited capabilities when attached not to top head, face, or upper torso. Basically it can just go in singular direction
+        }
+
+        if (isEye)
+        {
+            //eyes just attack in forwards direction with torso or head sending attack upwards or downwards. Backwards will flip character. Downwards is impossible
+            //limited capabilities when attached not to face, chest, or lower torso. Basically it can just go in singular direction
+        }
+
+        if (isMouth)
+        {
+            //eyes just attack in forwards direction with torso or head sending attack upwards or downwards. Backwards will flip character. Downwards is impossible
+            //limited capabilities when attached not to face, chest, or lower torso. Basically it can just go in singular direction
+        }
+
+        /*
         #region Attack Reaction Calculations
         //This whole section needs rewriting
         //no more angled torso attacks, just forward, upward, etc. 
@@ -1069,6 +1228,7 @@ public class monsterPart : MonoBehaviour
         }
 
         #endregion
+        */
     }
 
     public void triggerAnimationOffsets()
@@ -1151,16 +1311,50 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Attack Animations
-    public void triggerAttack(string animationName)
+    public void triggerAttack(string animationName, int attackDirection)
     {
         if (connected == false)
         {
             return;
         }
 
+        attackAnimationID = attackDirection;
+
+
+        /*
+        myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
+
+        torsoCommand = "";
+        headCommand = "";
+        torsoCommandOverride = "";
+        upwardAttackQuickSwitch = false;
+        forwardAttackQuickSwitch = false;
+        requiresBackwardStance = false;
+        requiresForwardStance = false;
+        requiresRightStance = false;
+        requiresLeftStance = false;
+
+        attackCalculations();// change this function so that we dont have to run it everytime, just read all cardinal commands for every piece at the beginning
+        */
+
+        /*
         if (attackFocusOn == false && myAnimator != null)
         {
             isAttacking = true;
+            myAnimator.SetTrigger(animationName);
+            myMainSystem.attackFocusOn();
+            attackFocusOn = true;
+            runToAttackCorrections();
+            attackMarkedHeavy = false;
+            heavyAttackInMotion = false;
+            fullActiveHeavy = false;
+            triggerNeutralOrHeavyRefresh(false);
+        }
+        */
+        if (myAnimator != null)
+        {
+            isAttacking = true;
+            myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
             myAnimator.SetTrigger(animationName);
             myMainSystem.attackFocusOn();
             attackFocusOn = true;
@@ -1174,6 +1368,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackAnticipation()
     {
+        /*
         if (hasTorsoCommand)
         {
             connectedMonsterPart.SetTrigger(torsoCommand);
@@ -1188,15 +1383,67 @@ public class monsterPart : MonoBehaviour
         {
             connectedMonsterPart.SetTrigger(headCommand);//current issue with making pieces connected to the torso affect the head with attacks
         }
+        */
+
+        if (attackAnimationID == 1)
+        {
+            if (hasTorsoCommand)
+            {
+                connectedMonsterPart.SetTrigger(forwardInputTorsoCommand);
+            }
+            
+            if(hasHeadCommand)
+            {
+                connectedMonsterPart.SetTrigger(forwardInputHeadCommand);
+            }
+        }
+        else if (attackAnimationID == -1)
+        {
+            if (hasTorsoCommand)
+            {
+                connectedMonsterPart.SetTrigger(backwardInputTorsoCommand);
+            }
+
+            if (hasHeadCommand)
+            {
+                connectedMonsterPart.SetTrigger(backwardInputHeadCommand);
+            }
+        }
+        else if (attackAnimationID == 0)
+        {
+            if (hasTorsoCommand)
+            {
+                connectedMonsterPart.SetTrigger(downwardInputTorsoCommand);
+            }
+
+            if (hasHeadCommand)
+            {
+                connectedMonsterPart.SetTrigger(downwardInputHeadCommand);
+            }
+        }
+        else if (attackAnimationID == 2)
+        {
+            if (hasTorsoCommand)
+            {
+                connectedMonsterPart.SetTrigger(upwardInputTorsoCommand);
+            }
+
+            if (hasHeadCommand)
+            {
+                connectedMonsterPart.SetTrigger(upwardInputHeadCommand);
+            }
+        }
     }
 
     #region Attack Bracing Animations
     public void triggerLeftAttackStance()
     {
-        if (connected == false)
+        if (connected == false || attackFocusOn)
         {
             return;
         }
+
+        isBracing = true;
 
         if (isGroundedLimb)
         {
@@ -1304,10 +1551,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerRightAttackStance()
     {
-        if (connected == false)
+        if (connected == false || attackFocusOn)
         {
             return;
         }
+
+        isBracing = true;
 
         if (isGroundedLimb)
         {
@@ -1415,10 +1664,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerForwardStance()
     {
-        if (connected == false)
+        if (connected == false || attackFocusOn)
         {
             return;
         }
+
+        isBracing = true;
 
         if (isGroundedLimb)
         {
@@ -1525,10 +1776,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerBackwardStance()
     {
-        if (connected == false)
+        if (connected == false || attackFocusOn)
         {
             return;
         }
+
+        isBracing = true;
 
         if (isGroundedLimb)
         {
@@ -1637,11 +1890,13 @@ public class monsterPart : MonoBehaviour
 
     public void triggerFlourishStance()
     {
-        if (connected == false)
+        if (connected == false || attackFocusOn)
         {
             return;
         }
 
+
+        isBracing = true;
 
         if (isGroundedLimb)
         {
@@ -1756,6 +2011,8 @@ public class monsterPart : MonoBehaviour
             return;
         }
 
+        isBracing = false;
+
         if (isAttacking == false)
         {
             if (isLeg) // || isTorso //took out grounded limb here to test just legs in general
@@ -1801,6 +2058,8 @@ public class monsterPart : MonoBehaviour
                 myAnimator.ResetTrigger("Forward Brace");
             }
         }
+
+        //print("unbracing");
     }
 
     #endregion
@@ -1834,6 +2093,7 @@ public class monsterPart : MonoBehaviour
                 {
                     attackMarkedHeavy = false;
                     myAnimator.SetBool("Attack Marked Heavy", false);
+                    triggerNeutralOrHeavy();
                 }
             }
             else
@@ -1932,6 +2192,7 @@ public class monsterPart : MonoBehaviour
 
             isRunning = false;
             fullActiveHeavy = true;
+            isAttacking = false;
             myMainSystem.correctWalkingAttackAnimations();
 
             //This section corrects rotation to make for better collisions, but some attacks skip this step because of special factors like leaping attacks
@@ -1955,7 +2216,7 @@ public class monsterPart : MonoBehaviour
                 }
                 else
                 {
-                    myMainSystem.correctAttackDirection(0);
+                    myMainSystem.correctAttackDirection(0);//delete everything but this one
                 }
             }
 
@@ -1983,6 +2244,24 @@ public class monsterPart : MonoBehaviour
                     }
 
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
+
+                    if (attackAnimationID == 1)
+                    {
+                        myMainSystem.leapAttackForward();
+                    }
+                    else if (attackAnimationID == -1)
+                    {
+                        myMainSystem.leapAttackBackward();
+                    }
+                    else if (attackAnimationID == 2)
+                    {
+                        myMainSystem.leapAttackUpward();
+                    }
+                    else if (attackAnimationID == 0)
+                    {
+                        myMainSystem.leapAttackDownward();
+                    }
+
                 }
                 else if (reelHeavyAttack)
                 {
@@ -2011,8 +2290,27 @@ public class monsterPart : MonoBehaviour
                 {
                     //give damage info to colliders
                     triggerJabOrSlashCollisionsOn(); //make sure that the opposite function is called at interrupting points like fall, land, hit, etc.
+
+                    if (attackAnimationID == 1)
+                    {
+                        myMainSystem.smallLeapAttackForward();
+                    }
+                    else if (attackAnimationID == -1)
+                    {
+                        myMainSystem.smallLeapAttackBackward();
+                    }
+                    else if (attackAnimationID == 2)
+                    {
+                        myMainSystem.smallLeapAttackUpward();
+                    }else if (attackAnimationID == 0)
+                    {
+                        myMainSystem.smallLeapAttackDownward();
+                    }
                 }
             }
+
+
+            attackMarkedHeavy = false;
         }
     }
 
@@ -2054,6 +2352,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackCorrections()
     {
+        /*
         if (attackFocusOn)
         {
             myMainSystem.correctRunningAttackAnimations();
@@ -2078,6 +2377,30 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Swaying", false);
             }
+        }
+        */
+
+        myMainSystem.correctRunningAttackAnimations();
+        myMainSystem.attackFocusOff();
+        attackFocusOn = false;
+        isAttacking = false;
+        fullActiveHeavy = false;
+
+        connectedMonsterPart.SetBool("Attack to Idle", false);
+
+        if (hasTorsoCommandOverride)
+        {
+            mainTorso.SetBool("Attack to Idle", false);
+        }
+
+        if (reelHeavyAttack)
+        {
+            myMainSystem.grabbingCanceled();
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Swaying", false);
         }
     }
 
@@ -2200,6 +2523,7 @@ public class monsterPart : MonoBehaviour
         }
 
         grounded = false;
+        attackMarkedHeavy = false;
 
         if (attackFocusOn)
         {
@@ -2282,6 +2606,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Swaying", false);
             }
         }
+
     }
 
     #endregion
@@ -2827,7 +3152,7 @@ public class monsterPart : MonoBehaviour
 
     public void triggerJump()
     {
-        if (connected == false || isDecor)
+        if (connected == false || isDecor || attackFocusOn || (isTorso && isBracing))
         {
             return;
         }
@@ -3094,6 +3419,88 @@ public class monsterPart : MonoBehaviour
 
     public void triggerLand()
     {
+        attackFocusOn = false;
+
+        if (connected == false || isDecor || isHorn)
+        {
+            return;
+        }
+
+        if (isHorn && myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", true);
+            grounded = true;
+        }
+
+        if (myAnimator != null)
+        {
+            myAnimator.SetBool("Grounded", true);
+
+            if (isGroundedLimb || isTorso || isHead || isArm || isLeg)
+            {
+                myAnimator.SetTrigger("Land");
+            }
+        }
+
+        if (isGroundedLimb || isTorso || isHead || isWing || isTail)
+        {
+            if (isRunning == false)
+            {
+                //myAnimator.SetBool("Walking", false);
+                //myAnimator.SetBool("Running", false);
+                //isWalking = false;
+                //isRunning = false;
+            }
+            else
+            {
+                //myAnimator.SetBool("Walking", false);
+                //isWalking = false;
+            }
+
+            if (isWing || isHead)
+            {
+                myAnimator.SetBool("Glide Activated", false);
+            }
+
+            if (isLeg)
+            {
+                myAnimator.SetBool("Calm", false);
+                myAnimator.SetBool("Teeter", false);
+            }
+
+            if (isTorso)
+            {
+                myAnimator.SetBool("Glide Activated", false);
+                myAnimator.SetBool("Teeter", false);
+            }
+        }
+
+        if (isArm)
+        {
+            myAnimator.SetBool("Glide Activated", false);
+            myAnimator.SetBool("Swaying", false);
+
+            if (isRunning == false)
+            {
+                //myAnimator.SetBool("Running", false);
+                //isWalking = false;
+                //isRunning = false;
+            }
+            else
+            {
+                //isWalking = false;
+            }
+        }
+
+        grounded = true;
+        stopInfiniteRoll();
+        endRunVisual();
+    }
+
+    public void triggerLateLand()
+    {
+        attackFocusOn = false;
+
         if (connected == false || isDecor || isHorn)
         {
             return;

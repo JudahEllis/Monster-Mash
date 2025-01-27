@@ -42,9 +42,10 @@ public class playerController : MonoBehaviour
     public bool isWalking = false;
     public bool isRunning = false;
     private int directionModifier = -1;
-    private int inputModifier = 1;
     //
     public bool grounded = false;
+    private bool atPlatformEdge = false;
+    private Vector2 platformEdgeCooridinates;
     private bool requiresLateLand = false;
     public bool landDetectionReady = true;
     //public bool onSemiSolid = false;
@@ -63,7 +64,7 @@ public class playerController : MonoBehaviour
     private bool slowFallBlocked = false;
     private float slowFallGravityPower = 8;
     private float gravityPower;
-    //public bool insideFloor = false;
+    private bool insideFloor = false;
     //
     private float rollSpeed = 50f;//50
     Vector2 rightJoystickVector; //gives us direction on x axis for roll
@@ -85,8 +86,14 @@ public class playerController : MonoBehaviour
     private bool buttonX_Pressed = false;
     private bool buttonY_Pressed = false;
 
+    //
+
+    private int neutralAttackSFXIndex = 1;
+    private int heavyAttackSFXIndex = 1;
+
     [SerializeField]
     private Rigidbody2D myRigidbody;
+    private int inputModifier = 1;
 
     private void Awake()
     {
@@ -146,6 +153,8 @@ public class playerController : MonoBehaviour
             {
                 if (grounded == false)
                 {
+                    land();
+                    /*
                     if (isAttacking)
                     {
                         if (myRigidbody.gravityScale != 0)
@@ -157,12 +166,15 @@ public class playerController : MonoBehaviour
                     {
                         land();
                     }
+                    */
                 }
             }
             else if (isSemiGrounded())
             {
                 if (grounded == false && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && isPhasingThroughPlatform == false && landDetectionReady)
                 {
+                    land();
+                    /*
                     if (isAttacking)
                     {
                         if (myRigidbody.gravityScale != 0)
@@ -174,6 +186,7 @@ public class playerController : MonoBehaviour
                     {
                         land();
                     }
+                    */
                 }
                 
             }else if ((myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && myRigidbody.gravityScale != slowFallGravityPower && canMove && slowFallBlocked == false)
@@ -229,11 +242,27 @@ public class playerController : MonoBehaviour
                         if (leftJoystickVector.x > 0.9f)
                         {
                             //right
+                            if (isRunning == false)
+                            {
+                                isRunning = true;
+                                isWalking = false;
+                                stopWalkingVisual();
+                                startRunningVisual();
+                            }
+
                             myRigidbody.velocity = new Vector2(1 * runSpeed, myRigidbody.velocity.y);
                         }
                         else
                         {
                             //left
+                            if (isRunning == false)
+                            {
+                                isRunning = true;
+                                isWalking = false;
+                                stopWalkingVisual();
+                                startRunningVisual();
+                            }
+
                             myRigidbody.velocity = new Vector2(-1 * runSpeed, myRigidbody.velocity.y);
                         }
                     }
@@ -254,11 +283,27 @@ public class playerController : MonoBehaviour
                         if (leftJoystickVector.x > 0.2f)
                         {
                             //right
+                            if (isWalking == false)
+                            {
+                                isWalking = true;
+                                isRunning = false;
+                                stopRunningVisual();
+                                startWalkingVisual();
+                            }
+
                             myRigidbody.velocity = new Vector2(1 * walkSpeed, myRigidbody.velocity.y);
                         }
                         else
                         {
                             //left
+                            if (isWalking == false)
+                            {
+                                isWalking = true;
+                                isRunning = false;
+                                stopRunningVisual();
+                                startWalkingVisual();
+                            }
+
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed, myRigidbody.velocity.y);
                         }
                     }
@@ -271,6 +316,8 @@ public class playerController : MonoBehaviour
                             isWalking = false;
                             isRunning = false;
                             stopWalkingVisual();
+                            //forceCalmEffect();
+                            startMiscIdleAnimations();
                             turnOnFriction();
                         }
 
@@ -279,6 +326,8 @@ public class playerController : MonoBehaviour
                             isRunning = false;
                             isWalking = false;
                             stopRunningVisual();
+                            //forceCalmEffect();
+                            startMiscIdleAnimations();
                             //turnOnFriction();
                             StartCoroutine(slideToStop());
                         }
@@ -345,6 +394,8 @@ public class playerController : MonoBehaviour
                             isRunning = false;
                             stopWalkingVisual();
                             stopRunningVisual();
+                            //forceCalmEffect();
+                            startMiscIdleAnimations();
                         }
 
                         if (isRunning && isPhasingThroughPlatform == false)
@@ -353,6 +404,8 @@ public class playerController : MonoBehaviour
                             isWalking = false;
                             stopWalkingVisual();
                             stopRunningVisual();
+                            //forceCalmEffect();
+                            startMiscIdleAnimations();
                         }
                     }
                     #endregion
@@ -370,7 +423,7 @@ public class playerController : MonoBehaviour
                     }
                 }
 
-                if (buttonA_Pressed == false && buttonB_Pressed == false && buttonX_Pressed == false && buttonY_Pressed == false)
+                if (buttonA_Pressed == false && buttonB_Pressed == false && buttonX_Pressed == false && buttonY_Pressed == false && isAttacking == false)
                 {
 
                     #region Jumping
@@ -445,6 +498,8 @@ public class playerController : MonoBehaviour
                                     isRunning = false;
                                     isWalking = false;
                                     StartCoroutine(slideToStop());
+                                    //forceCalmEffect();
+                                    startMiscIdleAnimations();
                                 }
                                 else
                                 {
@@ -711,16 +766,15 @@ public class playerController : MonoBehaviour
         isPhasingThroughPlatform = false;
         isFastFalling = false;
         landDetectionReady = true;
-        myRigidbody.gravityScale = gravityPower;
         canJump = true;
         canDash = true;
+        insideFloor = false;
         //canRoll = true;
         if (grabbingWall)
         {
             endWallGrabVisual();
         }
         grabbingWall = false;
-        canMove = true;
         /*
         if (isWalking)
         {
@@ -736,6 +790,24 @@ public class playerController : MonoBehaviour
         isWalking = false;
         */
         //primedForBigJump = false;
+        if (isAttacking == false)
+        {
+            landVisual();
+            playLandSound();
+            canMove = true;
+            myRigidbody.gravityScale = gravityPower;
+        }
+        else
+        {
+            lateLandVisualCorrections();
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            turnOnFriction();
+            playLandSound();
+            requiresLateLand = true;
+            myRigidbody.gravityScale = gravityPower;
+            return;
+        }
+
         if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
         {
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
@@ -745,6 +817,8 @@ public class playerController : MonoBehaviour
                 isWalking = false;
                 isRunning = false;
                 stopWalkingVisual();
+                //forceCalmEffect();
+                startMiscIdleAnimations();
                 turnOnFriction();
             }
 
@@ -753,6 +827,8 @@ public class playerController : MonoBehaviour
                 isRunning = false;
                 isWalking = false;
                 stopRunningVisual();
+                //forceCalmEffect();
+                startMiscIdleAnimations();
                 //turnOnFriction();
                 StartCoroutine(slideToStop());
             }
@@ -769,19 +845,6 @@ public class playerController : MonoBehaviour
             stopRunningVisual();
         }
         */
-
-        landVisual();
-        playLandSound();
-
-        if (isAttacking == false)
-        {
-            //landVisual();
-           // playLandSound();
-        }
-        else
-        {
-            //requiresLateLand = true;
-        }
 
         if ((isRunning || isWalking) && isAttacking == false && canMove)
         {
@@ -1298,6 +1361,29 @@ public class playerController : MonoBehaviour
         myMonster.flipRight();
     }
 
+    /*
+    private void forceCalmEffect()
+    {
+        myMonster.teeterCheck();
+    }
+    */
+
+    private void startMiscIdleAnimations()
+    {
+        canMove = true;
+        isAttacking = false;
+        myMonster.focusedAttackActive = false;
+
+        if (atPlatformEdge)
+        {
+            myMonster.teeterCheck();
+        }
+        else
+        {
+            myMonster.activeBounce();
+        }
+    }
+
     private void startRunningVisual()
     {
         myMonster.run();
@@ -1316,6 +1402,16 @@ public class playerController : MonoBehaviour
     private void stopWalkingVisual()
     {
         myMonster.stopWalking();
+    }
+
+    private void startTeeterVisual()
+    {
+        myMonster.enteredPlatformEdge();
+    }
+
+    private void stopTeeterVisual()
+    {
+        myMonster.exitedPlatformEdge();
     }
 
     private void bigJumpVisual()
@@ -1346,6 +1442,11 @@ public class playerController : MonoBehaviour
     private void lateLandVisualCorrections()
     {
         myMonster.lateLand();
+    }
+
+    private void lateAttackReleaseVisualCorrections()
+    {
+        myMonster.forceUngrounded();
     }
 
     private void startCrouchVisual()
@@ -1439,7 +1540,7 @@ public class playerController : MonoBehaviour
 
     private void playDoubleJumpSound()
     {
-        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 3);
+        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 4);
 
         if (randomDoubleJumpInt == 1)
         {
@@ -1477,6 +1578,89 @@ public class playerController : MonoBehaviour
         mySFXBrain.playLandSound();
     }
 
+    private void playNeutralAttackSound()
+    {
+        /*
+        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 3);
+
+        if (randomDoubleJumpInt == 1)
+        {
+            mySFXBrain.playNeutralAttack1Sound();
+        }
+        else if (randomDoubleJumpInt == 2)
+        {
+            mySFXBrain.playNeutralAttack2Sound();
+        }
+        else
+        {
+            mySFXBrain.playNeutralAttack3Sound();
+        }
+        */
+        if (neutralAttackSFXIndex == 3 || neutralAttackSFXIndex > 3)
+        {
+            neutralAttackSFXIndex = 1;
+        }
+        else
+        {
+            neutralAttackSFXIndex++;
+        }
+
+        if (neutralAttackSFXIndex == 1)
+        {
+            mySFXBrain.playNeutralAttack1Sound();
+        }
+        else if (neutralAttackSFXIndex == 2)
+        {
+            mySFXBrain.playNeutralAttack2Sound();
+        }
+        else if (neutralAttackSFXIndex == 3)
+        {
+            mySFXBrain.playNeutralAttack3Sound();
+        }
+    }
+
+    private void playHeavyAttackSound()
+    {
+        /*
+        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 3);
+
+        if (randomDoubleJumpInt == 1)
+        {
+            mySFXBrain.playHeavyAttack1Sound();
+        }
+        else if (randomDoubleJumpInt == 2)
+        {
+            mySFXBrain.playHeavyAttack2Sound();
+        }
+        else
+        {
+            mySFXBrain.playHeavyAttack3Sound();
+        }
+        */
+
+        if (heavyAttackSFXIndex == 3 || heavyAttackSFXIndex > 3)
+        {
+            heavyAttackSFXIndex = 1;
+        }
+        else
+        {
+            heavyAttackSFXIndex++;
+        }
+
+        if (heavyAttackSFXIndex == 1)
+        {
+            mySFXBrain.playHeavyAttack1Sound();
+        }
+        else if (heavyAttackSFXIndex == 2)
+        {
+            mySFXBrain.playHeavyAttack2Sound();
+        }
+        else if (heavyAttackSFXIndex == 3)
+        {
+            mySFXBrain.playHeavyAttack3Sound();
+        }
+    }
+
     #endregion
 
     public void turnOnFriction()
@@ -1504,12 +1688,15 @@ public class playerController : MonoBehaviour
         isPhasingThroughPlatform = true;
     }
 
-    private void antiPhase()
+    private void antiPhase(bool hasOverride)
     {
-        bodyCollider.enabled = true;
-        smallBodyCollider.enabled = true;
-        //groundFrictionCollider.enabled = true;
-        isPhasingThroughPlatform = false;
+        if (hasOverride || insideFloor == false)
+        {
+            bodyCollider.enabled = true;
+            smallBodyCollider.enabled = true;
+            //groundFrictionCollider.enabled = true;
+            isPhasingThroughPlatform = false;
+        }
     }
 
     IEnumerator slideToStop()
@@ -1528,7 +1715,7 @@ public class playerController : MonoBehaviour
         myRigidbody.gravityScale = slowFallGravityPower;
     }
 
-    #region Monster Attack System - upstream reactions
+    #region Attack Based Movement
     public void lockPlayerController()
     {
         canMove = false;
@@ -1544,6 +1731,7 @@ public class playerController : MonoBehaviour
         {
             //myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
             isAttacking = true;
+            antiPhase(false);
             //heavyActivated();
             midAirWindUp();
         }
@@ -1581,7 +1769,7 @@ public class playerController : MonoBehaviour
         if (requiresLateLand)
         {
             requiresLateLand = false;
-            lateLandVisualCorrections();
+            //lateLandVisualCorrections();
         }
 
         
@@ -1596,10 +1784,10 @@ public class playerController : MonoBehaviour
 
     public void midAirWindUp()
     {
-        if (grounded == false)
+        if (grounded == false && slowFallBlocked == false)
         {
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 0);
-            myRigidbody.gravityScale = 2;
+            myRigidbody.gravityScale = 4;
         }
     }
 
@@ -1630,9 +1818,21 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackForward()
     {
-        turnOffFriction();
-        myRigidbody.velocity = new Vector2(1 * directionModifier, myRigidbody.velocity.y);
-
+        playNeutralAttackSound();
+        //turnOffFriction();
+        //myRigidbody.velocity = new Vector2(1 * directionModifier, myRigidbody.velocity.y);
+        if (isFacingEdge() == false)
+        {
+            if (grounded)
+            {
+                turnOffFriction();
+                myRigidbody.velocity = new Vector2(1 * directionModifier, myRigidbody.velocity.y);
+            }
+            else
+            {
+                myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
+            }
+        }
         /*
         if (grounded)
         {
@@ -1647,8 +1847,13 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackBackward()
     {
-        turnOffFriction();
-        myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
+        playNeutralAttackSound();
+
+        if (isFacingEdge() || atPlatformEdge == false)
+        {
+            turnOffFriction();
+            myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
+        }
         /*
         if (grounded)
         {
@@ -1663,6 +1868,7 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackUpward()
     {
+        playNeutralAttackSound();
         /*
         if (grounded)
         {
@@ -1689,6 +1895,7 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackDownward()
     {
+        playNeutralAttackSound();
         /*
         if (grounded)
         {
@@ -1704,19 +1911,25 @@ public class playerController : MonoBehaviour
     public void leapAttackForward()
     {
         //turnOffFriction();
-        if (grounded)
+
+        if (isFacingEdge() == false)
         {
-            turnOnFriction();
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            myRigidbody.velocity = new Vector2(45 * directionModifier, myRigidbody.velocity.y);
+            if (grounded)
+            {
+                turnOnFriction();
+                myRigidbody.velocity = new Vector2(0, 0);
+                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+            }
+            else
+            {
+                heavyActivated();
+                myRigidbody.velocity = new Vector2(0, 0);
+                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                StartCoroutine(leapAttackForwardControl());
+            }
         }
-        else
-        {
-            heavyActivated();
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            myRigidbody.velocity = new Vector2(45 * directionModifier, myRigidbody.velocity.y);
-            StartCoroutine(leapAttackForwardControl());
-        }
+
+        playHeavyAttackSound();
         /*
         myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
         */
@@ -1741,7 +1954,12 @@ public class playerController : MonoBehaviour
 
     public void leapAttackBackward()
     {
-        myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
+        if (isFacingEdge() || atPlatformEdge == false)
+        {
+            myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
+        }
+
+        playHeavyAttackSound();
         /*
         if (grounded)
         {
@@ -1756,17 +1974,24 @@ public class playerController : MonoBehaviour
 
     public void leapAttackUpward()
     {
+
         if (grounded)
         {
-            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 60);
+            heavyActivated();
+            myRigidbody.velocity = new Vector2(0, 60);
             grounded = false;
+            //
+            lateAttackReleaseVisualCorrections();
         }
         else
         {
-            myRigidbody.gravityScale = gravityPower;
-            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 60);
+            heavyActivated();
+            myRigidbody.velocity = new Vector2(0, 60);
             grounded = false;
         }
+
+        StartCoroutine(leapAttackUpwardControl());
+        playHeavyAttackSound();
         /*
         if (grounded)
         {
@@ -1789,6 +2014,13 @@ public class playerController : MonoBehaviour
         */
     }
 
+    IEnumerator leapAttackUpwardControl()
+    {
+        yield return new WaitForSeconds(0.1f);
+        myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 0);
+        myRigidbody.gravityScale = 0;
+    }
+
     public void leapAttackDownward()
     {
         /*
@@ -1801,16 +2033,46 @@ public class playerController : MonoBehaviour
 
         }
         */
+        playHeavyAttackSound();
     }
 
     #endregion
 
 
+    private bool isFacingEdge()
+    {
+        if (atPlatformEdge && ((facingRight && transform.position.x < platformEdgeCooridinates.x) || (facingRight == false && transform.position.x > platformEdgeCooridinates.x)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (isPhasingThroughPlatform && collision.gameObject.tag == "Solid")
         {
-            antiPhase();
+            antiPhase(true);
+        }
+
+        if (collision.gameObject.tag == "Semi Solid")
+        {
+            insideFloor = true;
+        }
+
+        if (collision.gameObject.tag == "Platform Edge")
+        {
+            startTeeterVisual();
+            atPlatformEdge = true;
+            platformEdgeCooridinates = new Vector2(collision.gameObject.transform.position.x, collision.gameObject.transform.position.y);
+
+            if (isAttacking && (isGrounded() || isSemiGrounded()) && isDashing == false && isRolling == false)
+            {
+                myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            }
         }
     }
 
@@ -1818,8 +2080,14 @@ public class playerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Semi Solid")
         {
-            //insideFloor = false;
+            insideFloor = false;
             landDetectionReady = true;
+        }
+
+        if (collision.gameObject.tag == "Platform Edge")
+        {
+            stopTeeterVisual();
+            atPlatformEdge = false;
         }
     }
 }

@@ -512,6 +512,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   facingRight: 0
+  isAttacking: 0
+  canMove: 1
   isWalking: 0
   isRunning: 0
   grounded: 0
@@ -566,7 +568,7 @@ MonoBehaviour:
   universalLandSound: {fileID: 8300000, guid: e2eb1092ed89e5c4197bb3d861268783, type: 3}
   doubleJump1Library:
   - {fileID: 8300000, guid: 98f3836642615324890823d5ac710d39, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 80982a46324cdc146911f4fb59e3f8e8, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -591,7 +593,7 @@ MonoBehaviour:
   - {fileID: 0}
   doubleJump2Library:
   - {fileID: 8300000, guid: 7cffeed90a79db74caa840601f7e797a, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 80982a46324cdc146911f4fb59e3f8e8, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -616,7 +618,7 @@ MonoBehaviour:
   - {fileID: 0}
   doubleJump3Library:
   - {fileID: 8300000, guid: 9244643651c2ee24b923864d27f63f4e, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 80982a46324cdc146911f4fb59e3f8e8, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -641,7 +643,7 @@ MonoBehaviour:
   - {fileID: 0}
   neutralAttack1Library:
   - {fileID: 8300000, guid: 87691f3780bb028458e5417e64237df6, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: a12a8c7dd12ea1045a0c243bfd10f6aa, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -666,7 +668,7 @@ MonoBehaviour:
   - {fileID: 0}
   nuetralAttack2Library:
   - {fileID: 8300000, guid: 5c2ccf5b297eb1a4a8bd2fed1241e4e7, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: a12a8c7dd12ea1045a0c243bfd10f6aa, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -691,7 +693,7 @@ MonoBehaviour:
   - {fileID: 0}
   neutralAttack3Library:
   - {fileID: 8300000, guid: bc43eb0bad53a28449432f585003825f, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: a12a8c7dd12ea1045a0c243bfd10f6aa, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -716,7 +718,7 @@ MonoBehaviour:
   - {fileID: 0}
   heavyAttack1Library:
   - {fileID: 8300000, guid: 8399eb2a3db95d2428b468e820fb9607, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 317ebdf39d9c877418f8888d76c8814d, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -741,7 +743,7 @@ MonoBehaviour:
   - {fileID: 0}
   heavyAttack2Library:
   - {fileID: 8300000, guid: 7730b73bc1d2b1e48ad7cec71415bdad, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 317ebdf39d9c877418f8888d76c8814d, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -766,7 +768,7 @@ MonoBehaviour:
   - {fileID: 0}
   heavyAttack3Library:
   - {fileID: 8300000, guid: 9e653f09b5575f442a2cedc20788b235, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 317ebdf39d9c877418f8888d76c8814d, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -791,7 +793,7 @@ MonoBehaviour:
   - {fileID: 0}
   neutralDamage1Library:
   - {fileID: 8300000, guid: 63135ffdbceb4884fa16f9a208903acd, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: f3a1c5cebaffd974cb2a1cf4c01f9c6f, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -816,7 +818,7 @@ MonoBehaviour:
   - {fileID: 0}
   neutralDamage2Library:
   - {fileID: 8300000, guid: b21caf52988f3ff41a4438204a77e37b, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: f3a1c5cebaffd974cb2a1cf4c01f9c6f, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -841,7 +843,7 @@ MonoBehaviour:
   - {fileID: 0}
   heavyDamage1Library:
   - {fileID: 8300000, guid: 235e562d8e20f704ab2757d0d18eb5af, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: e857e45d1eb4544448d2e3121b293c81, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -866,7 +868,7 @@ MonoBehaviour:
   - {fileID: 0}
   heavyDamage2Library:
   - {fileID: 8300000, guid: 39a32c6397fb9924b8c1f8deb3c04f6b, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: e857e45d1eb4544448d2e3121b293c81, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

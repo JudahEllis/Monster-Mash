@@ -723,9 +723,9 @@ public class monsterAttackSystem : MonoBehaviour
                 allMonsterParts[i].triggerRoll(isGrounded, true);
             }
 
-            myAnimator.SetFloat("Flipping Speed", 1.5f);
-            myAnimator.ResetTrigger("Roll");
-            myAnimator.SetTrigger("Roll");
+            //myAnimator.SetFloat("Flipping Speed", 1.5f);
+            //myAnimator.ResetTrigger("Roll");
+            //myAnimator.SetTrigger("Roll");
             isGliding = false;
             glideVisual.Stop();
             myAnimator.SetBool("Gliding", false);
@@ -1598,7 +1598,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void lateLand()
     {
         isGrounded = true;
-        focusedAttackActive = false;
+        //focusedAttackActive = false;
         canDashAttack = true;
         canRoll = true;
         glideVisual.Stop();
@@ -1611,16 +1611,11 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerLateLand();
         }
 
+        requiresFlourishingRoll = true;
+        braceForFlourishImpact();
+        requiresFlourishingRoll = false;
+
         isGliding = false;
-
-        //myAnimator.SetTrigger("Land");//
-
-        if (isRunning == false && isWalking == false)
-        {
-            myAnimator.SetBool("Idle Bounce Allowed", true);
-            myAnimator.SetBool("Calm", false);
-            calm = false;
-        }
 
         if (isWinged)
         {
@@ -1629,6 +1624,29 @@ public class monsterAttackSystem : MonoBehaviour
         else
         {
             jumpsLeft = jumpsAllowed_DoubleJump;
+        }
+    }
+
+    public void forceUngrounded()
+    {
+        if (isGrounded)
+        {
+            isGrounded = false;
+            //isRunning = false;
+            //isWalking = false;
+            //focusedAttackActive = false;
+            isGliding = false;
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].triggerSimpleUngrounded();
+            }
+
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+            myAnimator.SetBool("Calm", false);
+            calm = false;
+            forceEndEmote();
+            forceStopCrouch();
         }
     }
 
@@ -2065,6 +2083,27 @@ public class monsterAttackSystem : MonoBehaviour
         heavyAttackActive = true;
     }
 
+    public void teeterCheck()
+    {
+        if (isRunning || isWalking)
+        {
+            return;
+        }
+
+        if (onPlatformEdge)
+        {
+            calm = true;
+            myAnimator.SetBool("Calm", true);
+            myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < allMonsterParts.Length; i++)
+            {
+                allMonsterParts[i].teeterOnEdge();
+            }
+        }
+
+    }
+
     public void calmedDown()
     {
         if (isRunning || isWalking)
@@ -2085,19 +2124,13 @@ public class monsterAttackSystem : MonoBehaviour
 
         if (calm == false && isGrounded && emoteActive == false)
         {
-            calm = true;
-            myAnimator.SetBool("Calm", true);
-            myAnimator.SetBool("Idle Bounce Allowed", false);
 
-            if (onPlatformEdge)
+            if (onPlatformEdge == false)
             {
-                for (int i = 0; i < allMonsterParts.Length; i++)
-                {
-                    allMonsterParts[i].teeterOnEdge();
-                }
-            }
-            else
-            {
+                calm = true;
+                myAnimator.SetBool("Calm", true);
+                myAnimator.SetBool("Idle Bounce Allowed", false);
+
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
                     allMonsterParts[i].calmedDown();
@@ -2106,14 +2139,37 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void activeBounce()
+    {
+        calm = false;
+        myAnimator.SetBool("Calm", false);
+        myAnimator.SetBool("Idle Bounce Allowed", true);
+
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].bounceCorrections(true);
+        }
+    }
+
     public void enteredPlatformEdge()
     {
         onPlatformEdge = true;
+        myAnimator.SetBool("Idle Bounce Allowed", false);
+        //tell all parts we're at the platform edge
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].isAtEdge();
+        }
     }
 
     public void exitedPlatformEdge()
     {
         onPlatformEdge = false;
+        //tell all parts we're no longer at the platform edge
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].notAtEdge();
+        }
     }
 
     public void runIntoAWall()

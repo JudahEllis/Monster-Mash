@@ -3467,6 +3467,7 @@ public class monsterPart : MonoBehaviour
                     }
                 }
                 */
+
             }
             else
             {
@@ -4058,11 +4059,15 @@ public class monsterPart : MonoBehaviour
 
         if (jabNeutralAttack)
         {
+            neutralColliderReference.resetAttackHistory();
             neutralColliderReference.damage = damage;
+            heavyColliderReference.markedHeavy = false;
         }
         else if (slashNeutralAttack)
         {
+            neutralColliderReference.resetAttackHistory();
             neutralColliderReference.damage = damage;
+            heavyColliderReference.markedHeavy = false;
         }
         else if (projectileNeutralAttack)
         {
@@ -4095,11 +4100,15 @@ public class monsterPart : MonoBehaviour
 
         if (jabHeavyAttack)
         {
+            heavyColliderReference.resetAttackHistory();
             heavyColliderReference.damage = damage;
+            heavyColliderReference.markedHeavy = true;
         }
         else if (slashHeavyAttack)
         {
+            heavyColliderReference.resetAttackHistory();
             heavyColliderReference.damage = damage;
+            heavyColliderReference.markedHeavy = true;
         }
         else if (projectileHeavyAttack)
         {
@@ -4165,10 +4174,9 @@ public class monsterPart : MonoBehaviour
             heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
             heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
-            heavyColliderReference.hauntedStatusEffect = hauntedStatusEffect;
+            heavyColliderReference.cursedStatusEffect = hauntedStatusEffect;
             heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
             heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
-            heavyColliderReference.stunnedStatusEffect = stunnedStatusEffect;
             heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
             heavyColliderReference.squashedStatusEffect = squashedStatusEffect;
             heavyColliderReference.slowedStatusEffect = slowedStatusEffect;
@@ -4180,10 +4188,9 @@ public class monsterPart : MonoBehaviour
             heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
             heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
-            heavyColliderReference.hauntedStatusEffect = hauntedStatusEffect;
+            heavyColliderReference.cursedStatusEffect = hauntedStatusEffect;
             heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
             heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
-            heavyColliderReference.stunnedStatusEffect = stunnedStatusEffect;
             heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
             heavyColliderReference.squashedStatusEffect = squashedStatusEffect;
             heavyColliderReference.slowedStatusEffect = slowedStatusEffect;

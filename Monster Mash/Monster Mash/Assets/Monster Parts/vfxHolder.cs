@@ -135,10 +135,9 @@ public class vfxHolder : MonoBehaviour
                 damageGivingVFX[i].electrifiedStatusEffect = electrifiedStatusEffect;
                 damageGivingVFX[i].poisonedStatusEffect = poisonedStatusEffect;
                 damageGivingVFX[i].stinkyStatusEffect = stinkyStatusEffect;
-                damageGivingVFX[i].hauntedStatusEffect = hauntedStatusEffect;
+                damageGivingVFX[i].cursedStatusEffect = hauntedStatusEffect;
                 damageGivingVFX[i].confusedStatusEffect = confusedStatusEffect;
                 damageGivingVFX[i].slimedStatusEffect = slimedStatusEffect;
-                damageGivingVFX[i].stunnedStatusEffect = stunnedStatusEffect;
                 damageGivingVFX[i].frozenStatusEffect = frozenStatusEffect;
                 damageGivingVFX[i].squashedStatusEffect = squashedStatusEffect;
                 damageGivingVFX[i].slowedStatusEffect = slowedStatusEffect;

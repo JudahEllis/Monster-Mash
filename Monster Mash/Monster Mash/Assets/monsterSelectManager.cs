@@ -29,7 +29,7 @@ public class monsterSelectManager : MonoBehaviour
     private void Awake()
     {
         stageSelect = FindObjectOfType<stageSelectManager>();
-        tempMonsterLibrary = FindObjectsOfType<monsterAttackSystem>();
+        //tempMonsterLibrary = FindObjectsOfType<monsterAttackSystem>();
         establishMonsterConnections();
     }
 
@@ -137,13 +137,28 @@ public class monsterSelectManager : MonoBehaviour
 
     public void turnOnSelectedMonster(int monsterInLibrary)
     {
-        monsterAttackSystem selectedMonster = tempMonsterLibrary[monsterInLibrary];
-        playerController player1 = GameObject.Find("Player 1").GetComponent<playerController>();
-        selectedMonster.transform.parent = player1.transform;
-        player1.myMonster = selectedMonster;
-        player1.myMonster.myPlayer = player1;
-        player1.myMonster.turnOffLimbConnectors();
-        player1.myMonster.connectCurrentLimbs();
-        player1.myMonster.awakenTheBeast();
+        //extremely temp code
+        if (monsterInLibrary == 0)
+        {
+            monsterAttackSystem selectedMonster = tempMonsterLibrary[monsterInLibrary];
+            playerController player1 = GameObject.Find("Player 1").GetComponent<playerController>();
+            selectedMonster.transform.parent = player1.transform;
+            player1.myMonster = selectedMonster;
+            player1.myMonster.myPlayer = player1;
+            player1.myMonster.turnOffLimbConnectors();
+            player1.myMonster.connectCurrentLimbs();
+            player1.myMonster.awakenTheBeast();
+        }
+        else if (monsterInLibrary == 1)
+        {
+            monsterAttackSystem selectedMonster = tempMonsterLibrary[monsterInLibrary];
+            playerController player2 = GameObject.Find("Player 2").GetComponent<playerController>();
+            selectedMonster.transform.parent = player2.transform;
+            player2.myMonster = selectedMonster;
+            player2.myMonster.myPlayer = player2;
+            player2.myMonster.turnOffLimbConnectors();
+            player2.myMonster.connectCurrentLimbs();
+            player2.myMonster.awakenTheBeast();
+        }
     }
 }

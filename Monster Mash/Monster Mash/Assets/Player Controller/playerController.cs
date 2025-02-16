@@ -1716,6 +1716,63 @@ public class playerController : MonoBehaviour
     }
 
     #region Attack Based Movement
+
+    public void damageLockPlayercontroller()
+    {
+        canMove = false;
+        isRunning = false;
+        isWalking = false;
+        antiPhase(false);
+
+        if (grounded)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
+
+        //temp code
+        if (grounded)
+        {
+            turnOffFriction();
+            myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
+        }
+        else
+        {
+            myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
+        }
+    }
+
+    public void damageUnlockPlayerController()
+    {
+        canMove = true;
+        isRunning = false;
+        isWalking = false;
+        isAttacking = false;
+        //myRigidbody.gravityScale = gravityPower;
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+
+        if (isDashing == false && isRolling == false)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            turnOnFriction();
+            landDetectionReady = true;
+        }
+
+        if (requiresLateLand)
+        {
+            requiresLateLand = false;
+            //lateLandVisualCorrections();
+        }
+
+
+
+        /*
+        if (grounded)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
+        */
+    }
+
     public void lockPlayerController()
     {
         canMove = false;
@@ -1748,6 +1805,8 @@ public class playerController : MonoBehaviour
         }
         */
     }
+
+
 
     public void unlockPlayerController()
     {
@@ -1952,6 +2011,11 @@ public class playerController : MonoBehaviour
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
     }
 
+    public void forceStopLeap()
+    {
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+    }
+
     public void leapAttackBackward()
     {
         if (isFacingEdge() || atPlatformEdge == false)
@@ -2038,6 +2102,199 @@ public class playerController : MonoBehaviour
 
     #endregion
 
+    #region Health
+
+    //damage as to how it relates to the initial strike and the knockback effect
+    public void damaged(int damageRecieved, bool markedForHeavyAttack, int attackDirection, Vector3 contactPoint)
+    {
+        canMove = false;
+        isRunning = false;
+        isWalking = false;
+        antiPhase(false);
+
+        bool facingPunch;
+
+        if ((contactPoint.x < transform.position.x && facingRight == false) || (contactPoint.x > transform.position.x && facingRight) || (contactPoint.x == transform.position.x)) //facing punch
+        {
+            facingPunch = true;
+        }
+        else
+        {
+            facingPunch = false;
+        }
+
+        if (grounded)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            turnOffFriction();
+
+            if (markedForHeavyAttack)
+            {
+                if (facingPunch)
+                {
+                    // myRigidbody.velocity = new Vector2(20 * -directionModifier, 20); this one could be applied to neutrals
+                    myRigidbody.velocity = new Vector2(120 * -directionModifier, 80);
+                    //forwards hit animation
+                    myMonster.heavyDamage(true);
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+                else
+                {
+                    myRigidbody.velocity = new Vector2(120 * directionModifier, 80);
+                    //forwards hit animation
+                    myMonster.heavyDamage(true);
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+            }
+            else
+            {
+                if (facingPunch)
+                {
+                    myRigidbody.velocity = new Vector2(5 * -directionModifier, myRigidbody.velocity.y);
+                    //forwards hit animation
+                    myMonster.neutralDamage();
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+                else
+                {
+                    myRigidbody.velocity = new Vector2(5 * directionModifier, myRigidbody.velocity.y);
+                    //backwards hit animation
+                    myMonster.neutralDamage();
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+            }
+
+            //myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
+        }
+        else
+        {
+            //myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
+
+            if (markedForHeavyAttack)
+            {
+                if (facingPunch)
+                {
+                    myRigidbody.velocity = new Vector2(60 * -directionModifier, 20);
+                    //forwards hit animation
+                    myMonster.heavyDamage(true);
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+                else
+                {
+                    myRigidbody.velocity = new Vector2(60 * directionModifier, 20);
+                    //backwards hit animation
+                    myMonster.heavyDamage(true);
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+            }
+            else
+            {
+                if (facingPunch)
+                {
+                    myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
+                    //forwards hit animation
+                    myMonster.neutralDamage();
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+                else
+                {
+                    myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
+                    //backwards hit animation
+                    myMonster.neutralDamage();
+                    StartCoroutine(damageRecoveryTime(0.1f));
+                }
+            }
+        }
+
+    }
+
+    IEnumerator damageRecoveryTime(float recoveryTime)
+    {
+        //check to make sure that i didnt just land
+        yield return new WaitForSeconds(recoveryTime);
+
+        canMove = true;
+        isRunning = false;
+        isWalking = false;
+        isAttacking = false;
+        //myRigidbody.gravityScale = gravityPower;
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+
+        if (isGrounded())
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            turnOnFriction();
+            landDetectionReady = true;
+        }
+
+    }
+
+    //damage and effects over time
+    public void statusGiven(bool hasBurning, bool hasElectrified, bool hasConfusion, bool hasStink, bool hasCurse, bool hasSlowing, bool hasPoison, 
+                            bool hasFreezing, bool hasSlime, int tickDamageRecieved, float timeBetweenTick, float tickDuration)
+    {
+        if (hasBurning)
+        {
+
+        }
+
+        if (hasElectrified)
+        {
+
+        }
+
+        if (hasConfusion)
+        {
+
+        }
+
+        if (hasStink)
+        {
+
+        }
+
+        if (hasCurse)
+        {
+
+        }
+
+        if (hasSlowing)
+        {
+
+        }
+
+        if (hasPoison)
+        {
+
+        }
+
+        if (hasFreezing)
+        {
+
+        }
+
+        if (hasSlime)
+        {
+
+        }
+    }
+
+    IEnumerator tickDamageTimer(float tickDuration)
+    {
+        yield return new WaitForSeconds(tickDuration);
+        //turn off tick machine
+        StopCoroutine(tickDamageMachine(0,0));
+    }
+
+    IEnumerator tickDamageMachine(float timeBetweenTick, int tickDamage)
+    {
+        
+        yield return new WaitForSeconds(timeBetweenTick);
+        //apply damage
+        //restart machine
+    }
+
+    #endregion
 
     private bool isFacingEdge()
     {

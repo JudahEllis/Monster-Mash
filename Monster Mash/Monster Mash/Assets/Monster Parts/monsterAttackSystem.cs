@@ -2240,11 +2240,12 @@ public class monsterAttackSystem : MonoBehaviour
         forceStopCrouch();
         stopForceFall();
 
+        
         damageComboCounter++;
 
         if (timeSinceLastDamage <= 0.5f)
         {
-
+            /*
             if (damageComboCounter >= 3)
             {
                 //if not a neutral projectile, neutral beam, or reel
@@ -2253,6 +2254,7 @@ public class monsterAttackSystem : MonoBehaviour
                 damageComboCounter = 0; //we're going to have to pass in a bool or int about what attack type it is to see if launching is appropriate
                 return;
             }
+            */
 
             if (damageAnimationAltNeeded)
             {
@@ -2269,7 +2271,7 @@ public class monsterAttackSystem : MonoBehaviour
             damageAnimationAltNeeded = false;
         }
         timeSinceLastDamage = 0;
-
+        
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
@@ -2283,6 +2285,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     IEnumerator neutralDamageRecoveryTimer()
     {
+        //this entire section should be controlled by player controller, not monster attack/animation system
         yield return new WaitForSeconds(0.1f);
         myAnimator.SetBool("Idle Bounce Allowed", isGrounded);
         damageLocked = false;
@@ -2374,7 +2377,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     IEnumerator spinTimer()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         myAnimator.SetTrigger("Spin");
     }
 

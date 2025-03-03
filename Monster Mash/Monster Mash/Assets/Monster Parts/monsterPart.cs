@@ -113,6 +113,7 @@ public class monsterPart : MonoBehaviour
     public bool projectileHeavyAttack;
     public bool beamHeavyAttack;
     public bool reelHeavyAttack;
+    public bool grappleHeavyAttack;
     public bool boomerangHeavyAttack;
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -2501,6 +2502,7 @@ public class monsterPart : MonoBehaviour
             connectedMonsterPart.SetTrigger(headCommand);//current issue with making pieces connected to the torso affect the head with attacks
         }
         */
+        myMainSystem.correctAttackDirection(0);
 
         if (attackAnimationID == 1)
         {
@@ -3314,7 +3316,7 @@ public class monsterPart : MonoBehaviour
             myMainSystem.correctWalkingAttackAnimations();
             //
 
-            myMainSystem.correctAttackDirection(0);
+            //myMainSystem.correctAttackDirection(0);
 
             /*
             //This section corrects rotation to make for better collisions, but some attacks skip this step because of special factors like leaping attacks
@@ -3353,7 +3355,7 @@ public class monsterPart : MonoBehaviour
                     {
                         if(forwardHeavyMovementCommand == "Forward Leap") //arm swings, leg kicks, etc.
                         {
-                            myMainSystem.leapAttackForward();
+                            //myMainSystem.leapAttackForward();
                         }
                         else if (forwardHeavyMovementCommand == "Forward Spin") //tail spin attacks
                         {
@@ -3368,18 +3370,18 @@ public class monsterPart : MonoBehaviour
                     {
                         if (upwardHeavyMovementCommand == "Upward Leap") //arm swings, etc.
                         {
-                            myMainSystem.leapAttackUpward();
+                            //myMainSystem.leapAttackUpward();
                         }
                         else if (upwardHeavyMovementCommand == "Upward Spin") //tail spin attacks, spinjitsu leg kick
                         {
-                            myMainSystem.rollingUpwardsAttack();
+                            //myMainSystem.rollingUpwardsAttack();
                         }
                     }
                     else if (attackAnimationID == -1)
                     {
                         if (backwardHeavyMovementCommand == "Backward Leap") //leg kicks, recoil etc.
                         {
-                            myMainSystem.leapAttackBackward();
+                            //myMainSystem.leapAttackBackward();
                         }
                         else if (backwardHeavyMovementCommand == "Backward Spin") //tail spin
                         {
@@ -3394,15 +3396,15 @@ public class monsterPart : MonoBehaviour
                     {
                         if (downwardHeavyMovementCommand == "Downward Leap") //arm swings, etc.
                         {
-                            myMainSystem.leapAttackDownward();
+                            //myMainSystem.leapAttackDownward();
                         }
                         else if (downwardHeavyMovementCommand == "Downward Spin") //tail spin attacks
                         {
-                            myMainSystem.rollingDownwardsAttack();
+                            //myMainSystem.rollingDownwardsAttack();
                         }
                         else if (downwardHeavyMovementCommand == "Heavy Stomp") //leg kick
                         {
-                            myMainSystem.stompAttack();
+                            //myMainSystem.stompAttack();
                         }
                     }
                 }
@@ -3479,7 +3481,7 @@ public class monsterPart : MonoBehaviour
                     {
                         if (forwardNeutralMovementCommand == "Forward Strike") //arm swings, leg kicks, etc.
                         {
-                            myMainSystem.smallLeapAttackForward();
+                            //myMainSystem.smallLeapAttackForward();
                         }
                         else if (forwardNeutralMovementCommand == "Forward Single Spin") //tail spin attacks, spinjitsu leg kick
                         {
@@ -3494,7 +3496,7 @@ public class monsterPart : MonoBehaviour
                     {
                         if (upwardNeutralMovementCommand == "Upward Strike") //arm swings, etc.
                         {
-                            myMainSystem.smallLeapAttackUpward();
+                            //myMainSystem.smallLeapAttackUpward();
                         }
                         else if (upwardNeutralMovementCommand == "Upward Single Spin") //tail spin attacks, spinjitsu leg kick
                         {
@@ -3505,7 +3507,7 @@ public class monsterPart : MonoBehaviour
                     {
                         if (backwardNeutralMovementCommand == "Backward Strike") //leg kicks, recoil etc.
                         {
-                            myMainSystem.smallLeapAttackBackward();
+                            //myMainSystem.smallLeapAttackBackward();
                         }
                         else if (backwardNeutralMovementCommand == "Backward Single Spin") //tail spin
                         {
@@ -3520,7 +3522,7 @@ public class monsterPart : MonoBehaviour
                     {
                         if (downwardNeutralMovementCommand == "Downward Strike") //arm swings, etc.
                         {
-                            myMainSystem.smallLeapAttackDownward();
+                            //myMainSystem.smallLeapAttackDownward();
                         }
                         else if (downwardNeutralMovementCommand == "Downward Single Spin") //tail spin attacks
                         {
@@ -3528,7 +3530,7 @@ public class monsterPart : MonoBehaviour
                         }
                         else if (downwardNeutralMovementCommand == "Stomp") //leg kick
                         {
-                            myMainSystem.stompAttack();
+                            //myMainSystem.stompAttack();
                         }
                     }
 
@@ -3569,7 +3571,7 @@ public class monsterPart : MonoBehaviour
             }
 
 
-            attackMarkedHeavy = false;
+            
         }
     }
 
@@ -3642,6 +3644,7 @@ public class monsterPart : MonoBehaviour
         myMainSystem.correctRunningAttackAnimations();
         myMainSystem.attackFocusOff();
         attackFocusOn = false;
+        attackMarkedHeavy = false;
         isAttacking = false;
         fullActiveHeavy = false;
 
@@ -4128,6 +4131,12 @@ public class monsterPart : MonoBehaviour
         {
             heavyHitVFXManager.damage = damage;
             heavyHitVFXManager.updateDamageOnProjectiles();
+        }
+        else if (grappleHeavyAttack)
+        {
+            heavyColliderReference.resetAttackHistory();
+            heavyColliderReference.damage = damage;
+            heavyColliderReference.markedHeavy = true;
         }
 
         //print(damage);

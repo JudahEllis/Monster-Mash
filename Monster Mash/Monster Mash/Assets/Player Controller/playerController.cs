@@ -62,7 +62,7 @@ public class playerController : MonoBehaviour
     private float bigJumpPower = 65;//80
     private float littleJumpPower = 45;//60
     private bool slowFallBlocked = false;
-    private float slowFallGravityPower = 8;
+    private float slowFallGravityPower = 6;
     private float gravityPower;
     private bool insideFloor = false;
     //
@@ -77,8 +77,16 @@ public class playerController : MonoBehaviour
     //
     private bool ledgeHopAvailable = true;
     //
+    public bool grappling = false;
+    public bool grapplingPlayer = false;
+    public bool grapplingWall = false;
+    private float grappleSpeed = 300;
+    private float grappleDistance = 5f;
+    public playerController grapplePlayerTarget;
+    public Vector3 wallGrapplePoint;
+    //
     public bool grabbingWall = false;
-    private float wallGrabbingGravityPower = 0.5f;
+    private float wallGrabbingGravityPower = 0.2f;
     private float wallJumpPower = 28f;
     //
     private bool buttonA_Pressed = false;
@@ -453,7 +461,7 @@ public class playerController : MonoBehaviour
                     }
                     */
 
-                    if (leftJoystickVector.y > 0.2f)
+                    if (leftJoystickVector.y > 0.2f && (leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
                     {
                         //big jump
                         if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
@@ -621,6 +629,50 @@ public class playerController : MonoBehaviour
                         bigJumpVisual();
                     }
                     #endregion
+                }
+            }
+
+            if (grappling)
+            {
+                if (grapplePlayerTarget != null && grapplingPlayer)
+                {
+                    float distanceFromTarget = Vector3.Distance(grapplePlayerTarget.transform.position, transform.position);
+
+                    if (distanceFromTarget > grappleDistance)
+                    {
+                        Vector3 directionOfGrapple = grapplePlayerTarget.transform.position - transform.position;
+                        directionOfGrapple.Normalize();
+                        myRigidbody.MovePosition(transform.position + (directionOfGrapple * grappleSpeed * Time.deltaTime));
+                    }
+                    else
+                    {
+                        grappling = false;
+                        grapplePlayerTarget = null;
+                        wallGrapplePoint = new Vector3(0, 0, 0);
+                        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+                    }
+                }
+                else if (wallGrapplePoint != new Vector3(0,0,0) && grapplingWall)
+                {
+                    float distanceFromTarget = Vector3.Distance(wallGrapplePoint, transform.position);
+
+                    if (distanceFromTarget > grappleDistance)
+                    {
+                        Vector3 directionOfGrapple = wallGrapplePoint - transform.position;
+                        directionOfGrapple.Normalize();
+                        myRigidbody.MovePosition(transform.position + (directionOfGrapple * grappleSpeed * Time.deltaTime));
+                    }
+                    else
+                    {
+                        grappling = false;
+                        grapplePlayerTarget = null;
+                        wallGrapplePoint = new Vector3(0, 0, 0);
+                        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+                    }
+                }
+                else
+                {
+                    grappling = false;
                 }
             }
 
@@ -1261,6 +1313,7 @@ public class playerController : MonoBehaviour
     #region Face Buttons, Triggers, and Buttons
     public void onButtonA(InputAction.CallbackContext context)
     {
+        /*
         if (context.canceled)
         {
             myMonster.attackCancel(0);
@@ -1278,6 +1331,13 @@ public class playerController : MonoBehaviour
             myMonster.attack(0, inputModifier);
             canMove = false;
             buttonA_Pressed = true;
+        }
+        */
+
+
+        if (context.started)
+        {
+            bigJump();
         }
     }
 
@@ -1447,6 +1507,11 @@ public class playerController : MonoBehaviour
     private void lateAttackReleaseVisualCorrections()
     {
         myMonster.forceUngrounded();
+    }
+
+    private void grappleTowardsVisual()
+    {
+
     }
 
     private void startCrouchVisual()
@@ -1875,11 +1940,36 @@ public class playerController : MonoBehaviour
         slowFallBlocked = true;
     }
 
+    public void playerGrapple(playerController target)
+    {
+        if (grappling == false)
+        {
+            grapplePlayerTarget = target;
+            grappling = true;
+            grapplingPlayer = true;
+            grapplingWall = false;
+        }
+
+    }
+
+    public void wallGrapple(Vector3 contactPoint)
+    {
+        if (grappling == false)
+        {
+            wallGrapplePoint = contactPoint;
+            grappling = true;
+            grapplingWall = true;
+            grapplingPlayer = false;
+        }
+    }
+
+
     public void smallLeapAttackForward()
     {
         playNeutralAttackSound();
         //turnOffFriction();
         //myRigidbody.velocity = new Vector2(1 * directionModifier, myRigidbody.velocity.y);
+        /*
         if (isFacingEdge() == false)
         {
             if (grounded)
@@ -1892,6 +1982,7 @@ public class playerController : MonoBehaviour
                 myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
             }
         }
+        */
         /*
         if (grounded)
         {
@@ -1908,11 +1999,13 @@ public class playerController : MonoBehaviour
     {
         playNeutralAttackSound();
 
+        /*
         if (isFacingEdge() || atPlatformEdge == false)
         {
             turnOffFriction();
             myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
         }
+        */
         /*
         if (grounded)
         {
@@ -2133,16 +2226,20 @@ public class playerController : MonoBehaviour
                 if (facingPunch)
                 {
                     // myRigidbody.velocity = new Vector2(20 * -directionModifier, 20); this one could be applied to neutrals
-                    myRigidbody.velocity = new Vector2(120 * -directionModifier, 80);
+                    // myRigidbody.velocity = new Vector2(120 * -directionModifier, 80);
                     //forwards hit animation
-                    myMonster.heavyDamage(true);
+                    // myMonster.heavyDamage(true);
+                    // StartCoroutine(damageRecoveryTime(0.1f));
+                    myMonster.neutralDamage();
                     StartCoroutine(damageRecoveryTime(0.1f));
                 }
                 else
                 {
-                    myRigidbody.velocity = new Vector2(120 * directionModifier, 80);
+                    // myRigidbody.velocity = new Vector2(120 * directionModifier, 80);
                     //forwards hit animation
-                    myMonster.heavyDamage(true);
+                    //myMonster.heavyDamage(true);
+                    // StartCoroutine(damageRecoveryTime(0.1f));
+                    myMonster.neutralDamage();
                     StartCoroutine(damageRecoveryTime(0.1f));
                 }
             }
@@ -2150,15 +2247,19 @@ public class playerController : MonoBehaviour
             {
                 if (facingPunch)
                 {
-                    myRigidbody.velocity = new Vector2(5 * -directionModifier, myRigidbody.velocity.y);
+                    //myRigidbody.velocity = new Vector2(5 * -directionModifier, myRigidbody.velocity.y);
                     //forwards hit animation
+                    // myMonster.neutralDamage();
+                    // StartCoroutine(damageRecoveryTime(0.1f));
                     myMonster.neutralDamage();
                     StartCoroutine(damageRecoveryTime(0.1f));
                 }
                 else
                 {
-                    myRigidbody.velocity = new Vector2(5 * directionModifier, myRigidbody.velocity.y);
+                    //myRigidbody.velocity = new Vector2(5 * directionModifier, myRigidbody.velocity.y);
                     //backwards hit animation
+                    //myMonster.neutralDamage();
+                    //  StartCoroutine(damageRecoveryTime(0.1f));
                     myMonster.neutralDamage();
                     StartCoroutine(damageRecoveryTime(0.1f));
                 }
@@ -2174,34 +2275,36 @@ public class playerController : MonoBehaviour
             {
                 if (facingPunch)
                 {
-                    myRigidbody.velocity = new Vector2(60 * -directionModifier, 20);
+                    //myRigidbody.velocity = new Vector2(60 * -directionModifier, 20);
                     //forwards hit animation
-                    myMonster.heavyDamage(true);
-                    StartCoroutine(damageRecoveryTime(0.1f));
+                    // myMonster.heavyDamage(true);
+                    //StartCoroutine(damageRecoveryTime(0.1f));
+                    myMonster.neutralDamage();
                 }
                 else
                 {
-                    myRigidbody.velocity = new Vector2(60 * directionModifier, 20);
+                    // myRigidbody.velocity = new Vector2(60 * directionModifier, 20);
                     //backwards hit animation
-                    myMonster.heavyDamage(true);
-                    StartCoroutine(damageRecoveryTime(0.1f));
+                    // myMonster.heavyDamage(true);
+                    // StartCoroutine(damageRecoveryTime(0.1f));
+                    myMonster.neutralDamage();
                 }
             }
             else
             {
                 if (facingPunch)
                 {
-                    myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
+                   // myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
                     //forwards hit animation
                     myMonster.neutralDamage();
-                    StartCoroutine(damageRecoveryTime(0.1f));
+                   // StartCoroutine(damageRecoveryTime(0.1f));
                 }
                 else
                 {
-                    myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
+                   // myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
                     //backwards hit animation
                     myMonster.neutralDamage();
-                    StartCoroutine(damageRecoveryTime(0.1f));
+                   // StartCoroutine(damageRecoveryTime(0.1f));
                 }
             }
         }
@@ -2310,9 +2413,12 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isPhasingThroughPlatform && collision.gameObject.tag == "Solid")
+        if (collision.gameObject.tag == "Solid")
         {
-            antiPhase(true);
+            if (isPhasingThroughPlatform)
+            {
+                antiPhase(true);
+            }
         }
 
         if (collision.gameObject.tag == "Semi Solid")
@@ -2346,5 +2452,33 @@ public class playerController : MonoBehaviour
             stopTeeterVisual();
             atPlatformEdge = false;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+        if(collision.gameObject.tag == "Player")
+        {
+            if (collision.transform.parent.gameObject.GetComponent<playerController>() != null)
+            {
+                playerController fellowPlayer = collision.transform.parent.gameObject.GetComponent<playerController>();
+
+                if (grappling && grapplePlayerTarget != null)
+                {
+                    if (grapplePlayerTarget == fellowPlayer)
+                    {
+                        grappling = false;
+                        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+                        grapplePlayerTarget = null;
+                        //belly bounce
+                    }
+                    else
+                    {
+                        //tackle out of the way
+                    }
+                }
+            }
+        }
+        
     }
 }

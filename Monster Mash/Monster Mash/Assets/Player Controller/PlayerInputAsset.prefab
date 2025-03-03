@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4897304324593584139}
   m_Layer: 0
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -525,6 +525,9 @@ MonoBehaviour:
   canRoll: 1
   isDashing: 0
   canDash: 1
+  grappling: 0
+  grappleDistance: 2
+  grapplePlayerTarget: {fileID: 0}
   grabbingWall: 0
   myRigidbody: {fileID: 4492483810748514835}
 --- !u!50 &4492483810748514835

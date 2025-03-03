@@ -1989,6 +1989,25 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    public void grappleToTarget()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerUnbrace();
+            //tell attacking limb to pull in
+            //tell everything else to jump I guess?
+        }
+    }
+
+    public void lateGrappleCorrections()
+    {
+        for (int i = 0; i < allMonsterParts.Length; i++)
+        {
+            allMonsterParts[i].triggerUnbrace();
+            //tell all parts to unbrace or whatever
+        }
+    }
+
     public void grabbingActivated(monsterAttackSystem grabbedMonster, Transform reelBone ,Vector3 pointOfContact)
     {
         grabActivated = true;

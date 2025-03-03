@@ -14,6 +14,7 @@ public class monsterPartReference : MonoBehaviour
     public bool isProjectile;
     public bool isJabOrSlash;
     public bool isReel;
+    public bool isGrapple;
     public bool isBoomerang;
 
     [Header("Damage, Direction, and Status Effects")]
@@ -40,10 +41,7 @@ public class monsterPartReference : MonoBehaviour
 
     public void resetAttackHistory()
     {
-        if (isHitbox && attackHistory.Count > 0)
-        {
-            attackHistory.Clear();
-        }
+        attackHistory.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -54,36 +52,58 @@ public class monsterPartReference : MonoBehaviour
             {
                 monsterAttackSystem damagedMonster = other.GetComponent<monsterPartReference>().mainSystem;
 
-                if (attackHistory.Contains(damagedMonster) == false && damagedMonster != mainSystem)
+                if (damagedMonster != null)
                 {
-                    //attack
-                    pointOfContact = other.ClosestPointOnBounds(transform.position);
-                    damagedMonster.myPlayer.damaged(damage, markedHeavy, directionOfAttack, pointOfContact);
-
-                    if (hasStatusEffect && markedHeavy)
+                    if (attackHistory.Contains(damagedMonster) == false && damagedMonster != mainSystem && damagedMonster.myPlayer != null)
                     {
-                        damagedMonster.myPlayer.statusGiven(burnedStatusEffect, electrifiedStatusEffect, confusedStatusEffect, stinkyStatusEffect, cursedStatusEffect, slowedStatusEffect, 
-                                                            poisonedStatusEffect, frozenStatusEffect, slimedStatusEffect, tickDamage, tickTiming, tickDamageDuration);
-                    }
+                        //attack
+                        pointOfContact = other.ClosestPointOnBounds(transform.position);
+                        damagedMonster.myPlayer.damaged(damage, markedHeavy, directionOfAttack, pointOfContact);
 
-                    #region VFX & Misc Response to Successful Hit
-                    if (isProjectile || isBoomerang)
+                        if (hasStatusEffect && markedHeavy)
+                        {
+                            damagedMonster.myPlayer.statusGiven(burnedStatusEffect, electrifiedStatusEffect, confusedStatusEffect, stinkyStatusEffect, cursedStatusEffect, slowedStatusEffect,
+                                                                poisonedStatusEffect, frozenStatusEffect, slimedStatusEffect, tickDamage, tickTiming, tickDamageDuration);
+                        }
+
+                        #region VFX & Misc Response to Successful Hit
+                        if (isProjectile || isBoomerang)
+                        {
+                            GetComponent<projectile>().impact();
+                        }
+
+                        if (isJabOrSlash)
+                        {
+                            partReference.triggerJabOrSlashHitDetect();
+                            mainSystem.myPlayer.forceStopLeap();
+                        }
+
+                        if (isGrapple)
+                        {
+                            //mainSystem.myPlayer.leapAttackForward();
+
+                            if (directionOfAttack == 1 || directionOfAttack == -1)
+                            {
+                                //grapple into a body smash
+                                mainSystem.myPlayer.playerGrapple(damagedMonster.myPlayer);
+                            }
+                            else if (directionOfAttack == 2)
+                            {
+                                //grapple into a body smash upwards
+                            }
+                            else if (directionOfAttack == 0)
+                            {
+                                //grapple into a body smash & jump
+                            }
+                        }
+                        #endregion
+
+                        attackHistory.Add(damagedMonster);
+                    }
+                    else
                     {
-                        GetComponent<projectile>().impact();
+                        return;
                     }
-
-                    if (isJabOrSlash)
-                    {
-                        partReference.triggerJabOrSlashHitDetect();
-                        mainSystem.myPlayer.forceStopLeap();
-                    }
-                    #endregion
-
-                    attackHistory.Add(damagedMonster);
-                }
-                else
-                {
-                    return;
                 }
 
                 /*
@@ -114,9 +134,34 @@ public class monsterPartReference : MonoBehaviour
                 */
             }
         }
-       
 
-        if(other.GetComponent<collisionMaterial>() != null)
+        if (other.gameObject.tag == "Solid")
+        {
+            pointOfContact = other.ClosestPointOnBounds(transform.position);
+
+            if (isGrapple)
+            {
+                //mainSystem.myPlayer.leapAttackForward();
+
+                if (directionOfAttack == 1 || directionOfAttack == -1)
+                {
+                    //mainSystem.myPlayer.leftRightGrapple(false, pointOfContact);
+                    //grapple into wall
+                    mainSystem.myPlayer.wallGrapple(pointOfContact);
+                    print("wall detected");
+                }
+                else if (directionOfAttack == 2)
+                {
+                    //grapple into ceiling
+                }
+                else if (directionOfAttack == 0)
+                {
+                    //grapple into floor
+                }
+            }
+        }
+
+        if (other.GetComponent<collisionMaterial>() != null)
         {
             if (isStomp)
             {

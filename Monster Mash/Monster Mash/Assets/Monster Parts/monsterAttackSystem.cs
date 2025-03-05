@@ -1993,7 +1993,8 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerUnbrace();
+            //allMonsterParts[i].triggerUnbrace();
+            allMonsterParts[i].reelBackReaction();
             //tell attacking limb to pull in
             //tell everything else to jump I guess?
         }
@@ -2003,7 +2004,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerUnbrace();
+            //allMonsterParts[i].triggerUnbrace();
             //tell all parts to unbrace or whatever
         }
     }
@@ -2221,6 +2222,11 @@ public class monsterAttackSystem : MonoBehaviour
             forceStopCrouch();
             StartCoroutine(neutralDamageRecoveryTimer());
         }
+    }
+
+    public void chargeForward()
+    {
+        myPlayer.nonStopChargeForward();
     }
 
     #endregion

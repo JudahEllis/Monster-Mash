@@ -16,6 +16,7 @@ public class monsterPartReference : MonoBehaviour
     public bool isReel;
     public bool isGrapple;
     public bool isBoomerang;
+    public bool isChargingJab;
 
     [Header("Damage, Direction, and Status Effects")]
     public int damage = 0;
@@ -24,6 +25,7 @@ public class monsterPartReference : MonoBehaviour
     public float tickTiming = 0;
     public float tickDamageDuration = 0;
     public bool markedHeavy;
+    public bool isFullyChargedHeavy;
     public int directionOfAttack = 1;
     private Vector3 pointOfContact;
     public bool hasStatusEffect;
@@ -76,6 +78,13 @@ public class monsterPartReference : MonoBehaviour
                         {
                             partReference.triggerJabOrSlashHitDetect();
                             mainSystem.myPlayer.forceStopLeap();
+
+                            if (isChargingJab && isFullyChargedHeavy)
+                            {
+                                mainSystem.myPlayer.endChargeForward();
+                                partReference.endChargeForward();
+                                isFullyChargedHeavy = false;
+                            }
                         }
 
                         if (isGrapple)
@@ -157,6 +166,19 @@ public class monsterPartReference : MonoBehaviour
                 else if (directionOfAttack == 0)
                 {
                     //grapple into floor
+                }
+            }
+
+            if (isJabOrSlash)
+            {
+                partReference.triggerJabOrSlashHitDetect();
+                mainSystem.myPlayer.forceStopLeap();
+
+                if (isChargingJab && isFullyChargedHeavy)
+                {
+                    mainSystem.myPlayer.endChargeForward();
+                    partReference.endChargeForward();
+                    isFullyChargedHeavy = false;
                 }
             }
         }

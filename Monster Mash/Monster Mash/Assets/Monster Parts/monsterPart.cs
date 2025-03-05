@@ -45,10 +45,9 @@ public class monsterPart : MonoBehaviour
     public bool electrifiedStatusEffect;
     public bool poisonedStatusEffect;
     public bool stinkyStatusEffect;
-    public bool hauntedStatusEffect;
+    public bool cursedStatusEffect;
     public bool confusedStatusEffect;
     public bool slimedStatusEffect;
-    public bool stunnedStatusEffect;
     public bool frozenStatusEffect;
     public bool squashedStatusEffect;
     public bool slowedStatusEffect;
@@ -59,7 +58,13 @@ public class monsterPart : MonoBehaviour
     public bool slashNeutralAttack;
     public bool sprayNeutralAttack;
     public bool projectileNeutralAttack;
-    public bool beamNeutralAttack;
+    public bool homingMissileNeutralAttack;
+    public bool anvilNeutralAttack;
+    public bool bowlingBallNeutralAttack;
+    public bool gaseousNeutralAttack;
+    public bool reflectingNeutralAttack;
+    public bool suctionNeutralAttack;
+    public bool AOENeutralAttack;
     public bool boomerangNeutralAttack;
     public GameObject neutralHitVFXHolder;
     public GameObject neutralForwardSwingVFXHolder;
@@ -115,6 +120,18 @@ public class monsterPart : MonoBehaviour
     public bool reelHeavyAttack;
     public bool grappleHeavyAttack;
     public bool boomerangHeavyAttack;
+    public bool homingMissileHeavyAttack;
+    public bool anvilHeavyAttack;
+    public bool bowlingBallHeavyAttack;
+    public bool powerBoostingHeavyAttack;
+    public bool shieldHeavyAttack;
+    public bool reflectingHeavyAttack;
+    public bool eatingHeavyAttack;
+    public bool suctionHeavyAttack;
+    public bool AOEHeavyAttack;
+    public bool chargingHeavyAttack;
+    public bool selfExplodingHeavyAttack;
+    //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
     public GameObject heavyBackwardSwingVFXHolder;
@@ -4077,10 +4094,6 @@ public class monsterPart : MonoBehaviour
             neutralHitVFXManager.damage = damage;
             neutralHitVFXManager.updateDamageOnProjectiles();
         }
-        else if (beamNeutralAttack)
-        {
-
-        }
         else if (sprayNeutralAttack)
         {
             neutralHitVFXManager.damage = damage;
@@ -4183,7 +4196,7 @@ public class monsterPart : MonoBehaviour
             heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
             heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
-            heavyColliderReference.cursedStatusEffect = hauntedStatusEffect;
+            heavyColliderReference.cursedStatusEffect = cursedStatusEffect;
             heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
             heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
             heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
@@ -4197,7 +4210,7 @@ public class monsterPart : MonoBehaviour
             heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
             heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
-            heavyColliderReference.cursedStatusEffect = hauntedStatusEffect;
+            heavyColliderReference.cursedStatusEffect = cursedStatusEffect;
             heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
             heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
             heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
@@ -4213,10 +4226,9 @@ public class monsterPart : MonoBehaviour
             heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
             heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
-            heavyHitVFXManager.hauntedStatusEffect = hauntedStatusEffect;
+            heavyHitVFXManager.hauntedStatusEffect = cursedStatusEffect;
             heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
             heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
-            heavyHitVFXManager.stunnedStatusEffect = stunnedStatusEffect;
             heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
             heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
             heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
@@ -4235,10 +4247,9 @@ public class monsterPart : MonoBehaviour
             heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
             heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
-            heavyHitVFXManager.hauntedStatusEffect = hauntedStatusEffect;
+            heavyHitVFXManager.hauntedStatusEffect = cursedStatusEffect;
             heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
             heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
-            heavyHitVFXManager.stunnedStatusEffect = stunnedStatusEffect;
             heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
             heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
             heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
@@ -4253,10 +4264,9 @@ public class monsterPart : MonoBehaviour
             heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
             heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
             heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
-            heavyHitVFXManager.hauntedStatusEffect = hauntedStatusEffect;
+            heavyHitVFXManager.hauntedStatusEffect = cursedStatusEffect;
             heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
             heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
-            heavyHitVFXManager.stunnedStatusEffect = stunnedStatusEffect;
             heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
             heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
             heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
@@ -5958,10 +5968,6 @@ public class monsterPart : MonoBehaviour
                 neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
             }
         }
-        else if (beamNeutralAttack)
-        {
-            neutralHitVFXManager.unleashBeamVisual();
-        }
         else if (boomerangNeutralAttack && neutralAttackHitVFXArray.Length != 0)
         {
             neutralHitVFXManager.faceRightDirection(facingRight);
@@ -6094,16 +6100,9 @@ public class monsterPart : MonoBehaviour
 
     public void endRemainingVFX()
     {
-        if (beamNeutralAttack || beamHeavyAttack)
+        if (beamHeavyAttack)
         {
-            if (beamNeutralAttack)
-            {
-                neutralHitVFXManager.endBeamVisual();
-            }
-            else
-            {
-                heavyHitVFXManager.endBeamVisual();
-            }
+            heavyHitVFXManager.endBeamVisual();
         }
 
         endRunVisual();
@@ -6206,6 +6205,34 @@ public class monsterPart : MonoBehaviour
         {
             myAnimator.SetBool("Swaying", true);
             myAnimator.SetBool("Teeter", true);
+        }
+    }
+
+    public void reelBackReaction()
+    {
+        if (attackFocusOn)
+        {
+            myAnimator.SetTrigger("Reel Back");
+        }
+    }
+
+    
+
+    public void triggerChargeForward()
+    {
+        if (attackFocusOn)
+        {
+            heavyCollider.gameObject.GetComponent<monsterPartReference>().isFullyChargedHeavy = true;
+            myAnimator.SetBool("Charge Attack Active", true);
+            myMainSystem.chargeForward();
+        }
+    }
+
+    public void endChargeForward()
+    {
+        if (attackFocusOn)
+        {
+            myAnimator.SetBool("Charge Attack Active", false);
         }
     }
 

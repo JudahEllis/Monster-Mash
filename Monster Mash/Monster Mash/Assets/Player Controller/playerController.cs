@@ -81,9 +81,12 @@ public class playerController : MonoBehaviour
     public bool grapplingPlayer = false;
     public bool grapplingWall = false;
     private float grappleSpeed = 300;
-    private float grappleDistance = 5f;
+    private float endPlayerGrappleDistance = 8f;
+    private float endWallPlayerGrappledistance = 5f;
     public playerController grapplePlayerTarget;
     public Vector3 wallGrapplePoint;
+    //
+    public bool chargingForward = false;
     //
     public bool grabbingWall = false;
     private float wallGrabbingGravityPower = 0.2f;
@@ -632,13 +635,14 @@ public class playerController : MonoBehaviour
                 }
             }
 
+            #region Grappling
             if (grappling)
             {
                 if (grapplePlayerTarget != null && grapplingPlayer)
                 {
                     float distanceFromTarget = Vector3.Distance(grapplePlayerTarget.transform.position, transform.position);
 
-                    if (distanceFromTarget > grappleDistance)
+                    if (distanceFromTarget > endPlayerGrappleDistance)
                     {
                         Vector3 directionOfGrapple = grapplePlayerTarget.transform.position - transform.position;
                         directionOfGrapple.Normalize();
@@ -656,7 +660,7 @@ public class playerController : MonoBehaviour
                 {
                     float distanceFromTarget = Vector3.Distance(wallGrapplePoint, transform.position);
 
-                    if (distanceFromTarget > grappleDistance)
+                    if (distanceFromTarget > endWallPlayerGrappledistance)
                     {
                         Vector3 directionOfGrapple = wallGrapplePoint - transform.position;
                         directionOfGrapple.Normalize();
@@ -675,10 +679,23 @@ public class playerController : MonoBehaviour
                     grappling = false;
                 }
             }
+            #endregion
+
+            if (chargingForward)
+            {
+                if (facingRight)
+                {
+                    myRigidbody.velocity = new Vector2(1 * (runSpeed * 2), myRigidbody.velocity.y);
+                }
+                else
+                {
+                    myRigidbody.velocity = new Vector2(-1 * (runSpeed * 2), myRigidbody.velocity.y);
+                }
+            }
 
         }
 
-       
+
     }
 
     #region Left Stick - Walk, Run, Big Jump, Little Jump
@@ -1337,7 +1354,31 @@ public class playerController : MonoBehaviour
 
         if (context.started)
         {
-            bigJump();
+            if (grabbingWall)
+            {
+                if (facingRight)
+                {
+                    wallJump(-1);
+                }
+                else
+                {
+                    wallJump(1);
+                }
+
+                bigJumpVisual();
+            }
+            else
+            {
+                if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
+                {
+                    bigJump();
+                }
+            }
+        }
+
+        if (context.canceled)
+        {
+            jumpButtonReset = true;
         }
     }
 
@@ -1511,7 +1552,7 @@ public class playerController : MonoBehaviour
 
     private void grappleTowardsVisual()
     {
-
+        myMonster.grappleToTarget();
     }
 
     private void startCrouchVisual()
@@ -1948,6 +1989,7 @@ public class playerController : MonoBehaviour
             grappling = true;
             grapplingPlayer = true;
             grapplingWall = false;
+            grappleTowardsVisual();
         }
 
     }
@@ -1960,9 +2002,23 @@ public class playerController : MonoBehaviour
             grappling = true;
             grapplingWall = true;
             grapplingPlayer = false;
+            grappleTowardsVisual();
         }
     }
 
+
+    public void nonStopChargeForward()
+    {
+        chargingForward = true;
+        turnOffFriction();
+    }
+
+    public void endChargeForward()
+    {
+        chargingForward = false;
+        turnOnFriction();
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+    }
 
     public void smallLeapAttackForward()
     {

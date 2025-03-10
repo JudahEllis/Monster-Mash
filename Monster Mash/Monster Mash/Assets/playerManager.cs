@@ -103,7 +103,10 @@ public class playerManager : MonoBehaviour
         {
             for (int i = 0; i < players.Count; i++)
             {
-                battleCamera.playerTransforms[i] = players[i].transform;
+                if (battleCamera.playerTransforms.Contains(players[i].transform) == false)
+                {
+                    battleCamera.playerTransforms.Add(players[i].transform);
+                }
             }
         }
     }

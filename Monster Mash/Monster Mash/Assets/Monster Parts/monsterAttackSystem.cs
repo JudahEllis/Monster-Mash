@@ -77,11 +77,14 @@ public class monsterAttackSystem : MonoBehaviour
     public ParticleSystem rollingAttackVisual;
     public ParticleSystem leapingAttackVisual;
     public ParticleSystem jumpVisual;
+    public ParticleSystem doubleJumpVisual;
     public ParticleSystem landVisual;
-    public vfxHolder runVFXHolder;
+    public ParticleSystem runVisual;
+    //public vfxHolder runVFXHolder;
     public ParticleSystem floatingRunVisual;
     public GameObject forwardTeleportal;
     public GameObject backwardTeleportal;
+    public ParticleSystem fullHeavyVFX;
 
     [Header("Attack Necessities")]
     public GameObject dashSplat;
@@ -1270,8 +1273,15 @@ public class monsterAttackSystem : MonoBehaviour
     {
         if (isRunning)
         {
-            runVFXHolder.releaseMonsterSystemVisual();
+            //runVFXHolder.releaseMonsterSystemVisual();
+            runVisual.Stop();
+            runVisual.Play();
         }
+    }
+
+    public void stopRunVFX()
+    {
+        runVisual.Stop();
     }
 
     public void stopRunning()
@@ -1280,6 +1290,8 @@ public class monsterAttackSystem : MonoBehaviour
         {
             return;
         }
+
+        stopRunVFX();
 
         if (isRunning)
         {
@@ -1337,6 +1349,7 @@ public class monsterAttackSystem : MonoBehaviour
         jumpsLeft--;
         canDashAttack = true;
         canRoll = true;
+        stopRunVFX();
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
@@ -1391,7 +1404,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void doubleJump()
     {
         stopForceFall();
-
+        releaseDoubleJumpVFX();
         /*
         if (isWinged)
         {
@@ -1443,7 +1456,14 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         myAnimator.SetTrigger("Roll");
         releaseJumpVFX();
+        stopRunVFX();
 
+    }
+
+    public void releaseDoubleJumpVFX()
+    {
+        doubleJumpVisual.Stop();
+        doubleJumpVisual.Play();
     }
 
     public void releaseJumpVFX()
@@ -1458,6 +1478,8 @@ public class monsterAttackSystem : MonoBehaviour
         {
             return;
         }
+
+        stopRunVFX();
 
         if (isGrounded == false && isWinged)
         {
@@ -1524,6 +1546,7 @@ public class monsterAttackSystem : MonoBehaviour
             calm = false;
             forceEndEmote();
             forceStopCrouch();
+            stopRunVFX();
         }
     }
 
@@ -1548,6 +1571,7 @@ public class monsterAttackSystem : MonoBehaviour
             calm = false;
             forceEndEmote();
             forceStopCrouch();
+            stopRunVFX();
         }
     }
 
@@ -1685,6 +1709,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void entryTeleportalVFX(bool facingInDirection)
     {
+        stopRunVFX();
+
         if (facingInDirection)
         {
             forwardTeleportal.SetActive(true);
@@ -1702,6 +1728,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void reEntryTeleportalVFX()
     {
+        stopRunVFX();
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
@@ -1721,6 +1749,7 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        stopRunVFX();
         //crouch can interrupt running, walking, landing, and emotes
         //crouch cannout interrupt neutral or heavy attacks, windups, rolls, and jumps
         if (focusedAttackActive == false && isGrounded)
@@ -1760,6 +1789,7 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        stopRunVFX();
         //crouch can interrupt running, walking, landing, and emotes
         //crouch cannout interrupt neutral or heavy attacks, windups, rolls, and jumps
         if (focusedAttackActive == false && isGrounded)
@@ -1822,6 +1852,8 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
+        stopRunVFX();
+
         if (isGrounded == false && focusedAttackActive == false)
         {
             if (forceFallingActivated)
@@ -1867,6 +1899,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         getOutOfLaunch();
+        stopRunVFX();
     }
 
     public void stopForceFall()
@@ -1991,6 +2024,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void grappleToTarget()
     {
+        stopRunVFX();
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             //allMonsterParts[i].triggerUnbrace();
@@ -2052,6 +2087,7 @@ public class monsterAttackSystem : MonoBehaviour
         forceEndEmote();
         forceStopCrouch();
         stopForceFall();
+        stopRunVFX();
         myAnimator.ResetTrigger("Back to Prior State");
         //myAnimator.SetTrigger("Back to Prior State");
 
@@ -2079,8 +2115,9 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.ResetTrigger("Right Attack Release");
         myAnimator.ResetTrigger("Left Attack Release");
         myAnimator.SetTrigger("Back to Prior State");
+        stopRunVFX();
 
-        
+
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
            allMonsterParts[i].resetBracing();
@@ -2115,6 +2152,7 @@ public class monsterAttackSystem : MonoBehaviour
             calm = true;
             myAnimator.SetBool("Calm", true);
             myAnimator.SetBool("Idle Bounce Allowed", false);
+            stopRunVFX();
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
@@ -2227,6 +2265,7 @@ public class monsterAttackSystem : MonoBehaviour
     public void chargeForward()
     {
         myPlayer.nonStopChargeForward();
+        releaseRunVFX();
     }
 
     #endregion
@@ -2577,6 +2616,14 @@ public class monsterAttackSystem : MonoBehaviour
         deactivateAllMonsterParts();
     }
 
+    #endregion
+
+    #region VFX
+    public void releaseFullHeavyVisual()
+    {
+        fullHeavyVFX.Stop();
+        fullHeavyVFX.Play();
+    }
     #endregion
 
     #region Emotes

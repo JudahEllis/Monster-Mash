@@ -8,12 +8,13 @@ public class playerController : MonoBehaviour
 {
     public int playerIndex;
     public monsterAttackSystem myMonster;
+    private playerAudioManager myAudioSystem;
     public CapsuleCollider2D bodyCollider;
     public CircleCollider2D smallBodyCollider;
     public BoxCollider2D groundFrictionCollider;
-    public brainSFX mySFXBrain;
+    //public brainSFX mySFXBrain;
     //public MeshRenderer standingVisual;
-    public MeshRenderer ballVisual;
+    //public MeshRenderer ballVisual;
     public Transform groundCheck;
     public Transform headCheck;
     public LayerMask solidGroundLayer;
@@ -110,8 +111,8 @@ public class playerController : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         playerControlsMap = new PlayerControls();
+        myAudioSystem = GetComponentInChildren<playerAudioManager>();
         gravityPower = myRigidbody.gravityScale;
-        updateBrainSFX();
 
         startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
         UIcontrols = playerInput.actions.FindActionMap("UI Controls");
@@ -862,7 +863,6 @@ public class playerController : MonoBehaviour
         if (isAttacking == false)
         {
             landVisual();
-            playLandSound();
             canMove = true;
             myRigidbody.gravityScale = gravityPower;
         }
@@ -871,7 +871,6 @@ public class playerController : MonoBehaviour
             lateLandVisualCorrections();
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
             turnOnFriction();
-            playLandSound();
             requiresLateLand = true;
             myRigidbody.gravityScale = gravityPower;
             return;
@@ -942,13 +941,11 @@ public class playerController : MonoBehaviour
 
             if (numberOfJumpsLeft == numberOfJumps)
             {
-                playJumpSound();
                 bigJumpVisual();
 
             }
             else
             {
-                playDoubleJumpSound();
                 doubleJumpVisual();
             }
 
@@ -1518,11 +1515,13 @@ public class playerController : MonoBehaviour
     private void bigJumpVisual()
     {
         myMonster.jump();
+        playJumpSound();
     }
 
     private void doubleJumpVisual()
     {
         myMonster.doubleJump();
+        playDoubleJumpSound();
     }
 
     private void phaseThroughPlatformVisual()
@@ -1617,157 +1616,15 @@ public class playerController : MonoBehaviour
     }
     #endregion
 
-    #region Monster Attack System Audio Communication
-    private void updateBrainSFX()
+    public void playJumpSound()
     {
-        mySFXBrain.updateBrainSounds();
+        myAudioSystem.playJumpSound();
     }
 
-    private void playJumpSound()
+    public void playDoubleJumpSound()
     {
-        /*
-        int randomJumpInt = UnityEngine.Random.Range(1, 3);
-
-        if (randomJumpInt == 1)
-        {
-            mySFXBrain.playJump1Sound();
-        }
-        else if (randomJumpInt == 2)
-        {
-            mySFXBrain.playJump2Sound();
-        }
-        else
-        {
-            mySFXBrain.playJump3Sound();
-        }
-        */
-        mySFXBrain.playJumpSound();
+        myAudioSystem.playDoubleJumpSound();
     }
-
-    private void playDoubleJumpSound()
-    {
-        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 4);
-
-        if (randomDoubleJumpInt == 1)
-        {
-            mySFXBrain.playDoubleJump1Sound();
-        }
-        else if (randomDoubleJumpInt == 2)
-        {
-            mySFXBrain.playDoubleJump2Sound();
-        }
-        else
-        {
-            mySFXBrain.playDoubleJump3Sound();
-        }
-    }
-
-    private void playLandSound()
-    {
-        /*
-        int randomLandInt = UnityEngine.Random.Range(1, 3);
-
-        if (randomLandInt == 1)
-        {
-            mySFXBrain.playLand1Sound();
-        }
-        else if (randomLandInt == 2)
-        {
-            mySFXBrain.playLand2Sound();
-        }
-        else
-        {
-            mySFXBrain.playLand3Sound();
-        }
-        */
-
-        mySFXBrain.playLandSound();
-    }
-
-    private void playNeutralAttackSound()
-    {
-        /*
-        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 3);
-
-        if (randomDoubleJumpInt == 1)
-        {
-            mySFXBrain.playNeutralAttack1Sound();
-        }
-        else if (randomDoubleJumpInt == 2)
-        {
-            mySFXBrain.playNeutralAttack2Sound();
-        }
-        else
-        {
-            mySFXBrain.playNeutralAttack3Sound();
-        }
-        */
-        if (neutralAttackSFXIndex == 3 || neutralAttackSFXIndex > 3)
-        {
-            neutralAttackSFXIndex = 1;
-        }
-        else
-        {
-            neutralAttackSFXIndex++;
-        }
-
-        if (neutralAttackSFXIndex == 1)
-        {
-            mySFXBrain.playNeutralAttack1Sound();
-        }
-        else if (neutralAttackSFXIndex == 2)
-        {
-            mySFXBrain.playNeutralAttack2Sound();
-        }
-        else if (neutralAttackSFXIndex == 3)
-        {
-            mySFXBrain.playNeutralAttack3Sound();
-        }
-    }
-
-    private void playHeavyAttackSound()
-    {
-        /*
-        int randomDoubleJumpInt = UnityEngine.Random.Range(1, 3);
-
-        if (randomDoubleJumpInt == 1)
-        {
-            mySFXBrain.playHeavyAttack1Sound();
-        }
-        else if (randomDoubleJumpInt == 2)
-        {
-            mySFXBrain.playHeavyAttack2Sound();
-        }
-        else
-        {
-            mySFXBrain.playHeavyAttack3Sound();
-        }
-        */
-
-        if (heavyAttackSFXIndex == 3 || heavyAttackSFXIndex > 3)
-        {
-            heavyAttackSFXIndex = 1;
-        }
-        else
-        {
-            heavyAttackSFXIndex++;
-        }
-
-        if (heavyAttackSFXIndex == 1)
-        {
-            mySFXBrain.playHeavyAttack1Sound();
-        }
-        else if (heavyAttackSFXIndex == 2)
-        {
-            mySFXBrain.playHeavyAttack2Sound();
-        }
-        else if (heavyAttackSFXIndex == 3)
-        {
-            mySFXBrain.playHeavyAttack3Sound();
-        }
-    }
-
-    #endregion
 
     public void turnOnFriction()
     {
@@ -2022,7 +1879,6 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackForward()
     {
-        playNeutralAttackSound();
         //turnOffFriction();
         //myRigidbody.velocity = new Vector2(1 * directionModifier, myRigidbody.velocity.y);
         /*
@@ -2053,7 +1909,6 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackBackward()
     {
-        playNeutralAttackSound();
 
         /*
         if (isFacingEdge() || atPlatformEdge == false)
@@ -2076,7 +1931,6 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackUpward()
     {
-        playNeutralAttackSound();
         /*
         if (grounded)
         {
@@ -2103,7 +1957,6 @@ public class playerController : MonoBehaviour
 
     public void smallLeapAttackDownward()
     {
-        playNeutralAttackSound();
         /*
         if (grounded)
         {
@@ -2137,7 +1990,6 @@ public class playerController : MonoBehaviour
             }
         }
 
-        playHeavyAttackSound();
         /*
         myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
         */
@@ -2172,7 +2024,6 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
         }
 
-        playHeavyAttackSound();
         /*
         if (grounded)
         {
@@ -2204,7 +2055,6 @@ public class playerController : MonoBehaviour
         }
 
         StartCoroutine(leapAttackUpwardControl());
-        playHeavyAttackSound();
         /*
         if (grounded)
         {
@@ -2246,7 +2096,6 @@ public class playerController : MonoBehaviour
 
         }
         */
-        playHeavyAttackSound();
     }
 
     #endregion
@@ -2272,97 +2121,36 @@ public class playerController : MonoBehaviour
             facingPunch = false;
         }
 
-        if (grounded)
+
+        if (facingPunch == false) //flip to face attack
         {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            turnOffFriction();
-
-            if (markedForHeavyAttack)
+            if (facingRight == false)
             {
-                if (facingPunch)
-                {
-                    // myRigidbody.velocity = new Vector2(20 * -directionModifier, 20); this one could be applied to neutrals
-                    // myRigidbody.velocity = new Vector2(120 * -directionModifier, 80);
-                    //forwards hit animation
-                    // myMonster.heavyDamage(true);
-                    // StartCoroutine(damageRecoveryTime(0.1f));
-                    myMonster.neutralDamage();
-                    StartCoroutine(damageRecoveryTime(0.1f));
-                }
-                else
-                {
-                    // myRigidbody.velocity = new Vector2(120 * directionModifier, 80);
-                    //forwards hit animation
-                    //myMonster.heavyDamage(true);
-                    // StartCoroutine(damageRecoveryTime(0.1f));
-                    myMonster.neutralDamage();
-                    StartCoroutine(damageRecoveryTime(0.1f));
-                }
+                //face right
+                facingRight = true;
+                directionModifier = 1;
+                flipRightVisual();
             }
-            else
+            else if (facingRight)
             {
-                if (facingPunch)
-                {
-                    //myRigidbody.velocity = new Vector2(5 * -directionModifier, myRigidbody.velocity.y);
-                    //forwards hit animation
-                    // myMonster.neutralDamage();
-                    // StartCoroutine(damageRecoveryTime(0.1f));
-                    myMonster.neutralDamage();
-                    StartCoroutine(damageRecoveryTime(0.1f));
-                }
-                else
-                {
-                    //myRigidbody.velocity = new Vector2(5 * directionModifier, myRigidbody.velocity.y);
-                    //backwards hit animation
-                    //myMonster.neutralDamage();
-                    //  StartCoroutine(damageRecoveryTime(0.1f));
-                    myMonster.neutralDamage();
-                    StartCoroutine(damageRecoveryTime(0.1f));
-                }
+                //face left
+                facingRight = false;
+                directionModifier = -1;
+                flipLeftVisual();
             }
+        }
 
-            //myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
+        if (markedForHeavyAttack)
+        {
+            myMonster.neutralDamage();
+            myAudioSystem.playHeavyDamageSound();
+            StartCoroutine(damageRecoveryTime(0.1f));
         }
         else
         {
-            //myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
-
-            if (markedForHeavyAttack)
-            {
-                if (facingPunch)
-                {
-                    //myRigidbody.velocity = new Vector2(60 * -directionModifier, 20);
-                    //forwards hit animation
-                    // myMonster.heavyDamage(true);
-                    //StartCoroutine(damageRecoveryTime(0.1f));
-                    myMonster.neutralDamage();
-                }
-                else
-                {
-                    // myRigidbody.velocity = new Vector2(60 * directionModifier, 20);
-                    //backwards hit animation
-                    // myMonster.heavyDamage(true);
-                    // StartCoroutine(damageRecoveryTime(0.1f));
-                    myMonster.neutralDamage();
-                }
-            }
-            else
-            {
-                if (facingPunch)
-                {
-                   // myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
-                    //forwards hit animation
-                    myMonster.neutralDamage();
-                   // StartCoroutine(damageRecoveryTime(0.1f));
-                }
-                else
-                {
-                   // myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
-                    //backwards hit animation
-                    myMonster.neutralDamage();
-                   // StartCoroutine(damageRecoveryTime(0.1f));
-                }
-            }
+            myMonster.neutralDamage();
+            myAudioSystem.playNeutralDamageSound();
+            StartCoroutine(damageRecoveryTime(0.1f));
         }
 
     }

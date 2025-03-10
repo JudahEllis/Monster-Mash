@@ -20,6 +20,8 @@ public class monsterPart : MonoBehaviour
     public int monsterPartID = 1;
     public int attackAnimationID = 1;
     public bool connected = true;
+    //
+    private AudioSource myPartAudio;
 
     //also because there is a pretty big oversight right now for "right" sided limbs that may end up being repositioned or rotated to act as a "left" sided limb
     [Header("Monster Part Questionaire")]
@@ -107,6 +109,8 @@ public class monsterPart : MonoBehaviour
     private Quaternion neutralVFXStoredRotation;
     private int neutralVFXCount;
     private bool jabOrSlashLanded = false;
+    public AudioClip[] neutralAttackHitAudioLibrary;
+    private int neutralHitCounter = 0;
     //private Transform neutralVFXParent;
     //private Vector3 neutralVFXPosition;
     //private Vector3 neutralVFXRotation;
@@ -154,6 +158,9 @@ public class monsterPart : MonoBehaviour
     //public Transform heavyUpwardMuzzle;
     //public Transform heavyDownwardMuzzle;
     //public Transform heavyBackwardMuzzle;
+    public ParticleSystem chargeVisual;
+    public ParticleSystem heavyChargeVisual;
+    //public ParticleSystem fullHeavyChargeVisual;
     public Transform[] heavyAttackHitVFXArray;
     public Transform[] heavyAttackForwardSwingVFXArray;
     public Transform[] heavyAttackBackwardSwingVFXArray;
@@ -165,6 +172,8 @@ public class monsterPart : MonoBehaviour
     private Vector3 heavyVFXStoredPosition;
     private Quaternion heavyVFXStoredRotation;
     private int heavyVFXCount;
+    public AudioClip[] heavyAttackHitAudioLibrary;
+    private int heavyHitCounter = 0;
 
     [Header("Monster Part Positioning Info")]
     public bool isJointed = true;
@@ -284,6 +293,7 @@ public class monsterPart : MonoBehaviour
             attackCalculations();
 
             setUpVFX();
+            setUpSFX();
         }
     }
 
@@ -421,6 +431,7 @@ public class monsterPart : MonoBehaviour
         #endregion
 
         setUpVFX();
+        setUpSFX();
     }
 
     public void attackCalculations()
@@ -3280,6 +3291,7 @@ public class monsterPart : MonoBehaviour
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
             triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
+            triggerChargeVisual();
         }
         else
         {
@@ -3308,6 +3320,12 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
+    public void triggerFullHeavyEffect()
+    {
+        //check for some damage upgrade 
+        myMainSystem.releaseFullHeavyVisual();
+    }
+
     public void triggerAttackRelease()
     {
 
@@ -3331,6 +3349,7 @@ public class monsterPart : MonoBehaviour
             fullActiveHeavy = true;
             isAttacking = false;
             myMainSystem.correctWalkingAttackAnimations();
+            triggerEndChargeVisual();
             //
 
             //myMainSystem.correctAttackDirection(0);
@@ -3365,6 +3384,7 @@ public class monsterPart : MonoBehaviour
             if (attackMarkedHeavy)
             {
                 heavyAttackPowerCalculation();
+                triggerHeavyChargeVisual();
 
                 if (hasHeavyMovementCommand)
                 {
@@ -3906,6 +3926,7 @@ public class monsterPart : MonoBehaviour
             if (heavyHitVFXManager != null)
             {
                 heavyHitVFXManager.unleashJabOrSlash();
+                playSuccessfulHeavyAttack();
             }
         }
         else
@@ -3913,6 +3934,7 @@ public class monsterPart : MonoBehaviour
             if (neutralHitVFXManager != null)
             {
                 neutralHitVFXManager.unleashJabOrSlash();
+                playSuccessNeutralAttack();
             }
         }
     }
@@ -3941,10 +3963,12 @@ public class monsterPart : MonoBehaviour
         if (attackMarkedHeavy == true)
         {
             heavyCollider.enabled = false;
+            heavyColliderReference.resetAttackHistory();
         }
         else
         {
             neutralCollider.enabled = false;
+            neutralColliderReference.resetAttackHistory();
         }
 
     }
@@ -5886,9 +5910,35 @@ public class monsterPart : MonoBehaviour
 
     }
 
+    public void triggerChargeVisual()
+    {
+        if (chargeVisual != null)
+        {
+            chargeVisual.Stop();
+            chargeVisual.Play();
+        }
+    }
+
+    public void triggerEndChargeVisual()
+    {
+        if (chargeVisual != null)
+        {
+            chargeVisual.Stop();
+        }
+    }
+
+    public void triggerHeavyChargeVisual()
+    {
+        if (heavyChargeVisual != null)
+        {
+            heavyChargeVisual.Stop();
+            heavyChargeVisual.Play();
+        }
+    }
+
     public void triggerRunVisual()
     {
-        myMainSystem.releaseRunVFX();
+        //myMainSystem.releaseRunVFX();
 
         //if we decide that multiple pieces other than grounded legs should have a trail visual, we will move this into a full network message
         if (specialRunVisual != null)
@@ -6106,6 +6156,53 @@ public class monsterPart : MonoBehaviour
         }
 
         endRunVisual();
+    }
+
+    #endregion
+
+    #region SFX
+
+    public void setUpSFX()
+    {
+        myPartAudio = GetComponent<AudioSource>();
+    }
+
+    public void playSuccessNeutralAttack()
+    {
+        if (myPartAudio != null && neutralAttackHitAudioLibrary[0] != null)
+        {
+            if (neutralHitCounter < neutralAttackHitAudioLibrary.Length - 1)
+            {
+                neutralHitCounter++;
+            }
+            else
+            {
+                neutralHitCounter = 0;
+            }
+
+            myPartAudio.Stop();
+            myPartAudio.clip = neutralAttackHitAudioLibrary[neutralHitCounter];
+            myPartAudio.Play();
+        }
+    }
+
+    public void playSuccessfulHeavyAttack()
+    {
+        if (myPartAudio != null && heavyAttackHitAudioLibrary[0] != null)
+        {
+            if (heavyHitCounter < heavyAttackHitAudioLibrary.Length - 1)
+            {
+                heavyHitCounter++;
+            }
+            else
+            {
+                heavyHitCounter = 0;
+            }
+
+            myPartAudio.Stop();
+            myPartAudio.clip = heavyAttackHitAudioLibrary[heavyHitCounter];
+            myPartAudio.Play();
+        }
     }
 
     #endregion

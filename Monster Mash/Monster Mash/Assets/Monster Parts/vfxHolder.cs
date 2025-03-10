@@ -11,7 +11,8 @@ public class vfxHolder : MonoBehaviour
     //
     [Header("VFX Questionaire")]
     public bool isJabOrSlashHolder;
-    private GameObject[] hitVFX;
+    //private GameObject[] hitVFX;
+    private ParticleSystem[] hitVFX;
     private int hitVFXCount;
     private Transform hitVFXParent;
     private Vector3 VFXPosition;
@@ -230,12 +231,29 @@ public class vfxHolder : MonoBehaviour
     {
         if (isJabOrSlashHolder || isReelInHolder)
         {
+            /*
             List<GameObject> tempJabOrSlashVFX = new List<GameObject>();
             for (int i = 0; i < transform.childCount; i++)
             {
                 tempJabOrSlashVFX.Add(transform.GetChild(i).gameObject);
             }
             hitVFX = new GameObject[tempJabOrSlashVFX.Count];
+            for (int i = 0; i < hitVFX.Length; i++)
+            {
+                hitVFX[i] = tempJabOrSlashVFX[i];
+            }
+
+            VFXPosition = hitVFX[0].transform.localPosition;
+            hitVFXParent = hitVFX[0].transform.parent;
+            */
+
+            List<ParticleSystem> tempJabOrSlashVFX = new List<ParticleSystem>();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                //tempJabOrSlashVFX.Add(transform.GetChild(i).gameObject.GetComponent<partci>);
+                tempJabOrSlashVFX.Add(transform.GetChild(i).gameObject.GetComponent<ParticleSystem>());
+            }
+            hitVFX = new ParticleSystem[tempJabOrSlashVFX.Count];
             for (int i = 0; i < hitVFX.Length; i++)
             {
                 hitVFX[i] = tempJabOrSlashVFX[i];
@@ -386,11 +404,16 @@ public class vfxHolder : MonoBehaviour
             hitVFXCount++;
         }
 
+        hitVFX[hitVFXCount].Stop();
+        hitVFX[hitVFXCount].Play();
+
+        /*
         hitVFX[hitVFXCount].SetActive(false);
         hitVFX[hitVFXCount].transform.parent = hitVFXParent;
         hitVFX[hitVFXCount].transform.localPosition = VFXPosition;
         hitVFX[hitVFXCount].transform.parent = null;
         hitVFX[hitVFXCount].SetActive(true);
+        */
     }
 
     public void unleashSingleProjectile()
@@ -472,12 +495,17 @@ public class vfxHolder : MonoBehaviour
             hitVFXCount++;
         }
 
+        hitVFX[hitVFXCount].Stop();
+        hitVFX[hitVFXCount].Play();
+
+        /*
         hitVFX[hitVFXCount].SetActive(false);
         hitVFX[hitVFXCount].transform.parent = hitVFXParent;
         hitVFX[hitVFXCount].transform.localPosition = VFXPosition;
         hitVFX[hitVFXCount].transform.parent = null;
         hitVFX[hitVFXCount].transform.localScale = new Vector3(3f, 3f, 3f);
         hitVFX[hitVFXCount].SetActive(true);
+        */
     }
 
     public void releaseMonsterSystemVisual()

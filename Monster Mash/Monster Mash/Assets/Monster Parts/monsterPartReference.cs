@@ -114,33 +114,6 @@ public class monsterPartReference : MonoBehaviour
                         return;
                     }
                 }
-
-                /*
-                if (referencesToIgnore.Contains(other.GetComponent<monsterPartReference>()) == false)
-                {
-                    if ((isProjectile || isBoomerang) && isHitbox)
-                    {
-                        GetComponent<projectile>().impact();
-                        damagedMonster.neutralDamage();
-                        //print(damage);
-                    }
-
-                    if (isJabOrSlash && isHitbox)
-                    {
-                        partReference.triggerJabOrSlashHitDetect();
-                        damagedMonster.neutralDamage();
-                        //print(damage);
-                    }
-
-                    if (isReel && isHitbox)
-                    {
-                        partReference.triggerReelHitDetect(); //probably pass along monster part reference script of whatever this hits for "grabbing"
-                        Vector3 storedCollisionPoint = other.ClosestPoint(transform.position);
-                        mainSystem.grabbingActivated(other.GetComponent<monsterPartReference>().mainSystem, this.transform, storedCollisionPoint);
-                    }
-                }
-
-                */
             }
         }
 

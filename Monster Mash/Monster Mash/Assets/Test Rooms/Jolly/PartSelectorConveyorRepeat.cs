@@ -6,6 +6,7 @@ public class PartSelectorConveyorRepeat : MonoBehaviour
 {
     public Transform screen_top;
     public Transform screen_bottom;
+    public Animation glowAnim;
 
     void Update()
     {
@@ -17,5 +18,11 @@ public class PartSelectorConveyorRepeat : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, screen_top.position.y, transform.position.z);
         }
+    }
+
+    public void RestartGlowAnim()
+    {
+        glowAnim.Stop();
+        glowAnim.Play();
     }
 }

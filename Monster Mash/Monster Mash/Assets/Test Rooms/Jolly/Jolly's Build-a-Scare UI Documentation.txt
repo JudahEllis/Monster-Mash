@@ -1,0 +1,85 @@
+----------- DOCUMENTATION: JOLLY'S BUILD-A-SCARE UI ----------------
+
+Although I included commentated explanations for stuff in the scripts themselves,
+some processes start in one script and are completed in another, or there's stuff
+going on in the Animators that might need explaining, so this is my attempt to
+document my work here more clearly. If any further explanation on anything I set
+up is needed, just lemme know anytime!
+
+It is always OK to edit or rewrite my code. It's also OK to add your own text to
+this file, just sign your name when you do.
+
+-------------------------------------------------------------------------
+
+PART SELECTOR:
+
+!! Clicking off selection: if you playtest this on PC, try not to click anything
+with the mouse; it'll deselect whatever is currently selected. I don't know how
+to make Unity just not do that at all, but since this will be built for controller,
+it should be impossible to "click off" on its proper platform. since this "bug"
+shouldn't be reproducible on our target platform, I haven't prioritized trying to
+figure out a good, clean fix for it.
+
+* Scrolling functionality: currently unavailable, I was last trying to code this but
+have since changed priorities. if someone else codes this function in, please
+lemme know that it's been implemented :]
+
+* Canvas component on Part Icons, Tab Icons, Parts Categories, Tabs Dock:
+don't remove these! it's used to render the active icon in front of its neighbors
+without rearranging its position in the hierarchy, using the component's Override
+Sorting checkbox (this is turned on/off via the animations in the part's Animator).
+(this appears to be the only way to rearrange UI render order without rearranging
+the hierarchy.)
+
+* PartSelector.cs: attached to the PartSelector game object.
+      * to change which part category is shown by default, put the corresponding
+	category's number in defaultActiveCategory in the inspector.
+	the script then activates the defaultActiveCategory on Awake and Start
+	(the specific lines of code in Awake and Start have to stay where they
+	are in Awake and Start and can't be combined, or it doesn't work.
+	probably has something to do with the order things are started up in
+	in the scene, such as the Grid Layout components in the part grids)
+      * Update(): backs the player out from the part icons grid, to the category
+	dock. also adjusts the tab button's animators (see "Tab Button
+	Animator" section).
+      * EnableCategory(int categoryNumber): called from any tab button's Toggle
+	component when interacted with. if the player presses the category
+	that's already enabled, it just takes them back to the part icons grid.
+	otherwise, it prepares the animation for switching categories. note
+	that the chosen category is only actually enabled once
+	FinishSwitchTabAnim() is called; see "Tab Switch Animation"
+	section for details.
+
+* PartGrid.cs: attached to each category's part drawer (think shelf drawers).
+on Start, it automatically resizes its RectTransform according to the number of
+parts its grid holds. this does nothing on its own (it doesn't actually affect the
+part grid), but is later used by the PartSelector script, which assigns the
+ScrollView content to this RectTransform.
+
+* Tab Switch Animation: pressing any Tab Button runs EnableCategory (located
+in the PartSelector.cs), which prepares for, then plays the Switch Category
+animation (attached to each Parts Category object). an AnimationEvent in this
+animation calls FinishAnim in PartGrid.cs, which in turn calls
+FinishSwitchTabAnim() in PartSelector.cs (it's roundabout like this because
+AnimationEvents don't seem to allow calling methods from parent objects). this
+completes the process and reopens player interaction.
+
+* Part Icon Animator: mostly self-explanatory. the Highlight triggers generally
+won't be useful for a controller build, since it seems to refer to PointerEnter
+events; a controller build will use the Selected trigger instead. For the Part
+Jostle animation, however, I added another Layer in the Animator (the "Jostle"
+layer), which overrides its usual animations; it's played via the "Jostle" trigger,
+and turns itself off and reverts to the usual animations when the Jostle animation
+is done playing.
+
+* Tab Button Animator: mostly self-explanatory, but has an extra Animator Layer.
+the "Is On & Interactable" layer overrides the base layer, and is activated in
+PartSelector.cs for special animation behavior when the given category is currently
+turned on, AND the player is currently interacting with the category dock.
+
+* PartSelectorConveyorRepeat.cs: continuously readjusts the conveyor's Y
+position in Update so that it appears to repeat infinitely as the player scrolls
+up/down. also has a method called at the end of the tab switch animation, which
+resets its glow effect so that it doesn't look choppy during the switch.
+
+--------

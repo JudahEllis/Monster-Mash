@@ -23,10 +23,6 @@ public class vfxHolder : MonoBehaviour
     private int projectileVFXCount;
     //
     public bool isBoomerangHolder;
-    public float boomerHeight;
-    public float boomerDistance;
-    public float boomerAutoEnd;
-    public float boomerTurnAround = 0f;
     public bool isReloaded = true;
     public monsterPart myMonsterPart;
     public int neutralOrHeavy; //0 == neutral, 1 == heavy
@@ -88,7 +84,7 @@ public class vfxHolder : MonoBehaviour
         turnOnAssetWhenReloaded.SetActive(setActive);
     }
 
-    public void grabReferences()
+    public void grabReferences()//new projectile-like attack types must be added here
     {
         if (isProjectileHolder || isSubSprayHolder || isBoomerangHolder)
         {
@@ -195,7 +191,7 @@ public class vfxHolder : MonoBehaviour
 
     #region Additional Set Up
 
-    private void additionalSetUp()
+    private void additionalSetUp() //new attack types must be added here
     {
         if (isJabOrSlashHolder || isReelInHolder)
         {
@@ -231,22 +227,6 @@ public class vfxHolder : MonoBehaviour
     {
         if (isJabOrSlashHolder || isReelInHolder)
         {
-            /*
-            List<GameObject> tempJabOrSlashVFX = new List<GameObject>();
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                tempJabOrSlashVFX.Add(transform.GetChild(i).gameObject);
-            }
-            hitVFX = new GameObject[tempJabOrSlashVFX.Count];
-            for (int i = 0; i < hitVFX.Length; i++)
-            {
-                hitVFX[i] = tempJabOrSlashVFX[i];
-            }
-
-            VFXPosition = hitVFX[0].transform.localPosition;
-            hitVFXParent = hitVFX[0].transform.parent;
-            */
-
             List<ParticleSystem> tempJabOrSlashVFX = new List<ParticleSystem>();
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -264,7 +244,7 @@ public class vfxHolder : MonoBehaviour
         }
     }
 
-    public void prepProjectileVFX()
+    public void prepProjectileVFX() //projectile-like new attack types must be added here
     {
         if (isProjectileHolder || isSubSprayHolder || isBoomerangHolder)
         {
@@ -272,17 +252,6 @@ public class vfxHolder : MonoBehaviour
             for (int i = 0; i < transform.childCount; i++)
             {
                 tempProjectileVFX.Add(transform.GetChild(i).gameObject);
-
-                if (isBoomerangHolder && transform.GetChild(i).gameObject.GetComponent<projectile>())
-                {
-                    projectile cp = transform.GetChild(i).gameObject.GetComponent<projectile>();
-                    cp.isBoomerang = true;
-                    cp.height = boomerHeight;
-                    cp.distance = boomerDistance;
-                    cp.autoEnd = boomerAutoEnd;
-                    cp.turnAround = boomerTurnAround;
-                    cp.neutralOrHeavy = neutralOrHeavy;
-                }
             }
             projectileVFXArray = new GameObject[tempProjectileVFX.Count];
             for (int i = 0; i < projectileVFXArray.Length; i++)

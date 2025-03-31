@@ -93,7 +93,8 @@ public class monsterPart : MonoBehaviour
     private vfxHolder neutralDefaultSprayVFXManager;
     private vfxHolder neutralStompVFXManager;
     public Transform neutralMuzzle;
-    public bool needsReloadNeutral; //for projectiles, determines if projectile must be reloaded before shooting again
+    public bool needsReloadNeutral; //determines if part must be reloaded before attacking again
+    public float reloadTimeNeutral = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
     [SerializeField] private bool isReloadedNeutral = true;
     [SerializeField] private bool isReloadedHeavy = true;
     public Transform[] neutralAttackHitVFXArray;
@@ -123,6 +124,7 @@ public class monsterPart : MonoBehaviour
     public bool homingMissileHeavyAttack;
     public bool anvilHeavyAttack;
     public bool bowlingBallHeavyAttack;
+    public bool gaseousHeavyAttack;
     public bool powerBoostingHeavyAttack;
     public bool shieldHeavyAttack;
     public bool reflectingHeavyAttack;
@@ -150,6 +152,7 @@ public class monsterPart : MonoBehaviour
     private vfxHolder heavyStompVFXManager;
     public Transform heavyMuzzle;
     public bool needsReloadHeavy; //for projectiles, determines if projectile must be reloaded before shooting again
+    public float reloadTimeHeavy = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
     public ParticleSystem chargeVisual;
     public ParticleSystem heavyChargeVisual;
     //public ParticleSystem fullHeavyChargeVisual;
@@ -168,24 +171,24 @@ public class monsterPart : MonoBehaviour
     private int heavyHitCounter = 0;
 
     [Header("Monster Part Positioning Info")]
-    public bool isJointed = true;
-    public bool isRightShoulderLimb;
-    public bool isLeftShoudlerLimb;
-    public bool isRightPelvisLimb;
-    public bool isLeftPelvisLimb;
-    public bool isChestLimb;
-    public bool isBellyLimb;
-    public bool isNeckLimb;
-    public bool isTailLimb;
-    public bool isShoulderBladeLimb;
-    public bool isTopHeadLimb;
-    public bool isBacksideHeadLimb;
-    public bool isRightEarLimb;
-    public bool isLeftEarLimb;
-    public bool isFacialLimb;
-    public bool isRightSidedLimb;
-    public bool isLeftSidedLimb;
-    public bool isGroundedLimb;
+    [HideInInspector] public bool isJointed = true;
+    [HideInInspector] public bool isRightShoulderLimb;
+    [HideInInspector] public bool isLeftShoudlerLimb;
+    [HideInInspector] public bool isRightPelvisLimb;
+    [HideInInspector] public bool isLeftPelvisLimb;
+    [HideInInspector] public bool isChestLimb;
+    [HideInInspector] public bool isBellyLimb;
+    [HideInInspector] public bool isNeckLimb;
+    [HideInInspector] public bool isTailLimb;
+    [HideInInspector] public bool isShoulderBladeLimb;
+    [HideInInspector] public bool isTopHeadLimb;
+    [HideInInspector] public bool isBacksideHeadLimb;
+    [HideInInspector] public bool isRightEarLimb;
+    [HideInInspector] public bool isLeftEarLimb;
+    [HideInInspector] public bool isFacialLimb;
+    [HideInInspector] public bool isRightSidedLimb;
+    [HideInInspector] public bool isLeftSidedLimb;
+    [HideInInspector] public bool isGroundedLimb;
     private string forwardInputTorsoCommand = "";
     private string backwardInputTorsoCommand = "";
     private string upwardInputTorsoCommand = "";
@@ -204,8 +207,8 @@ public class monsterPart : MonoBehaviour
     private bool rightAttackOverride;
 
     [Header("Internal Info - Don't Touch")]
-    public bool isBracing = false;
-    public bool attackMarkedHeavy = false;
+    [HideInInspector] public bool isBracing = false;
+    [HideInInspector] public bool attackMarkedHeavy = false;
     private bool heavyAttackInMotion = false;
     private bool fullActiveHeavy = false;
     public bool requiresRightStance = false;
@@ -311,21 +314,8 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void disableOutline()
-    {
-        if (visualForAnimationTests != null)
-        {
-            visualForAnimationTests.enabled = false;
-        }
-    }
-
-    public void reenableOutline()
-    {
-        if (visualForAnimationTests != null)
-        {
-            visualForAnimationTests.enabled = true;
-        }
-    }
+    public void disableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = false;}
+    public void reenableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = true;}
 
     #endregion
 
@@ -1260,6 +1250,7 @@ public class monsterPart : MonoBehaviour
             if (!isReloadedNeutral)
             {
                 triggerNeutralOrHeavyRefresh(true);
+                return;
             }
         }
 
@@ -1268,6 +1259,7 @@ public class monsterPart : MonoBehaviour
             if (!isReloadedHeavy)
             {
                 triggerNeutralOrHeavyRefresh(true);
+                return;
             }
         }
 
@@ -1883,38 +1875,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyAttackPowerUp() //built up in wind up animation
     {
-        if (jabHeavyAttack)
-        {
-            builtUpAttackPower++;
-        }
-
-        if (slashHeavyAttack)
-        {
-            builtUpAttackPower++;
-        }
-
-        if (projectileHeavyAttack)
-        {
-            builtUpAttackPower++;
-        }
-
-        if (beamHeavyAttack)
-        {
-
-        }
-
-        if (sprayNeutralAttack)
-        {
-            builtUpAttackPower++;
-        }
-
         if (reelHeavyAttack)
         {
             reelAttackBuiltUpPower++;
             powerUpCheckAllowed = true;
         }
-
-        if (boomerangHeavyAttack)
+        else if (!beamHeavyAttack)
         {
             builtUpAttackPower++;
         }
@@ -1937,33 +1903,17 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    private void neutralAttackPowerCalculation()
+    private void neutralAttackPowerCalculation() //new attack types must be added here
     {
         damage = baseNeutralAttackDamage;
 
-        if (jabNeutralAttack)
+        if (jabNeutralAttack || slashNeutralAttack)
         {
             neutralColliderReference.resetAttackHistory();
             neutralColliderReference.damage = damage;
             heavyColliderReference.markedHeavy = false;
         }
-        else if (slashNeutralAttack)
-        {
-            neutralColliderReference.resetAttackHistory();
-            neutralColliderReference.damage = damage;
-            heavyColliderReference.markedHeavy = false;
-        }
-        else if (projectileNeutralAttack)
-        {
-            neutralHitVFXManager.damage = damage;
-            neutralHitVFXManager.updateDamageOnProjectiles();
-        }
-        else if (sprayNeutralAttack)
-        {
-            neutralHitVFXManager.damage = damage;
-            neutralHitVFXManager.updateDamageOnProjectiles();
-        }
-        else if (boomerangNeutralAttack)
+        else if (projectileNeutralAttack || sprayNeutralAttack || boomerangHeavyAttack)
         {
             neutralHitVFXManager.damage = damage;
             neutralHitVFXManager.updateDamageOnProjectiles();
@@ -1972,24 +1922,18 @@ public class monsterPart : MonoBehaviour
         damageClearance();
     }
 
-    private void heavyAttackPowerCalculation()
+    private void heavyAttackPowerCalculation() //new attack types must be added here
     {
         damage = baseHeavyAttackDamage + (builtUpAttackPower * builtUpAddedDamage);
         builtUpAttackPower = 0;
 
-        if (jabHeavyAttack)
+        if (jabHeavyAttack || slashHeavyAttack || grappleHeavyAttack)
         {
             heavyColliderReference.resetAttackHistory();
             heavyColliderReference.damage = damage;
             heavyColliderReference.markedHeavy = true;
         }
-        else if (slashHeavyAttack)
-        {
-            heavyColliderReference.resetAttackHistory();
-            heavyColliderReference.damage = damage;
-            heavyColliderReference.markedHeavy = true;
-        }
-        else if (projectileHeavyAttack)
+        else if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
         {
             heavyHitVFXManager.damage = damage;
             heavyHitVFXManager.updateDamageOnProjectiles();
@@ -1997,22 +1941,6 @@ public class monsterPart : MonoBehaviour
         else if (beamHeavyAttack)
         {
 
-        }
-        else if (sprayHeavyAttack)
-        {
-            heavyHitVFXManager.damage = damage;
-            heavyHitVFXManager.updateDamageOnProjectiles();
-        }
-        else if (boomerangHeavyAttack)
-        {
-            heavyHitVFXManager.damage = damage;
-            heavyHitVFXManager.updateDamageOnProjectiles();
-        }
-        else if (grappleHeavyAttack)
-        {
-            heavyColliderReference.resetAttackHistory();
-            heavyColliderReference.damage = damage;
-            heavyColliderReference.markedHeavy = true;
         }
 
         damageClearance();
@@ -2026,7 +1954,7 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Status Effects
-    private void statusEffectAndDamageCalculations()
+    private void statusEffectAndDamageCalculations() //new attack types must be added here
     {
         if (jabNeutralAttack)
         {
@@ -2052,7 +1980,7 @@ public class monsterPart : MonoBehaviour
             neutralHitVFXManager.updateDamageOnProjectiles();
         }
 
-        if (jabHeavyAttack)
+        if (jabHeavyAttack || slashHeavyAttack)
         {
             heavyColliderReference.burnedStatusEffect = burnedStatusEffect;
             heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
@@ -2066,21 +1994,7 @@ public class monsterPart : MonoBehaviour
             heavyColliderReference.slowedStatusEffect = slowedStatusEffect;
             heavyColliderReference.grabbedStatusEffect = grabbedStatusEffect;
         }
-        else if (slashHeavyAttack)
-        {
-            heavyColliderReference.burnedStatusEffect = burnedStatusEffect;
-            heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
-            heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
-            heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
-            heavyColliderReference.cursedStatusEffect = cursedStatusEffect;
-            heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
-            heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
-            heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
-            heavyColliderReference.squashedStatusEffect = squashedStatusEffect;
-            heavyColliderReference.slowedStatusEffect = slowedStatusEffect;
-            heavyColliderReference.grabbedStatusEffect = grabbedStatusEffect;
-        }
-        else if (projectileHeavyAttack)
+        else if (projectileHeavyAttack || boomerangHeavyAttack)
         {
             heavyHitVFXManager.damage = baseHeavyAttackDamage;
             heavyHitVFXManager.updateDamageOnProjectiles();
@@ -2117,23 +2031,6 @@ public class monsterPart : MonoBehaviour
             heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
             heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
             heavyHitVFXManager.updateStatusEffectsOnSpray();
-        }
-        else if (boomerangHeavyAttack)
-        {
-            heavyHitVFXManager.damage = baseHeavyAttackDamage;
-            heavyHitVFXManager.updateDamageOnProjectiles();
-            heavyHitVFXManager.burnedStatusEffect = burnedStatusEffect;
-            heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
-            heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
-            heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
-            heavyHitVFXManager.hauntedStatusEffect = cursedStatusEffect;
-            heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
-            heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
-            heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
-            heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
-            heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
-            heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
-            heavyHitVFXManager.updateStatusEffectsOnProjectiles();
         }
     }
     #endregion
@@ -3070,7 +2967,7 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    private void setUpVFX()
+    private void setUpVFX()//new attack projectile-like types must be added here
     {
 
         #region Neutral Hit VFX Holder
@@ -3167,7 +3064,8 @@ public class monsterPart : MonoBehaviour
         }
         #endregion
 
-        #region Neutral Default Spray Holder
+        #region Neutral Default Spray Holder 
+        //new sprayable attack types must be added here
         if (neutralDefaultSprayVFXHolder != null)
         {
             if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
@@ -3208,6 +3106,7 @@ public class monsterPart : MonoBehaviour
 
 
         #region Heavy Hit VFX Holder
+        //new projectile-like attack types must be added here
         if (heavyHitVFXHolder != null)
         {
             if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
@@ -3321,6 +3220,7 @@ public class monsterPart : MonoBehaviour
         #endregion
 
         #region Heavy Default Spray Holder
+        //new sprayable attack types must be added here
         if (heavyDefaultSprayVFXHolder != null)
         {
             if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
@@ -3416,7 +3316,7 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerNeutralAttackVisuals() //called in attack animation
+    public void triggerNeutralAttackVisuals() //called in attack animation //new attack types must be added here
     {
         if (jabNeutralAttack)
         {
@@ -3489,7 +3389,7 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerHeavyAttackVisuals()
+    public void triggerHeavyAttackVisuals() //new attack types must be added here
     {
         if (jabHeavyAttack)
         {
@@ -4272,8 +4172,32 @@ public class monsterPart : MonoBehaviour
 
     #endregion
 
-    #region Judah Reloading Check Code //mostly for boomerangs
+    #region Reloading Piece Logic 
+    //allows non-projectiles to reload if intended
+    public void ReloadMeleeNeutral()
+    {
+        isReloadedNeutral = false;
+        StartCoroutine(ReloadMeleeAttack(reloadTimeNeutral, true));
+    }
 
+    public void ReloadMeleeHeavy()
+    {
+        isReloadedHeavy = false;
+        StartCoroutine(ReloadMeleeAttack(reloadTimeHeavy, false));
+    }
+    private IEnumerator ReloadMeleeAttack(float reloadTime, bool isNeutral) //bool isNeutral, true == reload neutral, false == reload heavy
+    {
+        yield return new WaitForSeconds(reloadTime);
+
+        if (isNeutral)
+        {
+            isReloadedNeutral = true;
+            yield break;
+        }
+
+        isReloadedHeavy = true;
+        yield break;
+    }
     public bool GetReloadNeutral ()
     {
         return isReloadedNeutral;
@@ -4322,6 +4246,5 @@ public class monsterPart : MonoBehaviour
 
         return calc;
     }
-
     #endregion
 }

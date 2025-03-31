@@ -35,11 +35,11 @@ public class projectile : MonoBehaviour
 
     [Header("Boomerang")]
     [SerializeField] public bool needsReload = false;
-    [HideInInspector] public bool isBoomerang = false;
-    [HideInInspector] public float height;
-    [HideInInspector] public float distance;
-    [HideInInspector] public float autoEnd;
-    [HideInInspector] public float turnAround = 0f;
+    public bool isBoomerang = false;
+    public float height;
+    public float distance;
+    public float autoEnd;
+    public float turnAround = 0f;
     [SerializeField] private bool isReloaded = false;
     [HideInInspector] public int neutralOrHeavy;
     private monsterPart myMonsterPart;
@@ -91,12 +91,7 @@ public class projectile : MonoBehaviour
             trailVisual.SetActive(true);
         }
         baseCollider.enabled = true;
-        /*
-        if (trailVisual.GetComponent<ParticleSystem>() != null)
-        {
-            trailVisual.GetComponent<ParticleSystem>().Play();
-        }
-        */
+
         resetPosition();
         updateVelocity();
 
@@ -271,6 +266,7 @@ public class projectile : MonoBehaviour
         }
     }
 
+    #region Boomerang logic
     private void FixedUpdate()
     {
         if (isBoomerang)
@@ -340,7 +336,10 @@ public class projectile : MonoBehaviour
 
         yield break;
     }
+    #endregion
 
+
+    #region ReloadFunctions
     public bool GetReload()
     {
         return isReloaded;
@@ -350,4 +349,5 @@ public class projectile : MonoBehaviour
     {
         isReloaded = reload;
     }
+    #endregion
 }

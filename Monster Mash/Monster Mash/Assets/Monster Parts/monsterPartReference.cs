@@ -18,6 +18,35 @@ public class monsterPartReference : MonoBehaviour
     public bool isBoomerang;
     public bool isChargingJab;
 
+    #region Box Cast vars
+    private enum orientation
+    {
+        Forward,
+        Back,
+        Left,
+        Right,
+        Up,
+        Down
+    }
+
+    /// <summary>
+    /// Maps an orientation enum to the corisponding vector
+    /// </summary>
+    private Dictionary<orientation, Vector3> orientationToVector;
+
+    [Header("Box Cast Positioning Info")]
+    [SerializeField] private Vector3 boxSize;
+    [SerializeField] private Vector3 boxRotation;
+    [Tooltip("Please note that the max distance is not where the box cast is curentely located. When activated the box cast will start at the begining of the ray and travel to the end of the ray, " +
+        "the location of the box gizmo indicates the ending position of the box cast.")]
+    [SerializeField] private float boxMaxDistance;
+    [Tooltip("Orientations are in world space so the selected orientation label might not be corect depending on the objects rotation. " +
+        "The orientation will still work but may be reversed, just pick the orientation that puts the box cast in the direction you want and ignore the labels if this happens, you can also use negative values as a work around.")]
+    [SerializeField] private orientation boxOrientation;
+    [SerializeField] private bool showDebug;
+
+    #endregion
+
     [Header("Damage, Direction, and Status Effects")]
     public int damage = 0;
     public bool hasTickDamage;
@@ -40,6 +69,20 @@ public class monsterPartReference : MonoBehaviour
     public bool squashedStatusEffect;
     public bool slowedStatusEffect;
     public bool grabbedStatusEffect;
+
+
+    private void Awake()
+    {
+        orientationToVector = new Dictionary<orientation, Vector3>
+        {
+            {orientation.Forward, transform.forward },
+            {orientation.Back, -transform.forward },
+            {orientation.Left, -transform.right },
+            {orientation.Right, transform.right },
+            {orientation.Up, transform.up },
+            {orientation.Down, -transform.up }
+        };
+    }
 
     public void resetAttackHistory()
     {
@@ -165,6 +208,44 @@ public class monsterPartReference : MonoBehaviour
                 partReference.triggerStompDetectionOff();
             }
         }
+    }
+
+    private void TriggerBoxCast()
+    {
+        Vector3 orientation;
+        orientationToVector.TryGetValue(boxOrientation, out orientation);
+
+        RaycastHit hitinfo;
+        if (Physics.BoxCast(transform.position, boxSize / 2, transform.TransformDirection(orientation), out hitinfo, Quaternion.Euler(boxRotation), boxMaxDistance))
+        {
+            Debug.Log(hitinfo.transform.name);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!showDebug) { return; }
+
+        // OnDrawGizmos is run in the editor so we need to call awake manualy
+        if (orientationToVector == null)
+        {
+            Awake();
+        }
+        
+
+        Vector3 orientation;
+        orientationToVector.TryGetValue(boxOrientation, out orientation);
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawRay(transform.position, transform.TransformDirection(orientation) * boxMaxDistance);
+
+        // Rotating a gizmo is not straightforward so we need to apply the rotation to the transform matrix
+        Vector3 position = transform.position + transform.TransformDirection(orientation) * boxMaxDistance;
+        Quaternion rotation = Quaternion.Euler(boxRotation);
+        Gizmos.matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
+
+        Gizmos.DrawWireCube(Vector3.zero, boxSize);
     }
 
 }

@@ -64,6 +64,12 @@ FinishSwitchTabAnim() in PartSelector.cs (it's roundabout like this because
 AnimationEvents don't seem to allow calling methods from parent objects). this
 completes the process and reopens player interaction.
 
+* Part Icon Prefab: to change the part icon, reassign the Images in each of the
+children except for "goo." use the default version of the part icon for all of
+these except for "highlighted," which of course takes the highlighted version
+of the icon. I will likely add script to PartButton.cs later to streamline
+this a bit more.
+
 * Part Icon Animator: mostly self-explanatory. the Highlight triggers generally
 won't be useful for a controller build, since it seems to refer to PointerEnter
 events; a controller build will use the Selected trigger instead. For the Part

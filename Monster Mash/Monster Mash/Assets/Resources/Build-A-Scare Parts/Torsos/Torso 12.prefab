@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &29875105366112593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6503473531614054956}
+  m_Layer: 0
+  m_Name: Monster Mash - Torso 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6503473531614054956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29875105366112593}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5563589007906356049}
+  m_Father: {fileID: 7614308173702181984}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &129430934815979946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,14 +1369,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6979566539113139134}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3957985829379439642}
-  m_Father: {fileID: 7614308173702181984}
-  m_RootOrder: 1
+  m_Father: {fileID: 6503473531614054956}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7124875332346146522
 GameObject:
@@ -1378,7 +1410,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 350537373104106834}
-  - {fileID: 5563589007906356049}
+  - {fileID: 6503473531614054956}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1469,6 +1501,7 @@ MonoBehaviour:
   neutralCollider: {fileID: 0}
   neutralMuzzle: {fileID: 0}
   needsReloadNeutral: 0
+  reloadTimeNeutral: 1
   isReloadedNeutral: 1
   isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
@@ -1490,6 +1523,7 @@ MonoBehaviour:
   homingMissileHeavyAttack: 0
   anvilHeavyAttack: 0
   bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
   powerBoostingHeavyAttack: 0
   shieldHeavyAttack: 0
   reflectingHeavyAttack: 0
@@ -1508,6 +1542,7 @@ MonoBehaviour:
   heavyCollider: {fileID: 0}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
+  reloadTimeHeavy: 1
   chargeVisual: {fileID: 0}
   heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []

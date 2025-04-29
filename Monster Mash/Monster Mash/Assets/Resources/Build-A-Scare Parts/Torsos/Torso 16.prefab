@@ -213,7 +213,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5077620369098370868}
-  - {fileID: 2478207845000703603}
+  - {fileID: 5588630572510760203}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -304,6 +304,7 @@ MonoBehaviour:
   neutralCollider: {fileID: 0}
   neutralMuzzle: {fileID: 0}
   needsReloadNeutral: 0
+  reloadTimeNeutral: 1
   isReloadedNeutral: 1
   isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
@@ -325,6 +326,7 @@ MonoBehaviour:
   homingMissileHeavyAttack: 0
   anvilHeavyAttack: 0
   bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
   powerBoostingHeavyAttack: 0
   shieldHeavyAttack: 0
   reflectingHeavyAttack: 0
@@ -343,6 +345,7 @@ MonoBehaviour:
   heavyCollider: {fileID: 0}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
+  reloadTimeHeavy: 1
   chargeVisual: {fileID: 0}
   heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
@@ -428,14 +431,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1120812018494234268}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6466075575599245624}
-  m_Father: {fileID: 502994336439591234}
-  m_RootOrder: 1
+  m_Father: {fileID: 5588630572510760203}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1644931618029508531
 GameObject:
@@ -1563,6 +1566,38 @@ Transform:
   - {fileID: 7829261964083653066}
   m_Father: {fileID: 6466075575599245624}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7942870839879890357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5588630572510760203}
+  m_Layer: 0
+  m_Name: Monster Mash - Torso 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5588630572510760203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942870839879890357}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2478207845000703603}
+  m_Father: {fileID: 502994336439591234}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9001102234757547108
 GameObject:

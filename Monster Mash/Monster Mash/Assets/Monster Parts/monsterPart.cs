@@ -2043,10 +2043,11 @@ public class monsterPart : MonoBehaviour
             return;
         }
 
-        if (isGroundedLimb || isTorso)
+        if (isGroundedLimb)
         {
             myAnimator.ResetTrigger("Walk to Idle");
             myAnimator.SetBool("Walking", true);
+            myAnimator.SetTrigger("Walk");
             myAnimator.SetBool("Running", false);
             isWalking = true;
             isRunning = false;
@@ -2056,6 +2057,15 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetBool("Calm", false);
                 myAnimator.SetBool("Teeter", false);
             }
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Walk to Idle");
+            myAnimator.SetBool("Walking", true);
+            myAnimator.SetBool("Running", false);
+            isWalking = true;
+            isRunning = false;
 
             if (isTorso)
             {
@@ -2115,10 +2125,11 @@ public class monsterPart : MonoBehaviour
             return;
         }
 
-        if (isGroundedLimb || isTorso)
+        if (isGroundedLimb)
         {
             myAnimator.ResetTrigger("Walk to Idle");
             myAnimator.SetBool("Running", true);
+            myAnimator.SetTrigger("Run");
             myAnimator.SetBool("Walking", false);
             isWalking = false;
             isRunning = true;
@@ -2127,6 +2138,15 @@ public class monsterPart : MonoBehaviour
             {
                 myAnimator.SetBool("Calm", false);
             }
+        }
+
+        if (isTorso)
+        {
+            myAnimator.ResetTrigger("Walk to Idle");
+            myAnimator.SetBool("Running", true);
+            myAnimator.SetBool("Walking", false);
+            isWalking = false;
+            isRunning = true;
         }
 
         if (isHead || isWing || isArm || isTail)

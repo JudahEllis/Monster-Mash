@@ -213,7 +213,7 @@ public class playerController : MonoBehaviour
             }
             else if (isWalking && myMonster.isWalking == false)
             {
-                startWalkingVisual();
+                //startWalkingVisual();
             }
 
             if(isRunning == false && myMonster.isRunning)
@@ -297,10 +297,10 @@ public class playerController : MonoBehaviour
                             //right
                             if (isWalking == false)
                             {
-                                isWalking = true;
-                                isRunning = false;
-                                stopRunningVisual();
-                                startWalkingVisual();
+                                //isWalking = true;
+                                //isRunning = false;
+                                //stopRunningVisual();
+                                //startWalkingVisual();
                             }
 
                             myRigidbody.velocity = new Vector2(1 * walkSpeed, myRigidbody.velocity.y);
@@ -310,16 +310,16 @@ public class playerController : MonoBehaviour
                             //left
                             if (isWalking == false)
                             {
-                                isWalking = true;
-                                isRunning = false;
-                                stopRunningVisual();
-                                startWalkingVisual();
+                                //isWalking = true;
+                                //isRunning = false;
+                                //stopRunningVisual();
+                                //startWalkingVisual();
                             }
 
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed, myRigidbody.velocity.y);
                         }
                     }
-                    else if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
+                    else if ((leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
                     {
                         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 
@@ -396,7 +396,7 @@ public class playerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed / 2, myRigidbody.velocity.y);
                         }
                     }
-                    else if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
+                    else if ((leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
                     {
                         myRigidbody.velocity = new Vector2(myRigidbody.velocity.x - 0.001f, myRigidbody.velocity.y);
 
@@ -793,16 +793,16 @@ public class playerController : MonoBehaviour
                         turnOffFriction();
                     }
                 }
-                else if (leftJoystickVector.x > 0.1f || leftJoystickVector.x < -0.1f)
+                else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f || leftJoystickVector.x == 0.2f || leftJoystickVector.x == -0.2f)
                 {
                     //walk
 
-                    if (isWalking == false && isRunning == false)
+                    if (isWalking == false)
                     {
                         isWalking = true;
                         isRunning = false;
                         startWalkingVisual();
-                        //stopRunningVisual();
+                        stopRunningVisual();
                         turnOffFriction();
                     }
                 }
@@ -876,7 +876,7 @@ public class playerController : MonoBehaviour
             return;
         }
 
-        if ((leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
+        if ((leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
         {
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 

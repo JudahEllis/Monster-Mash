@@ -544,6 +544,7 @@ public class monsterAttackSystem : MonoBehaviour
                 //Redo this section to clean it up
                 if (attackSlotMonsterParts[attackSlot].attackAnimationID == 0)
                 {
+                    /*
                     if (isGrounded || attackSlotMonsterParts[attackSlot].isTail)
                     {
                         requiresFlourishingTwirl = false;
@@ -554,9 +555,13 @@ public class monsterAttackSystem : MonoBehaviour
                         requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
                     }
+                    */
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 1)
                 {
+                    //requiresFlourishingTwirl = true;
+                    //requiresFlourishingRoll = false;
+                    /*
                     if (attackSlotMonsterParts[attackSlot].isLeg && attackSlotMonsterParts[attackSlot].isGroundedLimb)
                     {
                         requiresFlourishingTwirl = false;
@@ -567,10 +572,11 @@ public class monsterAttackSystem : MonoBehaviour
                         requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
                     }
-
+                    */
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == -1)
                 {
+                    /*
                     if (attackSlotMonsterParts[attackSlot].isTail)
                     {
                         requiresFlourishingTwirl = false;
@@ -586,11 +592,14 @@ public class monsterAttackSystem : MonoBehaviour
                         requiresFlourishingTwirl = false;
                         requiresFlourishingRoll = false;
                     }
+                    */
                 }
                 else if (attackSlotMonsterParts[attackSlot].attackAnimationID == 2)
                 {
+                    /*
                     requiresFlourishingTwirl = false;
                     requiresFlourishingRoll = false;
+                    */
                 }
 
                 if (isGrounded)

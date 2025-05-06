@@ -1,41 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MonsterCalculations
 {
     #region return these vars
-    public bool requiresBackwardStance;
-    public bool requiresForwardStance;
-    public bool requiresRightStance;
-    public bool requiresLeftStance;
+    public bool requiresBackwardStance = false;
+    public bool requiresForwardStance = false;
+    public bool requiresRightStance = true;
+    public bool requiresLeftStance = false;
 
-    public bool hasTorsoCommand;
+    public bool hasTorsoCommand = true;
     public string forwardInputTorsoCommand;
     public string backwardInputTorsoCommand;
     public string upwardInputTorsoCommand;
     public string downwardInputTorsoCommand;
 
-    public bool hasHeadCommand;
+    public bool hasHeadCommand = false;
     public string forwardInputHeadCommand;
     public string backwardInputHeadCommand;
     public string upwardInputHeadCommand;
     public string downwardInputHeadCommand;
 
-    public bool hasNeutralMovementCommand;
+    public bool hasNeutralMovementCommand = true;
     public string forwardNeutralMovementCommand;
     public string upwardNeutralMovementCommand;
     public string backwardNeutralMovementCommand;
     public string downwardNeutralMovementCommand;
 
-    public bool hasHeavyMovementCommand;
+    public bool hasHeavyMovementCommand = true;
     public string forwardHeavyMovementCommand;
     public string upwardHeavyMovementCommand;
     public string backwardHeavyMovementCommand;
     public string downwardHeavyMovementCommand;
     #endregion
+
+    private Dictionary<string, AttackConfig> configMap;
+
     public void AttackCalculationSetUp(monsterPart part)
     {
+        LoadConfigs();
+
         #region Arms
         if (part.isArm)
         {
@@ -47,7 +53,7 @@ public class MonsterCalculations
 
             if (part.isRightShoulderLimb || part.isLeftShoudlerLimb || part.isChestLimb)
             {
-                requiresBackwardStance = false;
+                /*requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -62,7 +68,7 @@ public class MonsterCalculations
                 forwardInputHeadCommand = "";
                 backwardInputHeadCommand = "";
                 upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
+                downwardInputHeadCommand = "Forward Attack"; // Always forward. Value does not change and can be removed
 
                 hasNeutralMovementCommand = true;
                 forwardNeutralMovementCommand = "Forward Strike";
@@ -72,15 +78,17 @@ public class MonsterCalculations
 
                 hasHeavyMovementCommand = true;
                 forwardHeavyMovementCommand = "Forward Leap";
-                upwardHeavyMovementCommand = "Upward Leap";
-                backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";
+                upwardHeavyMovementCommand = "Upward Leap"; // is empty most of the time, occurences can be reduced by having a default value
+                backwardHeavyMovementCommand = "Quick 180 Heavy"; // is empty most of the time, occurences can be reduced by having a default value
+                downwardHeavyMovementCommand = "Downward Leap"; // is empty most of the time, occurences can be reduced by having a default value*/
+
+                ApplyConfig("ArmShoulderConfig");
 
 
             }
             else if (part.isRightPelvisLimb || part.isLeftPelvisLimb || part.isBellyLimb || part.isShoulderBladeLimb)
             {
-                requiresBackwardStance = false;
+                /*requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -107,11 +115,13 @@ public class MonsterCalculations
                 forwardHeavyMovementCommand = "Forward Leap";
                 upwardHeavyMovementCommand = "Upward Leap";
                 backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";
+                downwardHeavyMovementCommand = "Downward Leap";*/
+
+                ApplyConfig("ArmPelvisConfig");
             }
             else if (part.isTailLimb)
             {
-                requiresBackwardStance = false;
+                /*requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -138,7 +148,9 @@ public class MonsterCalculations
                 forwardHeavyMovementCommand = "Quick 180 Heavy";
                 upwardHeavyMovementCommand = "Upward Leap";
                 backwardHeavyMovementCommand = "Backward Leap";
-                downwardHeavyMovementCommand = "Downward Leap";
+                downwardHeavyMovementCommand = "Downward Leap";*/
+
+                ApplyConfig("ArmTailConfig");
 
             }
             else if (part.isRightEarLimb || part.isLeftEarLimb || part.isFacialLimb)
@@ -221,7 +233,7 @@ public class MonsterCalculations
                 forwardInputHeadCommand = "Face Attack";
                 backwardInputHeadCommand = "Face Attack";
                 upwardInputHeadCommand = "Forward Attack";
-                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Upward Attack";
 
                 hasNeutralMovementCommand = true;
                 forwardNeutralMovementCommand = "Quick 180";
@@ -453,7 +465,7 @@ public class MonsterCalculations
                 forwardInputHeadCommand = "Face Attack";
                 backwardInputHeadCommand = "Face Attack";
                 upwardInputHeadCommand = "Forward Attack";
-                upwardInputHeadCommand = "Upward Attack";
+                downwardInputHeadCommand = "Upward Attack";
 
                 hasNeutralMovementCommand = true;
                 forwardNeutralMovementCommand = "";
@@ -1291,5 +1303,48 @@ public class MonsterCalculations
 
         }
         #endregion
+    }
+
+    private void LoadConfigs()
+    {
+        TextAsset jsonText = Resources.Load<TextAsset>("attack_configs");
+
+        if (jsonText == null)
+        {
+            Debug.LogError("Could not load attack_configs.json");
+            return;
+        }
+
+        AttackConfigList configList = JsonUtility.FromJson<AttackConfigList>(jsonText.text);
+        configMap = configList.configs.ToDictionary(config => config.ConfigName);
+    }
+
+    private void ApplyConfig(string configName)
+    {
+        if (configMap.TryGetValue(configName, out var config))
+        {
+            forwardInputTorsoCommand = config.forwardInputTorsoCommand;
+            backwardInputTorsoCommand = config.backwardInputTorsoCommand;
+            upwardInputTorsoCommand = config.upwardInputTorsoCommand;
+            downwardInputTorsoCommand = config.downwardInputTorsoCommand;
+
+            forwardInputHeadCommand = config.forwardInputHeadCommand;
+            backwardInputHeadCommand = config.backwardInputHeadCommand;
+            upwardInputHeadCommand = config.upwardInputHeadCommand;
+            downwardInputHeadCommand = config.downwardInputHeadCommand;
+
+            forwardNeutralMovementCommand = config.forwardNeutralMovementCommand;
+            upwardNeutralMovementCommand = config.upwardNeutralMovementCommand;
+            backwardNeutralMovementCommand = config.backwardNeutralMovementCommand;
+            downwardNeutralMovementCommand = config.downwardNeutralMovementCommand;
+
+            forwardHeavyMovementCommand = config.forwardHeavyMovementCommand;
+            upwardHeavyMovementCommand = config.upwardHeavyMovementCommand;
+            backwardHeavyMovementCommand = config.backwardHeavyMovementCommand;
+            downwardHeavyMovementCommand = config.downwardHeavyMovementCommand;
+
+
+
+        }
     }
 }

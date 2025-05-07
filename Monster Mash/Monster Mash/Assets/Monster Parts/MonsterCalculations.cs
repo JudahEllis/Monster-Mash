@@ -53,206 +53,27 @@ public class MonsterCalculations
 
             if (part.isRightShoulderLimb || part.isLeftShoudlerLimb || part.isChestLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Forward Attack";
-                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Downward Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack"; // Always forward. Value does not change and can be removed
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "Forward Strike";
-                upwardNeutralMovementCommand = "Upward Strike";
-                backwardNeutralMovementCommand = "Quick 180";
-                downwardNeutralMovementCommand = "Downward Strike";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "Forward Leap";
-                upwardHeavyMovementCommand = "Upward Leap"; // is empty most of the time, occurences can be reduced by having a default value
-                backwardHeavyMovementCommand = "Quick 180 Heavy"; // is empty most of the time, occurences can be reduced by having a default value
-                downwardHeavyMovementCommand = "Downward Leap"; // is empty most of the time, occurences can be reduced by having a default value
-
-                //ApplyConfig("ArmShoulderConfig");
-
-
+                ApplyConfig("ArmShoulderConfig");
             }
             else if (part.isRightPelvisLimb || part.isLeftPelvisLimb || part.isBellyLimb || part.isShoulderBladeLimb)
             {
-                /*requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Lower Attack";
-                backwardInputTorsoCommand = "Lower Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Lower Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "Forward Strike";
-                upwardNeutralMovementCommand = "Upward Strike";
-                backwardNeutralMovementCommand = "Quick 180";
-                downwardNeutralMovementCommand = "Downward Strike";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "Forward Leap";
-                upwardHeavyMovementCommand = "Upward Leap";
-                backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";*/
-
                 ApplyConfig("ArmPelvisConfig");
             }
             else if (part.isTailLimb)
             {
-                /*requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Butt Attack";
-                backwardInputTorsoCommand = "Butt Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Forward Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "Quick 180";
-                upwardNeutralMovementCommand = "Upward Strike";
-                backwardNeutralMovementCommand = "Backward Strike";
-                downwardNeutralMovementCommand = "Downward Strike";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "Quick 180 Heavy";
-                upwardHeavyMovementCommand = "Upward Leap";
-                backwardHeavyMovementCommand = "Backward Leap";
-                downwardHeavyMovementCommand = "Downward Leap";*/
-
                 ApplyConfig("ArmTailConfig");
-
             }
             else if (part.isRightEarLimb || part.isLeftEarLimb || part.isFacialLimb)
             {
-                /*requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Forward Attack";
-                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Downward Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "Face Attack";
-                backwardInputHeadCommand = "Face Attack";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "Forward Strike";
-                upwardNeutralMovementCommand = "Upward Strike";
-                backwardNeutralMovementCommand = "Quick 180";
-                downwardNeutralMovementCommand = "Downward Strike";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "Forward Leap";
-                upwardHeavyMovementCommand = "Upward Leap";
-                backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";*/
-
                 ApplyConfig("ArmEarConfig");
-
             }
             else if (part.isTopHeadLimb)
             {
-                /*requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Forward Attack";
-                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Downward Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "Forward Attack";
-                backwardInputHeadCommand = "Forward Attack";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "Forward Strike";
-                upwardNeutralMovementCommand = "Upward Strike";
-                backwardNeutralMovementCommand = "Quick 180";
-                downwardNeutralMovementCommand = "Downward Strike";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "Forward Leap";
-                upwardHeavyMovementCommand = "Upward Leap";
-                backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";*/
-
                 ApplyConfig("ArmTopHeadConfig");
             }
             else if (part.isBacksideHeadLimb)
             {
-                /*requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Lower Attack";
-                backwardInputTorsoCommand = "Lower Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "Face Attack";
-                backwardInputHeadCommand = "Face Attack";
-                upwardInputHeadCommand = "Forward Attack";
-                downwardInputHeadCommand = "Upward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "Quick 180";
-                upwardNeutralMovementCommand = "Upward Strike";
-                backwardNeutralMovementCommand = "Backward Strike";
-                downwardNeutralMovementCommand = "Downward Strike";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "Quick 180 Heavy";
-                upwardHeavyMovementCommand = "Upward Leap";
-                backwardHeavyMovementCommand = "Backward Leap";
-                downwardHeavyMovementCommand = "Downward Leap";*/
-
                 ApplyConfig("ArmBackSideHeadConfig");
-
             }
 
         }
@@ -267,223 +88,31 @@ public class MonsterCalculations
 
             if (part.isRightShoulderLimb || part.isLeftShoudlerLimb || part.isChestLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Forward Attack";
-                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Downward Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
-
+                ApplyConfig("LegShoulderConfig");
             }
             else if (part.isRightPelvisLimb || part.isLeftPelvisLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Lower Attack";
-                backwardInputTorsoCommand = "Butt Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Lower Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
+                ApplyConfig("LegPelvisConfig");
             }
             else if (part.isBellyLimb || part.isShoulderBladeLimb)
-            {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Lower Attack";
-                backwardInputTorsoCommand = "Lower Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Lower Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
+            { 
+                ApplyConfig("LegBellyShoulderBladeConfig");
             }
             else if (part.isTailLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Butt Attack";
-                backwardInputTorsoCommand = "Butt Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Forward Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "";
-                backwardInputHeadCommand = "";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
-
+                ApplyConfig("LegTailConfig");
             }
             else if (part.isRightEarLimb || part.isLeftEarLimb || part.isFacialLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Forward Attack";
-                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Downward Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "Face Attack";
-                backwardInputHeadCommand = "Face Attack";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
+                ApplyConfig("LegEarConfig");
             }
             else if (part.isTopHeadLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Forward Attack";
-                backwardInputTorsoCommand = "Forward Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Downward Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "Forward Attack";
-                backwardInputHeadCommand = "Forward Attack";
-                upwardInputHeadCommand = "Upward Attack";
-                downwardInputHeadCommand = "Forward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
-
+                ApplyConfig("LegTopHeadConfig");
             }
             else if (part.isBacksideHeadLimb)
             {
-                requiresBackwardStance = false;
-                requiresForwardStance = false;
-                requiresRightStance = true;
-                requiresLeftStance = false;
-
-                hasTorsoCommand = true;
-                forwardInputTorsoCommand = "Lower Attack";
-                backwardInputTorsoCommand = "Lower Attack"; //make sure monster flips before attacking
-                upwardInputTorsoCommand = "Upper Attack";
-                downwardInputTorsoCommand = "Lower Attack";
-
-                hasHeadCommand = false;
-                forwardInputHeadCommand = "Face Attack";
-                backwardInputHeadCommand = "Face Attack";
-                upwardInputHeadCommand = "Forward Attack";
-                downwardInputHeadCommand = "Upward Attack";
-
-                hasNeutralMovementCommand = true;
-                forwardNeutralMovementCommand = "";
-                upwardNeutralMovementCommand = "";
-                backwardNeutralMovementCommand = "";
-                downwardNeutralMovementCommand = "";
-
-                hasHeavyMovementCommand = true;
-                forwardHeavyMovementCommand = "";
-                upwardHeavyMovementCommand = "";
-                backwardHeavyMovementCommand = "";
-                downwardHeavyMovementCommand = "";
+                ApplyConfig("LegBackSideHeadConfig");
             }
 
         }
@@ -1313,6 +942,7 @@ public class MonsterCalculations
 
     private void LoadConfigs()
     {
+        // Loads the json file from Assets/Resources/Data/attack_configs.json 
         TextAsset jsonText = Resources.Load<TextAsset>("Data/attack_configs");
 
         if (jsonText == null)
@@ -1321,12 +951,14 @@ public class MonsterCalculations
             return;
         }
 
+        // Builds a Dictionary that maps the config object with the name of the config so that it can be retrived by name elsewhere in the code.
         AttackConfigList configList = JsonUtility.FromJson<AttackConfigList>(jsonText.text);
         configMap = configList.configs.ToDictionary(config => config.ConfigName);
     }
 
     private void ApplyConfig(string configName)
     {
+        // Searches the config map for the config object that is paired with the passed in name.
         if (configMap.TryGetValue(configName, out var config))
         {
             requiresBackwardStance = false;

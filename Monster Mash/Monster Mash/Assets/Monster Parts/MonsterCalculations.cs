@@ -6,30 +6,30 @@ using UnityEngine;
 public class MonsterCalculations
 {
     #region return these vars
-    public bool requiresBackwardStance = false;
-    public bool requiresForwardStance = false;
-    public bool requiresRightStance = true;
-    public bool requiresLeftStance = false;
+    public bool requiresBackwardStance;
+    public bool requiresForwardStance;
+    public bool requiresRightStance;
+    public bool requiresLeftStance;
 
-    public bool hasTorsoCommand = true;
+    public bool hasTorsoCommand;
     public string forwardInputTorsoCommand;
     public string backwardInputTorsoCommand;
     public string upwardInputTorsoCommand;
     public string downwardInputTorsoCommand;
 
-    public bool hasHeadCommand = false;
+    public bool hasHeadCommand;
     public string forwardInputHeadCommand;
     public string backwardInputHeadCommand;
     public string upwardInputHeadCommand;
     public string downwardInputHeadCommand;
 
-    public bool hasNeutralMovementCommand = true;
+    public bool hasNeutralMovementCommand;
     public string forwardNeutralMovementCommand;
     public string upwardNeutralMovementCommand;
     public string backwardNeutralMovementCommand;
     public string downwardNeutralMovementCommand;
 
-    public bool hasHeavyMovementCommand = true;
+    public bool hasHeavyMovementCommand;
     public string forwardHeavyMovementCommand;
     public string upwardHeavyMovementCommand;
     public string backwardHeavyMovementCommand;
@@ -53,7 +53,7 @@ public class MonsterCalculations
 
             if (part.isRightShoulderLimb || part.isLeftShoudlerLimb || part.isChestLimb)
             {
-                /*requiresBackwardStance = false;
+                requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -80,9 +80,9 @@ public class MonsterCalculations
                 forwardHeavyMovementCommand = "Forward Leap";
                 upwardHeavyMovementCommand = "Upward Leap"; // is empty most of the time, occurences can be reduced by having a default value
                 backwardHeavyMovementCommand = "Quick 180 Heavy"; // is empty most of the time, occurences can be reduced by having a default value
-                downwardHeavyMovementCommand = "Downward Leap"; // is empty most of the time, occurences can be reduced by having a default value*/
+                downwardHeavyMovementCommand = "Downward Leap"; // is empty most of the time, occurences can be reduced by having a default value
 
-                ApplyConfig("ArmShoulderConfig");
+                //ApplyConfig("ArmShoulderConfig");
 
 
             }
@@ -155,7 +155,7 @@ public class MonsterCalculations
             }
             else if (part.isRightEarLimb || part.isLeftEarLimb || part.isFacialLimb)
             {
-                requiresBackwardStance = false;
+                /*requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -182,12 +182,14 @@ public class MonsterCalculations
                 forwardHeavyMovementCommand = "Forward Leap";
                 upwardHeavyMovementCommand = "Upward Leap";
                 backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";
+                downwardHeavyMovementCommand = "Downward Leap";*/
+
+                ApplyConfig("ArmEarConfig");
 
             }
             else if (part.isTopHeadLimb)
             {
-                requiresBackwardStance = false;
+                /*requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -214,11 +216,13 @@ public class MonsterCalculations
                 forwardHeavyMovementCommand = "Forward Leap";
                 upwardHeavyMovementCommand = "Upward Leap";
                 backwardHeavyMovementCommand = "Quick 180 Heavy";
-                downwardHeavyMovementCommand = "Downward Leap";
+                downwardHeavyMovementCommand = "Downward Leap";*/
+
+                ApplyConfig("ArmTopHeadConfig");
             }
             else if (part.isBacksideHeadLimb)
             {
-                requiresBackwardStance = false;
+                /*requiresBackwardStance = false;
                 requiresForwardStance = false;
                 requiresRightStance = true;
                 requiresLeftStance = false;
@@ -245,7 +249,9 @@ public class MonsterCalculations
                 forwardHeavyMovementCommand = "Quick 180 Heavy";
                 upwardHeavyMovementCommand = "Upward Leap";
                 backwardHeavyMovementCommand = "Backward Leap";
-                downwardHeavyMovementCommand = "Downward Leap";
+                downwardHeavyMovementCommand = "Downward Leap";*/
+
+                ApplyConfig("ArmBackSideHeadConfig");
 
             }
 
@@ -1307,7 +1313,7 @@ public class MonsterCalculations
 
     private void LoadConfigs()
     {
-        TextAsset jsonText = Resources.Load<TextAsset>("attack_configs");
+        TextAsset jsonText = Resources.Load<TextAsset>("Data/attack_configs");
 
         if (jsonText == null)
         {
@@ -1323,28 +1329,39 @@ public class MonsterCalculations
     {
         if (configMap.TryGetValue(configName, out var config))
         {
+            requiresBackwardStance = false;
+            requiresForwardStance = false;
+            requiresRightStance = true;
+            requiresLeftStance = false;
+
+
+            hasTorsoCommand = true;
             forwardInputTorsoCommand = config.forwardInputTorsoCommand;
             backwardInputTorsoCommand = config.backwardInputTorsoCommand;
             upwardInputTorsoCommand = config.upwardInputTorsoCommand;
             downwardInputTorsoCommand = config.downwardInputTorsoCommand;
 
+            hasHeadCommand = false;
             forwardInputHeadCommand = config.forwardInputHeadCommand;
             backwardInputHeadCommand = config.backwardInputHeadCommand;
             upwardInputHeadCommand = config.upwardInputHeadCommand;
             downwardInputHeadCommand = config.downwardInputHeadCommand;
 
+            hasNeutralMovementCommand = true;
             forwardNeutralMovementCommand = config.forwardNeutralMovementCommand;
             upwardNeutralMovementCommand = config.upwardNeutralMovementCommand;
             backwardNeutralMovementCommand = config.backwardNeutralMovementCommand;
             downwardNeutralMovementCommand = config.downwardNeutralMovementCommand;
 
+            hasHeavyMovementCommand = true;
             forwardHeavyMovementCommand = config.forwardHeavyMovementCommand;
             upwardHeavyMovementCommand = config.upwardHeavyMovementCommand;
             backwardHeavyMovementCommand = config.backwardHeavyMovementCommand;
             downwardHeavyMovementCommand = config.downwardHeavyMovementCommand;
-
-
-
+        }
+        else
+        {
+            Debug.LogError(configName + " could not be found in attack_configs.json");
         }
     }
 }

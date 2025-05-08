@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+// Data model for the json config objects. Do not touch this class unless you need to add new varables to the json
+[Serializable]
 public class AttackConfig
 {
     public string ConfigName;
@@ -24,8 +26,9 @@ public class AttackConfig
     public string downwardHeavyMovementCommand;
 }
 
-[System.Serializable]
+// You cant load json directly into a list so we need a wrapper class
+[Serializable]
 public class AttackConfigList
 {
-    public List<AttackConfig> configs;
+    public List<AttackConfig> Configs;
 }

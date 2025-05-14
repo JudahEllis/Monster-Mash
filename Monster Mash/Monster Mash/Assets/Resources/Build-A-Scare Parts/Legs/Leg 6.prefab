@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 7051772441001008167}
   - component: {fileID: 2523800668290382572}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Hurtbox
   m_TagString: Hurtbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1260,8 +1260,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6600219110465928311}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0945998, y: 0.4541077, z: 0.069616996}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.09460002, y: 0.45410767, z: 0.06961712}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1942,8 +1942,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1472607962023799915}
-  - component: {fileID: 4381509199365788523}
   - component: {fileID: 8845472746112135647}
+  - component: {fileID: 4381509199365788523}
   - component: {fileID: 3139465728658884576}
   - component: {fileID: 2629493538528783464}
   - component: {fileID: 2953245296280329419}
@@ -1970,6 +1970,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!95 &8845472746112135647
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8466080868166655041}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 711a0d0f1639cf543811d6f3bd310850, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &4381509199365788523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2125,26 +2145,6 @@ MonoBehaviour:
   grounded: 1
   myIdleVFX: []
   referencesToIgnore: []
---- !u!95 &8845472746112135647
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8466080868166655041}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bf539a0e88c404649b2931e0888a48a0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!135 &3139465728658884576
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2202,7 +2202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3873112402136013506}
   m_Layer: 0
-  m_Name: Monster Mash - Leg 6 - Rig
+  m_Name: Monster Mash - Leg 6 Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2381,7 +2381,7 @@ GameObject:
   - component: {fileID: 8656644070430145895}
   - component: {fileID: 5722012900160946535}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Hurtbox
   m_TagString: Hurtbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

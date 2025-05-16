@@ -67,6 +67,11 @@ public class playerController : MonoBehaviour
     private float gravityPower;
     private bool insideFloor = false;
     //
+    public bool isGooball; //flings self through air, splats on walls, ball rolls on ground, double jump, medium movement, limited air control
+    public bool isGlider; //glides through air, grabs opponents, slow fall flying while holding A, many more jumps, slower ground movement
+    public bool isHunter; //zips through opponents, in air connects to nearest opponent in radius, faster ground movement, triple jump
+    public bool isTechnoid; //places or destroys portals, can attack through portals, in air can place platforms that destroy upon exit
+    //
     private float rollSpeed = 50f;//50
     Vector2 rightJoystickVector; //gives us direction on x axis for roll
     public bool isRolling = false;

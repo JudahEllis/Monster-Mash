@@ -22,5 +22,5 @@ public class NeutralAttackType
         Boomerang
     }
 
-    public NeutralAttackTypeEnum attackType;
+    public NeutralAttackTypeEnum AttackType;
 }

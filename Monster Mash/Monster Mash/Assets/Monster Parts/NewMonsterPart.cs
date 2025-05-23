@@ -59,7 +59,7 @@ public class NewMonsterPart : MonoBehaviour
     private bool grabbedStatusEffect;
 
     [Header("Neutral Attack Questionaire")]
-    [SerializeField] private NeutralAttackType neutralAttackType;
+    [SerializeField] private NeutralAttack neutralAttack;
 
     public GameObject neutralHitVFXHolder;
     public GameObject neutralForwardSwingVFXHolder;
@@ -103,26 +103,8 @@ public class NewMonsterPart : MonoBehaviour
     private int neutralHitCounter = 0;
 
     [Header("Heavy Attack Questionaire")]
-    public bool jabHeavyAttack;
-    public bool slashHeavyAttack;
-    public bool sprayHeavyAttack;
-    public bool projectileHeavyAttack;
-    public bool beamHeavyAttack;
-    public bool reelHeavyAttack;
-    public bool grappleHeavyAttack;
-    public bool boomerangHeavyAttack;
-    public bool homingMissileHeavyAttack;
-    public bool anvilHeavyAttack;
-    public bool bowlingBallHeavyAttack;
-    public bool gaseousHeavyAttack;
-    public bool powerBoostingHeavyAttack;
-    public bool shieldHeavyAttack;
-    public bool reflectingHeavyAttack;
-    public bool eatingHeavyAttack;
-    public bool suctionHeavyAttack;
-    public bool AOEHeavyAttack;
-    public bool chargingHeavyAttack;
-    public bool selfExplodingHeavyAttack;
+
+    [SerializeField] private HeavyAttack heavyAttack;
     //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -1193,7 +1175,7 @@ public class NewMonsterPart : MonoBehaviour
         //most likely a canceled input after system already has registered the difference between input but before the attack has been unleashed
         //aka a canceled heavy attack
 
-        if (fullActiveHeavy && attackFocusOn && beamHeavyAttack)
+        if (fullActiveHeavy && attackFocusOn && heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam)
         {
             if (inputCanceled)
             {
@@ -1253,7 +1235,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        if (beamHeavyAttack && attackMarkedHeavy)
+        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam && attackMarkedHeavy)
         {
             heavyAttackInMotion = true;
             return;
@@ -1391,9 +1373,12 @@ public class NewMonsterPart : MonoBehaviour
                     }
                 }
 
-                if (jabHeavyAttack || slashHeavyAttack)
+                switch (heavyAttack.Attack)
                 {
-                    triggerJabOrSlashCollisionsOn();
+                    case HeavyAttack.HeavyAttackType.Jab:
+                    case HeavyAttack.HeavyAttackType.Slash:
+                        triggerJabOrSlashCollisionsOn();
+                        break;
                 }
             }
             else
@@ -1461,10 +1446,10 @@ public class NewMonsterPart : MonoBehaviour
 
                 }
 
-                switch (neutralAttackType.AttackType)
+                switch (neutralAttack.Attack)
                 {
-                    case NeutralAttackType.NeutralAttackTypeEnum.Jab:
-                    case NeutralAttackType.NeutralAttackTypeEnum.Slash:
+                    case NeutralAttack.AttackType.Jab:
+                    case NeutralAttack.AttackType.Slash:
                         triggerJabOrSlashCollisionsOn();
                         break;
                 }
@@ -1524,7 +1509,7 @@ public class NewMonsterPart : MonoBehaviour
             mainTorso.SetBool("Attack to Idle", false);
         }
 
-        if (reelHeavyAttack)
+        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
         {
             myMainSystem.grabbingCanceled();
         }
@@ -1868,20 +1853,21 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerHeavyAttackPowerUp() //built up in wind up animation
     {
-        if (reelHeavyAttack)
+        switch(heavyAttack.Attack)
         {
-            reelAttackBuiltUpPower++;
-            powerUpCheckAllowed = true;
-        }
-        else if (!beamHeavyAttack)
-        {
-            builtUpAttackPower++;
+            case HeavyAttack.HeavyAttackType.Reel:
+                reelAttackBuiltUpPower++;
+                powerUpCheckAllowed = true;
+                break;
+            case HeavyAttack.HeavyAttackType.Beam:
+                builtUpAttackPower++;
+                break;
         }
     }
 
     public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
     {
-        if (reelHeavyAttack && powerUpCheckAllowed)
+        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel && powerUpCheckAllowed)
         {
             reelAttackCurrentThreshold++;
 
@@ -1900,17 +1886,17 @@ public class NewMonsterPart : MonoBehaviour
     {
         damage = baseNeutralAttackDamage;
 
-        switch(neutralAttackType.AttackType)
+        switch(neutralAttack.Attack)
         {
-            case NeutralAttackType.NeutralAttackTypeEnum.Jab:
-            case NeutralAttackType.NeutralAttackTypeEnum.Slash:
+            case NeutralAttack.AttackType.Jab:
+            case NeutralAttack.AttackType.Slash:
                 neutralColliderReference.resetAttackHistory();
                 neutralColliderReference.damage = damage;
                 heavyColliderReference.markedHeavy = false;
                 break;
-            case NeutralAttackType.NeutralAttackTypeEnum.Projectile:
-            case NeutralAttackType.NeutralAttackTypeEnum.Spray:
-            case NeutralAttackType.NeutralAttackTypeEnum.Boomerang:
+            case NeutralAttack.AttackType.Projectile:
+            case NeutralAttack.AttackType.Spray:
+            case NeutralAttack.AttackType.Boomerang:
                 neutralHitVFXManager.damage = damage;
                 neutralHitVFXManager.updateDamageOnProjectiles();
                 break;
@@ -1924,20 +1910,21 @@ public class NewMonsterPart : MonoBehaviour
         damage = baseHeavyAttackDamage + (builtUpAttackPower * builtUpAddedDamage);
         builtUpAttackPower = 0;
 
-        if (jabHeavyAttack || slashHeavyAttack || grappleHeavyAttack)
+        switch(heavyAttack.Attack)
         {
-            heavyColliderReference.resetAttackHistory();
-            heavyColliderReference.damage = damage;
-            heavyColliderReference.markedHeavy = true;
-        }
-        else if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
-        {
-            heavyHitVFXManager.damage = damage;
-            heavyHitVFXManager.updateDamageOnProjectiles();
-        }
-        else if (beamHeavyAttack)
-        {
-
+            case HeavyAttack.HeavyAttackType.Jab:
+            case HeavyAttack.HeavyAttackType.Slash:
+            case HeavyAttack.HeavyAttackType.Grapple:
+                heavyColliderReference.resetAttackHistory();
+                heavyColliderReference.damage = damage;
+                heavyColliderReference.markedHeavy = true;
+                break;
+            case HeavyAttack.HeavyAttackType.Projectile:
+            case HeavyAttack.HeavyAttackType.Spray:
+            case HeavyAttack.HeavyAttackType.Boomerang:
+                heavyHitVFXManager.damage = damage;
+                heavyHitVFXManager.updateDamageOnProjectiles();
+                break;
         }
 
         damageClearance();
@@ -1953,76 +1940,76 @@ public class NewMonsterPart : MonoBehaviour
     #region Status Effects
     private void statusEffectAndDamageCalculations() //new attack types must be added here
     {
-        switch(neutralAttackType.AttackType)
+        switch(neutralAttack.Attack)
         {
-            case NeutralAttackType.NeutralAttackTypeEnum.Jab:
-            case NeutralAttackType.NeutralAttackTypeEnum.Slash:
+            case NeutralAttack.AttackType.Jab:
+            case NeutralAttack.AttackType.Slash:
                 neutralColliderReference.damage = baseNeutralAttackDamage;
                 break;
-            case NeutralAttackType.NeutralAttackTypeEnum.Projectile:
-            case NeutralAttackType.NeutralAttackTypeEnum.Boomerang:
+            case NeutralAttack.AttackType.Projectile:
+            case NeutralAttack.AttackType.Boomerang:
                 neutralHitVFXManager.damage = baseNeutralAttackDamage;
                 neutralHitVFXManager.updateDamageOnSpray();
                 break;
-            case NeutralAttackType.NeutralAttackTypeEnum.Spray:
+            case NeutralAttack.AttackType.Spray:
                 neutralHitVFXManager.damage = baseNeutralAttackDamage;
                 neutralHitVFXManager.updateDamageOnSpray();
                 break;
         }
 
-        if (jabHeavyAttack || slashHeavyAttack)
+        switch(heavyAttack.Attack)
         {
-            heavyColliderReference.burnedStatusEffect = burnedStatusEffect;
-            heavyColliderReference.electrifiedStatusEffect = electrifiedStatusEffect;
-            heavyColliderReference.poisonedStatusEffect = poisonedStatusEffect;
-            heavyColliderReference.stinkyStatusEffect = stinkyStatusEffect;
-            heavyColliderReference.cursedStatusEffect = cursedStatusEffect;
-            heavyColliderReference.confusedStatusEffect = confusedStatusEffect;
-            heavyColliderReference.slimedStatusEffect = slimedStatusEffect;
-            heavyColliderReference.frozenStatusEffect = frozenStatusEffect;
-            heavyColliderReference.squashedStatusEffect = squashedStatusEffect;
-            heavyColliderReference.slowedStatusEffect = slowedStatusEffect;
-            heavyColliderReference.grabbedStatusEffect = grabbedStatusEffect;
-        }
-        else if (projectileHeavyAttack || boomerangHeavyAttack)
-        {
-            heavyHitVFXManager.damage = baseHeavyAttackDamage;
-            heavyHitVFXManager.updateDamageOnProjectiles();
-            heavyHitVFXManager.burnedStatusEffect = burnedStatusEffect;
-            heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
-            heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
-            heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
-            heavyHitVFXManager.hauntedStatusEffect = cursedStatusEffect;
-            heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
-            heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
-            heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
-            heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
-            heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
-            heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
-            heavyHitVFXManager.updateStatusEffectsOnProjectiles();
-        }
-        else if (beamHeavyAttack)
-        {
-
-        }
-        else if (sprayHeavyAttack)
-        {
-            heavyHitVFXManager.damage = baseHeavyAttackDamage;
-            heavyHitVFXManager.updateDamageOnSpray();
-            heavyHitVFXManager.burnedStatusEffect = burnedStatusEffect;
-            heavyHitVFXManager.electrifiedStatusEffect = electrifiedStatusEffect;
-            heavyHitVFXManager.poisonedStatusEffect = poisonedStatusEffect;
-            heavyHitVFXManager.stinkyStatusEffect = stinkyStatusEffect;
-            heavyHitVFXManager.hauntedStatusEffect = cursedStatusEffect;
-            heavyHitVFXManager.confusedStatusEffect = confusedStatusEffect;
-            heavyHitVFXManager.slimedStatusEffect = slimedStatusEffect;
-            heavyHitVFXManager.frozenStatusEffect = frozenStatusEffect;
-            heavyHitVFXManager.squashedStatusEffect = squashedStatusEffect;
-            heavyHitVFXManager.slowedStatusEffect = slowedStatusEffect;
-            heavyHitVFXManager.grabbedStatusEffect = grabbedStatusEffect;
-            heavyHitVFXManager.updateStatusEffectsOnSpray();
+            case HeavyAttack.HeavyAttackType.Jab:
+            case HeavyAttack.HeavyAttackType.Slash:
+                ApplyStatusEffectsToColliderReference(heavyColliderReference);
+                break;
+            case HeavyAttack.HeavyAttackType.Projectile:
+            case HeavyAttack.HeavyAttackType.Boomerang:
+                heavyHitVFXManager.damage = baseHeavyAttackDamage;
+                heavyHitVFXManager.updateDamageOnProjectiles();
+                ApplyStatusEffectsToVFXHolder(heavyHitVFXManager);
+                heavyHitVFXManager.updateStatusEffectsOnProjectiles();
+                break;
+            case HeavyAttack.HeavyAttackType.Spray:
+                heavyHitVFXManager.damage = baseHeavyAttackDamage;
+                heavyHitVFXManager.updateDamageOnSpray();
+                ApplyStatusEffectsToVFXHolder(heavyHitVFXManager);
+                heavyHitVFXManager.updateStatusEffectsOnSpray();
+                break;
         }
     }
+
+    private void ApplyStatusEffectsToVFXHolder(vfxHolder vfxHolder)
+    {
+        vfxHolder.burnedStatusEffect = burnedStatusEffect;
+        vfxHolder.electrifiedStatusEffect = electrifiedStatusEffect;
+        vfxHolder.poisonedStatusEffect = poisonedStatusEffect;
+        vfxHolder.stinkyStatusEffect = stinkyStatusEffect;
+        vfxHolder.hauntedStatusEffect = cursedStatusEffect;
+        vfxHolder.confusedStatusEffect = confusedStatusEffect;
+        vfxHolder.slimedStatusEffect = slimedStatusEffect;
+        vfxHolder.frozenStatusEffect = frozenStatusEffect;
+        vfxHolder.squashedStatusEffect = squashedStatusEffect;
+        vfxHolder.slowedStatusEffect = slowedStatusEffect;
+        vfxHolder.grabbedStatusEffect = grabbedStatusEffect;
+    }
+
+    private void ApplyStatusEffectsToColliderReference(monsterPartReference colliderRef)
+    {
+        colliderRef.burnedStatusEffect = burnedStatusEffect;
+        colliderRef.electrifiedStatusEffect = electrifiedStatusEffect;
+        colliderRef.poisonedStatusEffect = poisonedStatusEffect;
+        colliderRef.stinkyStatusEffect = stinkyStatusEffect;
+        colliderRef.confusedStatusEffect = cursedStatusEffect;
+        colliderRef.confusedStatusEffect = confusedStatusEffect;
+        colliderRef.slimedStatusEffect = slimedStatusEffect;
+        colliderRef.frozenStatusEffect = frozenStatusEffect;
+        colliderRef.squashedStatusEffect = squashedStatusEffect;
+        colliderRef.slowedStatusEffect = slowedStatusEffect;
+        colliderRef.grabbedStatusEffect = grabbedStatusEffect;
+    }
+
+
     #endregion
 
     #region Movement Animations
@@ -2694,7 +2681,7 @@ public class NewMonsterPart : MonoBehaviour
                 mainTorso.SetBool("Ready to Swing", false);
             }
 
-            if (reelHeavyAttack)
+            if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
             {
                 myMainSystem.grabbingCanceled();
             }
@@ -2793,7 +2780,7 @@ public class NewMonsterPart : MonoBehaviour
                 mainTorso.SetBool("Ready to Swing", false);
             }
 
-            if (reelHeavyAttack)
+            if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
             {
                 myMainSystem.grabbingCanceled();
             }
@@ -2877,7 +2864,7 @@ public class NewMonsterPart : MonoBehaviour
                 mainTorso.SetBool("Ready to Swing", false);
             }
 
-            if (reelHeavyAttack)
+            if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
             {
                 myMainSystem.grabbingCanceled();
             }
@@ -2988,13 +2975,13 @@ public class NewMonsterPart : MonoBehaviour
                 neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
             }
 
-            switch(neutralAttackType.AttackType)
+            switch(neutralAttack.Attack)
             {
-                case NeutralAttackType.NeutralAttackTypeEnum.Boomerang:
+                case NeutralAttack.AttackType.Boomerang:
                     neutralHitVFXManager.isBoomerangHolder = true;
-                    goto case NeutralAttackType.NeutralAttackTypeEnum.Projectile;
-                case NeutralAttackType.NeutralAttackTypeEnum.Projectile:
-                case NeutralAttackType.NeutralAttackTypeEnum.Spray:
+                    goto case NeutralAttack.AttackType.Projectile;
+                case NeutralAttack.AttackType.Projectile:
+                case NeutralAttack.AttackType.Spray:
                     neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
                     neutralVFXStoredPosition = transform.localPosition;
                     neutralVFXStoredRotation = transform.localRotation;
@@ -3084,11 +3071,11 @@ public class NewMonsterPart : MonoBehaviour
                 neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            switch(neutralAttackType.AttackType)
+            switch(neutralAttack.Attack)
             {
-                case NeutralAttackType.NeutralAttackTypeEnum.Projectile:
-                case NeutralAttackType.NeutralAttackTypeEnum.Spray:
-                case NeutralAttackType.NeutralAttackTypeEnum.Boomerang:
+                case NeutralAttack.AttackType.Projectile:
+                case NeutralAttack.AttackType.Spray:
+                case NeutralAttack.AttackType.Boomerang:
                     neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
                     neutralVFXStoredPosition = transform.localPosition;
                     neutralVFXStoredRotation = transform.localRotation;
@@ -3129,16 +3116,17 @@ public class NewMonsterPart : MonoBehaviour
                 heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
+            switch(heavyAttack.Attack)
             {
-                if (boomerangHeavyAttack)
-                {
+                case HeavyAttack.HeavyAttackType.Boomerang:
                     heavyHitVFXManager.isBoomerangHolder = true;
-                }
-
-                heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                heavyVFXStoredPosition = transform.localPosition;
-                heavyVFXStoredRotation = transform.localRotation;
+                    goto case HeavyAttack.HeavyAttackType.Projectile;
+                case HeavyAttack.HeavyAttackType.Projectile:
+                case HeavyAttack.HeavyAttackType.Spray:
+                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
+                    heavyVFXStoredPosition = transform.localPosition;
+                    heavyVFXStoredRotation = transform.localRotation;
+                    break;
             }
 
             heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
@@ -3219,11 +3207,15 @@ public class NewMonsterPart : MonoBehaviour
                 heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
+            switch(heavyAttack.Attack)
             {
-                heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                heavyVFXStoredPosition = transform.localPosition;
-                heavyVFXStoredRotation = transform.localRotation;
+                case HeavyAttack.HeavyAttackType.Projectile:
+                case HeavyAttack.HeavyAttackType.Spray:
+                case HeavyAttack.HeavyAttackType.Boomerang:
+                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
+                    heavyVFXStoredPosition = transform.localPosition;
+                    heavyVFXStoredRotation = transform.localRotation;
+                    break;
             }
 
             heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
@@ -3243,11 +3235,15 @@ public class NewMonsterPart : MonoBehaviour
                 heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            if (projectileHeavyAttack || sprayHeavyAttack || boomerangHeavyAttack)
+            switch(heavyAttack.Attack)
             {
-                heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                heavyVFXStoredPosition = transform.localPosition;
-                heavyVFXStoredRotation = transform.localRotation;
+                case HeavyAttack.HeavyAttackType.Projectile:
+                case HeavyAttack.HeavyAttackType.Spray:
+                case HeavyAttack.HeavyAttackType.Boomerang:
+                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
+                    heavyVFXStoredPosition = transform.localPosition;
+                    heavyVFXStoredRotation = transform.localRotation;
+                    break;
             }
 
             heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
@@ -3333,23 +3329,23 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerNeutralAttackVisuals() //called in attack animation //new attack types must be added here
     {
-        switch (neutralAttackType.AttackType)
+        switch (neutralAttack.Attack)
         {
-            case NeutralAttackType.NeutralAttackTypeEnum.Jab:
+            case NeutralAttack.AttackType.Jab:
                 if (!jabOrSlashLanded && neutralMissVFXHolder != null)
                 {
                     neutralMissVFXManager.unleashJabOrSlash();
                 }
                 break;
 
-            case NeutralAttackType.NeutralAttackTypeEnum.Slash:
+            case NeutralAttack.AttackType.Slash:
                 if (!jabOrSlashLanded && neutralMissVFXHolder != null)
                 {
                     neutralMissVFXManager.unleashJabOrSlash();
                 }
                 break;
 
-            case NeutralAttackType.NeutralAttackTypeEnum.Spray:
+            case NeutralAttack.AttackType.Spray:
                 neutralHitVFXHolder.transform.position = neutralMuzzle.transform.position;
                 neutralHitVFXHolder.transform.rotation = neutralMuzzle.transform.rotation;
 
@@ -3367,7 +3363,7 @@ public class NewMonsterPart : MonoBehaviour
                 }
                 break;
 
-            case NeutralAttackType.NeutralAttackTypeEnum.Projectile:
+            case NeutralAttack.AttackType.Projectile:
                 if (neutralAttackHitVFXArray.Length != 0)
                 {
                     neutralHitVFXManager.faceRightDirection(facingRight);
@@ -3380,7 +3376,7 @@ public class NewMonsterPart : MonoBehaviour
                 }
                 break;
 
-            case NeutralAttackType.NeutralAttackTypeEnum.Boomerang:
+            case NeutralAttack.AttackType.Boomerang:
                 if (neutralAttackHitVFXArray.Length != 0)
                 {
                     neutralHitVFXManager.faceRightDirection(facingRight);
@@ -3414,82 +3410,67 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerHeavyAttackVisuals() //new attack types must be added here
     {
-        if (jabHeavyAttack)
+        switch(heavyAttack.Attack)
         {
-            if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
-            {
-                //turn on miss visual if neutral vfx holder's script hasn't made contact
-                heavyMissVFXManager.unleashJabOrSlash();
-            }
-        }
-        else if (slashHeavyAttack)
-        {
-            if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
-            {
-                //turn on miss visual if neutral vfx holder's script hasn't made contact
-                heavyMissVFXManager.unleashJabOrSlash();
-            }
+            case HeavyAttack.HeavyAttackType.Jab:
+            case HeavyAttack.HeavyAttackType.Slash:
+                if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
+                {
+                    //turn on miss visual if neutral vfx holder's script hasn't made contact
+                    heavyMissVFXManager.unleashJabOrSlash();
+                }
 
-        }
-        else if (sprayHeavyAttack)
-        {
-            heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-            heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
+                break;
+            case HeavyAttack.HeavyAttackType.Spray:
+                heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
+                heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
 
-            if (heavyDefaultSprayVFXHolder != null)
-            {
-                heavyDefaultSprayVFXHolder.transform.position = heavyMuzzle.transform.position;
-                heavyDefaultSprayVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
+                if (heavyDefaultSprayVFXHolder != null)
+                {
+                    heavyDefaultSprayVFXHolder.transform.position = heavyMuzzle.transform.position;
+                    heavyDefaultSprayVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
 
-            }
+                }
 
-            heavyHitVFXManager.unleashSpray();
-            if (heavyDefaultSprayVFXManager)
-            {
-                heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-            }
-        }
-        else if (projectileHeavyAttack && heavyAttackHitVFXArray.Length != 0)
-        {
-            heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-            heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
+                heavyHitVFXManager.unleashSpray();
+                if (heavyDefaultSprayVFXManager)
+                {
+                    heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
+                }
 
-            heavyHitVFXManager.faceRightDirection(facingRight);
-            heavyHitVFXManager.unleashSingleProjectile();
+                break;
+            case HeavyAttack.HeavyAttackType.Projectile:
+            case HeavyAttack.HeavyAttackType.Boomerang:
+                if (heavyAttackHitVFXArray.Length != 0)
+                {
+                    heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
+                    heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
 
-            if (heavyDefaultSprayVFXManager)
-            {
-                heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-            }
-        }
-        else if (reelHeavyAttack)
-        {
-            if (reelAttackLanded == false)
-            {
-                //miss visual
-                triggerReelCollisionsOff();
-            }
+                    heavyHitVFXManager.faceRightDirection(facingRight);
+                    heavyHitVFXManager.unleashSingleProjectile();
 
-            reelAttackBuiltUpPower = 0;
-            reelAttackCurrentThreshold = 0;
-            powerUpCheckAllowed = false;
-        }
-        else if (beamHeavyAttack)
-        {
-            heavyHitVFXManager.unleashBeamVisual();
-        }
-        else if (boomerangHeavyAttack && heavyAttackHitVFXArray.Length != 0)
-        {
-            heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-            heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
+                    if (heavyDefaultSprayVFXManager)
+                    {
+                        heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
+                    }
+                }
 
-            heavyHitVFXManager.faceRightDirection(facingRight);
-            heavyHitVFXManager.unleashSingleProjectile();
+                break;
+            case HeavyAttack.HeavyAttackType.Reel:
+                if (!reelAttackLanded)
+                {
+                    //miss visual
+                    triggerReelCollisionsOff();
+                }
 
-            if (heavyDefaultSprayVFXManager)
-            {
-                heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-            }
+                reelAttackBuiltUpPower = 0;
+                reelAttackCurrentThreshold = 0;
+                powerUpCheckAllowed = false;
+                break;
+            case HeavyAttack.HeavyAttackType.Beam:
+                heavyHitVFXManager.unleashBeamVisual();
+                break;
+
         }
     }
 
@@ -3511,7 +3492,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void endRemainingVFX()
     {
-        if (beamHeavyAttack)
+        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam)
         {
             heavyHitVFXManager.endBeamVisual();
         }

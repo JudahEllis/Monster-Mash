@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class NeutralAttackType
+public class NeutralAttack
 {
-    public enum NeutralAttackTypeEnum 
+    public enum AttackType 
     {
         Jab,
         Slash,
@@ -22,5 +22,5 @@ public class NeutralAttackType
         Boomerang
     }
 
-    public NeutralAttackTypeEnum AttackType;
+    public AttackType Attack;
 }

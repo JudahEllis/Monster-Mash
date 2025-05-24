@@ -125,7 +125,6 @@ public class monsterPart : MonoBehaviour
     public bool anvilHeavyAttack;
     public bool bowlingBallHeavyAttack;
     public bool gaseousHeavyAttack;
-    public bool powerBoostingHeavyAttack;
     public bool shieldHeavyAttack;
     public bool reflectingHeavyAttack;
     public bool eatingHeavyAttack;
@@ -133,6 +132,8 @@ public class monsterPart : MonoBehaviour
     public bool AOEHeavyAttack;
     public bool chargingHeavyAttack;
     public bool selfExplodingHeavyAttack;
+    public bool powerBoostingHeavyAttack;
+    public int powerBoostingRequired;
     //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -1245,42 +1246,46 @@ public class monsterPart : MonoBehaviour
 
     public void triggerNeutralOrHeavy()
     {
-        if (!attackMarkedHeavy && needsReloadNeutral )
+        print("oh hey power: " + builtUpAttackPower);
+        if (!powerBoostingHeavyAttack || builtUpAttackPower >= powerBoostingRequired)//for power boosting attacks, new behavior of cancellable charging instead
         {
-            if (!isReloadedNeutral)
+            if (!attackMarkedHeavy && needsReloadNeutral)
             {
-                triggerNeutralOrHeavyRefresh(true);
+                if (!isReloadedNeutral)
+                {
+                    triggerNeutralOrHeavyRefresh(true);
+                    return;
+                }
+            }
+
+            if (attackMarkedHeavy && needsReloadHeavy)
+            {
+                if (!isReloadedHeavy)
+                {
+                    triggerNeutralOrHeavyRefresh(true);
+                    return;
+                }
+            }
+
+            if (beamHeavyAttack && attackMarkedHeavy)
+            {
+                heavyAttackInMotion = true;
                 return;
             }
-        }
 
-        if (attackMarkedHeavy && needsReloadHeavy)
-        {
-            if (!isReloadedHeavy)
+            if (attackMarkedHeavy)
             {
-                triggerNeutralOrHeavyRefresh(true);
-                return;
+
+                heavyAttackInMotion = true;
+                myMainSystem.switchBraceStance(); //for a stronger looking leg stance
+                myMainSystem.heavyAttackActivated();
+                triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
+                triggerChargeVisual();
             }
-        }
-
-        if (beamHeavyAttack && attackMarkedHeavy)
-        {
-            heavyAttackInMotion = true;
-            return;
-        }
-
-        if (attackMarkedHeavy)
-        {
-
-            heavyAttackInMotion = true;
-            myMainSystem.switchBraceStance(); //for a stronger looking leg stance
-            myMainSystem.heavyAttackActivated();
-            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
-            triggerChargeVisual();
-        }
-        else
-        {
-            myAnimator.SetTrigger("Force Neutral Attack");
+            else
+            {
+                myAnimator.SetTrigger("Force Neutral Attack");
+            }
         }
     }
 

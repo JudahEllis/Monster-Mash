@@ -133,7 +133,8 @@ public class monsterPart : MonoBehaviour
     public bool chargingHeavyAttack;
     public bool selfExplodingHeavyAttack;
     public bool powerBoostingHeavyAttack;
-    public int powerBoostingRequired;
+    public int powerBoostingRequired; //built up attack power must reach this int before launching attack
+    public int powerBoostingBuiltUpAttackPower;
     //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -1204,6 +1205,12 @@ public class monsterPart : MonoBehaviour
         //most likely a canceled input after system already has registered the difference between input but before the attack has been unleashed
         //aka a canceled heavy attack
 
+        /*if (powerBoostingHeavyAttack && attackMarkedHeavy && (builtUpAttackPower < powerBoostingRequired)) //for power boosting attacks only, pause wind up whenever
+        {
+            myAnimator.SetTrigger("Cancel Heavy");
+            return;
+        }*/
+
         if (fullActiveHeavy && attackFocusOn && beamHeavyAttack)
         {
             if (inputCanceled)
@@ -1246,46 +1253,42 @@ public class monsterPart : MonoBehaviour
 
     public void triggerNeutralOrHeavy()
     {
-        print("oh hey power: " + builtUpAttackPower);
-        if (!powerBoostingHeavyAttack || builtUpAttackPower >= powerBoostingRequired)//for power boosting attacks, new behavior of cancellable charging instead
+        if (!attackMarkedHeavy && needsReloadNeutral)
         {
-            if (!attackMarkedHeavy && needsReloadNeutral)
+            if (!isReloadedNeutral)
             {
-                if (!isReloadedNeutral)
-                {
-                    triggerNeutralOrHeavyRefresh(true);
-                    return;
-                }
-            }
-
-            if (attackMarkedHeavy && needsReloadHeavy)
-            {
-                if (!isReloadedHeavy)
-                {
-                    triggerNeutralOrHeavyRefresh(true);
-                    return;
-                }
-            }
-
-            if (beamHeavyAttack && attackMarkedHeavy)
-            {
-                heavyAttackInMotion = true;
+                triggerNeutralOrHeavyRefresh(true);
                 return;
             }
+        }
 
-            if (attackMarkedHeavy)
+        if (attackMarkedHeavy && needsReloadHeavy)
+        {
+            if (!isReloadedHeavy)
             {
+                triggerNeutralOrHeavyRefresh(true);
+                return;
+            }
+        }
 
-                heavyAttackInMotion = true;
-                myMainSystem.switchBraceStance(); //for a stronger looking leg stance
-                myMainSystem.heavyAttackActivated();
-                triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
-                triggerChargeVisual();
-            }
-            else
-            {
-                myAnimator.SetTrigger("Force Neutral Attack");
-            }
+        if (beamHeavyAttack && attackMarkedHeavy)
+        {
+            heavyAttackInMotion = true;
+            return;
+        }
+
+        if (attackMarkedHeavy)
+        {
+
+            heavyAttackInMotion = true;
+            myMainSystem.switchBraceStance(); //for a stronger looking leg stance
+            myMainSystem.heavyAttackActivated();
+            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
+            triggerChargeVisual();
+        }
+        else
+        {
+            myAnimator.SetTrigger("Force Neutral Attack");
         }
     }
 
@@ -1318,6 +1321,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackRelease()
     {
+        if (powerBoostingHeavyAttack && attackMarkedHeavy && builtUpAttackPower < powerBoostingRequired)
+        {
+            triggerAttackToIdle();
+            triggerAttackCorrections();
+            return;
+        }
 
         if (isJointed)
         {

@@ -2093,10 +2093,6 @@ MonoBehaviour:
   isProjectileHolder: 1
   projectileSpeed: 70
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -4299,10 +4295,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 0
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -4883,10 +4875,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 0
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -8069,10 +8057,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 70
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -9408,10 +9392,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 0
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -9894,10 +9874,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 0
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -9939,6 +9915,7 @@ GameObject:
   - component: {fileID: 6483627374449451132}
   - component: {fileID: 476378592806288930}
   - component: {fileID: 7558171910711805230}
+  - component: {fileID: -3359269097036918665}
   m_Layer: 0
   m_Name: Horn 3
   m_TagString: Connection - Monster Part
@@ -10033,6 +10010,7 @@ MonoBehaviour:
   neutralCollider: {fileID: 0}
   neutralMuzzle: {fileID: 3659140766108552337}
   needsReloadNeutral: 0
+  reloadTimeNeutral: 1
   isReloadedNeutral: 1
   isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
@@ -10054,6 +10032,7 @@ MonoBehaviour:
   homingMissileHeavyAttack: 0
   anvilHeavyAttack: 0
   bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
   powerBoostingHeavyAttack: 0
   shieldHeavyAttack: 0
   reflectingHeavyAttack: 0
@@ -10072,6 +10051,7 @@ MonoBehaviour:
   heavyCollider: {fileID: 0}
   heavyMuzzle: {fileID: 3659140766108552337}
   needsReloadHeavy: 0
+  reloadTimeHeavy: 1
   chargeVisual: {fileID: 0}
   heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
@@ -10185,6 +10165,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3359269097036918665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6115177461421104729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Horns/Horn 3
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6150015877810355158
 GameObject:
   m_ObjectHideFlags: 0
@@ -11670,10 +11667,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 0
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0

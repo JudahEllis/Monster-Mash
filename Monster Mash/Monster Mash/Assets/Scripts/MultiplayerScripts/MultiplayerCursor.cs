@@ -26,6 +26,7 @@ public class MultiplayerCursor : MonoBehaviour
 
     GraphicRaycaster graphicRaycaster;
     PointerEventData eventData = new PointerEventData(null);
+    EventSystem eventSystem;
 
     GameObject movingCursor;
     
@@ -52,6 +53,8 @@ public class MultiplayerCursor : MonoBehaviour
         deselectAction.started += DeselectCharacter;
 
         graphicRaycaster = FindObjectOfType<GraphicRaycaster>();
+
+        eventSystem = FindObjectOfType<EventSystem>();
 
         movingCursor = transform.GetChild(0).gameObject;
 
@@ -85,6 +88,23 @@ public class MultiplayerCursor : MonoBehaviour
 
     public void SelectAction(InputAction.CallbackContext context)
     {
+        eventData = new PointerEventData(eventSystem);
+
+        eventData.position = transform.GetChild(0).localPosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        graphicRaycaster.Raycast(eventData, results);
+
+        if(results.Count > 0)
+        {
+            if(results[0].gameObject.TryGetComponent(out ICursorSelectable selectable))
+            {
+                selectable.OnSelect(this);
+            }
+        }
+
+        /*
         RectTransform rect = movingCursor.GetComponent<RectTransform>();
 
         Vector3 mousePoint = new Vector3(rect.localPosition.x, rect.localPosition.y, 10);
@@ -94,13 +114,15 @@ public class MultiplayerCursor : MonoBehaviour
         int layerMask = 1 << 14;
 
         RaycastHit hit;
+
         if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             hit.transform.gameObject.GetComponent<MultiplayerJoinManager.IQuickplayButtonable>().ButtonSelected(this);
         }
+        */
     }
 
-    public void SelectCharacter(MonsterData data, GameObject selectedMonster)
+    public void SelectCharacter(MonsterData data)
     { 
         if (joinManager.charactersSelected < inputManager.playerCount && !selectedCharacter)
         {
@@ -112,11 +134,7 @@ public class MultiplayerCursor : MonoBehaviour
 
             selectedCharacter = true;
 
-            Transform monsterSpawn = joinManager.monsterSpawnPoints[player.playerIndex];
-
-            Instantiate(selectedMonster, monsterSpawn);
-
-            if (joinManager.charactersSelected == inputManager.playerCount)
+            if (joinManager.charactersSelected == inputManager.playerCount && inputManager.playerCount != 1)
             {
                 print("Start Game!");
 
@@ -127,7 +145,7 @@ public class MultiplayerCursor : MonoBehaviour
 
     public void DeselectCharacter(InputAction.CallbackContext context)
     {
-        if(selectedCharacter)
+        if(selectedCharacter && joinManager.currentScreen == MultiplayerJoinManager.CurrentScreen.CharacterSelect)
         {
             selectedCharacter = false;
 
@@ -138,11 +156,6 @@ public class MultiplayerCursor : MonoBehaviour
             joinManager.playerInfo[player.playerIndex].monster = null;
 
             joinManager.playerInfo[player.playerIndex].playerInput = null;
-
-            GameObject previewChar = 
-                joinManager.monsterSpawnPoints[player.playerIndex].transform.GetChild(0).gameObject;
-
-            Destroy(previewChar);
         }
     }
 
@@ -152,9 +165,7 @@ public class MultiplayerCursor : MonoBehaviour
 
         cursorVisual.enabled = false;
 
-        joinManager.playerTubes[input.playerIndex].SetActive(false);
-
-        print(inputManager.playerCount);
+        //joinManager.playerTubes[input.playerIndex].SetActive(false);
     }
 
     void EnableVisuals(PlayerInput input)
@@ -163,8 +174,6 @@ public class MultiplayerCursor : MonoBehaviour
 
         cursorVisual.enabled = true;
 
-        joinManager.playerTubes[input.playerIndex].SetActive(true);
-
-        print(inputManager.playerCount);
+       // joinManager.playerTubes[input.playerIndex].SetActive(true);
     }
 }

@@ -10,6 +10,11 @@ public class PlayerSpawnManager : MonoBehaviour
 
     [SerializeField]
     private Transform players;
+
+    [SerializeField]
+    GameObject dynamicCamObj;
+
+    DynamicCamera dynamicCam;
     void Awake()
     {
        SpawnPlayers();
@@ -22,8 +27,9 @@ public class PlayerSpawnManager : MonoBehaviour
     }
     void SpawnPlayers()
     {
-        CharacterSelectManager transfer = FindObjectOfType<CharacterSelectManager>();
+        dynamicCam = dynamicCamObj.GetComponentInChildren<DynamicCamera>();
 
+        CharacterSelectManager transfer = FindObjectOfType<CharacterSelectManager>();
 
         GameObject playerPrefab = Resources.Load("Fun-Test Parts/Monster/Player") as GameObject;
 
@@ -33,7 +39,11 @@ public class PlayerSpawnManager : MonoBehaviour
         {
             GameObject spawnedPlayer = Instantiate(playerPrefab, playerSpawnLocations[i].position, Quaternion.identity);
 
+            spawnedPlayer.transform.localScale = new Vector3(1, 1, 1);
+
             spawnedPlayer.name = ("Player_" + (transfer.storedPlayerInformation[i].playerIndex + 1));
+
+            dynamicCam.playerTransforms.Add(spawnedPlayer.transform);
 
             spawnedPlayer.GetComponent<input_handler>().playerInput = transfer.storedPlayerInformation[i].playerInput.GetComponent<PlayerInput>();
 

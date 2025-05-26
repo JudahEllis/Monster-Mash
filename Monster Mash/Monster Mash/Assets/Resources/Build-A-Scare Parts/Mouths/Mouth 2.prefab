@@ -320,10 +320,6 @@ MonoBehaviour:
   isProjectileHolder: 1
   projectileSpeed: 70
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -429,6 +425,7 @@ GameObject:
   - component: {fileID: 2944404956080455407}
   - component: {fileID: 2944404956080455406}
   - component: {fileID: 2944404956080455401}
+  - component: {fileID: -8943009045115901924}
   m_Layer: 0
   m_Name: Mouth 2
   m_TagString: Connection - Monster Part
@@ -544,6 +541,7 @@ MonoBehaviour:
   neutralCollider: {fileID: 0}
   neutralMuzzle: {fileID: 2944404957342965376}
   needsReloadNeutral: 0
+  reloadTimeNeutral: 1
   isReloadedNeutral: 1
   isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
@@ -565,6 +563,7 @@ MonoBehaviour:
   homingMissileHeavyAttack: 0
   anvilHeavyAttack: 0
   bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
   powerBoostingHeavyAttack: 0
   shieldHeavyAttack: 0
   reflectingHeavyAttack: 0
@@ -583,6 +582,7 @@ MonoBehaviour:
   heavyCollider: {fileID: 0}
   heavyMuzzle: {fileID: 2944404955934837733}
   needsReloadHeavy: 0
+  reloadTimeHeavy: 1
   chargeVisual: {fileID: 0}
   heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
@@ -676,6 +676,23 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &-8943009045115901924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2944404956080455400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Mouths/Mouth 2
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &2944404956106150536
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,10 +988,6 @@ MonoBehaviour:
   isProjectileHolder: 1
   projectileSpeed: 70
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0
@@ -3618,10 +3631,6 @@ MonoBehaviour:
   isProjectileHolder: 0
   projectileSpeed: 70
   isBoomerangHolder: 0
-  boomerHeight: 0
-  boomerDistance: 0
-  boomerAutoEnd: 0
-  boomerTurnAround: 0
   isReloaded: 1
   myMonsterPart: {fileID: 0}
   neutralOrHeavy: 0

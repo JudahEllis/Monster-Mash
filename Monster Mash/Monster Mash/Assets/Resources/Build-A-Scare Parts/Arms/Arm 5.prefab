@@ -761,6 +761,7 @@ GameObject:
   - component: {fileID: 872870158163269444}
   - component: {fileID: 608437729431456473}
   - component: {fileID: 4716811668813070369}
+  - component: {fileID: -196297544562088250}
   m_Layer: 0
   m_Name: Arm 5
   m_TagString: Connection - Monster Part
@@ -873,6 +874,7 @@ MonoBehaviour:
   neutralCollider: {fileID: 1131301108047581070}
   neutralMuzzle: {fileID: 0}
   needsReloadNeutral: 0
+  reloadTimeNeutral: 1
   isReloadedNeutral: 1
   isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
@@ -894,6 +896,7 @@ MonoBehaviour:
   homingMissileHeavyAttack: 0
   anvilHeavyAttack: 0
   bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
   powerBoostingHeavyAttack: 0
   shieldHeavyAttack: 0
   reflectingHeavyAttack: 0
@@ -912,6 +915,7 @@ MonoBehaviour:
   heavyCollider: {fileID: 7070881340027395658}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
+  reloadTimeHeavy: 1
   chargeVisual: {fileID: 0}
   heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
@@ -987,6 +991,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-196297544562088250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510020796097404926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Arms/Arm 5
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1955327084898914360
 GameObject:
   m_ObjectHideFlags: 0

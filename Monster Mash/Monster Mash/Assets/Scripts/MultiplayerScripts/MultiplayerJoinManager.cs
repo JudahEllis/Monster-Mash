@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 public class MultiplayerJoinManager : MonoBehaviour
 {
+    public enum CurrentScreen { CharacterSelect, StageSelect}
+
+    public CurrentScreen currentScreen = CurrentScreen.CharacterSelect;
+
     private PlayerInputManager playerInputController;
 
     // The Scene's UI Canvas that the Player UI Controllers are spawned under
@@ -17,10 +21,10 @@ public class MultiplayerJoinManager : MonoBehaviour
     [SerializeField]
     private List<VirtualMouseInput> playerCursors;
 
-    [SerializeField]
-    public GameObject[] playerTubes;
+    //[SerializeField]
+    //public GameObject[] playerTubes;
 
-    public List<Transform> monsterSpawnPoints;
+    //public List<Transform> monsterSpawnPoints;
 
     [HideInInspector]
     public int charactersSelected;
@@ -38,8 +42,6 @@ public class MultiplayerJoinManager : MonoBehaviour
     public class PlayerInformation
     {
         public MonsterData monster;
-
-        public GameObject characterModel;
 
         public int playerIndex;
 
@@ -81,10 +83,12 @@ public class MultiplayerJoinManager : MonoBehaviour
     {
         playerInputController.onPlayerJoined += AddPlayerToken;
 
-        playerInputController.onPlayerJoined += AssignCursorControls;
+    }
 
-        playerInputController.onPlayerJoined += AssignPlayerInformation;
-
+    //Temp Replace with unsubscription interface system at a later date (Ask Jeremy about what that is if curious)
+    private void OnDisable()
+    {
+        playerInputController.onPlayerJoined -= AddPlayerToken;
     }
 
     // Update is called once per frame
@@ -105,11 +109,15 @@ public class MultiplayerJoinManager : MonoBehaviour
 
         playerCursors[player.playerIndex].gameObject.GetComponent<MultiplayerCursor>().Enabled(player);
 
-        playerTubes[player.playerIndex].SetActive(true);
+        //playerTubes[player.playerIndex].SetActive(true);
 
         player.gameObject.transform.position = Vector3.zero;
 
         allowStartGame = false;
+
+        AssignCursorControls(player);
+
+        AssignPlayerInformation(player);
 
     }
 
@@ -125,15 +133,17 @@ public class MultiplayerJoinManager : MonoBehaviour
 
         InputAction moveAction = controllerMap.FindAction("Move Cursor  - Generic Gamepad");
 
-        InputAction selectAction = controllerMap.FindAction("Select Action - Generic Gamepad");
+        //InputAction selectAction = controllerMap.FindAction("Select Action - Generic Gamepad");
 
-        InputAction startGame = controllerMap.FindAction("Start Game - Generic Gamepad");
+        //InputAction startGame = controllerMap.FindAction("Start Game - Generic Gamepad");
 
         InputActionProperty moveActionProperty = new InputActionProperty(moveAction);
 
         mouseUI.stickAction = moveActionProperty;
 
-        startGame.started += StartAction;
+        //These need to be unsubscribed on scene unload as well
+
+        //startGame.performed += StartAction;
     }
 
     //Function to Assign Variables Needed when Loading into Scenes of Gameplay

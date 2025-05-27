@@ -1383,7 +1383,7 @@ public class NewMonsterPart : MonoBehaviour
             }
             else
             {
-                neutralAttackPowerCalculation();
+                neutralAttack.neutralAttackPowerCalculation();
 
                 if (hasNeutralMovementCommand)
                 {
@@ -1880,29 +1880,6 @@ public class NewMonsterPart : MonoBehaviour
                 myAnimator.SetTrigger("Reel Back");
             }
         }
-    }
-
-    private void neutralAttackPowerCalculation() //new attack types must be added here
-    {
-        damage = baseNeutralAttackDamage;
-
-        switch(neutralAttack.Attack)
-        {
-            case NeutralAttack.AttackType.Jab:
-            case NeutralAttack.AttackType.Slash:
-                neutralColliderReference.resetAttackHistory();
-                neutralColliderReference.damage = damage;
-                heavyColliderReference.markedHeavy = false;
-                break;
-            case NeutralAttack.AttackType.Projectile:
-            case NeutralAttack.AttackType.Spray:
-            case NeutralAttack.AttackType.Boomerang:
-                neutralHitVFXManager.damage = damage;
-                neutralHitVFXManager.updateDamageOnProjectiles();
-                break;
-        }
-
-        damageClearance();
     }
 
     private void heavyAttackPowerCalculation() //new attack types must be added here

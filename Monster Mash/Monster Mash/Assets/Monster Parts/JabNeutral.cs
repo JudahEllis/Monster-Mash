@@ -13,4 +13,15 @@ public class JabNeutral : NeutralAttack
 
         damageClearance();
     }
+
+    public override void statusEffectAndDamageCalculations()
+    {
+        base.statusEffectAndDamageCalculations();
+        neutralColliderReference.damage = baseNeutralAttackDamage;
+    }
+
+    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    {
+        monsterPartRef.triggerJabOrSlashCollisionsOn();
+    }
 }

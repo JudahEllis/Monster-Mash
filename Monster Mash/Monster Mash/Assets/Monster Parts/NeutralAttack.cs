@@ -24,7 +24,6 @@ public class NeutralAttack: BaseAttack
 
     public AttackType Attack;
 
-    // TODO: Remember to add the functions that assign these varables
     protected monsterPartReference neutralColliderReference;
     protected vfxHolder neutralHitVFXManager;
 
@@ -39,6 +38,14 @@ public class NeutralAttack: BaseAttack
             AttackType.Boomerang => new BoomerangNeutral(),
             _ => null,
         };
+    }
+
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        neutralColliderReference = monsterPartRef.neutralCollider.gameObject.GetComponent<monsterPartReference>();
+        neutralHitVFXManager = monsterPartRef.neutralHitVFXHolder.GetComponent<vfxHolder>();
+
     }
 
 

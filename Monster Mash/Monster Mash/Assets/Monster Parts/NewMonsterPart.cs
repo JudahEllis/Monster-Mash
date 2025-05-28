@@ -489,6 +489,13 @@ public class NewMonsterPart : MonoBehaviour
         }
 
         statusEffectAndDamageCalculations();
+        neutralAttack.statusEffectAndDamageCalculations();
+    }
+
+    public void AttackSetup()
+    {
+        neutralAttack = neutralAttack.GetAttack();
+        neutralAttack.Init(this);
     }
 
     #endregion
@@ -1446,13 +1453,7 @@ public class NewMonsterPart : MonoBehaviour
 
                 }
 
-                switch (neutralAttack.Attack)
-                {
-                    case NeutralAttack.AttackType.Jab:
-                    case NeutralAttack.AttackType.Slash:
-                        triggerJabOrSlashCollisionsOn();
-                        break;
-                }
+                neutralAttack.triggerAttackRelease(this);
             }
         }
     }
@@ -1917,23 +1918,6 @@ public class NewMonsterPart : MonoBehaviour
     #region Status Effects
     private void statusEffectAndDamageCalculations() //new attack types must be added here
     {
-        switch(neutralAttack.Attack)
-        {
-            case NeutralAttack.AttackType.Jab:
-            case NeutralAttack.AttackType.Slash:
-                neutralColliderReference.damage = baseNeutralAttackDamage;
-                break;
-            case NeutralAttack.AttackType.Projectile:
-            case NeutralAttack.AttackType.Boomerang:
-                neutralHitVFXManager.damage = baseNeutralAttackDamage;
-                neutralHitVFXManager.updateDamageOnSpray();
-                break;
-            case NeutralAttack.AttackType.Spray:
-                neutralHitVFXManager.damage = baseNeutralAttackDamage;
-                neutralHitVFXManager.updateDamageOnSpray();
-                break;
-        }
-
         switch(heavyAttack.Attack)
         {
             case HeavyAttack.HeavyAttackType.Jab:

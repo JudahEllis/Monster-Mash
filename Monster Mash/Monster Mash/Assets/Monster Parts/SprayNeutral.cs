@@ -12,4 +12,11 @@ public class SprayNeutral : NeutralAttack
 
         damageClearance();
     }
+
+    public override void statusEffectAndDamageCalculations()
+    {
+        base.statusEffectAndDamageCalculations();
+        neutralHitVFXManager.damage = baseNeutralAttackDamage;
+        neutralHitVFXManager.updateDamageOnSpray();
+    }
 }

@@ -359,6 +359,11 @@ public class monsterAttackSystem : MonoBehaviour
         SFXManager = FindObjectOfType<SFXManager>();
     }
 
+    public void AssignMyPlayer(playerController controller)
+    {
+        myPlayer = controller;
+    }
+
     IEnumerator spawnRenactment()
     {
         myAnimator.SetBool("Spawning In", true);

@@ -859,6 +859,138 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI Navagation",
+            "id": "6a8b4c9a-c871-47c4-a153-ebb68dce652a",
+            "actions": [
+                {
+                    "name": "Move Cursor  - Generic Gamepad",
+                    "type": "Value",
+                    "id": "28fc63e2-0537-4a31-aff6-d3349e015b55",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Select Action - Generic Gamepad",
+                    "type": "Button",
+                    "id": "5490c4d2-a3f5-430f-ac02-28e23fd92b5e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Deselect Action - Generic Gamepad",
+                    "type": "Button",
+                    "id": "9690badf-b577-40b4-9c65-35062d17db04",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Start Game - Generic Gamepad",
+                    "type": "Button",
+                    "id": "b122a2ff-7766-46e9-b57d-fa9e147f3d58",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ae68aca2-e405-4a48-b4bf-4e35a1066e52",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Cursor  - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "010f86f2-7115-42f3-a147-1c0d3c987410",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Cursor  - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c0f8ef3-3c1a-46d3-ad26-ba35c0b01c45",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Start Game - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1346c2d6-e559-471a-91e7-a067925d933b",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Start Game - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ddab4835-b877-4d91-affb-2a907e30162f",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Action - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a0c0e7c-7b16-4acf-ac62-a95052fc5f0f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Action - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1873ffd8-668b-4356-a944-35c6a0ff041e",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Deselect Action - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cef4363e-6901-46f6-be86-5e01405c8d58",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Deselect Action - Generic Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

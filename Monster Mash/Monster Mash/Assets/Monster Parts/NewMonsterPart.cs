@@ -59,7 +59,7 @@ public class NewMonsterPart : MonoBehaviour
     private bool grabbedStatusEffect;
 
     [Header("Neutral Attack Questionaire")]
-    [SerializeField] private NeutralAttack neutralAttack;
+    public NeutralAttack neutralAttack;
 
     public GameObject neutralHitVFXHolder;
     public GameObject neutralForwardSwingVFXHolder;
@@ -104,7 +104,7 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Heavy Attack Questionaire")]
 
-    [SerializeField] private HeavyAttack heavyAttack;
+    public HeavyAttack heavyAttack;
     //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -211,9 +211,9 @@ public class NewMonsterPart : MonoBehaviour
     public bool grounded = true;
     private bool haveGrabbedAMonster;
 
-    private int reelAttackBuiltUpPower = 0;
-    private int reelAttackCurrentThreshold = 0;
-    private bool powerUpCheckAllowed = true;
+    public int reelAttackBuiltUpPower = 0;
+    public int reelAttackCurrentThreshold = 0;
+    public bool powerUpCheckAllowed = true;
     private bool reelAttackLanded = false;
     private monsterPartReference grabbedMonster;
 
@@ -258,7 +258,7 @@ public class NewMonsterPart : MonoBehaviour
 
             attackCalculations();
 
-            setUpVFX();
+            GetComponent<MonsterPartVisual>().setUpVFX();
             setUpSFX();
         }
     }
@@ -367,7 +367,7 @@ public class NewMonsterPart : MonoBehaviour
         }
         else
         {
-            idleVFXSeparation();
+            GetComponent<MonsterPartVisual>().idleVFXSeparation();
         }
 
         for (int i = 0; i < hitboxesAndHurtboxes.Count; i++)
@@ -376,7 +376,7 @@ public class NewMonsterPart : MonoBehaviour
         }
         #endregion
 
-        setUpVFX();
+        GetComponent<MonsterPartVisual>().setUpVFX();
         setUpSFX();
     }
 
@@ -1255,7 +1255,7 @@ public class NewMonsterPart : MonoBehaviour
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
             triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
-            triggerChargeVisual();
+            GetComponent<MonsterPartVisual>().triggerChargeVisual();
         }
         else
         {
@@ -1313,12 +1313,12 @@ public class NewMonsterPart : MonoBehaviour
             fullActiveHeavy = true;
             isAttacking = false;
             myMainSystem.correctWalkingAttackAnimations();
-            triggerEndChargeVisual();
+            GetComponent<MonsterPartVisual>().triggerEndChargeVisual();
 
             if (attackMarkedHeavy)
             {
                 heavyAttackPowerCalculation();
-                triggerHeavyChargeVisual();
+                GetComponent<MonsterPartVisual>().triggerHeavyChargeVisual();
 
                 if (hasHeavyMovementCommand)
                 {
@@ -1563,7 +1563,7 @@ public class NewMonsterPart : MonoBehaviour
         }
 
         myMainSystem.endBracing();
-        endRemainingVFX();
+        GetComponent<MonsterPartVisual>().endRemainingVFX();
 
     }
 
@@ -2023,7 +2023,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerStopWalking()
@@ -2129,7 +2129,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerScreechingStop()
@@ -2179,7 +2179,7 @@ public class NewMonsterPart : MonoBehaviour
         }
 
         grounded = false;
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
@@ -2251,7 +2251,7 @@ public class NewMonsterPart : MonoBehaviour
 
         grounded = groundedWhenTriggered;
         stopInfiniteRoll();
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerWingFlap()
@@ -2331,7 +2331,7 @@ public class NewMonsterPart : MonoBehaviour
         }
 
         grounded = false;
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerSimpleUngrounded()
@@ -2363,7 +2363,7 @@ public class NewMonsterPart : MonoBehaviour
         }
 
         grounded = false;
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerLand()
@@ -2417,7 +2417,7 @@ public class NewMonsterPart : MonoBehaviour
 
         grounded = true;
         stopInfiniteRoll();
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerLateLand()
@@ -2473,7 +2473,7 @@ public class NewMonsterPart : MonoBehaviour
 
         grounded = true;
         stopInfiniteRoll();
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerGlide()
@@ -2541,7 +2541,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
         }
 
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerCrouchStop()
@@ -2579,7 +2579,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Force Falling", true);
         }
 
-        endRunVisual();
+        GetComponent<MonsterPartVisual>().endRunVisual();
     }
 
     public void triggerForceFallStop()
@@ -2901,568 +2901,6 @@ public class NewMonsterPart : MonoBehaviour
 
     #endregion
 
-    #region VFX
-
-    private void idleVFXSeparation()
-    {
-        ParticleSystem[] tempVFXGrab = GetComponentsInChildren<ParticleSystem>();
-        List<GameObject> tempDefaultSprayVFX = new List<GameObject>(); //this is to catch any VFX from default spray holders which, unlike other attack VFX, are active at this time
-        for (int i = 0; i < tempVFXGrab.Length; i++)
-        {
-            if (tempVFXGrab[i].transform.parent.GetComponent<vfxHolder>() != null)
-            {
-                tempVFXGrab[i].gameObject.SetActive(false);
-                tempDefaultSprayVFX.Add(tempVFXGrab[i].gameObject);
-            }
-        }
-
-        myIdleVFX = GetComponentsInChildren<ParticleSystem>();
-
-
-        for (int i = 0; i < tempDefaultSprayVFX.Count; i++)
-        {
-            tempDefaultSprayVFX[i].SetActive(true);
-        }
-    }
-
-    private void setUpVFX()//new attack projectile-like types must be added here
-    {
-
-        #region Neutral Hit VFX Holder
-        if (neutralHitVFXHolder != null)
-        {
-            if (neutralHitVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch(neutralAttack.Attack)
-            {
-                case NeutralAttack.AttackType.Boomerang:
-                    neutralHitVFXManager.isBoomerangHolder = true;
-                    goto case NeutralAttack.AttackType.Projectile;
-                case NeutralAttack.AttackType.Projectile:
-                case NeutralAttack.AttackType.Spray:
-                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
-                    neutralVFXStoredPosition = transform.localPosition;
-                    neutralVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
-            neutralAttackHitVFXArray = new Transform[neutralHitVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackHitVFXArray.Length; i++)
-            {
-                neutralAttackHitVFXArray[i] = neutralHitVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Forward Swing VFX Holder
-        if (neutralForwardSwingVFXHolder != null)
-        {
-            if (neutralForwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralForwardSwingVFXManager = neutralForwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackForwardSwingVFXArray = new Transform[neutralForwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackForwardSwingVFXArray.Length; i++)
-            {
-                neutralAttackForwardSwingVFXArray[i] = neutralForwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Backward Swing VFX Holder
-        if (neutralBackwardSwingVFXHolder != null)
-        {
-            if (neutralBackwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralBackwardSwingVFXManager = neutralBackwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackBackwardSwingVFXArray = new Transform[neutralBackwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackBackwardSwingVFXArray.Length; i++)
-            {
-                neutralAttackBackwardSwingVFXArray[i] = neutralBackwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        #endregion
-
-        #region Neutral Downward Swing VFX Holder
-        if (neutralDownwardSwingVFXHolder != null)
-        {
-            if (neutralDownwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralDownwardSwingVFXManager = neutralDownwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackDownwardSwingVFXArray = new Transform[neutralDownwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackDownwardSwingVFXArray.Length; i++)
-            {
-                neutralAttackDownwardSwingVFXArray[i] = neutralDownwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        #endregion
-
-        #region Neutral Miss VFX Holder
-        if (neutralMissVFXHolder != null)
-        {
-            if (neutralMissVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralMissVFXManager = neutralMissVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackMissVFXArray = new Transform[neutralMissVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackMissVFXArray.Length; i++)
-            {
-                neutralAttackMissVFXArray[i] = neutralMissVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Default Spray Holder 
-        //new sprayable attack types must be added here
-        if (neutralDefaultSprayVFXHolder != null)
-        {
-            if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch(neutralAttack.Attack)
-            {
-                case NeutralAttack.AttackType.Projectile:
-                case NeutralAttack.AttackType.Spray:
-                case NeutralAttack.AttackType.Boomerang:
-                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
-                    neutralVFXStoredPosition = transform.localPosition;
-                    neutralVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
-            neutralAttackDefaultVFXArray = new Transform[neutralDefaultSprayVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackDefaultVFXArray.Length; i++)
-            {
-                neutralAttackDefaultVFXArray[i] = neutralDefaultSprayVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Stomp VFX Holder
-        if (neutralStompVFXHolder != null)
-        {
-            if (neutralStompVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralStompVFXManager = neutralStompVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralStompVFXArray = new Transform[neutralStompVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralStompVFXArray.Length; i++)
-            {
-                neutralStompVFXArray[i] = neutralStompVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-
-        #region Heavy Hit VFX Holder
-        //new projectile-like attack types must be added here
-        if (heavyHitVFXHolder != null)
-        {
-            if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch(heavyAttack.Attack)
-            {
-                case HeavyAttack.HeavyAttackType.Boomerang:
-                    heavyHitVFXManager.isBoomerangHolder = true;
-                    goto case HeavyAttack.HeavyAttackType.Projectile;
-                case HeavyAttack.HeavyAttackType.Projectile:
-                case HeavyAttack.HeavyAttackType.Spray:
-                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                    heavyVFXStoredPosition = transform.localPosition;
-                    heavyVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
-            heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackHitVFXArray.Length; i++)
-            {
-                heavyAttackHitVFXArray[i] = heavyHitVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Forward Swing VFX Holder
-        if (heavyForwardSwingVFXHolder != null)
-        {
-            if (heavyForwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyForwardSwingVFXManager = heavyForwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackForwardSwingVFXArray = new Transform[heavyForwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackForwardSwingVFXArray.Length; i++)
-            {
-                heavyAttackForwardSwingVFXArray[i] = heavyForwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Backward Swing VFX Holder
-        if (heavyBackwardSwingVFXHolder != null)
-        {
-            if (heavyBackwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyBackwardSwingVFXManager = heavyBackwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackBackwardSwingVFXArray = new Transform[heavyBackwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackBackwardSwingVFXArray.Length; i++)
-            {
-                heavyAttackBackwardSwingVFXArray[i] = heavyBackwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Downward Swing VFX Holder
-        if (heavyDownwardSwingVFXHolder != null)
-        {
-            if (heavyDownwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyDownwardSwingVFXManager = heavyDownwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackDownwardSwingVFXArray = new Transform[heavyDownwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackDownwardSwingVFXArray.Length; i++)
-            {
-                heavyAttackDownwardSwingVFXArray[i] = heavyDownwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Miss VFX Holder
-        if (heavyMissVFXHolder != null)
-        {
-            if (heavyMissVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyMissVFXManager = heavyMissVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackMissVFXArray = new Transform[heavyMissVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackMissVFXArray.Length; i++)
-            {
-                heavyAttackMissVFXArray[i] = heavyMissVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        if (heavyDefaultSprayVFXHolder != null)
-        {
-            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch(heavyAttack.Attack)
-            {
-                case HeavyAttack.HeavyAttackType.Projectile:
-                case HeavyAttack.HeavyAttackType.Spray:
-                case HeavyAttack.HeavyAttackType.Boomerang:
-                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                    heavyVFXStoredPosition = transform.localPosition;
-                    heavyVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
-            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
-            {
-                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Default Spray Holder
-        //new sprayable attack types must be added here
-        if (heavyDefaultSprayVFXHolder != null)
-        {
-            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch(heavyAttack.Attack)
-            {
-                case HeavyAttack.HeavyAttackType.Projectile:
-                case HeavyAttack.HeavyAttackType.Spray:
-                case HeavyAttack.HeavyAttackType.Boomerang:
-                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                    heavyVFXStoredPosition = transform.localPosition;
-                    heavyVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
-            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
-            {
-                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Stomp VFX Holder
-        if (heavyStompVFXHolder != null)
-        {
-            if (heavyStompVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyStompVFXManager = heavyStompVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyStompVFXArray = new Transform[heavyStompVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyStompVFXArray.Length; i++)
-            {
-                heavyStompVFXArray[i] = heavyStompVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-    }
-
-    public void triggerChargeVisual()
-    {
-        if (chargeVisual != null)
-        {
-            chargeVisual.Stop();
-            chargeVisual.Play();
-        }
-    }
-
-    public void triggerEndChargeVisual()
-    {
-        if (chargeVisual != null)
-        {
-            chargeVisual.Stop();
-        }
-    }
-
-    public void triggerHeavyChargeVisual()
-    {
-        if (heavyChargeVisual != null)
-        {
-            heavyChargeVisual.Stop();
-            heavyChargeVisual.Play();
-        }
-    }
-
-    public void triggerRunVisual()
-    {
-        //if we decide that multiple pieces other than grounded legs should have a trail visual, we will move this into a full network message
-        if (specialRunVisual != null)
-        {
-            specialRunVisual.SetActive(true);
-        }
-    }
-
-    public void endRunVisual()
-    {
-        if (specialRunVisual != null)
-        {
-            specialRunVisual.SetActive(false);
-        }
-    }
-
-    public void triggerStompVisual()
-    {
-        if (neutralStompVFXManager != null && attackMarkedHeavy == false)
-        {
-            neutralStompVFXManager.unleashAdditionalSprayVisual();
-        }
-        else if (heavyStompVFXManager != null && attackMarkedHeavy == true)
-        {
-            heavyStompVFXManager.unleashAdditionalSprayVisual();
-        }
-    }
-
-    public void triggerNeutralAttackVisuals() //called in attack animation //new attack types must be added here
-    {
-        switch (neutralAttack.Attack)
-        {
-            case NeutralAttack.AttackType.Jab:
-                if (!jabOrSlashLanded && neutralMissVFXHolder != null)
-                {
-                    neutralMissVFXManager.unleashJabOrSlash();
-                }
-                break;
-
-            case NeutralAttack.AttackType.Slash:
-                if (!jabOrSlashLanded && neutralMissVFXHolder != null)
-                {
-                    neutralMissVFXManager.unleashJabOrSlash();
-                }
-                break;
-
-            case NeutralAttack.AttackType.Spray:
-                neutralHitVFXHolder.transform.position = neutralMuzzle.transform.position;
-                neutralHitVFXHolder.transform.rotation = neutralMuzzle.transform.rotation;
-
-                if (neutralDefaultSprayVFXHolder != null)
-                {
-                    neutralDefaultSprayVFXHolder.transform.position = neutralMuzzle.transform.position;
-                    neutralDefaultSprayVFXHolder.transform.rotation = neutralMuzzle.transform.rotation;
-                }
-
-                neutralHitVFXManager.unleashSpray();
-
-                if (neutralDefaultSprayVFXManager != null)
-                {
-                    neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                }
-                break;
-
-            case NeutralAttack.AttackType.Projectile:
-                if (neutralAttackHitVFXArray.Length != 0)
-                {
-                    neutralHitVFXManager.faceRightDirection(facingRight);
-                    neutralHitVFXManager.unleashSingleProjectile();
-
-                    if (neutralDefaultSprayVFXManager != null)
-                    {
-                        neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                    }
-                }
-                break;
-
-            case NeutralAttack.AttackType.Boomerang:
-                if (neutralAttackHitVFXArray.Length != 0)
-                {
-                    neutralHitVFXManager.faceRightDirection(facingRight);
-                    neutralHitVFXManager.unleashSingleProjectile();
-
-                    if (neutralDefaultSprayVFXManager != null)
-                    {
-                        neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                    }
-                }
-                break;
-        }
-
-    }
-
-    public void triggerNeutralSwingVisual()
-    {
-        if (neutralForwardSwingVFXManager && attackAnimationID == 1)
-        {
-            neutralForwardSwingVFXManager.unleashAdditionalSprayVisual();
-        }
-        else if (neutralBackwardSwingVFXManager && attackAnimationID == -1)
-        {
-            neutralBackwardSwingVFXManager.unleashAdditionalSprayVisual();
-        }
-        else if (neutralDownwardSwingVFXManager && attackAnimationID == 0)
-        {
-            neutralDownwardSwingVFXManager.unleashAdditionalSprayVisual();
-        }
-    }
-
-    public void triggerHeavyAttackVisuals() //new attack types must be added here
-    {
-        switch(heavyAttack.Attack)
-        {
-            case HeavyAttack.HeavyAttackType.Jab:
-            case HeavyAttack.HeavyAttackType.Slash:
-                if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
-                {
-                    //turn on miss visual if neutral vfx holder's script hasn't made contact
-                    heavyMissVFXManager.unleashJabOrSlash();
-                }
-
-                break;
-            case HeavyAttack.HeavyAttackType.Spray:
-                heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-                heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
-
-                if (heavyDefaultSprayVFXHolder != null)
-                {
-                    heavyDefaultSprayVFXHolder.transform.position = heavyMuzzle.transform.position;
-                    heavyDefaultSprayVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
-
-                }
-
-                heavyHitVFXManager.unleashSpray();
-                if (heavyDefaultSprayVFXManager)
-                {
-                    heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                }
-
-                break;
-            case HeavyAttack.HeavyAttackType.Projectile:
-            case HeavyAttack.HeavyAttackType.Boomerang:
-                if (heavyAttackHitVFXArray.Length != 0)
-                {
-                    heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-                    heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
-
-                    heavyHitVFXManager.faceRightDirection(facingRight);
-                    heavyHitVFXManager.unleashSingleProjectile();
-
-                    if (heavyDefaultSprayVFXManager)
-                    {
-                        heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                    }
-                }
-
-                break;
-            case HeavyAttack.HeavyAttackType.Reel:
-                if (!reelAttackLanded)
-                {
-                    //miss visual
-                    triggerReelCollisionsOff();
-                }
-
-                reelAttackBuiltUpPower = 0;
-                reelAttackCurrentThreshold = 0;
-                powerUpCheckAllowed = false;
-                break;
-            case HeavyAttack.HeavyAttackType.Beam:
-                heavyHitVFXManager.unleashBeamVisual();
-                break;
-
-        }
-    }
-
-    public void triggerHeavySwingVisual()
-    {
-        if (heavyForwardSwingVFXManager && attackAnimationID == 1)
-        {
-            heavyForwardSwingVFXManager.unleashAdditionalSprayVisual();
-        }
-        else if (heavyBackwardSwingVFXManager && attackAnimationID == -1)
-        {
-            heavyBackwardSwingVFXManager.unleashAdditionalSprayVisual();
-        }
-        else if (heavyDownwardSwingVFXManager && attackAnimationID == 0)
-        {
-            heavyDownwardSwingVFXManager.unleashAdditionalSprayVisual();
-        }
-    }
-
-    public void endRemainingVFX()
-    {
-        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam)
-        {
-            heavyHitVFXManager.endBeamVisual();
-        }
-
-        endRunVisual();
-    }
-
-    #endregion
-
     #region SFX
 
     public void setUpSFX()
@@ -3539,7 +2977,7 @@ public class NewMonsterPart : MonoBehaviour
             myIdleVFX[i].gameObject.SetActive(false);
         }
 
-        endRemainingVFX();
+        GetComponent<MonsterPartVisual>().endRemainingVFX();
     }
 
     public void triggerVisualReappearance()

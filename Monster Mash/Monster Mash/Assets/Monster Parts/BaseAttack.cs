@@ -13,6 +13,11 @@ public class BaseAttack
         heavyColliderReference = monsterPartRef.heavyCollider.GetComponent<monsterPartReference>();
     }
 
+    public virtual void Init(MonsterPartVisual monsterPartVisual)
+    {
+
+    }
+
     protected void damageClearance()
     {
         damage = 0;

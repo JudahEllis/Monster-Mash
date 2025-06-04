@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class JabNeutral : NeutralAttack
 {
+    private bool jabOrSlashLanded = false;
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();
@@ -23,5 +24,13 @@ public class JabNeutral : NeutralAttack
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
         monsterPartRef.triggerJabOrSlashCollisionsOn();
+    }
+
+    public override void triggerNeutralAttackVisuals()
+    {
+        if (!jabOrSlashLanded && neutralMissVFXHolder != null)
+        {
+            neutralMissVFXManager.unleashJabOrSlash();
+        }
     }
 }

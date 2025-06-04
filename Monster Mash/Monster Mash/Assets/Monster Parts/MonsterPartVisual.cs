@@ -42,12 +42,12 @@ public class MonsterPartVisual : MonoBehaviour
 
     public ParticleSystem[] myIdleVFX;
 
-    private vfxHolder neutralHitVFXManager;
+    public vfxHolder neutralHitVFXManager;
     private vfxHolder neutralForwardSwingVFXManager;
     private vfxHolder neutralBackwardSwingVFXManager;
     private vfxHolder neutralDownwardSwingVFXManager;
-    private vfxHolder neutralMissVFXManager;
-    private vfxHolder neutralDefaultSprayVFXManager;
+    public vfxHolder neutralMissVFXManager;
+    public vfxHolder neutralDefaultSprayVFXManager;
     private vfxHolder neutralStompVFXManager;
 
     private vfxHolder heavyHitVFXManager;
@@ -88,6 +88,7 @@ public class MonsterPartVisual : MonoBehaviour
     private void Awake()
     {
         monsterPartRef = GetComponent<NewMonsterPart>();
+        monsterPartRef.neutralAttack.Init(this);
     }
 
 
@@ -478,66 +479,7 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerNeutralAttackVisuals() //called in attack animation //new attack types must be added here
     {
-        switch (monsterPartRef.neutralAttack.Attack)
-        {
-            case NeutralAttack.AttackType.Jab:
-                if (!jabOrSlashLanded && neutralMissVFXHolder != null)
-                {
-                    neutralMissVFXManager.unleashJabOrSlash();
-                }
-                break;
-
-            case NeutralAttack.AttackType.Slash:
-                if (!jabOrSlashLanded && neutralMissVFXHolder != null)
-                {
-                    neutralMissVFXManager.unleashJabOrSlash();
-                }
-                break;
-
-            case NeutralAttack.AttackType.Spray:
-                neutralHitVFXHolder.transform.position = neutralMuzzle.transform.position;
-                neutralHitVFXHolder.transform.rotation = neutralMuzzle.transform.rotation;
-
-                if (neutralDefaultSprayVFXHolder != null)
-                {
-                    neutralDefaultSprayVFXHolder.transform.position = neutralMuzzle.transform.position;
-                    neutralDefaultSprayVFXHolder.transform.rotation = neutralMuzzle.transform.rotation;
-                }
-
-                neutralHitVFXManager.unleashSpray();
-
-                if (neutralDefaultSprayVFXManager != null)
-                {
-                    neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                }
-                break;
-
-            case NeutralAttack.AttackType.Projectile:
-                if (neutralAttackHitVFXArray.Length != 0)
-                {
-                    neutralHitVFXManager.faceRightDirection(monsterPartRef.facingRight);
-                    neutralHitVFXManager.unleashSingleProjectile();
-
-                    if (neutralDefaultSprayVFXManager != null)
-                    {
-                        neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                    }
-                }
-                break;
-
-            case NeutralAttack.AttackType.Boomerang:
-                if (neutralAttackHitVFXArray.Length != 0)
-                {
-                    neutralHitVFXManager.faceRightDirection(monsterPartRef.facingRight);
-                    neutralHitVFXManager.unleashSingleProjectile();
-
-                    if (neutralDefaultSprayVFXManager != null)
-                    {
-                        neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                    }
-                }
-                break;
-        }
+        monsterPartRef.neutralAttack.triggerNeutralAttackVisuals();
 
     }
 

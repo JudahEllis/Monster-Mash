@@ -25,7 +25,14 @@ public class NeutralAttack: BaseAttack
     public AttackType Attack;
 
     protected monsterPartReference neutralColliderReference;
+
+    // Monster visual vars
+    protected GameObject neutralMissVFXHolder;
+    protected vfxHolder neutralMissVFXManager;
     protected vfxHolder neutralHitVFXManager;
+    protected Transform neutralMuzzle;
+    protected Transform[] neutralAttackHitVFXArray;
+    protected GameObject neutralHitVFXHolder;
 
     public NeutralAttack GetAttack()
     {
@@ -44,7 +51,17 @@ public class NeutralAttack: BaseAttack
     {
         base.Init(monsterPartRef);
         neutralColliderReference = monsterPartRef.neutralCollider.gameObject.GetComponent<monsterPartReference>();
-        neutralHitVFXManager = monsterPartRef.neutralHitVFXHolder.GetComponent<vfxHolder>();
+
+    }
+
+    public override void Init(MonsterPartVisual monsterPartVisual)
+    {
+        neutralMissVFXHolder = monsterPartVisual.neutralMissVFXHolder;
+        neutralMissVFXManager = monsterPartVisual.neutralMissVFXManager;
+        neutralHitVFXManager = monsterPartVisual.neutralHitVFXManager;
+        neutralMuzzle = monsterPartVisual.neutralMuzzle;
+        neutralAttackHitVFXArray = monsterPartVisual.neutralAttackHitVFXArray;
+        neutralHitVFXHolder = monsterPartVisual.neutralHitVFXHolder;
 
     }
 
@@ -52,5 +69,10 @@ public class NeutralAttack: BaseAttack
     public virtual void neutralAttackPowerCalculation()
     {
         damage = baseNeutralAttackDamage;
+    }
+
+    public virtual void triggerNeutralAttackVisuals()
+    {
+        
     }
 }

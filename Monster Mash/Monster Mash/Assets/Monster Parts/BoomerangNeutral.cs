@@ -47,4 +47,17 @@ public class BoomerangNeutral : NeutralAttack
             }
         }
     }
+
+    public override void SetupVFX()
+    {
+        if (neutralHitVFXHolder != null || neutralDefaultSprayVFXHolder != null)
+        {
+            StoredParentSetup();
+        }
+
+        if(neutralHitVFXHolder != null)
+        {
+            neutralHitVFXManager.isBoomerangHolder = true;
+        }
+    }
 }

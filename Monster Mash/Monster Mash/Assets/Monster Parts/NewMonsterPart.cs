@@ -61,43 +61,13 @@ public class NewMonsterPart : MonoBehaviour
     [Header("Neutral Attack Questionaire")]
     public NeutralAttack neutralAttack;
 
-    public GameObject neutralHitVFXHolder;
-    public GameObject neutralForwardSwingVFXHolder;
-    public GameObject neutralBackwardSwingVFXHolder;
-    public GameObject neutralDownwardSwingVFXHolder;
-    private Transform neutralHitVFXParent;
-    public GameObject neutralMissVFXHolder;
-    private Transform neutralMissVFXParent;
-    public GameObject neutralDefaultSprayVFXHolder;
-    public GameObject neutralStompVFXHolder;
-    private Transform neutralDefaultSprayVFXParent;
-    private Vector3 neutralDefaultSprayVFXStoredPosition;
-    private Quaternion neutralDefaultSprayVFXStoredRotation;
     public Collider neutralCollider;
     private monsterPartReference neutralColliderReference;
     private vfxHolder neutralHitVFXManager;
-    private vfxHolder neutralForwardSwingVFXManager;
-    private vfxHolder neutralBackwardSwingVFXManager;
-    private vfxHolder neutralDownwardSwingVFXManager;
-    private vfxHolder neutralMissVFXManager;
-    private vfxHolder neutralDefaultSprayVFXManager;
-    private vfxHolder neutralStompVFXManager;
-    public Transform neutralMuzzle;
     public bool needsReloadNeutral; //determines if part must be reloaded before attacking again
     public float reloadTimeNeutral = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
     [SerializeField] private bool isReloadedNeutral = true;
     [SerializeField] private bool isReloadedHeavy = true;
-    public Transform[] neutralAttackHitVFXArray;
-    public Transform[] neutralAttackForwardSwingVFXArray;
-    public Transform[] neutralAttackBackwardSwingVFXArray;
-    public Transform[] neutralAttackDownwardSwingVFXArray;
-    public Transform[] neutralAttackMissVFXArray;
-    public Transform[] neutralAttackDefaultVFXArray;
-    public Transform[] neutralStompVFXArray;
-    private Transform neutralVFXStoredParent;
-    private Vector3 neutralVFXStoredPosition;
-    private Quaternion neutralVFXStoredRotation;
-    private int neutralVFXCount;
     private bool jabOrSlashLanded = false;
     public AudioClip[] neutralAttackHitAudioLibrary;
     private int neutralHitCounter = 0;
@@ -106,39 +76,12 @@ public class NewMonsterPart : MonoBehaviour
 
     public HeavyAttack heavyAttack;
     //
-    public GameObject heavyHitVFXHolder;
-    public GameObject heavyForwardSwingVFXHolder;
-    public GameObject heavyBackwardSwingVFXHolder;
-    public GameObject heavyDownwardSwingVFXHolder;
-    public GameObject heavyMissVFXHolder;
-    public GameObject heavyDefaultSprayVFXHolder;
-    public GameObject heavyStompVFXHolder;
     public Collider heavyCollider;
     private monsterPartReference heavyColliderReference;
     private vfxHolder heavyHitVFXManager;
-    private vfxHolder heavyForwardSwingVFXManager;
-    private vfxHolder heavyBackwardSwingVFXManager;
-    private vfxHolder heavyDownwardSwingVFXManager;
-    private vfxHolder heavyMissVFXManager;
-    private vfxHolder heavyDefaultSprayVFXManager;
-    private vfxHolder heavyStompVFXManager;
     public Transform heavyMuzzle;
     public bool needsReloadHeavy; //for projectiles, determines if projectile must be reloaded before shooting again
     public float reloadTimeHeavy = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
-    public ParticleSystem chargeVisual;
-    public ParticleSystem heavyChargeVisual;
-    //public ParticleSystem fullHeavyChargeVisual;
-    public Transform[] heavyAttackHitVFXArray;
-    public Transform[] heavyAttackForwardSwingVFXArray;
-    public Transform[] heavyAttackBackwardSwingVFXArray;
-    public Transform[] heavyAttackDownwardSwingVFXArray;
-    public Transform[] heavyAttackMissVFXArray;
-    public Transform[] heavyAttackDefaultVFXArray;
-    public Transform[] heavyStompVFXArray;
-    private Transform heavyVFXStoredParent;
-    private Vector3 heavyVFXStoredPosition;
-    private Quaternion heavyVFXStoredRotation;
-    private int heavyVFXCount;
     public AudioClip[] heavyAttackHitAudioLibrary;
     private int heavyHitCounter = 0;
 

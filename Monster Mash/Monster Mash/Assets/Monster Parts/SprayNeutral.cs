@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class SprayNeutral : NeutralAttack
 {
-    private GameObject neutralDefaultSprayVFXHolder;
     private vfxHolder neutralDefaultSprayVFXManager;
 
     public override void Init(MonsterPartVisual monsterPartVisual)
     {
         base.Init(monsterPartVisual);
-        neutralDefaultSprayVFXHolder = monsterPartVisual.neutralDefaultSprayVFXHolder;
         neutralDefaultSprayVFXManager = monsterPartVisual.neutralDefaultSprayVFXManager;
     }
 
@@ -46,6 +44,14 @@ public class SprayNeutral : NeutralAttack
         if (neutralDefaultSprayVFXManager != null)
         {
             neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
+        }
+    }
+
+    public override void SetupVFX()
+    {
+        if (neutralHitVFXHolder != null || neutralDefaultSprayVFXHolder != null)
+        {
+            StoredParentSetup();
         }
     }
 }

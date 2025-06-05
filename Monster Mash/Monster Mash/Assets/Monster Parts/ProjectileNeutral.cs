@@ -47,4 +47,12 @@ public class ProjectileNeutral : NeutralAttack
             }
         }
     }
+
+    public override void SetupVFX()
+    {
+        if (neutralHitVFXHolder != null || neutralDefaultSprayVFXHolder != null)
+        {
+            StoredParentSetup();
+        }
+    }
 }

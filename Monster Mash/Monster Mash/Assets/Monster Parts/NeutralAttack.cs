@@ -25,14 +25,19 @@ public class NeutralAttack: BaseAttack
     public AttackType Attack;
 
     protected monsterPartReference neutralColliderReference;
+    private Transform partTransform;
 
     // Monster visual vars
     protected GameObject neutralMissVFXHolder;
     protected vfxHolder neutralMissVFXManager;
     protected vfxHolder neutralHitVFXManager;
+    protected GameObject neutralDefaultSprayVFXHolder;
     protected Transform neutralMuzzle;
     protected Transform[] neutralAttackHitVFXArray;
     protected GameObject neutralHitVFXHolder;
+    protected Transform neutralVFXStoredParent;
+    protected Vector3 neutralVFXStoredPosition;
+    protected Quaternion neutralVFXStoredRotation;
 
     public NeutralAttack GetAttack()
     {
@@ -51,6 +56,7 @@ public class NeutralAttack: BaseAttack
     {
         base.Init(monsterPartRef);
         neutralColliderReference = monsterPartRef.neutralCollider.gameObject.GetComponent<monsterPartReference>();
+        partTransform = monsterPartRef.transform;
 
     }
 
@@ -62,6 +68,10 @@ public class NeutralAttack: BaseAttack
         neutralMuzzle = monsterPartVisual.neutralMuzzle;
         neutralAttackHitVFXArray = monsterPartVisual.neutralAttackHitVFXArray;
         neutralHitVFXHolder = monsterPartVisual.neutralHitVFXHolder;
+        neutralVFXStoredParent = monsterPartVisual.neutralVFXStoredParent;
+        neutralVFXStoredPosition = monsterPartVisual.neutralVFXStoredPosition;
+        neutralVFXStoredRotation = monsterPartVisual.neutralVFXStoredRotation;
+        neutralDefaultSprayVFXHolder = monsterPartVisual.neutralDefaultSprayVFXHolder;
 
     }
 
@@ -74,5 +84,17 @@ public class NeutralAttack: BaseAttack
     public virtual void triggerNeutralAttackVisuals()
     {
         
+    }
+
+    public virtual void SetupVFX()
+    {
+
+    }
+
+    protected void StoredParentSetup()
+    {
+        neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
+        neutralVFXStoredPosition = partTransform.localPosition;
+        neutralVFXStoredRotation = partTransform.localRotation;
     }
 }

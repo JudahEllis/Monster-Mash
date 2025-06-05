@@ -7,6 +7,7 @@ public class MonsterPartVisual : MonoBehaviour
     //This script is a mess a lot of the vars are not assigned. I just chucked all the VFX in here so I could deal with it seperate from the rest of the monster part script
 
     [HideInInspector] public bool attackMarkedHeavy = false;
+    [Header("Neutral Attack VFX Arrays")]
     public Transform[] neutralAttackHitVFXArray;
     public Transform[] neutralAttackForwardSwingVFXArray;
     public Transform[] neutralAttackBackwardSwingVFXArray;
@@ -15,6 +16,16 @@ public class MonsterPartVisual : MonoBehaviour
     public Transform[] neutralAttackDefaultVFXArray;
     public Transform[] neutralStompVFXArray;
 
+    [Header("Neutral Attack VFX Holders")]
+    public GameObject neutralHitVFXHolder;
+    public GameObject neutralForwardSwingVFXHolder;
+    public GameObject neutralBackwardSwingVFXHolder;
+    public GameObject neutralDownwardSwingVFXHolder;
+    [field: SerializeField] public GameObject neutralMissVFXHolder { get; private set; }
+    public GameObject neutralDefaultSprayVFXHolder;
+    public GameObject neutralStompVFXHolder;
+
+    [Header("Heavy Attack VFX Arrays")]
     public Transform[] heavyAttackHitVFXArray;
     public Transform[] heavyAttackForwardSwingVFXArray;
     public Transform[] heavyAttackBackwardSwingVFXArray;
@@ -23,15 +34,7 @@ public class MonsterPartVisual : MonoBehaviour
     public Transform[] heavyAttackDefaultVFXArray;
     public Transform[] heavyStompVFXArray;
 
-
-    public GameObject neutralHitVFXHolder;
-    public GameObject neutralForwardSwingVFXHolder;
-    public GameObject neutralBackwardSwingVFXHolder;
-    public GameObject neutralDownwardSwingVFXHolder;
-    public GameObject neutralMissVFXHolder;
-    public GameObject neutralDefaultSprayVFXHolder;
-    public GameObject neutralStompVFXHolder;
-
+    [Header("Heavy Attack VFX Holders")]
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
     public GameObject heavyBackwardSwingVFXHolder;
@@ -42,12 +45,12 @@ public class MonsterPartVisual : MonoBehaviour
 
     public ParticleSystem[] myIdleVFX;
 
-    public vfxHolder neutralHitVFXManager;
+    [HideInInspector] public vfxHolder neutralHitVFXManager { get; private set; }
     private vfxHolder neutralForwardSwingVFXManager;
     private vfxHolder neutralBackwardSwingVFXManager;
     private vfxHolder neutralDownwardSwingVFXManager;
-    public vfxHolder neutralMissVFXManager;
-    public vfxHolder neutralDefaultSprayVFXManager;
+    [HideInInspector] public vfxHolder neutralMissVFXManager { get; private set; }
+    [HideInInspector] public vfxHolder neutralDefaultSprayVFXManager { get; private set; }
     private vfxHolder neutralStompVFXManager;
 
     private vfxHolder heavyHitVFXManager;
@@ -63,9 +66,9 @@ public class MonsterPartVisual : MonoBehaviour
     private Transform neutralDefaultSprayVFXParent;
     private Vector3 neutralDefaultSprayVFXStoredPosition;
     private Quaternion neutralDefaultSprayVFXStoredRotation;
-    private Transform neutralVFXStoredParent;
-    private Vector3 neutralVFXStoredPosition;
-    private Quaternion neutralVFXStoredRotation;
+    [HideInInspector] public Transform neutralVFXStoredParent { get; private set; }
+    [HideInInspector] public Vector3 neutralVFXStoredPosition { get; private set; }
+    [HideInInspector] public Quaternion neutralVFXStoredRotation { get; private set; }
     private int neutralVFXCount;
 
     private Transform heavyVFXStoredParent;
@@ -80,7 +83,7 @@ public class MonsterPartVisual : MonoBehaviour
     public ParticleSystem heavyChargeVisual;
     public GameObject specialRunVisual;
     private bool jabOrSlashLanded = false;
-    public Transform neutralMuzzle;
+    public Transform neutralMuzzle { get; private set; }
     public int attackAnimationID = 1;
     public Transform heavyMuzzle;
     private bool reelAttackLanded = false;
@@ -94,6 +97,7 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void setUpVFX()//new attack projectile-like types must be added here
     {
+        monsterPartRef.neutralAttack.SetupVFX();
 
         #region Neutral Hit VFX Holder
         if (neutralHitVFXHolder != null)
@@ -101,19 +105,6 @@ public class MonsterPartVisual : MonoBehaviour
             if (neutralHitVFXHolder.GetComponent<vfxHolder>() != null)
             {
                 neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch (monsterPartRef.neutralAttack.Attack)
-            {
-                case NeutralAttack.AttackType.Boomerang:
-                    neutralHitVFXManager.isBoomerangHolder = true;
-                    goto case NeutralAttack.AttackType.Projectile;
-                case NeutralAttack.AttackType.Projectile:
-                case NeutralAttack.AttackType.Spray:
-                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
-                    neutralVFXStoredPosition = transform.localPosition;
-                    neutralVFXStoredRotation = transform.localRotation;
-                    break;
             }
 
             neutralAttackHitVFXArray = new Transform[neutralHitVFXHolder.transform.childCount];
@@ -197,17 +188,6 @@ public class MonsterPartVisual : MonoBehaviour
             if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
             {
                 neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch (monsterPartRef.neutralAttack.Attack)
-            {
-                case NeutralAttack.AttackType.Projectile:
-                case NeutralAttack.AttackType.Spray:
-                case NeutralAttack.AttackType.Boomerang:
-                    neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
-                    neutralVFXStoredPosition = transform.localPosition;
-                    neutralVFXStoredRotation = transform.localRotation;
-                    break;
             }
 
             neutralAttackDefaultVFXArray = new Transform[neutralDefaultSprayVFXHolder.transform.childCount];

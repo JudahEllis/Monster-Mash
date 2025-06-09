@@ -42,7 +42,7 @@ public class monsterPart : MonoBehaviour
     [Header("Damage and Status Effects")]
     public int baseNeutralAttackDamage = 0;
     public int baseHeavyAttackDamage = 0;
-    private int builtUpAttackPower = 0;
+    [SerializeField] private int builtUpAttackPower = 0;
     public int builtUpAddedDamage = 0;
     private int damage = 0;
     //Status Effects
@@ -135,6 +135,7 @@ public class monsterPart : MonoBehaviour
     public bool powerBoostingHeavyAttack;
     public int powerBoostingRequired; //built up attack power must reach this int before launching attack
     public int powerBoostingBuiltUpAttackPower;
+    public bool powerBoostingCharged = false;
     //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -1205,12 +1206,6 @@ public class monsterPart : MonoBehaviour
         //most likely a canceled input after system already has registered the difference between input but before the attack has been unleashed
         //aka a canceled heavy attack
 
-        /*if (powerBoostingHeavyAttack && attackMarkedHeavy && (builtUpAttackPower < powerBoostingRequired)) //for power boosting attacks only, pause wind up whenever
-        {
-            myAnimator.SetTrigger("Cancel Heavy");
-            return;
-        }*/
-
         if (fullActiveHeavy && attackFocusOn && beamHeavyAttack)
         {
             if (inputCanceled)
@@ -1253,6 +1248,19 @@ public class monsterPart : MonoBehaviour
 
     public void triggerNeutralOrHeavy()
     {
+        if (powerBoostingHeavyAttack)
+        {
+            //if (!powerBoostingCharged && builtUpAttackPower >= powerBoostingRequired)
+
+            if (powerBoostingCharged)
+            {
+                attackMarkedHeavy = true;
+                myAnimator.SetBool("Attack Marked Heavy", true);
+
+                myAnimator.SetTrigger("Force Heavy Attack");
+            }
+        }
+
         if (!attackMarkedHeavy && needsReloadNeutral)
         {
             if (!isReloadedNeutral)
@@ -1321,14 +1329,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackRelease()
     {
-        if (powerBoostingHeavyAttack && attackMarkedHeavy && builtUpAttackPower < powerBoostingRequired)
+        if (powerBoostingHeavyAttack && !powerBoostingCharged && attackMarkedHeavy && (builtUpAttackPower < powerBoostingRequired))
         {
             triggerAttackToIdle();
             triggerAttackCorrections();
             return;
-        }
-
-        if (isJointed)
+        } else if (isJointed)
         {
             // not sure about this whole section, it looks important
             connectedMonsterPart.SetBool("Ready to Swing", true);
@@ -1352,6 +1358,7 @@ public class monsterPart : MonoBehaviour
 
             if (attackMarkedHeavy)
             {
+                powerBoostingBuiltUpAttackPower = builtUpAttackPower;
                 heavyAttackPowerCalculation();
                 triggerHeavyChargeVisual();
 
@@ -1889,6 +1896,15 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyAttackPowerUp() //built up in wind up animation
     {
+        if (powerBoostingHeavyAttack)
+        {
+            if (!powerBoostingCharged && builtUpAttackPower >= powerBoostingRequired)
+            {
+                //triggerAttackToIdle();
+                //cancel attack state and go to idle? idk how honestly
+            }
+        }
+
         if (reelHeavyAttack)
         {
             reelAttackBuiltUpPower++;
@@ -3425,6 +3441,26 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyAttackVisuals() //new attack types must be added here
     {
+        if (powerBoostingHeavyAttack)
+        {
+            if (!powerBoostingCharged)
+            {
+                if (powerBoostingBuiltUpAttackPower < powerBoostingRequired) //final check 
+                {
+                    return;
+                }
+                else
+                {
+                    powerBoostingCharged = true;
+                    powerBoostingBuiltUpAttackPower = 0; //if successful, resets
+                    return;
+                }
+            } else
+            {
+                powerBoostingCharged = false;
+            }
+        }
+
         if (jabHeavyAttack)
         {
             if (jabOrSlashLanded == false && heavyMissVFXHolder != null)

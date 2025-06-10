@@ -1736,6 +1736,7 @@ public class NewMonsterPart : MonoBehaviour
     #region Reel Attack Specific Functions
     public void triggerReelHitDetect() //marks whether or not the hit VFX is needed
     {
+
         //jabOrSlashLanded = true;
         reelAttackLanded = true;
         //play out VFX
@@ -1750,6 +1751,8 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.ResetTrigger("Reel Back");
             myAnimator.SetTrigger("Reel Back");
         }
+
+        heavyAttack.Init(this);
     }
 
     public void triggerReelCollisionsOn() //called in attack animation
@@ -1762,6 +1765,8 @@ public class NewMonsterPart : MonoBehaviour
         {
             heavyCollider.enabled = true;
         }
+
+        heavyAttack.Init(this);
     }
 
     public void triggerReelCollisionsOff() //called in attack animation
@@ -1776,7 +1781,7 @@ public class NewMonsterPart : MonoBehaviour
         {
             heavyCollider.enabled = false;
         }
-
+        heavyAttack.Init(this);
     }
     #endregion
 

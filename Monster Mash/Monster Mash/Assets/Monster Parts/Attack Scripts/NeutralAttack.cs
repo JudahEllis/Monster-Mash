@@ -25,7 +25,6 @@ public class NeutralAttack: BaseAttack
     public AttackType Attack;
 
     protected monsterPartReference neutralColliderReference;
-    private Transform partTransform;
 
     // Monster visual vars
     protected GameObject neutralMissVFXHolder;
@@ -56,8 +55,6 @@ public class NeutralAttack: BaseAttack
     {
         base.Init(monsterPartRef);
         neutralColliderReference = monsterPartRef.neutralCollider.gameObject.GetComponent<monsterPartReference>();
-        partTransform = monsterPartRef.transform;
-
     }
 
     public override void Init(MonsterPartVisual monsterPartVisual)

@@ -8,6 +8,7 @@ public class BaseAttack
     protected monsterPartReference heavyColliderReference;
     protected bool jabOrSlashLanded;
     protected bool facingRight;
+    protected Transform partTransform;
     [SerializeField] protected int baseNeutralAttackDamage = 0;
 
     /// <summary>
@@ -18,6 +19,7 @@ public class BaseAttack
     {
         jabOrSlashLanded = monsterPartRef.jabOrSlashLanded;
         facingRight = monsterPartRef.facingRight;
+        partTransform = monsterPartRef.transform;
         heavyColliderReference = monsterPartRef.heavyCollider.GetComponent<monsterPartReference>();
     }
 

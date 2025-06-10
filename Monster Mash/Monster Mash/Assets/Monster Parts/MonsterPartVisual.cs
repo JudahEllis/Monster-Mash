@@ -52,12 +52,12 @@ public class MonsterPartVisual : MonoBehaviour
     [HideInInspector] public vfxHolder neutralDefaultSprayVFXManager { get; private set; }
     private vfxHolder neutralStompVFXManager;
 
-    private vfxHolder heavyHitVFXManager;
+    [HideInInspector] public vfxHolder heavyHitVFXManager { get; private set; }
     private vfxHolder heavyForwardSwingVFXManager;
     private vfxHolder heavyBackwardSwingVFXManager;
     private vfxHolder heavyDownwardSwingVFXManager;
-    private vfxHolder heavyMissVFXManager;
-    private vfxHolder heavyDefaultSprayVFXManager;
+    [HideInInspector] public vfxHolder heavyMissVFXManager { get; private set; }
+    [HideInInspector] public vfxHolder heavyDefaultSprayVFXManager { get; private set; }
     private vfxHolder heavyStompVFXManager;
 
     [HideInInspector] public Transform neutralVFXStoredParent { get; private set; }
@@ -71,9 +71,9 @@ public class MonsterPartVisual : MonoBehaviour
     private Transform neutralDefaultSprayVFXParent;
     private Vector3 neutralDefaultSprayVFXStoredPosition;
     private Quaternion neutralDefaultSprayVFXStoredRotation;
-    private Transform heavyVFXStoredParent;
-    private Vector3 heavyVFXStoredPosition;
-    private Quaternion heavyVFXStoredRotation;
+    public Transform heavyVFXStoredParent { get; private set; }
+    public Vector3 heavyVFXStoredPosition { get; private set; }
+    public Quaternion heavyVFXStoredRotation { get; private set; }
     private int heavyVFXCount;
 
     private NewMonsterPart monsterPartRef;
@@ -94,6 +94,7 @@ public class MonsterPartVisual : MonoBehaviour
     public void setUpVFX()//new attack projectile-like types must be added here
     {
         monsterPartRef.neutralAttack.SetupVFX();
+        monsterPartRef.heavyAttack.SetupVFX();
 
         #region Neutral Hit VFX Holder
         if (neutralHitVFXHolder != null)
@@ -222,19 +223,6 @@ public class MonsterPartVisual : MonoBehaviour
                 heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
             }
 
-            switch (monsterPartRef.heavyAttack.Attack)
-            {
-                case HeavyAttack.HeavyAttackType.Boomerang:
-                    heavyHitVFXManager.isBoomerangHolder = true;
-                    goto case HeavyAttack.HeavyAttackType.Projectile;
-                case HeavyAttack.HeavyAttackType.Projectile:
-                case HeavyAttack.HeavyAttackType.Spray:
-                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                    heavyVFXStoredPosition = transform.localPosition;
-                    heavyVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
             heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
             for (int i = 0; i < heavyAttackHitVFXArray.Length; i++)
             {
@@ -313,17 +301,6 @@ public class MonsterPartVisual : MonoBehaviour
                 heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
             }
 
-            switch (monsterPartRef.heavyAttack.Attack)
-            {
-                case HeavyAttack.HeavyAttackType.Projectile:
-                case HeavyAttack.HeavyAttackType.Spray:
-                case HeavyAttack.HeavyAttackType.Boomerang:
-                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                    heavyVFXStoredPosition = transform.localPosition;
-                    heavyVFXStoredRotation = transform.localRotation;
-                    break;
-            }
-
             heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
             for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
             {
@@ -339,17 +316,6 @@ public class MonsterPartVisual : MonoBehaviour
             if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
             {
                 heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            switch (monsterPartRef.heavyAttack.Attack)
-            {
-                case HeavyAttack.HeavyAttackType.Projectile:
-                case HeavyAttack.HeavyAttackType.Spray:
-                case HeavyAttack.HeavyAttackType.Boomerang:
-                    heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-                    heavyVFXStoredPosition = transform.localPosition;
-                    heavyVFXStoredRotation = transform.localRotation;
-                    break;
             }
 
             heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
@@ -479,52 +445,9 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerHeavyAttackVisuals() //new attack types must be added here
     {
+        //TODO: finish moving this
         switch (monsterPartRef.heavyAttack.Attack)
         {
-            case HeavyAttack.HeavyAttackType.Jab:
-            case HeavyAttack.HeavyAttackType.Slash:
-                if (monsterPartRef.jabOrSlashLanded == false && heavyMissVFXHolder != null)
-                {
-                    //turn on miss visual if neutral vfx holder's script hasn't made contact
-                    heavyMissVFXManager.unleashJabOrSlash();
-                }
-
-                break;
-            case HeavyAttack.HeavyAttackType.Spray:
-                heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-                heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
-
-                if (heavyDefaultSprayVFXHolder != null)
-                {
-                    heavyDefaultSprayVFXHolder.transform.position = heavyMuzzle.transform.position;
-                    heavyDefaultSprayVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
-
-                }
-
-                heavyHitVFXManager.unleashSpray();
-                if (heavyDefaultSprayVFXManager)
-                {
-                    heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                }
-
-                break;
-            case HeavyAttack.HeavyAttackType.Projectile:
-            case HeavyAttack.HeavyAttackType.Boomerang:
-                if (heavyAttackHitVFXArray.Length != 0)
-                {
-                    heavyHitVFXHolder.transform.position = heavyMuzzle.transform.position;
-                    heavyHitVFXHolder.transform.rotation = heavyMuzzle.transform.rotation;
-
-                    heavyHitVFXManager.faceRightDirection(monsterPartRef.facingRight);
-                    heavyHitVFXManager.unleashSingleProjectile();
-
-                    if (heavyDefaultSprayVFXManager)
-                    {
-                        heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-                    }
-                }
-
-                break;
             case HeavyAttack.HeavyAttackType.Reel:
                 if (!monsterPartRef.reelAttackLanded)
                 {
@@ -561,11 +484,7 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void endRemainingVFX()
     {
-        if (monsterPartRef.heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam)
-        {
-            heavyHitVFXManager.endBeamVisual();
-        }
-
+        monsterPartRef.heavyAttack.endRemainingVFX();
         endRunVisual();
     }
 }

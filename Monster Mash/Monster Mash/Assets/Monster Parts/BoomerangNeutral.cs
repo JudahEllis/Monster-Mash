@@ -5,7 +5,6 @@ using UnityEngine;
 public class BoomerangNeutral : NeutralAttack
 {
     private vfxHolder neutralDefaultSprayVFXManager;
-    private bool facingRight;
 
     public override void Init(MonsterPartVisual monsterPartVisual)
     {
@@ -13,11 +12,6 @@ public class BoomerangNeutral : NeutralAttack
         neutralDefaultSprayVFXManager = monsterPartVisual.neutralDefaultSprayVFXManager;
     }
 
-    public override void Init(NewMonsterPart monsterPartRef)
-    {
-        base.Init(monsterPartRef);
-        facingRight = monsterPartRef.facingRight;
-    }
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

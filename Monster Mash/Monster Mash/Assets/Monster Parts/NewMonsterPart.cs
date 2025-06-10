@@ -68,7 +68,7 @@ public class NewMonsterPart : MonoBehaviour
     public float reloadTimeNeutral = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
     [SerializeField] private bool isReloadedNeutral = true;
     [SerializeField] private bool isReloadedHeavy = true;
-    private bool jabOrSlashLanded = false;
+    public bool jabOrSlashLanded = false;
     public AudioClip[] neutralAttackHitAudioLibrary;
     private int neutralHitCounter = 0;
 
@@ -157,7 +157,7 @@ public class NewMonsterPart : MonoBehaviour
     public int reelAttackBuiltUpPower = 0;
     public int reelAttackCurrentThreshold = 0;
     public bool powerUpCheckAllowed = true;
-    private bool reelAttackLanded = false;
+    public bool reelAttackLanded = false;
     private monsterPartReference grabbedMonster;
 
     private bool forwardAttackQuickSwitch;

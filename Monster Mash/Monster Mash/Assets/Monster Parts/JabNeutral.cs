@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JabNeutral : NeutralAttack
 {
-    private bool jabOrSlashLanded = false;
+    
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

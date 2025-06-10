@@ -6,7 +6,6 @@ public class MonsterPartVisual : MonoBehaviour
 {
     //This script is a mess a lot of the vars are not assigned. I just chucked all the VFX in here so I could deal with it seperate from the rest of the monster part script
 
-    [HideInInspector] public bool attackMarkedHeavy = false;
     [Header("Neutral Attack VFX Arrays")]
     public Transform[] neutralAttackHitVFXArray;
     public Transform[] neutralAttackForwardSwingVFXArray;
@@ -61,16 +60,17 @@ public class MonsterPartVisual : MonoBehaviour
     private vfxHolder heavyDefaultSprayVFXManager;
     private vfxHolder heavyStompVFXManager;
 
+    [HideInInspector] public Transform neutralVFXStoredParent { get; private set; }
+    [HideInInspector] public Vector3 neutralVFXStoredPosition { get; private set; }
+    [HideInInspector] public Quaternion neutralVFXStoredRotation { get; private set; }
+
+    private int neutralVFXCount;
+
     private Transform neutralHitVFXParent;
     private Transform neutralMissVFXParent;
     private Transform neutralDefaultSprayVFXParent;
     private Vector3 neutralDefaultSprayVFXStoredPosition;
     private Quaternion neutralDefaultSprayVFXStoredRotation;
-    [HideInInspector] public Transform neutralVFXStoredParent { get; private set; }
-    [HideInInspector] public Vector3 neutralVFXStoredPosition { get; private set; }
-    [HideInInspector] public Quaternion neutralVFXStoredRotation { get; private set; }
-    private int neutralVFXCount;
-
     private Transform heavyVFXStoredParent;
     private Vector3 heavyVFXStoredPosition;
     private Quaternion heavyVFXStoredRotation;
@@ -82,16 +82,12 @@ public class MonsterPartVisual : MonoBehaviour
     public ParticleSystem chargeVisual;
     public ParticleSystem heavyChargeVisual;
     public GameObject specialRunVisual;
-    private bool jabOrSlashLanded = false;
-    public Transform neutralMuzzle { get; private set; }
-    public int attackAnimationID = 1;
+    [field: SerializeField] public Transform neutralMuzzle { get; private set; }
     public Transform heavyMuzzle;
-    private bool reelAttackLanded = false;
 
     private void Awake()
     {
         monsterPartRef = GetComponent<NewMonsterPart>();
-        monsterPartRef.neutralAttack.Init(this);
     }
 
 
@@ -212,6 +208,8 @@ public class MonsterPartVisual : MonoBehaviour
                 neutralStompVFXArray[i] = neutralStompVFXHolder.transform.GetChild(i);
             }
         }
+
+        monsterPartRef.neutralAttack.Init(this);
         #endregion
 
 
@@ -447,11 +445,11 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerStompVisual()
     {
-        if (neutralStompVFXManager != null && attackMarkedHeavy == false)
+        if (neutralStompVFXManager != null && monsterPartRef.attackMarkedHeavy == false)
         {
             neutralStompVFXManager.unleashAdditionalSprayVisual();
         }
-        else if (heavyStompVFXManager != null && attackMarkedHeavy == true)
+        else if (heavyStompVFXManager != null && monsterPartRef.attackMarkedHeavy == true)
         {
             heavyStompVFXManager.unleashAdditionalSprayVisual();
         }
@@ -465,15 +463,15 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerNeutralSwingVisual()
     {
-        if (neutralForwardSwingVFXManager && attackAnimationID == 1)
+        if (neutralForwardSwingVFXManager && monsterPartRef.attackAnimationID == 1)
         {
             neutralForwardSwingVFXManager.unleashAdditionalSprayVisual();
         }
-        else if (neutralBackwardSwingVFXManager && attackAnimationID == -1)
+        else if (neutralBackwardSwingVFXManager && monsterPartRef.attackAnimationID == -1)
         {
             neutralBackwardSwingVFXManager.unleashAdditionalSprayVisual();
         }
-        else if (neutralDownwardSwingVFXManager && attackAnimationID == 0)
+        else if (neutralDownwardSwingVFXManager && monsterPartRef.attackAnimationID == 0)
         {
             neutralDownwardSwingVFXManager.unleashAdditionalSprayVisual();
         }
@@ -485,7 +483,7 @@ public class MonsterPartVisual : MonoBehaviour
         {
             case HeavyAttack.HeavyAttackType.Jab:
             case HeavyAttack.HeavyAttackType.Slash:
-                if (jabOrSlashLanded == false && heavyMissVFXHolder != null)
+                if (monsterPartRef.jabOrSlashLanded == false && heavyMissVFXHolder != null)
                 {
                     //turn on miss visual if neutral vfx holder's script hasn't made contact
                     heavyMissVFXManager.unleashJabOrSlash();
@@ -528,7 +526,7 @@ public class MonsterPartVisual : MonoBehaviour
 
                 break;
             case HeavyAttack.HeavyAttackType.Reel:
-                if (!reelAttackLanded)
+                if (!monsterPartRef.reelAttackLanded)
                 {
                     //miss visual
                     monsterPartRef.triggerReelCollisionsOff();
@@ -547,15 +545,15 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerHeavySwingVisual()
     {
-        if (heavyForwardSwingVFXManager && attackAnimationID == 1)
+        if (heavyForwardSwingVFXManager && monsterPartRef.attackAnimationID == 1)
         {
             heavyForwardSwingVFXManager.unleashAdditionalSprayVisual();
         }
-        else if (heavyBackwardSwingVFXManager && attackAnimationID == -1)
+        else if (heavyBackwardSwingVFXManager && monsterPartRef.attackAnimationID == -1)
         {
             heavyBackwardSwingVFXManager.unleashAdditionalSprayVisual();
         }
-        else if (heavyDownwardSwingVFXManager && attackAnimationID == 0)
+        else if (heavyDownwardSwingVFXManager && monsterPartRef.attackAnimationID == 0)
         {
             heavyDownwardSwingVFXManager.unleashAdditionalSprayVisual();
         }

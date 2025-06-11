@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JabNeutral : NeutralAttack
+public class SlashNeutral : NeutralAttack
 {
     
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();
-        neutralColliderReference.resetAttackHistory();
-        neutralColliderReference.damage = damage;
-        heavyColliderReference.markedHeavy = false;
+        monsterPartRef.neutralColliderReference.resetAttackHistory();
+        monsterPartRef.neutralColliderReference.damage = damage;
+        monsterPartRef.heavyColliderReference.markedHeavy = false;
 
         damageClearance();
     }
 
     public override void statusEffectAndDamageCalculations()
     {
-        base.statusEffectAndDamageCalculations();
-        neutralColliderReference.damage = baseNeutralAttackDamage;
+        monsterPartRef.neutralColliderReference.damage = baseNeutralAttackDamage;
     }
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
@@ -28,9 +27,9 @@ public class JabNeutral : NeutralAttack
 
     public override void triggerNeutralAttackVisuals()
     {
-        if (!jabOrSlashLanded && neutralMissVFXHolder != null)
+        if (!monsterPartRef.jabOrSlashLanded && monsterPartVisualRef.neutralMissVFXHolder != null)
         {
-            neutralMissVFXManager.unleashJabOrSlash();
+            monsterPartVisualRef.neutralMissVFXManager.unleashJabOrSlash();
         }
     }
 }

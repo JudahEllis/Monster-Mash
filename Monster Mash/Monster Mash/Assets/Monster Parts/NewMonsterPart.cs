@@ -62,7 +62,7 @@ public class NewMonsterPart : MonoBehaviour
     public NeutralAttack neutralAttack;
 
     public Collider neutralCollider;
-    private monsterPartReference neutralColliderReference;
+    public monsterPartReference neutralColliderReference;
     private vfxHolder neutralHitVFXManager;
     public bool needsReloadNeutral; //determines if part must be reloaded before attacking again
     public float reloadTimeNeutral = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
@@ -77,7 +77,7 @@ public class NewMonsterPart : MonoBehaviour
     public HeavyAttack heavyAttack;
     //
     public Collider heavyCollider;
-    private monsterPartReference heavyColliderReference;
+    public monsterPartReference heavyColliderReference;
     private vfxHolder heavyHitVFXManager;
     public Transform heavyMuzzle;
     public bool needsReloadHeavy; //for projectiles, determines if projectile must be reloaded before shooting again
@@ -1771,17 +1771,12 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerReelCollisionsOff() //called in attack animation
     {
-        //turn off neutral vfx holder
-        reelAttackLanded = false;
-        reelAttackBuiltUpPower = 0;
-        reelAttackCurrentThreshold = 0;
-        powerUpCheckAllowed = false;
-
-        if (attackMarkedHeavy == true)
+        if (heavyAttack is ReelHeavy)
         {
-            heavyCollider.enabled = false;
+            // casting heavy attack to ReelHeavy so that we can acess the functions specific to reelHeavy
+            ReelHeavy reelAttack = heavyAttack as ReelHeavy;
+            reelAttack.triggerReelCollisionsOff();
         }
-        heavyAttack.Init(this);
     }
     #endregion
 

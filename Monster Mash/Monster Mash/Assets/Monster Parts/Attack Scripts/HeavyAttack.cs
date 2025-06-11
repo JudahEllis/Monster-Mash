@@ -32,19 +32,6 @@ public class HeavyAttack : BaseAttack
 
     public HeavyAttackType Attack;
 
-    // Monster part visual vars
-    protected vfxHolder heavyHitVFXManager;
-    protected GameObject heavyHitVFXHolder;
-    protected GameObject heavyDefaultSprayVFXHolder;
-    protected GameObject heavyMissVFXHolder;
-    protected vfxHolder heavyMissVFXManager;
-    protected vfxHolder heavyDefaultSprayVFXManager;
-    protected Transform heavyMuzzle;
-    protected Transform[] heavyAttackHitVFXArray;
-    private Transform heavyVFXStoredParent;
-    private Vector3 heavyVFXStoredPosition;
-    private Quaternion heavyVFXStoredRotation;
-
 
     public HeavyAttack GetAttack()
     {
@@ -60,21 +47,6 @@ public class HeavyAttack : BaseAttack
             HeavyAttackType.Boomerang => new BoomerangHeavy(),
             _ => null
         };
-    }
-
-    public override void Init(MonsterPartVisual monsterPartVisual)
-    {
-        heavyHitVFXManager = monsterPartVisual.heavyHitVFXManager;
-        heavyVFXStoredParent = monsterPartVisual.heavyVFXStoredParent;
-        heavyVFXStoredPosition = monsterPartVisual.heavyVFXStoredPosition;
-        heavyVFXStoredRotation = monsterPartVisual.heavyVFXStoredRotation;
-        heavyHitVFXHolder = monsterPartVisual.heavyHitVFXHolder;
-        heavyDefaultSprayVFXHolder = monsterPartVisual.heavyDefaultSprayVFXHolder;
-        heavyMissVFXHolder = monsterPartVisual.heavyMissVFXHolder;
-        heavyMissVFXManager = monsterPartVisual.heavyMissVFXManager;
-        heavyMuzzle = monsterPartVisual.heavyMuzzle;
-        heavyDefaultSprayVFXManager = monsterPartVisual.heavyDefaultSprayVFXManager;
-        heavyAttackHitVFXArray = monsterPartVisual.heavyAttackHitVFXArray;
     }
 
     public virtual void endRemainingVFX()
@@ -94,8 +66,8 @@ public class HeavyAttack : BaseAttack
 
     protected void StoredParentSetup()
     {
-        heavyVFXStoredParent = heavyHitVFXHolder.transform.parent;
-        heavyVFXStoredPosition = partTransform.localPosition;
-        heavyVFXStoredRotation = partTransform.localRotation;
+        monsterPartVisualRef.heavyVFXStoredParent = monsterPartVisualRef.heavyHitVFXHolder.transform.parent;
+        monsterPartVisualRef.heavyVFXStoredPosition = monsterPartRef.transform.localPosition;
+        monsterPartVisualRef.heavyVFXStoredRotation = monsterPartRef.transform.localRotation;
     }
 }

@@ -20,7 +20,7 @@ public class MonsterPartVisual : MonoBehaviour
     public GameObject neutralForwardSwingVFXHolder;
     public GameObject neutralBackwardSwingVFXHolder;
     public GameObject neutralDownwardSwingVFXHolder;
-    [field: SerializeField] public GameObject neutralMissVFXHolder { get; private set; }
+    [field: SerializeField] public GameObject neutralMissVFXHolder;
     public GameObject neutralDefaultSprayVFXHolder;
     public GameObject neutralStompVFXHolder;
 
@@ -44,25 +44,25 @@ public class MonsterPartVisual : MonoBehaviour
 
     public ParticleSystem[] myIdleVFX;
 
-    [HideInInspector] public vfxHolder neutralHitVFXManager { get; private set; }
+    [HideInInspector] public vfxHolder neutralHitVFXManager;
     private vfxHolder neutralForwardSwingVFXManager;
     private vfxHolder neutralBackwardSwingVFXManager;
     private vfxHolder neutralDownwardSwingVFXManager;
-    [HideInInspector] public vfxHolder neutralMissVFXManager { get; private set; }
-    [HideInInspector] public vfxHolder neutralDefaultSprayVFXManager { get; private set; }
+    [HideInInspector] public vfxHolder neutralMissVFXManager;
+    [HideInInspector] public vfxHolder neutralDefaultSprayVFXManager;
     private vfxHolder neutralStompVFXManager;
 
-    [HideInInspector] public vfxHolder heavyHitVFXManager { get; private set; }
+    [HideInInspector] public vfxHolder heavyHitVFXManager;
     private vfxHolder heavyForwardSwingVFXManager;
     private vfxHolder heavyBackwardSwingVFXManager;
     private vfxHolder heavyDownwardSwingVFXManager;
-    [HideInInspector] public vfxHolder heavyMissVFXManager { get; private set; }
-    [HideInInspector] public vfxHolder heavyDefaultSprayVFXManager { get; private set; }
+    [HideInInspector] public vfxHolder heavyMissVFXManager;
+    [HideInInspector] public vfxHolder heavyDefaultSprayVFXManager;
     private vfxHolder heavyStompVFXManager;
 
-    [HideInInspector] public Transform neutralVFXStoredParent { get; private set; }
-    [HideInInspector] public Vector3 neutralVFXStoredPosition { get; private set; }
-    [HideInInspector] public Quaternion neutralVFXStoredRotation { get; private set; }
+    [HideInInspector] public Transform neutralVFXStoredParent;
+    [HideInInspector] public Vector3 neutralVFXStoredPosition;
+    [HideInInspector] public Quaternion neutralVFXStoredRotation;
 
     private int neutralVFXCount;
 
@@ -71,9 +71,9 @@ public class MonsterPartVisual : MonoBehaviour
     private Transform neutralDefaultSprayVFXParent;
     private Vector3 neutralDefaultSprayVFXStoredPosition;
     private Quaternion neutralDefaultSprayVFXStoredRotation;
-    public Transform heavyVFXStoredParent { get; private set; }
-    public Vector3 heavyVFXStoredPosition { get; private set; }
-    public Quaternion heavyVFXStoredRotation { get; private set; }
+    public Transform heavyVFXStoredParent;
+    public Vector3 heavyVFXStoredPosition;
+    public Quaternion heavyVFXStoredRotation;
     private int heavyVFXCount;
 
     private NewMonsterPart monsterPartRef;
@@ -82,7 +82,7 @@ public class MonsterPartVisual : MonoBehaviour
     public ParticleSystem chargeVisual;
     public ParticleSystem heavyChargeVisual;
     public GameObject specialRunVisual;
-    [field: SerializeField] public Transform neutralMuzzle { get; private set; }
+    public Transform neutralMuzzle;
     public Transform heavyMuzzle;
 
     private void Awake()
@@ -445,25 +445,7 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerHeavyAttackVisuals() //new attack types must be added here
     {
-        //TODO: finish moving this
-        switch (monsterPartRef.heavyAttack.Attack)
-        {
-            case HeavyAttack.HeavyAttackType.Reel:
-                if (!monsterPartRef.reelAttackLanded)
-                {
-                    //miss visual
-                    monsterPartRef.triggerReelCollisionsOff();
-                }
-
-                monsterPartRef.reelAttackBuiltUpPower = 0;
-                monsterPartRef.reelAttackCurrentThreshold = 0;
-                monsterPartRef.powerUpCheckAllowed = false;
-                break;
-            case HeavyAttack.HeavyAttackType.Beam:
-                heavyHitVFXManager.unleashBeamVisual();
-                break;
-
-        }
+        monsterPartRef.heavyAttack.triggerHeavyAttackVisuals(); 
     }
 
     public void triggerHeavySwingVisual()

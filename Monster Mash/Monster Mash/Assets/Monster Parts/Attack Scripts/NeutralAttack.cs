@@ -24,20 +24,6 @@ public class NeutralAttack: BaseAttack
 
     public AttackType Attack;
 
-    protected monsterPartReference neutralColliderReference;
-
-    // Monster visual vars
-    protected GameObject neutralMissVFXHolder;
-    protected vfxHolder neutralMissVFXManager;
-    protected vfxHolder neutralHitVFXManager;
-    protected GameObject neutralDefaultSprayVFXHolder;
-    protected Transform neutralMuzzle;
-    protected Transform[] neutralAttackHitVFXArray;
-    protected GameObject neutralHitVFXHolder;
-    protected Transform neutralVFXStoredParent;
-    protected Vector3 neutralVFXStoredPosition;
-    protected Quaternion neutralVFXStoredRotation;
-
     public NeutralAttack GetAttack()
     {
         return Attack switch
@@ -50,28 +36,6 @@ public class NeutralAttack: BaseAttack
             _ => null,
         };
     }
-
-    public override void Init(NewMonsterPart monsterPartRef)
-    {
-        base.Init(monsterPartRef);
-        neutralColliderReference = monsterPartRef.neutralCollider.gameObject.GetComponent<monsterPartReference>();
-    }
-
-    public override void Init(MonsterPartVisual monsterPartVisual)
-    {
-        neutralMissVFXHolder = monsterPartVisual.neutralMissVFXHolder;
-        neutralMissVFXManager = monsterPartVisual.neutralMissVFXManager;
-        neutralHitVFXManager = monsterPartVisual.neutralHitVFXManager;
-        neutralMuzzle = monsterPartVisual.neutralMuzzle;
-        neutralAttackHitVFXArray = monsterPartVisual.neutralAttackHitVFXArray;
-        neutralHitVFXHolder = monsterPartVisual.neutralHitVFXHolder;
-        neutralVFXStoredParent = monsterPartVisual.neutralVFXStoredParent;
-        neutralVFXStoredPosition = monsterPartVisual.neutralVFXStoredPosition;
-        neutralVFXStoredRotation = monsterPartVisual.neutralVFXStoredRotation;
-        neutralDefaultSprayVFXHolder = monsterPartVisual.neutralDefaultSprayVFXHolder;
-
-    }
-
 
     public virtual void neutralAttackPowerCalculation()
     {
@@ -90,8 +54,8 @@ public class NeutralAttack: BaseAttack
 
     protected void StoredParentSetup()
     {
-        neutralVFXStoredParent = neutralHitVFXHolder.transform.parent;
-        neutralVFXStoredPosition = partTransform.localPosition;
-        neutralVFXStoredRotation = partTransform.localRotation;
+        monsterPartVisualRef.neutralVFXStoredParent = monsterPartVisualRef.neutralHitVFXHolder.transform.parent;
+        monsterPartVisualRef.neutralVFXStoredPosition = monsterPartRef.transform.localPosition;
+        monsterPartVisualRef.neutralVFXStoredRotation = monsterPartRef.transform.localRotation;
     }
 }

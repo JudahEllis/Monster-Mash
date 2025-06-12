@@ -27,4 +27,22 @@ public class ProjectileHeavy : HeavyAttack
             }
         }
     }
+
+    public override void heavyAttackPowerCalculation()
+    {
+        base.heavyAttackPowerCalculation();
+
+        monsterPartVisualRef.heavyHitVFXManager.damage = damage;
+        monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
+
+        damageClearance();
+    }
+
+    public override void statusEffectAndDamageCalculations()
+    {
+        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.baseHeavyAttackDamage;
+        monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
+        ApplyStatusEffectsToVFXHolder(monsterPartVisualRef.heavyHitVFXManager);
+        monsterPartVisualRef.heavyHitVFXManager.updateStatusEffectsOnProjectiles();
+    }
 }

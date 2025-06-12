@@ -17,6 +17,23 @@ public class ReelHeavy : HeavyAttack
         monsterPartRef.powerUpCheckAllowed = false;
     }
 
+    public override void triggerHeavyAttackPowerCheck()
+    {
+        if (monsterPartRef.powerUpCheckAllowed)
+        {
+            monsterPartRef.reelAttackCurrentThreshold++;
+
+            if (monsterPartRef.reelAttackCurrentThreshold == monsterPartRef.reelAttackBuiltUpPower)
+            {
+                monsterPartRef.reelAttackBuiltUpPower = 0;
+                monsterPartRef.reelAttackCurrentThreshold = 0;
+                monsterPartRef.powerUpCheckAllowed = false;
+                monsterPartRef.myAnimator.ResetTrigger("Reel Back");
+                monsterPartRef.myAnimator.SetTrigger("Reel Back");
+            }
+        }
+    }
+
     public void triggerReelCollisionsOff() //called in attack animation
     {
         //turn off neutral vfx holder
@@ -29,5 +46,10 @@ public class ReelHeavy : HeavyAttack
         {
             monsterPartRef.heavyCollider.enabled = false;
         }
+    }
+
+    public void CancelGrab()
+    {
+        monsterPartRef.myMainSystem.grabbingCanceled();
     }
 }

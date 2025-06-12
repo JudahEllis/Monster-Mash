@@ -27,4 +27,22 @@ public class SprayHeavy : HeavyAttack
             monsterPartVisualRef.heavyDefaultSprayVFXManager.unleashAdditionalSprayVisual();
         }
     }
+
+    public override void heavyAttackPowerCalculation()
+    {
+        base.heavyAttackPowerCalculation();
+
+        monsterPartVisualRef.heavyHitVFXManager.damage = damage;
+        monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
+
+        damageClearance();
+    }
+
+    public override void statusEffectAndDamageCalculations()
+    {
+        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.baseHeavyAttackDamage;
+        monsterPartVisualRef.heavyHitVFXManager.updateDamageOnSpray();
+        ApplyStatusEffectsToVFXHolder(monsterPartVisualRef.heavyHitVFXManager);
+        monsterPartVisualRef.heavyHitVFXManager.updateStatusEffectsOnSpray();
+    }
 }

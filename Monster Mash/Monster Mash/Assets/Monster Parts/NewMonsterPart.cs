@@ -11,7 +11,7 @@ public class NewMonsterPart : MonoBehaviour
     private SpriteRenderer[] mySpriteRenderers;
     public Animator connectedMonsterPart;
     public Animator mainTorso;
-    private Animator myAnimator;
+    [HideInInspector] public Animator myAnimator;
     public GameObject specialRunVisual;
     public bool requiresUniqueAnimationOffset;
     public Collider stompDetection;
@@ -42,9 +42,9 @@ public class NewMonsterPart : MonoBehaviour
     [Header("Damage and Status Effects")]
     public int baseNeutralAttackDamage = 0;
     public int baseHeavyAttackDamage = 0;
-    private int builtUpAttackPower = 0;
+    [HideInInspector] public int builtUpAttackPower = 0;
     public int builtUpAddedDamage = 0;
-    private int damage = 0;
+    [HideInInspector] public int damage = 0;
     //Status Effects
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -56,7 +56,7 @@ public class NewMonsterPart : MonoBehaviour
     public bool frozenStatusEffect;
     public bool squashedStatusEffect;
     public bool slowedStatusEffect;
-    private bool grabbedStatusEffect;
+    public bool grabbedStatusEffect;
 
     [Header("Neutral Attack Questionaire")]
     public NeutralAttack neutralAttack;
@@ -124,8 +124,8 @@ public class NewMonsterPart : MonoBehaviour
     [Header("Internal Info - Don't Touch")]
     [HideInInspector] public bool isBracing = false;
     [HideInInspector] public bool attackMarkedHeavy = false;
-    private bool heavyAttackInMotion = false;
-    private bool fullActiveHeavy = false;
+    [HideInInspector] public bool heavyAttackInMotion = false;
+    public bool fullActiveHeavy = false;
     public bool requiresRightStance = false;
     public bool requiresLeftStance = false;
     public bool requiresForwardStance = false;
@@ -431,7 +431,7 @@ public class NewMonsterPart : MonoBehaviour
             heavyColliderReference = heavyCollider.gameObject.GetComponent<monsterPartReference>();
         }
 
-        statusEffectAndDamageCalculations();
+        heavyAttack.statusEffectAndDamageCalculations();
         neutralAttack.statusEffectAndDamageCalculations();
     }
 
@@ -464,6 +464,7 @@ public class NewMonsterPart : MonoBehaviour
             attackMarkedHeavy = false;
             heavyAttackInMotion = false;
             fullActiveHeavy = false;
+
             triggerNeutralOrHeavyRefresh(false);
         }
     }
@@ -1125,13 +1126,11 @@ public class NewMonsterPart : MonoBehaviour
         //most likely a canceled input after system already has registered the difference between input but before the attack has been unleashed
         //aka a canceled heavy attack
 
-        if (fullActiveHeavy && attackFocusOn && heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam)
+        if (fullActiveHeavy && attackFocusOn && heavyAttack is BeamHeavy beam)
         {
             if (inputCanceled)
             {
-                //end functions + turn off visuals
-                triggerAttackToIdle();
-                StartCoroutine(beamAttackDelay());
+                beam.CancelAttack();
             }
             return;
         }
@@ -1159,12 +1158,6 @@ public class NewMonsterPart : MonoBehaviour
         }
     }
 
-    IEnumerator beamAttackDelay()
-    {
-        yield return new WaitForSeconds(0.2f);
-        triggerAttackCorrections(); //delaying this to allow the body time to unbrace
-    }
-
     public void triggerNeutralOrHeavy()
     {
         if (!attackMarkedHeavy && needsReloadNeutral)
@@ -1185,9 +1178,9 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Beam && attackMarkedHeavy)
+        if (heavyAttack is BeamHeavy beam && attackMarkedHeavy)
         {
-            heavyAttackInMotion = true;
+            beam.TriggerAttack();
             return;
         }
 
@@ -1260,7 +1253,7 @@ public class NewMonsterPart : MonoBehaviour
 
             if (attackMarkedHeavy)
             {
-                heavyAttackPowerCalculation();
+                heavyAttack.heavyAttackPowerCalculation();
                 GetComponent<MonsterPartVisual>().triggerHeavyChargeVisual();
 
                 if (hasHeavyMovementCommand)
@@ -1323,13 +1316,7 @@ public class NewMonsterPart : MonoBehaviour
                     }
                 }
 
-                switch (heavyAttack.Attack)
-                {
-                    case HeavyAttack.HeavyAttackType.Jab:
-                    case HeavyAttack.HeavyAttackType.Slash:
-                        triggerJabOrSlashCollisionsOn();
-                        break;
-                }
+                heavyAttack.triggerAttackRelease(this);
             }
             else
             {
@@ -1453,9 +1440,9 @@ public class NewMonsterPart : MonoBehaviour
             mainTorso.SetBool("Attack to Idle", false);
         }
 
-        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
+        if (heavyAttack is ReelHeavy reel)
         {
-            myMainSystem.grabbingCanceled();
+            reel.CancelGrab();
         }
 
         if (isArm)
@@ -1811,44 +1798,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
     {
-        if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel && powerUpCheckAllowed)
-        {
-            reelAttackCurrentThreshold++;
-
-            if (reelAttackCurrentThreshold == reelAttackBuiltUpPower)
-            {
-                reelAttackBuiltUpPower = 0;
-                reelAttackCurrentThreshold = 0;
-                powerUpCheckAllowed = false;
-                myAnimator.ResetTrigger("Reel Back");
-                myAnimator.SetTrigger("Reel Back");
-            }
-        }
-    }
-
-    private void heavyAttackPowerCalculation() //new attack types must be added here
-    {
-        damage = baseHeavyAttackDamage + (builtUpAttackPower * builtUpAddedDamage);
-        builtUpAttackPower = 0;
-
-        switch(heavyAttack.Attack)
-        {
-            case HeavyAttack.HeavyAttackType.Jab:
-            case HeavyAttack.HeavyAttackType.Slash:
-            case HeavyAttack.HeavyAttackType.Grapple:
-                heavyColliderReference.resetAttackHistory();
-                heavyColliderReference.damage = damage;
-                heavyColliderReference.markedHeavy = true;
-                break;
-            case HeavyAttack.HeavyAttackType.Projectile:
-            case HeavyAttack.HeavyAttackType.Spray:
-            case HeavyAttack.HeavyAttackType.Boomerang:
-                heavyHitVFXManager.damage = damage;
-                heavyHitVFXManager.updateDamageOnProjectiles();
-                break;
-        }
-
-        damageClearance();
+        heavyAttack.triggerHeavyAttackPowerCheck();
     }
     #endregion
 
@@ -1856,64 +1806,6 @@ public class NewMonsterPart : MonoBehaviour
     {
         damage = 0;
     }
-    #endregion
-
-    #region Status Effects
-    private void statusEffectAndDamageCalculations() //new attack types must be added here
-    {
-        switch(heavyAttack.Attack)
-        {
-            case HeavyAttack.HeavyAttackType.Jab:
-            case HeavyAttack.HeavyAttackType.Slash:
-                ApplyStatusEffectsToColliderReference(heavyColliderReference);
-                break;
-            case HeavyAttack.HeavyAttackType.Projectile:
-            case HeavyAttack.HeavyAttackType.Boomerang:
-                heavyHitVFXManager.damage = baseHeavyAttackDamage;
-                heavyHitVFXManager.updateDamageOnProjectiles();
-                ApplyStatusEffectsToVFXHolder(heavyHitVFXManager);
-                heavyHitVFXManager.updateStatusEffectsOnProjectiles();
-                break;
-            case HeavyAttack.HeavyAttackType.Spray:
-                heavyHitVFXManager.damage = baseHeavyAttackDamage;
-                heavyHitVFXManager.updateDamageOnSpray();
-                ApplyStatusEffectsToVFXHolder(heavyHitVFXManager);
-                heavyHitVFXManager.updateStatusEffectsOnSpray();
-                break;
-        }
-    }
-
-    private void ApplyStatusEffectsToVFXHolder(vfxHolder vfxHolder)
-    {
-        vfxHolder.burnedStatusEffect = burnedStatusEffect;
-        vfxHolder.electrifiedStatusEffect = electrifiedStatusEffect;
-        vfxHolder.poisonedStatusEffect = poisonedStatusEffect;
-        vfxHolder.stinkyStatusEffect = stinkyStatusEffect;
-        vfxHolder.hauntedStatusEffect = cursedStatusEffect;
-        vfxHolder.confusedStatusEffect = confusedStatusEffect;
-        vfxHolder.slimedStatusEffect = slimedStatusEffect;
-        vfxHolder.frozenStatusEffect = frozenStatusEffect;
-        vfxHolder.squashedStatusEffect = squashedStatusEffect;
-        vfxHolder.slowedStatusEffect = slowedStatusEffect;
-        vfxHolder.grabbedStatusEffect = grabbedStatusEffect;
-    }
-
-    private void ApplyStatusEffectsToColliderReference(monsterPartReference colliderRef)
-    {
-        colliderRef.burnedStatusEffect = burnedStatusEffect;
-        colliderRef.electrifiedStatusEffect = electrifiedStatusEffect;
-        colliderRef.poisonedStatusEffect = poisonedStatusEffect;
-        colliderRef.stinkyStatusEffect = stinkyStatusEffect;
-        colliderRef.confusedStatusEffect = cursedStatusEffect;
-        colliderRef.confusedStatusEffect = confusedStatusEffect;
-        colliderRef.slimedStatusEffect = slimedStatusEffect;
-        colliderRef.frozenStatusEffect = frozenStatusEffect;
-        colliderRef.squashedStatusEffect = squashedStatusEffect;
-        colliderRef.slowedStatusEffect = slowedStatusEffect;
-        colliderRef.grabbedStatusEffect = grabbedStatusEffect;
-    }
-
-
     #endregion
 
     #region Movement Animations
@@ -2585,9 +2477,9 @@ public class NewMonsterPart : MonoBehaviour
                 mainTorso.SetBool("Ready to Swing", false);
             }
 
-            if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
+            if (heavyAttack is ReelHeavy reel)
             {
-                myMainSystem.grabbingCanceled();
+                reel.CancelGrab();
             }
         }
 
@@ -2684,9 +2576,9 @@ public class NewMonsterPart : MonoBehaviour
                 mainTorso.SetBool("Ready to Swing", false);
             }
 
-            if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
+            if (heavyAttack is ReelHeavy reel)
             {
-                myMainSystem.grabbingCanceled();
+                reel.CancelGrab();
             }
         }
 
@@ -2768,9 +2660,9 @@ public class NewMonsterPart : MonoBehaviour
                 mainTorso.SetBool("Ready to Swing", false);
             }
 
-            if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.Reel)
+            if (heavyAttack is ReelHeavy reel)
             {
-                myMainSystem.grabbingCanceled();
+                reel.CancelGrab();
             }
         }
 

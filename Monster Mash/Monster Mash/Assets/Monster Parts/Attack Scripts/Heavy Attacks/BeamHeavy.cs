@@ -12,4 +12,21 @@ public class BeamHeavy : HeavyAttack
     {
         monsterPartVisualRef.heavyHitVFXManager.endBeamVisual();
     }
+
+    public override void TriggerAttack()
+    {
+        monsterPartRef.heavyAttackInMotion = true;
+    }
+    public override void CancelAttack()
+    {
+        //end functions + turn off visuals
+        monsterPartRef.triggerAttackToIdle();
+        monsterPartRef.StartCoroutine(beamAttackDelay());
+    }
+
+    IEnumerator beamAttackDelay()
+    {
+        yield return new WaitForSeconds(0.2f);
+        monsterPartRef.triggerAttackCorrections(); //delaying this to allow the body time to unbrace
+    }
 }

@@ -29,7 +29,7 @@ public class BaseAttack
 
     protected void damageClearance()
     {
-        damage = 0;
+        monsterPartRef.damage = 0;
     }
 
     public virtual void statusEffectAndDamageCalculations()
@@ -38,6 +38,16 @@ public class BaseAttack
     }
 
     public virtual void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    {
+
+    }
+
+    public virtual void CancelAttack()
+    {
+
+    }
+
+    public virtual void TriggerAttack()
     {
 
     }

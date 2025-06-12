@@ -12,4 +12,25 @@ public class JabHeavy : HeavyAttack
             monsterPartVisualRef.heavyMissVFXManager.unleashJabOrSlash();
         }
     }
+
+    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    {
+        monsterPartRef.triggerJabOrSlashCollisionsOn();
+    }
+
+    public override void heavyAttackPowerCalculation()
+    {
+        base.heavyAttackPowerCalculation();
+
+        monsterPartRef.heavyColliderReference.resetAttackHistory();
+        monsterPartRef.heavyColliderReference.damage = damage;
+        monsterPartRef.heavyColliderReference.markedHeavy = true;
+
+        damageClearance();
+    }
+
+    public override void statusEffectAndDamageCalculations()
+    {
+        ApplyStatusEffectsToColliderReference(monsterPartRef.heavyColliderReference);
+    }
 }

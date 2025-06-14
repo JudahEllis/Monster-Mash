@@ -39,11 +39,11 @@ public class monsterAttackSystem : MonoBehaviour
     public playerController myPlayer;
     private Animator myAnimator;
     private Animator mainTorso;
-    public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
+    public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
-    public monsterPart[] allMonsterParts;
-    private List<monsterPart> nonMappedMonsterParts = new List<monsterPart>();
+    public NewMonsterPart[] allMonsterParts;
+    private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
     [Header("Damage and Status Effects")]
     public int health = 800;
@@ -115,7 +115,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void removeAllLimbParenting() //we use this to remove all parenting during a full refresh
     {
-        monsterPart[] monsterPartList = GetComponentsInChildren<monsterPart>();
+        NewMonsterPart[] monsterPartList = GetComponentsInChildren<NewMonsterPart>();
         for (int i = 0; i < monsterPartList.Length; i++)
         {
             if (monsterPartList[i].isTorso == false && monsterPartList[i].isHead == false && monsterPartList[i].monsterPartID == 1)
@@ -178,19 +178,21 @@ public class monsterAttackSystem : MonoBehaviour
         grabAttackSlotInfo();
         myAnimator.SetBool("Facing Right", facingRight);
 
-        allMonsterParts = GetComponentsInChildren<monsterPart>();
+        allMonsterParts = GetComponentsInChildren<NewMonsterPart>();
 
         #region Figuring out if this Monster has one leg, many legs, or is a legless guy
 
         bool hasLeftGroundedLegs = false;
         bool hasRightGroundedLegs = false;
         bool hasWings = false;
-        List<monsterPart> allGroundedRightLegs = new List<monsterPart>();
-        List<monsterPart> allGroundedLeftLegs = new List<monsterPart>();
-        List<monsterPart> allWings = new List<monsterPart>();
+        List<NewMonsterPart> allGroundedRightLegs = new List<NewMonsterPart>();
+        List<NewMonsterPart> allGroundedLeftLegs = new List<NewMonsterPart>();
+        List<NewMonsterPart> allWings = new List<NewMonsterPart>();
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
+            allMonsterParts[i].AttackSetup();
+
             if (allMonsterParts[i].isGroundedLimb)
             {
                 if (allMonsterParts[i].isRightSidedLimb)
@@ -2468,7 +2470,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    public void popOffMonsterPart(monsterPart partRemoved)
+    public void popOffMonsterPart(NewMonsterPart partRemoved)
     {
         for (int i = 0; i < attackSlotMonsterParts.Length; i++)
         {

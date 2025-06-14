@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlaySFXOnAnimation : MonoBehaviour
 {
-    [SerializeField] monsterPart part;
+    [SerializeField] NewMonsterPart part;
     [SerializeField] SFXManager sfxManager;
 
 

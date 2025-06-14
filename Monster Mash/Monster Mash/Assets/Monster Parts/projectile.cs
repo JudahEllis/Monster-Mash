@@ -42,7 +42,7 @@ public class projectile : MonoBehaviour
     public float turnAround = 0f;
     [SerializeField] private bool isReloaded = false;
     [HideInInspector] public int neutralOrHeavy;
-    private monsterPart myMonsterPart;
+    private NewMonsterPart myMonsterPart;
     private bool hasRequiredAsset = false;
     private GameObject requiredAsset;
 

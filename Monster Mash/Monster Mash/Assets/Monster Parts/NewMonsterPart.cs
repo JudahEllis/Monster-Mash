@@ -154,10 +154,10 @@ public class NewMonsterPart : MonoBehaviour
     public bool grounded = true;
     private bool haveGrabbedAMonster;
 
-    public int reelAttackBuiltUpPower = 0;
-    public int reelAttackCurrentThreshold = 0;
-    public bool powerUpCheckAllowed = true;
-    public bool reelAttackLanded = false;
+    [HideInInspector] public int reelAttackBuiltUpPower = 0;
+    [HideInInspector] public int reelAttackCurrentThreshold = 0;
+    [HideInInspector] public bool powerUpCheckAllowed = true;
+    [HideInInspector] public bool reelAttackLanded = false;
     private monsterPartReference grabbedMonster;
 
     private bool forwardAttackQuickSwitch;
@@ -418,7 +418,7 @@ public class NewMonsterPart : MonoBehaviour
 
         for (int i = 0; i < internalPartReferences.Length; i++)
         {
-            internalPartReferences[i].partReference = this.GetComponent<monsterPart>();
+            internalPartReferences[i].partReference = this.GetComponent<NewMonsterPart>();
         }
 
         if (neutralCollider != null)
@@ -1198,13 +1198,18 @@ public class NewMonsterPart : MonoBehaviour
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
-            heavyAttack.triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
+            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
             GetComponent<MonsterPartVisual>().triggerChargeVisual();
         }
         else
         {
             myAnimator.SetTrigger("Force Neutral Attack");
         }
+    }
+
+    public void triggerHeavyAttackPowerUp()
+    {
+        heavyAttack.triggerHeavyAttackPowerUp();
     }
 
     public void triggerHeavyLegStance()

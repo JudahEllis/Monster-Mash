@@ -37,7 +37,7 @@ public class BoomerangHeavy : HeavyAttack
     {
         base.heavyAttackPowerCalculation();
 
-        monsterPartVisualRef.heavyHitVFXManager.damage = damage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
 
         damageClearance();

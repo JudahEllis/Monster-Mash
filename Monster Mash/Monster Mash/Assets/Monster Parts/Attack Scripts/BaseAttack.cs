@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BaseAttack
 {
-    protected int damage = 0;
-    [SerializeField] protected int baseNeutralAttackDamage = 0;
     protected NewMonsterPart monsterPartRef;
     protected MonsterPartVisual monsterPartVisualRef;
 

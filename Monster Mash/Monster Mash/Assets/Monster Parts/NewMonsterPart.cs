@@ -437,8 +437,16 @@ public class NewMonsterPart : MonoBehaviour
 
     public void AttackSetup()
     {
+        MonsterPartVisual monsterPartVisual = GetComponent<MonsterPartVisual>();
+
         neutralAttack = neutralAttack.GetAttack();
+        heavyAttack = heavyAttack.GetAttack();
+
         neutralAttack.Init(this);
+        heavyAttack.Init(this);
+
+        neutralAttack.Init(monsterPartVisual);
+        heavyAttack.Init(monsterPartVisual);
     }
 
     #endregion
@@ -1190,7 +1198,7 @@ public class NewMonsterPart : MonoBehaviour
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
-            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
+            heavyAttack.triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
             GetComponent<MonsterPartVisual>().triggerChargeVisual();
         }
         else
@@ -1738,8 +1746,6 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.ResetTrigger("Reel Back");
             myAnimator.SetTrigger("Reel Back");
         }
-
-        heavyAttack.Init(this);
     }
 
     public void triggerReelCollisionsOn() //called in attack animation
@@ -1752,8 +1758,6 @@ public class NewMonsterPart : MonoBehaviour
         {
             heavyCollider.enabled = true;
         }
-
-        heavyAttack.Init(this);
     }
 
     public void triggerReelCollisionsOff() //called in attack animation
@@ -1781,31 +1785,12 @@ public class NewMonsterPart : MonoBehaviour
     #endregion
 
     #region Heavy Attack Power Up
-
-    public void triggerHeavyAttackPowerUp() //built up in wind up animation
-    {
-        switch(heavyAttack.Attack)
-        {
-            case HeavyAttack.HeavyAttackType.Reel:
-                reelAttackBuiltUpPower++;
-                powerUpCheckAllowed = true;
-                break;
-            case HeavyAttack.HeavyAttackType.Beam:
-                builtUpAttackPower++;
-                break;
-        }
-    }
-
     public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
     {
         heavyAttack.triggerHeavyAttackPowerCheck();
     }
     #endregion
 
-    private void damageClearance()
-    {
-        damage = 0;
-    }
     #endregion
 
     #region Movement Animations

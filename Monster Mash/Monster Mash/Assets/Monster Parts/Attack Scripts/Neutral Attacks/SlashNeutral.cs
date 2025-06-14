@@ -9,7 +9,7 @@ public class SlashNeutral : NeutralAttack
     {
         base.neutralAttackPowerCalculation();
         monsterPartRef.neutralColliderReference.resetAttackHistory();
-        monsterPartRef.neutralColliderReference.damage = damage;
+        monsterPartRef.neutralColliderReference.damage = monsterPartRef.damage;
         monsterPartRef.heavyColliderReference.markedHeavy = false;
 
         damageClearance();
@@ -17,7 +17,7 @@ public class SlashNeutral : NeutralAttack
 
     public override void statusEffectAndDamageCalculations()
     {
-        monsterPartRef.neutralColliderReference.damage = baseNeutralAttackDamage;
+        monsterPartRef.neutralColliderReference.damage = monsterPartRef.baseNeutralAttackDamage;
     }
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)

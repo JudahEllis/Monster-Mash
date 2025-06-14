@@ -210,7 +210,6 @@ public class MonsterPartVisual : MonoBehaviour
             }
         }
 
-        monsterPartRef.neutralAttack.Init(this);
         #endregion
 
 

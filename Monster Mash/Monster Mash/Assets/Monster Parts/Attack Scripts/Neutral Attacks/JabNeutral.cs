@@ -9,7 +9,7 @@ public class JabNeutral : NeutralAttack
     {
         base.neutralAttackPowerCalculation();
         monsterPartRef.neutralColliderReference.resetAttackHistory();
-        monsterPartRef.neutralColliderReference.damage = damage;
+        monsterPartRef.neutralColliderReference.damage = monsterPartRef.damage;
         monsterPartRef.heavyColliderReference.markedHeavy = false;
 
         damageClearance();
@@ -18,7 +18,7 @@ public class JabNeutral : NeutralAttack
     public override void statusEffectAndDamageCalculations()
     {
         base.statusEffectAndDamageCalculations();
-        monsterPartRef.neutralColliderReference.damage = baseNeutralAttackDamage;
+        monsterPartRef.neutralColliderReference.damage = monsterPartRef.baseNeutralAttackDamage;
     }
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)

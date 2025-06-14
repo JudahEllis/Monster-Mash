@@ -7,7 +7,7 @@ public class SprayNeutral : NeutralAttack
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();
-        monsterPartVisualRef.neutralHitVFXManager.damage = damage;
+        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.damage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
 
         damageClearance();
@@ -16,7 +16,7 @@ public class SprayNeutral : NeutralAttack
     public override void statusEffectAndDamageCalculations()
     {
         base.statusEffectAndDamageCalculations();
-        monsterPartVisualRef.neutralHitVFXManager.damage = baseNeutralAttackDamage;
+        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.baseNeutralAttackDamage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
     }
 
@@ -27,8 +27,8 @@ public class SprayNeutral : NeutralAttack
 
         if (monsterPartVisualRef.neutralDefaultSprayVFXHolder != null)
         {
-            monsterPartVisualRef.neutralDefaultSprayVFXHolder.transform.position = monsterPartVisualRef.neutralMuzzle.transform.position;
-            monsterPartVisualRef.neutralDefaultSprayVFXHolder.transform.rotation = monsterPartVisualRef.neutralMuzzle.transform.rotation;
+            monsterPartVisualRef.neutralDefaultSprayVFXHolder.transform.SetPositionAndRotation(monsterPartVisualRef.neutralMuzzle.transform.position, 
+                monsterPartVisualRef.neutralMuzzle.transform.rotation);
         }
 
         monsterPartVisualRef.neutralHitVFXManager.unleashSpray();

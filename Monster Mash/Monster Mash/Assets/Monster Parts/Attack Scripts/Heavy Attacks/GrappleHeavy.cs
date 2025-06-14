@@ -9,7 +9,7 @@ public class GrappleHeavy : HeavyAttack
         base.heavyAttackPowerCalculation();
 
         monsterPartRef.heavyColliderReference.resetAttackHistory();
-        monsterPartRef.heavyColliderReference.damage = damage;
+        monsterPartRef.heavyColliderReference.damage = monsterPartRef.damage;
         monsterPartRef.heavyColliderReference.markedHeavy = true;
 
         damageClearance();

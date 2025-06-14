@@ -34,6 +34,12 @@ public class ReelHeavy : HeavyAttack
         }
     }
 
+    public override void triggerHeavyAttackPowerUp()
+    {
+        monsterPartRef.reelAttackBuiltUpPower++;
+        monsterPartRef.powerUpCheckAllowed = true;
+    }
+
     public void triggerReelCollisionsOff() //called in attack animation
     {
         //turn off neutral vfx holder

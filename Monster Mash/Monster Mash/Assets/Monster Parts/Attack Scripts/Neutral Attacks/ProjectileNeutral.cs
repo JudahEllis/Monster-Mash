@@ -7,7 +7,7 @@ public class ProjectileNeutral : NeutralAttack
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();
-        monsterPartVisualRef.neutralHitVFXManager.damage = damage;
+        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.damage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
 
         damageClearance();
@@ -15,7 +15,7 @@ public class ProjectileNeutral : NeutralAttack
 
     public override void statusEffectAndDamageCalculations()
     {
-        monsterPartVisualRef.neutralHitVFXManager.damage = baseNeutralAttackDamage;
+        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.baseNeutralAttackDamage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
     }
 

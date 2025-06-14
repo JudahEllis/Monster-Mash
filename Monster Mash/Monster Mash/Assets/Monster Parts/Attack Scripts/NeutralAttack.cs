@@ -39,7 +39,7 @@ public class NeutralAttack: BaseAttack
 
     public virtual void neutralAttackPowerCalculation()
     {
-        damage = baseNeutralAttackDamage;
+        monsterPartRef.damage = monsterPartRef.baseNeutralAttackDamage;
     }
 
     public virtual void triggerNeutralAttackVisuals()

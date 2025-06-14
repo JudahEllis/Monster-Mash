@@ -112,5 +112,11 @@ public class HeavyAttack : BaseAttack
         monsterPartRef.builtUpAttackPower = 0;
     }
 
-  
+    public virtual void triggerHeavyAttackPowerUp()
+    {
+
+    }
+
+
+
 }

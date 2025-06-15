@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ReelHeavy : HeavyAttack
 {
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = HeavyAttackType.Reel;
+    }
     public override void triggerHeavyAttackVisuals()
     {
         if (!monsterPartRef.reelAttackLanded)

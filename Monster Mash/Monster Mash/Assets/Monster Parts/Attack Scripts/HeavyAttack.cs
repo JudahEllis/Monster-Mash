@@ -8,6 +8,7 @@ public class HeavyAttack : BaseAttack
 {
     public enum HeavyAttackType
     {
+        None,
         Jab,
         Slash,
         Spray,
@@ -37,6 +38,7 @@ public class HeavyAttack : BaseAttack
     {
         return Attack switch
         {
+            HeavyAttackType.None => new HeavyAttack(),
             HeavyAttackType.Jab => new JabHeavy(),
             HeavyAttackType.Slash => new SlashHeavy(),
             HeavyAttackType.Spray => new SprayHeavy(),
@@ -45,7 +47,7 @@ public class HeavyAttack : BaseAttack
             HeavyAttackType.Reel => new ReelHeavy(),
             HeavyAttackType.Grapple => new GrappleHeavy(),
             HeavyAttackType.Boomerang => new BoomerangHeavy(),
-            _ => null
+            _ => new HeavyAttack()
         };
     }
 
@@ -66,6 +68,8 @@ public class HeavyAttack : BaseAttack
 
     protected void ApplyStatusEffectsToColliderReference(monsterPartReference colliderRef)
     {
+        if (colliderRef == null) { return; }
+
         colliderRef.burnedStatusEffect = monsterPartRef.burnedStatusEffect;
         colliderRef.electrifiedStatusEffect = monsterPartRef.electrifiedStatusEffect;
         colliderRef.poisonedStatusEffect = monsterPartRef.poisonedStatusEffect;

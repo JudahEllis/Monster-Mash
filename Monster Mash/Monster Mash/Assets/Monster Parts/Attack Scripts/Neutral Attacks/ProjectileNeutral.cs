@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ProjectileNeutral : NeutralAttack
 {
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = AttackType.Projectile;
+    }
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

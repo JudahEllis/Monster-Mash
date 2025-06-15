@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class GrappleHeavy : HeavyAttack
 {
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = HeavyAttackType.Grapple;
+    }
     public override void heavyAttackPowerCalculation()
     {
         base.heavyAttackPowerCalculation();

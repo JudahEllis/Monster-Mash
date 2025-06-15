@@ -11,7 +11,7 @@ public class BaseAttack
     /// Used to grab public varables from the monster part script
     /// </summary>
     /// <param name="monsterPartRef">Instance of the monster part script</param>
-    public void Init(NewMonsterPart monsterPartRef)
+    public virtual void Init(NewMonsterPart monsterPartRef)
     {
         this.monsterPartRef = monsterPartRef;
     }

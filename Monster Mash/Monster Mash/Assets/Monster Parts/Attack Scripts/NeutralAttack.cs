@@ -8,6 +8,7 @@ public class NeutralAttack: BaseAttack
 {
     public enum AttackType 
     {
+        None,
         Jab,
         Slash,
         Spray,
@@ -28,12 +29,13 @@ public class NeutralAttack: BaseAttack
     {
         return Attack switch
         {
+            AttackType.None => new NeutralAttack(), 
             AttackType.Jab => new JabNeutral(),
             AttackType.Slash => new SlashNeutral(),
             AttackType.Spray => new SprayNeutral(),
             AttackType.Projectile => new ProjectileNeutral(),
             AttackType.Boomerang => new BoomerangNeutral(),
-            _ => null,
+            _ => new NeutralAttack(),
         };
     }
 

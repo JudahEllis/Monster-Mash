@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class JabHeavy : HeavyAttack
 {
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = HeavyAttackType.Jab;
+    }
     public override void triggerHeavyAttackVisuals()
     {
         if (monsterPartRef.jabOrSlashLanded == false && monsterPartVisualRef.heavyMissVFXHolder != null)

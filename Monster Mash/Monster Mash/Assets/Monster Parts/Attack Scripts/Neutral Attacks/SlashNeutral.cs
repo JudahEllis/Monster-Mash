@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class SlashNeutral : NeutralAttack
 {
-    
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = AttackType.Slash;
+    }
+
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();
@@ -17,6 +22,7 @@ public class SlashNeutral : NeutralAttack
 
     public override void statusEffectAndDamageCalculations()
     {
+        if (monsterPartRef.neutralColliderReference == null) { return; }
         monsterPartRef.neutralColliderReference.damage = monsterPartRef.baseNeutralAttackDamage;
     }
 

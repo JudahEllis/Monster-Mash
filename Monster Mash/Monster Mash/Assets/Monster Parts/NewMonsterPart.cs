@@ -168,11 +168,29 @@ public class NewMonsterPart : MonoBehaviour
     private bool leftLowerAttackQuickSwitch;
     private bool rightLowerAttackQuickSwitch;
 
+    private bool attackSetupDone = false;
+
     public ParticleSystem[] myIdleVFX;
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
 
     #region Build a Scare Tools
+    public void AttackSetup()
+    {
+        if (attackSetupDone) { return; }
 
+        MonsterPartVisual monsterPartVisual = GetComponent<MonsterPartVisual>();
+
+        neutralAttack = neutralAttack.GetAttack();
+        heavyAttack = heavyAttack.GetAttack();
+
+        neutralAttack.Init(this);
+        heavyAttack.Init(this);
+
+        neutralAttack.Init(monsterPartVisual);
+        heavyAttack.Init(monsterPartVisual);
+
+        attackSetupDone = true;
+    }
     public void changeAttackAnimationAtRuntime()
     {
         //this will be expanded to include all monster parts
@@ -433,20 +451,6 @@ public class NewMonsterPart : MonoBehaviour
 
         heavyAttack.statusEffectAndDamageCalculations();
         neutralAttack.statusEffectAndDamageCalculations();
-    }
-
-    public void AttackSetup()
-    {
-        MonsterPartVisual monsterPartVisual = GetComponent<MonsterPartVisual>();
-
-        neutralAttack = neutralAttack.GetAttack();
-        heavyAttack = heavyAttack.GetAttack();
-
-        neutralAttack.Init(this);
-        heavyAttack.Init(this);
-
-        neutralAttack.Init(monsterPartVisual);
-        heavyAttack.Init(monsterPartVisual);
     }
 
     #endregion

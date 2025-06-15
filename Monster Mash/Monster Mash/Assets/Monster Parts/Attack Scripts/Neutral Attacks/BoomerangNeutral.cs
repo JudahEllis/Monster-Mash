@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class BoomerangNeutral : NeutralAttack
 {
-
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = AttackType.Boomerang;
+    }
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

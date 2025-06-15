@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class SprayHeavy : HeavyAttack
 {
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = HeavyAttackType.Spray;
+    }
     public override void SetupVFX()
     {
         if (monsterPartVisualRef.heavyHitVFXHolder != null || monsterPartVisualRef.heavyDefaultSprayVFXHolder != null)

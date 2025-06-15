@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class BeamHeavy : HeavyAttack
 {
+    public override void Init(NewMonsterPart monsterPartRef)
+    {
+        base.Init(monsterPartRef);
+        Attack = HeavyAttackType.Beam;
+    }
     public override void triggerHeavyAttackVisuals()
     {
         monsterPartVisualRef.heavyHitVFXManager.unleashBeamVisual();

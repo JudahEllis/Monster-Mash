@@ -12,7 +12,6 @@ public class NewMonsterPart : MonoBehaviour
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     [HideInInspector] public Animator myAnimator;
-    public GameObject specialRunVisual;
     public bool requiresUniqueAnimationOffset;
     public Collider stompDetection;
     public int monsterPartHealth = 100;

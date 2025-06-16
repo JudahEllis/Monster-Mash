@@ -70,6 +70,18 @@ public class PlayerSpawnManager : MonoBehaviour
                 spawnedPart.transform.localRotation = partData.partRotation;
 
                 spawnedPart.transform.localScale = partData.partScale;
+
+                monsterControl.AssignMonsterPartAttackInfo(partData.partButton, spawnedPart.GetComponentInChildren<monsterPart>());
+
+                IPartAdjustable[] partAdjustments = spawnedPart.GetComponentsInChildren<IPartAdjustable>();
+
+                if(partAdjustments.Length > 0)
+                {
+                    foreach(IPartAdjustable adjustable in partAdjustments)
+                    {
+                        adjustable.PartAdjustment(partData);
+                    }
+                }
             }
 
             monsterControl.turnOnLimbConnectors();
@@ -89,6 +101,8 @@ public class PlayerSpawnManager : MonoBehaviour
         monsterControl.turnOffLimbConnectors();
 
         monsterControl.connectCurrentLimbs();
+
+        yield return new WaitForSeconds(0.25f);
 
         monsterControl.awakenTheBeast();
     }

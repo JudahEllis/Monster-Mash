@@ -70,7 +70,7 @@ public class greenhouseEventSystem : MonoBehaviour
 
     private void shufflepPlants()
     {
-        int potentialNewPlant = Random.Range(1, plantSystems.Length);
+        int potentialNewPlant = Random.Range(0, plantSystems.Length);
 
         if (potentialNewPlant == selectedPlantInArray)
         {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class monsterPartReference : MonoBehaviour
 {
     public monsterAttackSystem mainSystem;
-    public monsterPart partReference;
+    public NewMonsterPart partReference;
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
     private List<monsterAttackSystem> attackHistory = new List<monsterAttackSystem>();
     public bool isHitbox;

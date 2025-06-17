@@ -24,7 +24,7 @@ public class vfxHolder : MonoBehaviour
     //
     public bool isBoomerangHolder;
     public bool isReloaded = true;
-    public monsterPart myMonsterPart;
+    public NewMonsterPart myMonsterPart;
     public int neutralOrHeavy; //0 == neutral, 1 == heavy
     public GameObject turnOnAssetWhenReloaded;
     private bool hasRequiredAsset = false;

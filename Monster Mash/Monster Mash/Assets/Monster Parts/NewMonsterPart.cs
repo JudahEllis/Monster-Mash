@@ -103,20 +103,10 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public bool isRightSidedLimb;
     [HideInInspector] public bool isLeftSidedLimb;
     [HideInInspector] public bool isGroundedLimb;
-    private string forwardInputTorsoCommand = "";
-    private string backwardInputTorsoCommand = "";
-    private string upwardInputTorsoCommand = "";
-    private string downwardInputTorsoCommand = "";
-    private string forwardInputHeadCommand = "";
-    private string backwardInputHeadCommand = "";
-    private string upwardInputHeadCommand = "";
-    private string downwardInputHeadCommand = "";
     private string torsoCommand = "";
-    private bool hasTorsoCommand = false;
     private string torsoCommandOverride = "";
-    private bool hasTorsoCommandOverride = false; //refers to heads on torsos, torsos on torsos, torsos on heads on torsos, etc. that needs to move the main body
+    [HideInInspector] public bool hasTorsoCommandOverride = false; //refers to heads on torsos, torsos on torsos, torsos on heads on torsos, etc. that needs to move the main body
     private string headCommand = "";
-    private bool hasHeadCommand = false;
     private bool leftAttackOverride;
     private bool rightAttackOverride;
 
@@ -129,23 +119,13 @@ public class NewMonsterPart : MonoBehaviour
     public bool requiresLeftStance = false;
     public bool requiresForwardStance = false;
     public bool requiresBackwardStance = false;
-    private bool hasNeutralMovementCommand = false;
-    private string forwardNeutralMovementCommand = "";
-    private string upwardNeutralMovementCommand = "";
-    private string backwardNeutralMovementCommand = "";
-    private string downwardNeutralMovementCommand = "";
-    private bool hasHeavyMovementCommand = false;
-    private string forwardHeavyMovementCommand = "";
-    private string upwardHeavyMovementCommand = "";
-    private string backwardHeavyMovementCommand = "";
-    private string downwardHeavyMovementCommand = "";
     public bool isLeadingLeg;
     public bool isFloatingGroundedLeg;
     public bool isFloatingTorso;
     public bool hasFlightedIdle = false;
     public Outline visualForAnimationTests;
     public bool hasHeavyBrace = false;
-    private bool isAttacking = false;
+    [HideInInspector] public bool isAttacking = false;
     public bool attackFocusOn = false;
     private bool isWalking = false;
     public bool isRunning = false;
@@ -216,7 +196,7 @@ public class NewMonsterPart : MonoBehaviour
             requiresRightStance = false;
             requiresLeftStance = false;
 
-            attackCalculations();
+            GetComponent<MonsterPartVisual>().attackCalculations();
 
             GetComponent<MonsterPartVisual>().setUpVFX();
             setUpSFX();
@@ -298,7 +278,7 @@ public class NewMonsterPart : MonoBehaviour
         requiresRightStance = false;
         requiresLeftStance = false;
 
-        attackCalculations();
+        GetComponent<MonsterPartVisual>().attackCalculations();
 
         #region Separating Visual and Combat Elements for Dash Attacks
         //search through all my objects and gather everything with a skinned mesh renderer
@@ -338,40 +318,6 @@ public class NewMonsterPart : MonoBehaviour
 
         GetComponent<MonsterPartVisual>().setUpVFX();
         setUpSFX();
-    }
-
-    public void attackCalculations()
-    {
-        MonsterCalculations calc = AttackCalculationsSetUp(); //does this in a separate script, it's too beefy :/
-
-        requiresBackwardStance = calc.requiresBackwardStance;
-        requiresForwardStance = calc.requiresForwardStance;
-        requiresRightStance = calc.requiresRightStance;
-        requiresLeftStance = calc.requiresLeftStance;
-
-        hasTorsoCommand = calc.hasTorsoCommand;
-        forwardInputTorsoCommand = calc.forwardInputTorsoCommand;
-        backwardInputTorsoCommand = calc.backwardInputTorsoCommand; //make sure monster flips before attacking
-        upwardInputTorsoCommand = calc.upwardInputTorsoCommand;
-        downwardInputTorsoCommand = calc.downwardInputTorsoCommand;
-
-        hasHeadCommand = calc.hasHeadCommand;
-        forwardInputHeadCommand = calc.forwardInputHeadCommand;
-        backwardInputHeadCommand = calc.backwardInputHeadCommand;
-        upwardInputHeadCommand = calc.upwardInputHeadCommand;
-        downwardInputHeadCommand = calc.downwardInputHeadCommand;
-
-        hasNeutralMovementCommand = calc.hasNeutralMovementCommand;
-        forwardNeutralMovementCommand = calc.forwardNeutralMovementCommand;
-        upwardNeutralMovementCommand = calc.upwardNeutralMovementCommand;
-        backwardNeutralMovementCommand = calc.backwardNeutralMovementCommand;
-        downwardNeutralMovementCommand = calc.downwardNeutralMovementCommand;
-
-        hasHeavyMovementCommand = calc.hasHeavyMovementCommand;
-        forwardHeavyMovementCommand = calc.forwardHeavyMovementCommand;
-        upwardHeavyMovementCommand = calc.upwardHeavyMovementCommand;
-        backwardHeavyMovementCommand = calc.backwardHeavyMovementCommand;
-        downwardHeavyMovementCommand = calc.downwardHeavyMovementCommand;
     }
 
     public void triggerAnimationOffsets()
@@ -477,60 +423,6 @@ public class NewMonsterPart : MonoBehaviour
             fullActiveHeavy = false;
 
             triggerNeutralOrHeavyRefresh(false);
-        }
-    }
-
-    public void triggerAttackAnticipation()
-    {
-        myMainSystem.correctAttackDirection(0);
-
-        if (attackAnimationID == 1)
-        {
-            if (hasTorsoCommand)
-            {
-                connectedMonsterPart.SetTrigger(forwardInputTorsoCommand);
-            }
-
-            if (hasHeadCommand)
-            {
-                connectedMonsterPart.SetTrigger(forwardInputHeadCommand);
-            }
-        }
-        else if (attackAnimationID == -1)
-        {
-            if (hasTorsoCommand)
-            {
-                connectedMonsterPart.SetTrigger(backwardInputTorsoCommand);
-            }
-
-            if (hasHeadCommand)
-            {
-                connectedMonsterPart.SetTrigger(backwardInputHeadCommand);
-            }
-        }
-        else if (attackAnimationID == 0)
-        {
-            if (hasTorsoCommand)
-            {
-                connectedMonsterPart.SetTrigger(downwardInputTorsoCommand);
-            }
-
-            if (hasHeadCommand)
-            {
-                connectedMonsterPart.SetTrigger(downwardInputHeadCommand);
-            }
-        }
-        else if (attackAnimationID == 2)
-        {
-            if (hasTorsoCommand)
-            {
-                connectedMonsterPart.SetTrigger(upwardInputTorsoCommand);
-            }
-
-            if (hasHeadCommand)
-            {
-                connectedMonsterPart.SetTrigger(upwardInputHeadCommand);
-            }
         }
     }
 
@@ -1235,175 +1127,6 @@ public class NewMonsterPart : MonoBehaviour
     }
 
     #endregion
-
-    public void triggerFullHeavyEffect()
-    {
-        //check for some damage upgrade 
-        myMainSystem.releaseFullHeavyVisual();
-    }
-
-    public void triggerAttackRelease()
-    {
-
-        if (isJointed)
-        {
-            // not sure about this whole section, it looks important
-            connectedMonsterPart.SetBool("Ready to Swing", true);
-            connectedMonsterPart.SetBool("Walking", false);
-            connectedMonsterPart.SetBool("Running", false);
-
-            if (hasTorsoCommandOverride)
-            {
-                mainTorso.SetBool("Ready to Swing", true);
-                mainTorso.ResetTrigger("Quick Forward Position");
-                mainTorso.ResetTrigger("Quick Upward Position");
-                mainTorso.SetBool("Walking", false);
-                mainTorso.SetBool("Running", false);
-            }
-
-            isRunning = false;
-            fullActiveHeavy = true;
-            isAttacking = false;
-            myMainSystem.correctWalkingAttackAnimations();
-            GetComponent<MonsterPartVisual>().triggerEndChargeVisual();
-
-            if (attackMarkedHeavy)
-            {
-                heavyAttack.heavyAttackPowerCalculation();
-                GetComponent<MonsterPartVisual>().triggerHeavyChargeVisual();
-
-                if (hasHeavyMovementCommand)
-                {
-                    if (attackAnimationID == 1)
-                    {
-                        if (forwardHeavyMovementCommand == "Forward Leap") //arm swings, leg kicks, etc.
-                        {
-                            //myMainSystem.leapAttackForward();
-                        }
-                        else if (forwardHeavyMovementCommand == "Forward Spin") //tail spin attacks
-                        {
-
-                        }
-                        else if (forwardHeavyMovementCommand == "Quick 360 Heavy") //tail spin attacks - alt
-                        {
-
-                        }
-                    }
-                    else if (attackAnimationID == 2)
-                    {
-                        if (upwardHeavyMovementCommand == "Upward Leap") //arm swings, etc.
-                        {
-                            //myMainSystem.leapAttackUpward();
-                        }
-                        else if (upwardHeavyMovementCommand == "Upward Spin") //tail spin attacks, spinjitsu leg kick
-                        {
-                            //myMainSystem.rollingUpwardsAttack();
-                        }
-                    }
-                    else if (attackAnimationID == -1)
-                    {
-                        if (backwardHeavyMovementCommand == "Backward Leap") //leg kicks, recoil etc.
-                        {
-                            //myMainSystem.leapAttackBackward();
-                        }
-                        else if (backwardHeavyMovementCommand == "Backward Spin") //tail spin
-                        {
-
-                        }
-                        else if (backwardHeavyMovementCommand == "Quick 180 Heavy") //surprise turn and attack
-                        {
-
-                        }
-                    }
-                    else if (attackAnimationID == 0)
-                    {
-                        if (downwardHeavyMovementCommand == "Downward Leap") //arm swings, etc.
-                        {
-                            //myMainSystem.leapAttackDownward();
-                        }
-                        else if (downwardHeavyMovementCommand == "Downward Spin") //tail spin attacks
-                        {
-                            //myMainSystem.rollingDownwardsAttack();
-                        }
-                        else if (downwardHeavyMovementCommand == "Heavy Stomp") //leg kick
-                        {
-                            //myMainSystem.stompAttack();
-                        }
-                    }
-                }
-
-                heavyAttack.triggerAttackRelease(this);
-            }
-            else
-            {
-                neutralAttack.neutralAttackPowerCalculation();
-
-                if (hasNeutralMovementCommand)
-                {
-                    if (attackAnimationID == 1)
-                    {
-                        if (forwardNeutralMovementCommand == "Forward Strike") //arm swings, leg kicks, etc.
-                        {
-                            //myMainSystem.smallLeapAttackForward();
-                        }
-                        else if (forwardNeutralMovementCommand == "Forward Single Spin") //tail spin attacks, spinjitsu leg kick
-                        {
-
-                        }
-                        else if (forwardNeutralMovementCommand == "Quick 360") //tail spin attacks
-                        {
-
-                        }
-                    }
-                    else if (attackAnimationID == 2)
-                    {
-                        if (upwardNeutralMovementCommand == "Upward Strike") //arm swings, etc.
-                        {
-                            //myMainSystem.smallLeapAttackUpward();
-                        }
-                        else if (upwardNeutralMovementCommand == "Upward Single Spin") //tail spin attacks, spinjitsu leg kick
-                        {
-
-                        }
-                    }
-                    else if (attackAnimationID == -1)
-                    {
-                        if (backwardNeutralMovementCommand == "Backward Strike") //leg kicks, recoil etc.
-                        {
-                            //myMainSystem.smallLeapAttackBackward();
-                        }
-                        else if (backwardNeutralMovementCommand == "Backward Single Spin") //tail spin
-                        {
-
-                        }
-                        else if (backwardNeutralMovementCommand == "Quick 180") //surprise turn and attack
-                        {
-
-                        }
-                    }
-                    else if (attackAnimationID == 0)
-                    {
-                        if (downwardNeutralMovementCommand == "Downward Strike") //arm swings, etc.
-                        {
-                            //myMainSystem.smallLeapAttackDownward();
-                        }
-                        else if (downwardNeutralMovementCommand == "Downward Single Spin") //tail spin attacks
-                        {
-
-                        }
-                        else if (downwardNeutralMovementCommand == "Stomp") //leg kick
-                        {
-                            //myMainSystem.stompAttack();
-                        }
-                    }
-
-                }
-
-                neutralAttack.triggerAttackRelease(this);
-            }
-        }
-    }
-
     public void walkToAttackCorrections()
     {
         if (connected == false)
@@ -1495,22 +1218,6 @@ public class NewMonsterPart : MonoBehaviour
             isWalking = false;
             isRunning = false;
         }
-    }
-
-    public void triggerAttackToIdle()
-    {
-        connectedMonsterPart.SetBool("Attack to Idle", true);
-        connectedMonsterPart.SetBool("Ready to Swing", false);
-
-        if (hasTorsoCommandOverride)
-        {
-            mainTorso.SetBool("Attack to Idle", true);
-            mainTorso.SetBool("Ready to Swing", false);
-        }
-
-        myMainSystem.endBracing();
-        GetComponent<MonsterPartVisual>().endRemainingVFX();
-
     }
 
     #region Launching Attacks
@@ -3194,19 +2901,6 @@ public class NewMonsterPart : MonoBehaviour
         }
     }
 
-    public void triggerEmoteEnd()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isTorso)
-        {
-            myMainSystem.emoteEnded();
-        }
-    }
-
     public void triggerForceStopEmote()
     {
         if (connected == false)
@@ -3261,8 +2955,7 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (isLeg && myMainSystem.SFXManager)
         {
-            //TODO: replace refrence with this scipt when refactor is done
-            //myMainSystem.SFXManager.footstepSFX(this);
+            myMainSystem.SFXManager.footstepSFX(this);
         }
     }
 
@@ -3270,8 +2963,8 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (isLeg && myMainSystem.SFXManager)
         {
-            //TODO: replace refrence with this scipt when refactor is done
-            //myMainSystem.SFXManager.runSFX(this);
+            
+            myMainSystem.SFXManager.runSFX(this);
         }
     }
 
@@ -3469,15 +3162,6 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
         return false;
-    }
-
-    private MonsterCalculations AttackCalculationsSetUp()
-    {
-        MonsterCalculations calc = new MonsterCalculations();
-        //TODO: replace refrence when refactor is done
-        //calc.AttackCalculationSetUp(this);
-
-        return calc;
     }
     #endregion
 }

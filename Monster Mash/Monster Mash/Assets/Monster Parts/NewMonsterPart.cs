@@ -12,6 +12,7 @@ public class NewMonsterPart : MonoBehaviour
     public Animator connectedMonsterPart;
     public Animator mainTorso;
     [HideInInspector] public Animator myAnimator;
+    [HideInInspector] public MonsterPartVisual PartVisual;
     public bool requiresUniqueAnimationOffset;
     public Collider stompDetection;
     public int monsterPartHealth = 100;
@@ -127,7 +128,7 @@ public class NewMonsterPart : MonoBehaviour
     public bool hasHeavyBrace = false;
     [HideInInspector] public bool isAttacking = false;
     public bool attackFocusOn = false;
-    private bool isWalking = false;
+    [HideInInspector] public bool isWalking = false;
     public bool isRunning = false;
     public bool facingRight;
     public bool grounded = true;
@@ -157,7 +158,7 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (attackSetupDone) { return; }
 
-        MonsterPartVisual monsterPartVisual = GetComponent<MonsterPartVisual>();
+        PartVisual = GetComponent<MonsterPartVisual>();
 
         neutralAttack = neutralAttack.GetAttack();
         heavyAttack = heavyAttack.GetAttack();
@@ -165,8 +166,8 @@ public class NewMonsterPart : MonoBehaviour
         neutralAttack.Init(this);
         heavyAttack.Init(this);
 
-        neutralAttack.Init(monsterPartVisual);
-        heavyAttack.Init(monsterPartVisual);
+        neutralAttack.Init(PartVisual);
+        heavyAttack.Init(PartVisual);
 
         attackSetupDone = true;
     }
@@ -196,9 +197,9 @@ public class NewMonsterPart : MonoBehaviour
             requiresRightStance = false;
             requiresLeftStance = false;
 
-            GetComponent<MonsterPartVisual>().attackCalculations();
+            PartVisual.attackCalculations();
 
-            GetComponent<MonsterPartVisual>().setUpVFX();
+            PartVisual.setUpVFX();
             setUpSFX();
         }
     }
@@ -278,7 +279,7 @@ public class NewMonsterPart : MonoBehaviour
         requiresRightStance = false;
         requiresLeftStance = false;
 
-        GetComponent<MonsterPartVisual>().attackCalculations();
+        PartVisual.attackCalculations();
 
         #region Separating Visual and Combat Elements for Dash Attacks
         //search through all my objects and gather everything with a skinned mesh renderer
@@ -307,7 +308,7 @@ public class NewMonsterPart : MonoBehaviour
         }
         else
         {
-            GetComponent<MonsterPartVisual>().idleVFXSeparation();
+            PartVisual.idleVFXSeparation();
         }
 
         for (int i = 0; i < hitboxesAndHurtboxes.Count; i++)
@@ -316,7 +317,7 @@ public class NewMonsterPart : MonoBehaviour
         }
         #endregion
 
-        GetComponent<MonsterPartVisual>().setUpVFX();
+        PartVisual.setUpVFX();
         setUpSFX();
     }
 
@@ -426,603 +427,6 @@ public class NewMonsterPart : MonoBehaviour
         }
     }
 
-    #region Attack Bracing Animations
-    public void triggerLeftAttackStance()
-    {
-        if (connected == false || attackFocusOn)
-        {
-            return;
-        }
-
-        isBracing = true;
-
-        if (isGroundedLimb)
-        {
-            if (grounded)
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Backward Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-
-        }
-        else if (isLeg)
-        {
-            if (isRightSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-            else if (isLeftSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-        }
-        else if (isArm)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isMouth && myAnimator != null)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isWing)
-        {
-            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-        else if (isTail)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-    }
-
-    public void triggerRightAttackStance()
-    {
-        if (connected == false || attackFocusOn)
-        {
-            return;
-        }
-
-        isBracing = true;
-
-        if (isGroundedLimb)
-        {
-            if (grounded)
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Backward Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-
-        }
-        else if (isLeg)
-        {
-            if (isRightSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-            else if (isLeftSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-        }
-        else if (isArm)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isMouth && myAnimator != null)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isWing)
-        {
-            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-        else if (isTail)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-    }
-
-    public void triggerForwardStance()
-    {
-        if (connected == false || attackFocusOn)
-        {
-            return;
-        }
-
-        isBracing = true;
-
-        if (isGroundedLimb)
-        {
-            if (grounded)
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Forward Brace");
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-        }
-        else if (isLeg)
-        {
-            if (isRightSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-            else if (isLeftSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-        }
-        else if (isArm)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isMouth && myAnimator != null)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isWing)
-        {
-            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-        else if (isTail)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-    }
-
-    public void triggerBackwardStance()
-    {
-        if (connected == false || attackFocusOn)
-        {
-            return;
-        }
-
-        isBracing = true;
-
-        if (isGroundedLimb)
-        {
-            if (grounded)
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Launching Backward Brace");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Launching Backward Brace");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-        }
-        else if (isLeg)
-        {
-            if (isRightSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-            else if (isLeftSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-        }
-        else if (isArm)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isMouth && myAnimator != null)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isWing)
-        {
-            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-        else if (isTail)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-    }
-
-    public void triggerFlourishStance()
-    {
-        if (connected == false || attackFocusOn)
-        {
-            return;
-        }
-
-
-        isBracing = true;
-
-        if (isGroundedLimb)
-        {
-
-            if (grounded)
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Flourish");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Flourish");
-                    myAnimator.SetBool("Needs Launch", true);
-                }
-
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-            }
-            else
-            {
-                if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-                else if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Airborn Brace");
-                }
-            }
-        }
-        else if (isLeg)
-        {
-            if (isRightSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-            else if (isLeftSidedLimb && isAttacking == false)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Airborn Brace");
-            }
-        }
-        else if (isArm)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isLeftSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-                else if (isRightSidedLimb && isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isMouth && myAnimator != null)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.SetTrigger("Brace");
-                }
-            }
-        }
-        else if (isWing)
-        {
-            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-        else if (isTail)
-        {
-            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
-            {
-                if (isAttacking == false)
-                {
-                    myAnimator.ResetTrigger("Unbrace");
-                    myAnimator.SetTrigger("Brace");
-                    myAnimator.SetBool("Walking", false);
-                    myAnimator.SetBool("Running", false);
-                }
-            }
-        }
-    }
-
-    public void triggerUnbrace()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        isBracing = false;
-
-        if (isAttacking == false)
-        {
-            if (isLeg)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Unbrace");
-                myAnimator.ResetTrigger("Backward Brace");
-                myAnimator.ResetTrigger("Forward Brace");
-            }
-
-            if (isArm || isWing || isTail)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Unbrace");
-                myAnimator.ResetTrigger("Brace");
-
-                if (isWing)
-                {
-                    myAnimator.SetBool("Glide Activated", false);
-                }
-
-                if (isArm)
-                {
-                    myAnimator.SetBool("Swaying", false);
-                }
-            }
-
-            if (isMouth && myAnimator != null)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Unbrace");
-                myAnimator.ResetTrigger("Brace");
-            }
-
-        }
-        else
-        {
-            if (isGroundedLimb)
-            {
-                myAnimator.ResetTrigger("Unbrace");
-                myAnimator.SetTrigger("Unbrace");
-                myAnimator.ResetTrigger("Backward Brace");
-                myAnimator.ResetTrigger("Forward Brace");
-            }
-        }
-    }
-
-    #endregion
-
     #region Neutral to Heavy Input Shifts
     public void triggerNeutralOrHeavyRefresh(bool inputCanceled)
     {
@@ -1094,7 +498,7 @@ public class NewMonsterPart : MonoBehaviour
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
             triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
-            GetComponent<MonsterPartVisual>().triggerChargeVisual();
+            PartVisual.triggerChargeVisual();
         }
         else
         {
@@ -1509,365 +913,10 @@ public class NewMonsterPart : MonoBehaviour
     #endregion
 
     #region Movement Animations
-    public void triggerWalk()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isGroundedLimb)
-        {
-            myAnimator.ResetTrigger("Walk to Idle");
-            myAnimator.SetBool("Walking", true);
-            myAnimator.SetTrigger("Walk");
-            myAnimator.SetBool("Running", false);
-            isWalking = true;
-            isRunning = false;
-
-            if (isLeg)
-            {
-                myAnimator.SetBool("Calm", false);
-                myAnimator.SetBool("Teeter", false);
-            }
-        }
-
-        if (isTorso)
-        {
-            myAnimator.ResetTrigger("Walk to Idle");
-            myAnimator.SetBool("Walking", true);
-            myAnimator.SetBool("Running", false);
-            isWalking = true;
-            isRunning = false;
-
-            if (isTorso)
-            {
-                myAnimator.SetBool("Teeter", false);
-            }
-        }
-        else if (isHead || isWing || isTail || isArm)
-        {
-            myAnimator.SetBool("Walking", true);
-            myAnimator.SetBool("Running", false);
-            isWalking = true;
-            isRunning = false;
-
-            if (isArm)
-            {
-                myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        GetComponent<MonsterPartVisual>().endRunVisual();
-    }
-
-    public void triggerStopWalking()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isGroundedLimb || isTorso)
-        {
-            myAnimator.ResetTrigger("Walk to Idle");
-
-            if (isWalking)
-            {
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetTrigger("Walk to Idle");
-                isWalking = false;
-            }
-        }
-        else if (isHead || isWing || isTail || isArm)
-        {
-            myAnimator.SetBool("Walking", false);
-            isWalking = false;
-
-            if (isArm)
-            {
-                myAnimator.SetBool("Swaying", false);
-            }
-        }
-    }
-
-    public void triggerRun()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isGroundedLimb)
-        {
-            myAnimator.ResetTrigger("Walk to Idle");
-            myAnimator.SetBool("Running", true);
-            myAnimator.SetTrigger("Run");
-            myAnimator.SetBool("Walking", false);
-            isWalking = false;
-            isRunning = true;
-
-            if (isLeg)
-            {
-                myAnimator.SetBool("Calm", false);
-            }
-        }
-
-        if (isTorso)
-        {
-            myAnimator.ResetTrigger("Walk to Idle");
-            myAnimator.SetBool("Running", true);
-            myAnimator.SetBool("Walking", false);
-            isWalking = false;
-            isRunning = true;
-        }
-
-        if (isHead || isWing || isArm || isTail)
-        {
-            myAnimator.SetBool("Running", true);
-            myAnimator.SetBool("Walking", false);
-            isWalking = false;
-            isRunning = true;
-
-            if (isArm)
-            {
-                myAnimator.SetBool("Swaying", false);
-            }
-        }
-    }
-
-    public void triggerStopRunning()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isGroundedLimb || isTorso)
-        {
-            if (isRunning)
-            {
-                myAnimator.ResetTrigger("Walk to Idle");
-                myAnimator.SetBool("Running", false);
-                isRunning = false;
-            }
-        }
-
-        if (isHead || isWing || isArm || isTail)
-        {
-            myAnimator.SetBool("Running", false);
-            isRunning = false;
-
-            if (isArm)
-            {
-                myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        GetComponent<MonsterPartVisual>().endRunVisual();
-    }
-
-    public void triggerScreechingStop()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isGroundedLimb || isTorso)
-        {
-            myAnimator.SetTrigger("Run to Screech");
-        }
-    }
-
-    public void triggerJump()
-    {
-        if (connected == false || isDecor || attackFocusOn || (isTorso && isBracing))
-        {
-            return;
-        }
-
-        if (myAnimator != null)
-        {
-            myAnimator.SetBool("Grounded", false);
-            myAnimator.SetTrigger("Jump");
-        }
-
-        if (isGroundedLimb || isTorso)
-        {
-            if (isLeg)
-            {
-                myAnimator.SetBool("Calm", false);
-            }
-        }
-
-        if (isHead || isWing || isArm || isTail || isTorso)
-        {
-            myAnimator.SetBool("Glide Activated", false);
-            myAnimator.SetBool("Walking", false);
-            isWalking = false;
-
-            if (isArm)
-            {
-                myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        grounded = false;
-        GetComponent<MonsterPartVisual>().endRunVisual();
-    }
-
-    public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
-    {
-        if (connected == false || isDecor || isHorn)
-        {
-            return;
-        }
-
-        if (isHorn && myAnimator != null)
-        {
-            myAnimator.SetBool("Grounded", groundedWhenTriggered);
-            grounded = groundedWhenTriggered;
-        }
-
-        if (myAnimator != null)
-        {
-            myAnimator.SetBool("Grounded", groundedWhenTriggered);
-            myAnimator.SetTrigger("Roll");
-        }
-
-        if (isGroundedLimb || isHead || isWing || isTail || isTorso)
-        {
-            if (trueRoll)
-            {
-                myAnimator.SetBool("Walking", false);
-                myAnimator.SetBool("Running", false);
-                isWalking = false;
-                isRunning = false;
-            }
-            else
-            {
-                myAnimator.SetBool("Walking", false);
-                isWalking = false;
-            }
-
-            if (isWing || isHead)
-            {
-                myAnimator.SetBool("Glide Activated", false);
-            }
-
-            if (isLeg)
-            {
-                myAnimator.SetBool("Calm", false);
-            }
-
-            if (isTorso)
-            {
-                myAnimator.SetBool("Glide Activated", false);
-            }
-        }
-
-        if (isArm)
-        {
-            myAnimator.SetBool("Glide Activated", false);
-            myAnimator.SetBool("Swaying", false);
-
-            if (trueRoll)
-            {
-                myAnimator.SetBool("Running", false);
-                isWalking = false;
-                isRunning = false;
-            }
-            else
-            {
-                isWalking = false;
-            }
-        }
-
-        grounded = groundedWhenTriggered;
-        stopInfiniteRoll();
-        GetComponent<MonsterPartVisual>().endRunVisual();
-    }
-
-    public void triggerWingFlap()
-    {
-        if (connected == false)
-        {
-            return;
-        }
-
-        if (isTorso)
-        {
-            myAnimator.SetTrigger("Upper Flap"); //change this so that its calculated at start with the other animations
-            //allows us to use something like "lower flap" for wings on the butt
-        }
-
-        if (isWing)
-        {
-            myAnimator.SetTrigger("Big Flap");
-        }
-
-        if (isArm)
-        {
-            myAnimator.SetTrigger("Roll");
-        }
-
-        if (isLeg || isHead || isTail)
-        {
-            myAnimator.SetTrigger("Jump");
-        }
-
-        if ((isMouth || isEye) && myAnimator != null)
-        {
-            if (isMouth)
-            {
-                myAnimator.SetTrigger("Roll");
-            }
-            else
-            {
-                myAnimator.SetTrigger("Brace");
-            }
-        }
-    }
-
-    public void correctRollSpamControl()
-    {
-        myMainSystem.correctRollControl();
-    }
 
     //This fall function is saved for when the player is knocked off an edge or walks over an edge (not a jump related fall)
-    public void triggerFall()
-    {
-        if (connected == false || isDecor || isHorn)
-        {
-            return;
-        }
-
-        if (myAnimator != null)
-        {
-            myAnimator.SetBool("Grounded", false);
-            myAnimator.SetTrigger("Fall");
-        }
-
-        if (isGroundedLimb || isTorso)
-        {
-            if (isLeg)
-            {
-                myAnimator.SetBool("Calm", false);
-            }
-        }
-
-        if (isHead || isWing || isArm || isTail || isTorso)
-        {
-            if (isArm)
-            {
-                myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        grounded = false;
-        GetComponent<MonsterPartVisual>().endRunVisual();
-    }
+    
+    // Left off here - Nick
 
     public void triggerSimpleUngrounded()
     {
@@ -1898,7 +947,7 @@ public class NewMonsterPart : MonoBehaviour
         }
 
         grounded = false;
-        GetComponent<MonsterPartVisual>().endRunVisual();
+        PartVisual.endRunVisual();
     }
 
     public void triggerLand()
@@ -1952,7 +1001,7 @@ public class NewMonsterPart : MonoBehaviour
 
         grounded = true;
         stopInfiniteRoll();
-        GetComponent<MonsterPartVisual>().endRunVisual();
+        PartVisual.endRunVisual();
     }
 
     public void triggerLateLand()
@@ -2008,7 +1057,7 @@ public class NewMonsterPart : MonoBehaviour
 
         grounded = true;
         stopInfiniteRoll();
-        GetComponent<MonsterPartVisual>().endRunVisual();
+        PartVisual.endRunVisual();
     }
 
     public void triggerGlide()
@@ -2076,7 +1125,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Running", false);
         }
 
-        GetComponent<MonsterPartVisual>().endRunVisual();
+        PartVisual.endRunVisual();
     }
 
     public void triggerCrouchStop()
@@ -2114,7 +1163,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Force Falling", true);
         }
 
-        GetComponent<MonsterPartVisual>().endRunVisual();
+        PartVisual.endRunVisual();
     }
 
     public void triggerForceFallStop()
@@ -2512,7 +1561,7 @@ public class NewMonsterPart : MonoBehaviour
             myIdleVFX[i].gameObject.SetActive(false);
         }
 
-        GetComponent<MonsterPartVisual>().endRemainingVFX();
+        PartVisual.endRemainingVFX();
     }
 
     public void triggerVisualReappearance()
@@ -3145,23 +2194,4 @@ public class NewMonsterPart : MonoBehaviour
     }
     #endregion
 
-    #region optimization functions
-
-    private bool CheckAnimState(string state)
-    {
-        return myAnimator.GetCurrentAnimatorStateInfo(0).IsName(state);
-    }
-
-    private bool CheckAnimState(params string[] states)
-    {
-        foreach (string state in states)
-        {
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName(state))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    #endregion
 }

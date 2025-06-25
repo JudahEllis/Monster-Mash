@@ -395,6 +395,7 @@ public class MonsterPartVisual : MonoBehaviour
 
 
     #region Animation Events
+    #region Attack Events
     public void triggerChargeVisual()
     {
         if (chargeVisual != null)
@@ -722,6 +723,943 @@ public class MonsterPartVisual : MonoBehaviour
         endRemainingVFX();
 
     }
+    #endregion
+    #region Attack Bracing Events
+    public void triggerLeftAttackStance()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.attackFocusOn)
+        {
+            return;
+        }
+
+        monsterPartRef.isBracing = true;
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            if (monsterPartRef.grounded)
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Backward Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Forward Brace");
+                }
+
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+            }
+            else
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+            }
+
+        }
+        else if (monsterPartRef.isLeg)
+        {
+            if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+            else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+        }
+        else if (monsterPartRef.isArm)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isWing)
+        {
+            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+        else if (monsterPartRef.isTail)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+    }
+    public void triggerRightAttackStance()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.attackFocusOn)
+        {
+            return;
+        }
+
+        monsterPartRef.isBracing = true;
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            if (monsterPartRef.grounded)
+            {
+                if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Backward Brace");
+                }
+                else if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Forward Brace");
+                }
+
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+            }
+            else
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+            }
+
+        }
+        else if (monsterPartRef.isLeg)
+        {
+            if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+            else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+        }
+        else if (monsterPartRef.isArm)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+                else if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isWing)
+        {
+            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+        else if (monsterPartRef.isTail)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+    }
+    public void triggerForwardStance()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.attackFocusOn)
+        {
+            return;
+        }
+
+        monsterPartRef.isBracing = true;
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            if (monsterPartRef.grounded)
+            {
+                if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Forward Brace");
+                }
+                else if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Forward Brace");
+                }
+
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+            }
+            else
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isLeg)
+        {
+            if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+            else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+        }
+        else if (monsterPartRef.isArm)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+                else if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isWing)
+        {
+            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+        else if (monsterPartRef.isTail)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+    }
+    public void triggerBackwardStance()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.attackFocusOn)
+        {
+            return;
+        }
+
+        monsterPartRef.isBracing = true;
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            if (monsterPartRef.grounded)
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Launching Backward Brace");
+                    monsterPartRef.myAnimator.SetBool("Needs Launch", true);
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Launching Backward Brace");
+                    monsterPartRef.myAnimator.SetBool("Needs Launch", true);
+                }
+
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+            }
+            else
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isLeg)
+        {
+            if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+            else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+        }
+        else if (monsterPartRef.isArm)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+                else if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isWing)
+        {
+            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+        else if (monsterPartRef.isTail)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+    }
+    public void triggerFlourishStance()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.attackFocusOn)
+        {
+            return;
+        }
+
+
+        monsterPartRef.isBracing = true;
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            if (monsterPartRef.grounded)
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Flourish");
+                    monsterPartRef.myAnimator.SetBool("Needs Launch", true);
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Flourish");
+                    monsterPartRef.myAnimator.SetBool("Needs Launch", true);
+                }
+
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+            }
+            else
+            {
+                if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+                else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isLeg)
+        {
+            if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+            else if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
+            }
+        }
+        else if (monsterPartRef.isArm)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isLeftSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+                else if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                }
+            }
+        }
+        else if (monsterPartRef.isWing)
+        {
+            if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+        else if (monsterPartRef.isTail)
+        {
+            if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
+            {
+                if (monsterPartRef.isAttacking == false)
+                {
+                    monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                    monsterPartRef.myAnimator.SetTrigger("Brace");
+                    monsterPartRef.myAnimator.SetBool("Walking", false);
+                    monsterPartRef.myAnimator.SetBool("Running", false);
+                }
+            }
+        }
+    }
+    public void triggerUnbrace()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        monsterPartRef.isBracing = false;
+
+        if (monsterPartRef.isAttacking == false)
+        {
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Unbrace");
+                monsterPartRef.myAnimator.ResetTrigger("Backward Brace");
+                monsterPartRef.myAnimator.ResetTrigger("Forward Brace");
+            }
+
+            if (monsterPartRef.isArm || monsterPartRef.isWing || monsterPartRef.isTail)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Unbrace");
+                monsterPartRef.myAnimator.ResetTrigger("Brace");
+
+                if (monsterPartRef.isWing)
+                {
+                    monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+                }
+
+                if (monsterPartRef.isArm)
+                {
+                    monsterPartRef.myAnimator.SetBool("Swaying", false);
+                }
+            }
+
+            if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Unbrace");
+                monsterPartRef.myAnimator.ResetTrigger("Brace");
+            }
+
+        }
+        else
+        {
+            if (monsterPartRef.isGroundedLimb)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Unbrace");
+                monsterPartRef.myAnimator.SetTrigger("Unbrace");
+                monsterPartRef.myAnimator.ResetTrigger("Backward Brace");
+                monsterPartRef.myAnimator.ResetTrigger("Forward Brace");
+            }
+        }
+    }
+    #endregion
+    #region Movement Events
+    public void triggerWalk()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Walking", true);
+            monsterPartRef.myAnimator.SetTrigger("Walk");
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isWalking = true;
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+                monsterPartRef.myAnimator.SetBool("Teeter", false);
+            }
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Walking", true);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isWalking = true;
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Teeter", false);
+            }
+        }
+        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Walking", true);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isWalking = true;
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        endRunVisual();
+    }
+    public void triggerStopWalking()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+
+            if (monsterPartRef.isWalking)
+            {
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetTrigger("Walk to Idle");
+                monsterPartRef.isWalking = false;
+            }
+        }
+        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+    }
+    public void triggerRun()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Running", true);
+            monsterPartRef.myAnimator.SetTrigger("Run");
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+            monsterPartRef.isRunning = true;
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Running", true);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+            monsterPartRef.isRunning = true;
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Running", true);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+            monsterPartRef.isRunning = true;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+    }
+    public void triggerStopRunning()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isRunning)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+                monsterPartRef.myAnimator.SetBool("Running", false);
+                monsterPartRef.isRunning = false;
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        endRunVisual();
+    }
+    public void triggerScreechingStop()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Run to Screech");
+        }
+    }
+    public void triggerJump()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.attackFocusOn || (monsterPartRef.isTorso && monsterPartRef.isBracing))
+        {
+            return;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", false);
+            monsterPartRef.myAnimator.SetTrigger("Jump");
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        monsterPartRef.grounded = false;
+        endRunVisual();
+    }
+    public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
+            monsterPartRef.grounded = groundedWhenTriggered;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
+            monsterPartRef.myAnimator.SetTrigger("Roll");
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            if (trueRoll)
+            {
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+                monsterPartRef.isWalking = false;
+                monsterPartRef.isRunning = false;
+            }
+            else
+            {
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.isWalking = false;
+            }
+
+            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+
+            if (monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            monsterPartRef.myAnimator.SetBool("Swaying", false);
+
+            if (trueRoll)
+            {
+                monsterPartRef.myAnimator.SetBool("Running", false);
+                monsterPartRef.isWalking = false;
+                monsterPartRef.isRunning = false;
+            }
+            else
+            {
+                monsterPartRef.isWalking = false;
+            }
+        }
+
+        monsterPartRef.grounded = groundedWhenTriggered;
+        monsterPartRef.stopInfiniteRoll();
+        endRunVisual();
+    }
+    public void triggerWingFlap()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Upper Flap"); //change this so that its calculated at start with the other animations
+            //allows us to use something like "lower flap" for wings on the butt
+        }
+
+        if (monsterPartRef.isWing)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Big Flap");
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Roll");
+        }
+
+        if (monsterPartRef.isLeg || monsterPartRef.isHead || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Jump");
+        }
+
+        if ((monsterPartRef.isMouth || monsterPartRef.isEye) && monsterPartRef.myAnimator != null)
+        {
+            if (monsterPartRef.isMouth)
+            {
+                monsterPartRef.myAnimator.SetTrigger("Roll");
+            }
+            else
+            {
+                monsterPartRef.myAnimator.SetTrigger("Brace");
+            }
+        }
+    }
+    public void triggerFall()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        {
+            return;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", false);
+            monsterPartRef.myAnimator.SetTrigger("Fall");
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        monsterPartRef.grounded = false;
+        endRunVisual();
+    }
+    #endregion
 
     public void triggerEmoteEnd()
     {
@@ -736,6 +1674,20 @@ public class MonsterPartVisual : MonoBehaviour
         }
     }
     #endregion
+
+
+
+    public bool CheckAnimState(params string[] states)
+    {
+        foreach (string state in states)
+        {
+            if (monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).IsName(state))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private MonsterCalculations AttackCalculationsSetUp()
     {
@@ -786,6 +1738,11 @@ public class MonsterPartVisual : MonoBehaviour
         {
             specialRunVisual.SetActive(false);
         }
+    }
+
+    public void correctRollSpamControl()
+    {
+        monsterPartRef.myMainSystem.correctRollControl();
     }
 
     public void endRemainingVFX()

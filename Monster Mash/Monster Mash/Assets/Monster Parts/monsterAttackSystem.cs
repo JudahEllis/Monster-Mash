@@ -734,7 +734,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(isGrounded, true);
+                allMonsterParts[i].PartVisual.triggerRoll(isGrounded, true);
             }
 
             //myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -758,7 +758,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRoll(isGrounded, true);
+            allMonsterParts[i].PartVisual.triggerRoll(isGrounded, true);
         }
 
         myAnimator.SetFloat("Flipping Speed", 2f);
@@ -784,7 +784,7 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             allMonsterParts[i].triggerVisualReappearance();
-            allMonsterParts[i].triggerRoll(isGrounded, true);
+            allMonsterParts[i].PartVisual.triggerRoll(isGrounded, true);
         }
 
         myAnimator.ResetTrigger("Roll");
@@ -1189,7 +1189,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerWalk();
+                allMonsterParts[i].PartVisual.triggerWalk();
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
@@ -1206,7 +1206,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerWalk();
+                allMonsterParts[i].PartVisual.triggerWalk();
             }
         }
     }
@@ -1226,7 +1226,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerStopWalking();
+                    allMonsterParts[i].PartVisual.triggerStopWalking();
                 }
 
                 //myAnimator.SetBool("Idle Bounce Allowed", true);
@@ -1254,7 +1254,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRun();
+                allMonsterParts[i].PartVisual.triggerRun();
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
@@ -1275,7 +1275,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRun();
+                allMonsterParts[i].PartVisual.triggerRun();
             }
         }
     }
@@ -1312,7 +1312,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerStopRunning();
+                    allMonsterParts[i].PartVisual.triggerStopRunning();
                 }
 
                 if (isWalking == false)
@@ -1328,7 +1328,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerStopRunning();
+                    allMonsterParts[i].PartVisual.triggerStopRunning();
                 }
             }
         }
@@ -1340,7 +1340,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerScreechingStop();
+                allMonsterParts[i].PartVisual.triggerScreechingStop();
             }
         }
     }
@@ -1364,7 +1364,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerJump();
+            allMonsterParts[i].PartVisual.triggerJump();
         }
 
         myAnimator.ResetTrigger("Jump");
@@ -1460,7 +1460,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRoll(false, false);
+            allMonsterParts[i].PartVisual.triggerRoll(false, false);
         }
 
         myAnimator.ResetTrigger("Roll");
@@ -1524,7 +1524,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerFall();
+            allMonsterParts[i].PartVisual.triggerFall();
         }
     }
 
@@ -1549,7 +1549,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerFall();
+                allMonsterParts[i].PartVisual.triggerFall();
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
@@ -1572,7 +1572,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(false, false);
+                allMonsterParts[i].PartVisual.triggerRoll(false, false);
             }
 
             myAnimator.SetFloat("Flipping Speed", 1.5f);
@@ -1705,7 +1705,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerRoll(true, true);
+                allMonsterParts[i].PartVisual.triggerRoll(true, true);
             }
 
             myAnimator.SetFloat("Flipping Speed", 1f);
@@ -1942,7 +1942,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerRightAttackStance();
+            allMonsterParts[i].PartVisual.triggerRightAttackStance();
         }
     }
 
@@ -1952,7 +1952,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerLeftAttackStance();
+            allMonsterParts[i].PartVisual.triggerLeftAttackStance();
         }
     }
 
@@ -1962,7 +1962,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerForwardStance();
+            allMonsterParts[i].PartVisual.triggerForwardStance();
         }
     }
 
@@ -1972,7 +1972,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerBackwardStance();
+            allMonsterParts[i].PartVisual.triggerBackwardStance();
         }
     }
 
@@ -2002,7 +2002,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerFlourishStance();
+            allMonsterParts[i].PartVisual.triggerFlourishStance();
         }
     }
 
@@ -2018,7 +2018,7 @@ public class monsterAttackSystem : MonoBehaviour
     {
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerUnbrace();
+            allMonsterParts[i].PartVisual.triggerUnbrace();
         }
 
         myAnimator.ResetTrigger("Glide to Attack");

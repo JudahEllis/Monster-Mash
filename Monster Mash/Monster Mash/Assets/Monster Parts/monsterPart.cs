@@ -133,9 +133,8 @@ public class monsterPart : MonoBehaviour
     public bool chargingHeavyAttack;
     public bool selfExplodingHeavyAttack;
     public bool powerBoostingHeavyAttack;
-    public int powerBoostingRequired; //built up attack power must reach this int before launching attack
-    public int powerBoostingBuiltUpAttackPower;
-    public bool powerBoostingCharged = false;
+    private int powerBoostingRequired = 10; //built up attack power must reach this int before launching attack
+    private bool powerBoostingCharged = false;
     //
     public GameObject heavyHitVFXHolder;
     public GameObject heavyForwardSwingVFXHolder;
@@ -1246,6 +1245,30 @@ public class monsterPart : MonoBehaviour
         triggerAttackCorrections(); //delaying this to allow the body time to unbrace
     }
 
+    public void PowerBoostCancel()
+    {
+        powerBoostingCharged = true;
+    }
+    public void PowerBoostCheck()
+    {
+        if (powerBoostingHeavyAttack)
+        {
+            if (!powerBoostingCharged)
+            {
+                if (builtUpAttackPower >= powerBoostingRequired) //final check 
+                {
+                    powerBoostingCharged = true;
+
+                    myAnimator.SetTrigger("Cancel Heavy");
+
+                    triggerUnbrace();
+                    triggerAttackToIdle();
+                    triggerAttackCorrections();
+                }
+            }
+        }
+    }
+
     public void triggerNeutralOrHeavy()
     {
         if (powerBoostingHeavyAttack)
@@ -1329,12 +1352,12 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackRelease()
     {
-        if (powerBoostingHeavyAttack && !powerBoostingCharged && attackMarkedHeavy && (builtUpAttackPower < powerBoostingRequired))
+        if (powerBoostingHeavyAttack && attackMarkedHeavy)
         {
-            triggerAttackToIdle();
-            triggerAttackCorrections();
-            return;
-        } else if (isJointed)
+            powerBoostingCharged = false;
+        }
+
+        if (isJointed)
         {
             // not sure about this whole section, it looks important
             connectedMonsterPart.SetBool("Ready to Swing", true);
@@ -1358,7 +1381,6 @@ public class monsterPart : MonoBehaviour
 
             if (attackMarkedHeavy)
             {
-                powerBoostingBuiltUpAttackPower = builtUpAttackPower;
                 heavyAttackPowerCalculation();
                 triggerHeavyChargeVisual();
 
@@ -1900,8 +1922,7 @@ public class monsterPart : MonoBehaviour
         {
             if (!powerBoostingCharged && builtUpAttackPower >= powerBoostingRequired)
             {
-                //triggerAttackToIdle();
-                //cancel attack state and go to idle? idk how honestly
+                PowerBoostCheck();
             }
         }
 
@@ -3441,26 +3462,6 @@ public class monsterPart : MonoBehaviour
 
     public void triggerHeavyAttackVisuals() //new attack types must be added here
     {
-        if (powerBoostingHeavyAttack)
-        {
-            if (!powerBoostingCharged)
-            {
-                if (powerBoostingBuiltUpAttackPower < powerBoostingRequired) //final check 
-                {
-                    return;
-                }
-                else
-                {
-                    powerBoostingCharged = true;
-                    powerBoostingBuiltUpAttackPower = 0; //if successful, resets
-                    return;
-                }
-            } else
-            {
-                powerBoostingCharged = false;
-            }
-        }
-
         if (jabHeavyAttack)
         {
             if (jabOrSlashLanded == false && heavyMissVFXHolder != null)

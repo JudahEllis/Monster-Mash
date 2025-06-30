@@ -119,281 +119,6 @@ public class MonsterPartVisual : MonoBehaviour
     }
 
 
-    public void setUpVFX()//new attack projectile-like types must be added here
-    {
-        monsterPartRef.neutralAttack.SetupVFX();
-        monsterPartRef.heavyAttack.SetupVFX();
-
-        #region Neutral Hit VFX Holder
-        if (neutralHitVFXHolder != null)
-        {
-            if (neutralHitVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackHitVFXArray = new Transform[neutralHitVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackHitVFXArray.Length; i++)
-            {
-                neutralAttackHitVFXArray[i] = neutralHitVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Forward Swing VFX Holder
-        if (neutralForwardSwingVFXHolder != null)
-        {
-            if (neutralForwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralForwardSwingVFXManager = neutralForwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackForwardSwingVFXArray = new Transform[neutralForwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackForwardSwingVFXArray.Length; i++)
-            {
-                neutralAttackForwardSwingVFXArray[i] = neutralForwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Backward Swing VFX Holder
-        if (neutralBackwardSwingVFXHolder != null)
-        {
-            if (neutralBackwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralBackwardSwingVFXManager = neutralBackwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackBackwardSwingVFXArray = new Transform[neutralBackwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackBackwardSwingVFXArray.Length; i++)
-            {
-                neutralAttackBackwardSwingVFXArray[i] = neutralBackwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        #endregion
-
-        #region Neutral Downward Swing VFX Holder
-        if (neutralDownwardSwingVFXHolder != null)
-        {
-            if (neutralDownwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralDownwardSwingVFXManager = neutralDownwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackDownwardSwingVFXArray = new Transform[neutralDownwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackDownwardSwingVFXArray.Length; i++)
-            {
-                neutralAttackDownwardSwingVFXArray[i] = neutralDownwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        #endregion
-
-        #region Neutral Miss VFX Holder
-        if (neutralMissVFXHolder != null)
-        {
-            if (neutralMissVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralMissVFXManager = neutralMissVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackMissVFXArray = new Transform[neutralMissVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackMissVFXArray.Length; i++)
-            {
-                neutralAttackMissVFXArray[i] = neutralMissVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Default Spray Holder 
-        //new sprayable attack types must be added here
-        if (neutralDefaultSprayVFXHolder != null)
-        {
-            if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralAttackDefaultVFXArray = new Transform[neutralDefaultSprayVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralAttackDefaultVFXArray.Length; i++)
-            {
-                neutralAttackDefaultVFXArray[i] = neutralDefaultSprayVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Neutral Stomp VFX Holder
-        if (neutralStompVFXHolder != null)
-        {
-            if (neutralStompVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                neutralStompVFXManager = neutralStompVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            neutralStompVFXArray = new Transform[neutralStompVFXHolder.transform.childCount];
-            for (int i = 0; i < neutralStompVFXArray.Length; i++)
-            {
-                neutralStompVFXArray[i] = neutralStompVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        #endregion
-
-
-        #region Heavy Hit VFX Holder
-        //new projectile-like attack types must be added here
-        if (heavyHitVFXHolder != null)
-        {
-            if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackHitVFXArray.Length; i++)
-            {
-                heavyAttackHitVFXArray[i] = heavyHitVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Forward Swing VFX Holder
-        if (heavyForwardSwingVFXHolder != null)
-        {
-            if (heavyForwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyForwardSwingVFXManager = heavyForwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackForwardSwingVFXArray = new Transform[heavyForwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackForwardSwingVFXArray.Length; i++)
-            {
-                heavyAttackForwardSwingVFXArray[i] = heavyForwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Backward Swing VFX Holder
-        if (heavyBackwardSwingVFXHolder != null)
-        {
-            if (heavyBackwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyBackwardSwingVFXManager = heavyBackwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackBackwardSwingVFXArray = new Transform[heavyBackwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackBackwardSwingVFXArray.Length; i++)
-            {
-                heavyAttackBackwardSwingVFXArray[i] = heavyBackwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Downward Swing VFX Holder
-        if (heavyDownwardSwingVFXHolder != null)
-        {
-            if (heavyDownwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyDownwardSwingVFXManager = heavyDownwardSwingVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackDownwardSwingVFXArray = new Transform[heavyDownwardSwingVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackDownwardSwingVFXArray.Length; i++)
-            {
-                heavyAttackDownwardSwingVFXArray[i] = heavyDownwardSwingVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Miss VFX Holder
-        if (heavyMissVFXHolder != null)
-        {
-            if (heavyMissVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyMissVFXManager = heavyMissVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackMissVFXArray = new Transform[heavyMissVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackMissVFXArray.Length; i++)
-            {
-                heavyAttackMissVFXArray[i] = heavyMissVFXHolder.transform.GetChild(i);
-            }
-        }
-
-        if (heavyDefaultSprayVFXHolder != null)
-        {
-            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
-            {
-                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Default Spray Holder
-        //new sprayable attack types must be added here
-        if (heavyDefaultSprayVFXHolder != null)
-        {
-            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
-            {
-                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-        #region Heavy Stomp VFX Holder
-        if (heavyStompVFXHolder != null)
-        {
-            if (heavyStompVFXHolder.GetComponent<vfxHolder>() != null)
-            {
-                heavyStompVFXManager = heavyStompVFXHolder.GetComponent<vfxHolder>();
-            }
-
-            heavyStompVFXArray = new Transform[heavyStompVFXHolder.transform.childCount];
-            for (int i = 0; i < heavyStompVFXArray.Length; i++)
-            {
-                heavyStompVFXArray[i] = heavyStompVFXHolder.transform.GetChild(i);
-            }
-        }
-        #endregion
-
-    }
-
-    public void idleVFXSeparation()
-    {
-        ParticleSystem[] tempVFXGrab = GetComponentsInChildren<ParticleSystem>();
-        List<GameObject> tempDefaultSprayVFX = new List<GameObject>(); //this is to catch any VFX from default spray holders which, unlike other attack VFX, are active at this time
-        for (int i = 0; i < tempVFXGrab.Length; i++)
-        {
-            if (tempVFXGrab[i].transform.parent.GetComponent<vfxHolder>() != null)
-            {
-                tempVFXGrab[i].gameObject.SetActive(false);
-                tempDefaultSprayVFX.Add(tempVFXGrab[i].gameObject);
-            }
-        }
-
-        myIdleVFX = GetComponentsInChildren<ParticleSystem>();
-
-
-        for (int i = 0; i < tempDefaultSprayVFX.Count; i++)
-        {
-            tempDefaultSprayVFX[i].SetActive(true);
-        }
-    }
-
-
     #region Animation Events
     #region Attack Events
     public void triggerChargeVisual()
@@ -724,7 +449,692 @@ public class MonsterPartVisual : MonoBehaviour
 
     }
     #endregion
-    #region Attack Bracing Events
+    #region Emote Events
+    public void triggerEmoteEnd()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myMainSystem.emoteEnded();
+        }
+    }
+    #endregion
+    #endregion
+    #region Animations
+    public bool CheckAnimState(params string[] states)
+    {
+        foreach (string state in states)
+        {
+            if (monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).IsName(state))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void endRunVisual()
+    {
+        if (specialRunVisual != null)
+        {
+            specialRunVisual.SetActive(false);
+        }
+    }
+
+    public void correctRollSpamControl()
+    {
+        monsterPartRef.myMainSystem.correctRollControl();
+    }
+
+    public void attackCalculations()
+    {
+        MonsterCalculations calc = AttackCalculationsSetUp(); //does this in a separate script, it's too beefy :/
+        MonsterPartVisual partVisual = GetComponent<MonsterPartVisual>();
+
+        monsterPartRef.requiresBackwardStance = calc.requiresBackwardStance;
+        monsterPartRef.requiresForwardStance = calc.requiresForwardStance;
+        monsterPartRef.requiresRightStance = calc.requiresRightStance;
+        monsterPartRef.requiresLeftStance = calc.requiresLeftStance;
+
+        partVisual.hasTorsoCommand = calc.hasTorsoCommand;
+        partVisual.forwardInputTorsoCommand = calc.forwardInputTorsoCommand;
+        partVisual.backwardInputTorsoCommand = calc.backwardInputTorsoCommand; //make sure monster flips before attacking
+        partVisual.upwardInputTorsoCommand = calc.upwardInputTorsoCommand;
+        partVisual.downwardInputTorsoCommand = calc.downwardInputTorsoCommand;
+
+        partVisual.hasHeadCommand = calc.hasHeadCommand;
+        partVisual.forwardInputHeadCommand = calc.forwardInputHeadCommand;
+        partVisual.backwardInputHeadCommand = calc.backwardInputHeadCommand;
+        partVisual.upwardInputHeadCommand = calc.upwardInputHeadCommand;
+        partVisual.downwardInputHeadCommand = calc.downwardInputHeadCommand;
+
+        partVisual.hasNeutralMovementCommand = calc.hasNeutralMovementCommand;
+        partVisual.forwardNeutralMovementCommand = calc.forwardNeutralMovementCommand;
+        partVisual.upwardNeutralMovementCommand = calc.upwardNeutralMovementCommand;
+        partVisual.backwardNeutralMovementCommand = calc.backwardNeutralMovementCommand;
+        partVisual.downwardNeutralMovementCommand = calc.downwardNeutralMovementCommand;
+
+        partVisual.hasHeavyMovementCommand = calc.hasHeavyMovementCommand;
+        partVisual.forwardHeavyMovementCommand = calc.forwardHeavyMovementCommand;
+        partVisual.upwardHeavyMovementCommand = calc.upwardHeavyMovementCommand;
+        partVisual.backwardHeavyMovementCommand = calc.backwardHeavyMovementCommand;
+        partVisual.downwardHeavyMovementCommand = calc.downwardHeavyMovementCommand;
+    }
+
+    private MonsterCalculations AttackCalculationsSetUp()
+    {
+        MonsterCalculations calc = new MonsterCalculations();
+
+        calc.AttackCalculationSetUp(monsterPartRef);
+
+        return calc;
+    }
+
+    #region Movement
+    public void triggerWalk()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Walking", true);
+            monsterPartRef.myAnimator.SetTrigger("Walk");
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isWalking = true;
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+                monsterPartRef.myAnimator.SetBool("Teeter", false);
+            }
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Walking", true);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isWalking = true;
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Teeter", false);
+            }
+        }
+        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Walking", true);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isWalking = true;
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        endRunVisual();
+    }
+    public void triggerStopWalking()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+
+            if (monsterPartRef.isWalking)
+            {
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetTrigger("Walk to Idle");
+                monsterPartRef.isWalking = false;
+            }
+        }
+        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+    }
+    public void triggerRun()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Running", true);
+            monsterPartRef.myAnimator.SetTrigger("Run");
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+            monsterPartRef.isRunning = true;
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+            monsterPartRef.myAnimator.SetBool("Running", true);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+            monsterPartRef.isRunning = true;
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Running", true);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+            monsterPartRef.isRunning = true;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+    }
+    public void triggerStopRunning()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isRunning)
+            {
+                monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
+                monsterPartRef.myAnimator.SetBool("Running", false);
+                monsterPartRef.isRunning = false;
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Running", false);
+            monsterPartRef.isRunning = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        endRunVisual();
+    }
+    public void triggerScreechingStop()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Run to Screech");
+        }
+    }
+    public void triggerJump()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.attackFocusOn || (monsterPartRef.isTorso && monsterPartRef.isBracing))
+        {
+            return;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", false);
+            monsterPartRef.myAnimator.SetTrigger("Jump");
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.isWalking = false;
+
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        monsterPartRef.grounded = false;
+        endRunVisual();
+    }
+    public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
+            monsterPartRef.grounded = groundedWhenTriggered;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
+            monsterPartRef.myAnimator.SetTrigger("Roll");
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            if (trueRoll)
+            {
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.myAnimator.SetBool("Running", false);
+                monsterPartRef.isWalking = false;
+                monsterPartRef.isRunning = false;
+            }
+            else
+            {
+                monsterPartRef.myAnimator.SetBool("Walking", false);
+                monsterPartRef.isWalking = false;
+            }
+
+            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+
+            if (monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            monsterPartRef.myAnimator.SetBool("Swaying", false);
+
+            if (trueRoll)
+            {
+                monsterPartRef.myAnimator.SetBool("Running", false);
+                monsterPartRef.isWalking = false;
+                monsterPartRef.isRunning = false;
+            }
+            else
+            {
+                monsterPartRef.isWalking = false;
+            }
+        }
+
+        monsterPartRef.grounded = groundedWhenTriggered;
+        monsterPartRef.stopInfiniteRoll();
+        endRunVisual();
+    }
+    public void triggerWingFlap()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Upper Flap"); //change this so that its calculated at start with the other animations
+            //allows us to use something like "lower flap" for wings on the butt
+        }
+
+        if (monsterPartRef.isWing)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Big Flap");
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Roll");
+        }
+
+        if (monsterPartRef.isLeg || monsterPartRef.isHead || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetTrigger("Jump");
+        }
+
+        if ((monsterPartRef.isMouth || monsterPartRef.isEye) && monsterPartRef.myAnimator != null)
+        {
+            if (monsterPartRef.isMouth)
+            {
+                monsterPartRef.myAnimator.SetTrigger("Roll");
+            }
+            else
+            {
+                monsterPartRef.myAnimator.SetTrigger("Brace");
+            }
+        }
+    }
+    public void triggerFall()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        {
+            return;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", false);
+            monsterPartRef.myAnimator.SetTrigger("Fall");
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        monsterPartRef.grounded = false;
+        endRunVisual();
+    }
+    public void triggerSimpleUngrounded()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        {
+            return;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", false);
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+        }
+
+        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            if (monsterPartRef.isArm)
+            {
+                monsterPartRef.myAnimator.SetBool("Swaying", false);
+            }
+        }
+
+        monsterPartRef.grounded = false;
+        endRunVisual();
+    }
+    public void triggerLand()
+    {
+        monsterPartRef.attackFocusOn = false;
+
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", true);
+            monsterPartRef.grounded = true;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", true);
+
+            if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isArm || monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetTrigger("Land");
+            }
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail)
+        {
+            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+
+            if (monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            monsterPartRef.myAnimator.SetBool("Swaying", false);
+        }
+
+        monsterPartRef.grounded = true;
+        monsterPartRef.stopInfiniteRoll();
+        endRunVisual();
+    }
+    public void triggerLateLand()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isAttacking)
+        {
+            if (monsterPartRef.isAttacking || monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Grounded", true);
+            }
+            return;
+        }
+
+        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", true);
+            monsterPartRef.grounded = true;
+        }
+
+        if (monsterPartRef.myAnimator != null)
+        {
+            monsterPartRef.myAnimator.SetBool("Grounded", true);
+
+            if (monsterPartRef.isGroundedLimb || monsterPartRef.isHead || monsterPartRef.isArm || monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetTrigger("Land");
+            }
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail)
+        {
+            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+
+            if (monsterPartRef.isLeg)
+            {
+                monsterPartRef.myAnimator.SetBool("Calm", false);
+            }
+
+            if (monsterPartRef.isTorso)
+            {
+                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            }
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
+            monsterPartRef.myAnimator.SetBool("Swaying", false);
+        }
+
+        monsterPartRef.grounded = true;
+        monsterPartRef.stopInfiniteRoll();
+        endRunVisual();
+    }
+    public void triggerGlide()
+    {
+        if (monsterPartRef.connected == false)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isWing || monsterPartRef.isHead || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetBool("Glide Activated", true);
+        }
+
+        monsterPartRef.stopInfiniteRoll();
+    }
+    public void triggerCrouch()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth)
+        {
+            return;
+        }
+
+        monsterPartRef.isWalking = false;
+        monsterPartRef.isRunning = false;
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetBool("Crouching", true);
+            monsterPartRef.myAnimator.SetTrigger("Crouch");
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+        }
+
+        if (monsterPartRef.isGroundedLimb)
+        {
+            monsterPartRef.myAnimator.SetBool("Crouching", true);
+            monsterPartRef.myAnimator.SetTrigger("Crouch");
+            monsterPartRef.myAnimator.SetBool("Calm", false);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Crouching", true);
+            monsterPartRef.myAnimator.SetTrigger("Crouch");
+            monsterPartRef.myAnimator.SetBool("Swaying", false);
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+        }
+
+        if (monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Crouching", true);
+            monsterPartRef.myAnimator.SetTrigger("Crouch");
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+        }
+
+        if (monsterPartRef.isWing || monsterPartRef.isHead)
+        {
+            monsterPartRef.myAnimator.SetBool("Walking", false);
+            monsterPartRef.myAnimator.SetBool("Running", false);
+        }
+
+        endRunVisual();
+    }
+    public void triggerCrouchStop()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isArm || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Crouching", false);
+        }
+    }
+    public void triggerForceFall()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth || monsterPartRef.grounded)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isTorso)
+        {
+            monsterPartRef.myAnimator.SetBool("Force Falling", true);
+        }
+
+        if (monsterPartRef.isArm)
+        {
+            monsterPartRef.myAnimator.SetBool("Force Falling", true);
+        }
+
+        if (monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Force Falling", true);
+        }
+
+        endRunVisual();
+    }
+    public void triggerForceFallStop()
+    {
+        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth)
+        {
+            return;
+        }
+
+        if (monsterPartRef.isTorso || monsterPartRef.isArm || monsterPartRef.isTail)
+        {
+            monsterPartRef.myAnimator.SetBool("Force Falling", false);
+        }
+    }
+    #endregion
+    #region Attack Bracing
     public void triggerLeftAttackStance()
     {
         if (monsterPartRef.connected == false || monsterPartRef.attackFocusOn)
@@ -1313,441 +1723,284 @@ public class MonsterPartVisual : MonoBehaviour
         }
     }
     #endregion
-    #region Movement Events
-    public void triggerWalk()
-    {
-        if (monsterPartRef.connected == false)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isGroundedLimb)
-        {
-            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
-            monsterPartRef.myAnimator.SetBool("Walking", true);
-            monsterPartRef.myAnimator.SetTrigger("Walk");
-            monsterPartRef.myAnimator.SetBool("Running", false);
-            monsterPartRef.isWalking = true;
-            monsterPartRef.isRunning = false;
-
-            if (monsterPartRef.isLeg)
-            {
-                monsterPartRef.myAnimator.SetBool("Calm", false);
-                monsterPartRef.myAnimator.SetBool("Teeter", false);
-            }
-        }
-
-        if (monsterPartRef.isTorso)
-        {
-            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
-            monsterPartRef.myAnimator.SetBool("Walking", true);
-            monsterPartRef.myAnimator.SetBool("Running", false);
-            monsterPartRef.isWalking = true;
-            monsterPartRef.isRunning = false;
-
-            if (monsterPartRef.isTorso)
-            {
-                monsterPartRef.myAnimator.SetBool("Teeter", false);
-            }
-        }
-        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
-        {
-            monsterPartRef.myAnimator.SetBool("Walking", true);
-            monsterPartRef.myAnimator.SetBool("Running", false);
-            monsterPartRef.isWalking = true;
-            monsterPartRef.isRunning = false;
-
-            if (monsterPartRef.isArm)
-            {
-                monsterPartRef.myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        endRunVisual();
-    }
-    public void triggerStopWalking()
-    {
-        if (monsterPartRef.connected == false)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
-        {
-            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
-
-            if (monsterPartRef.isWalking)
-            {
-                monsterPartRef.myAnimator.SetBool("Walking", false);
-                monsterPartRef.myAnimator.SetTrigger("Walk to Idle");
-                monsterPartRef.isWalking = false;
-            }
-        }
-        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
-        {
-            monsterPartRef.myAnimator.SetBool("Walking", false);
-            monsterPartRef.isWalking = false;
-
-            if (monsterPartRef.isArm)
-            {
-                monsterPartRef.myAnimator.SetBool("Swaying", false);
-            }
-        }
-    }
-    public void triggerRun()
-    {
-        if (monsterPartRef.connected == false)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isGroundedLimb)
-        {
-            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
-            monsterPartRef.myAnimator.SetBool("Running", true);
-            monsterPartRef.myAnimator.SetTrigger("Run");
-            monsterPartRef.myAnimator.SetBool("Walking", false);
-            monsterPartRef.isWalking = false;
-            monsterPartRef.isRunning = true;
-
-            if (monsterPartRef.isLeg)
-            {
-                monsterPartRef.myAnimator.SetBool("Calm", false);
-            }
-        }
-
-        if (monsterPartRef.isTorso)
-        {
-            monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
-            monsterPartRef.myAnimator.SetBool("Running", true);
-            monsterPartRef.myAnimator.SetBool("Walking", false);
-            monsterPartRef.isWalking = false;
-            monsterPartRef.isRunning = true;
-        }
-
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
-        {
-            monsterPartRef.myAnimator.SetBool("Running", true);
-            monsterPartRef.myAnimator.SetBool("Walking", false);
-            monsterPartRef.isWalking = false;
-            monsterPartRef.isRunning = true;
-
-            if (monsterPartRef.isArm)
-            {
-                monsterPartRef.myAnimator.SetBool("Swaying", false);
-            }
-        }
-    }
-    public void triggerStopRunning()
-    {
-        if (monsterPartRef.connected == false)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
-        {
-            if (monsterPartRef.isRunning)
-            {
-                monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
-                monsterPartRef.myAnimator.SetBool("Running", false);
-                monsterPartRef.isRunning = false;
-            }
-        }
-
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
-        {
-            monsterPartRef.myAnimator.SetBool("Running", false);
-            monsterPartRef.isRunning = false;
-
-            if (monsterPartRef.isArm)
-            {
-                monsterPartRef.myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        endRunVisual();
-    }
-    public void triggerScreechingStop()
-    {
-        if (monsterPartRef.connected == false)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
-        {
-            monsterPartRef.myAnimator.SetTrigger("Run to Screech");
-        }
-    }
-    public void triggerJump()
-    {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.attackFocusOn || (monsterPartRef.isTorso && monsterPartRef.isBracing))
-        {
-            return;
-        }
-
-        if (monsterPartRef.myAnimator != null)
-        {
-            monsterPartRef.myAnimator.SetBool("Grounded", false);
-            monsterPartRef.myAnimator.SetTrigger("Jump");
-        }
-
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
-        {
-            if (monsterPartRef.isLeg)
-            {
-                monsterPartRef.myAnimator.SetBool("Calm", false);
-            }
-        }
-
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
-        {
-            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
-            monsterPartRef.myAnimator.SetBool("Walking", false);
-            monsterPartRef.isWalking = false;
-
-            if (monsterPartRef.isArm)
-            {
-                monsterPartRef.myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        monsterPartRef.grounded = false;
-        endRunVisual();
-    }
-    public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
-    {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
-        {
-            monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
-            monsterPartRef.grounded = groundedWhenTriggered;
-        }
-
-        if (monsterPartRef.myAnimator != null)
-        {
-            monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
-            monsterPartRef.myAnimator.SetTrigger("Roll");
-        }
-
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isTorso)
-        {
-            if (trueRoll)
-            {
-                monsterPartRef.myAnimator.SetBool("Walking", false);
-                monsterPartRef.myAnimator.SetBool("Running", false);
-                monsterPartRef.isWalking = false;
-                monsterPartRef.isRunning = false;
-            }
-            else
-            {
-                monsterPartRef.myAnimator.SetBool("Walking", false);
-                monsterPartRef.isWalking = false;
-            }
-
-            if (monsterPartRef.isWing || monsterPartRef.isHead)
-            {
-                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
-            }
-
-            if (monsterPartRef.isLeg)
-            {
-                monsterPartRef.myAnimator.SetBool("Calm", false);
-            }
-
-            if (monsterPartRef.isTorso)
-            {
-                monsterPartRef.myAnimator.SetBool("Glide Activated", false);
-            }
-        }
-
-        if (monsterPartRef.isArm)
-        {
-            monsterPartRef.myAnimator.SetBool("Glide Activated", false);
-            monsterPartRef.myAnimator.SetBool("Swaying", false);
-
-            if (trueRoll)
-            {
-                monsterPartRef.myAnimator.SetBool("Running", false);
-                monsterPartRef.isWalking = false;
-                monsterPartRef.isRunning = false;
-            }
-            else
-            {
-                monsterPartRef.isWalking = false;
-            }
-        }
-
-        monsterPartRef.grounded = groundedWhenTriggered;
-        monsterPartRef.stopInfiniteRoll();
-        endRunVisual();
-    }
-    public void triggerWingFlap()
-    {
-        if (monsterPartRef.connected == false)
-        {
-            return;
-        }
-
-        if (monsterPartRef.isTorso)
-        {
-            monsterPartRef.myAnimator.SetTrigger("Upper Flap"); //change this so that its calculated at start with the other animations
-            //allows us to use something like "lower flap" for wings on the butt
-        }
-
-        if (monsterPartRef.isWing)
-        {
-            monsterPartRef.myAnimator.SetTrigger("Big Flap");
-        }
-
-        if (monsterPartRef.isArm)
-        {
-            monsterPartRef.myAnimator.SetTrigger("Roll");
-        }
-
-        if (monsterPartRef.isLeg || monsterPartRef.isHead || monsterPartRef.isTail)
-        {
-            monsterPartRef.myAnimator.SetTrigger("Jump");
-        }
-
-        if ((monsterPartRef.isMouth || monsterPartRef.isEye) && monsterPartRef.myAnimator != null)
-        {
-            if (monsterPartRef.isMouth)
-            {
-                monsterPartRef.myAnimator.SetTrigger("Roll");
-            }
-            else
-            {
-                monsterPartRef.myAnimator.SetTrigger("Brace");
-            }
-        }
-    }
-    public void triggerFall()
-    {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
-        {
-            return;
-        }
-
-        if (monsterPartRef.myAnimator != null)
-        {
-            monsterPartRef.myAnimator.SetBool("Grounded", false);
-            monsterPartRef.myAnimator.SetTrigger("Fall");
-        }
-
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
-        {
-            if (monsterPartRef.isLeg)
-            {
-                monsterPartRef.myAnimator.SetBool("Calm", false);
-            }
-        }
-
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
-        {
-            if (monsterPartRef.isArm)
-            {
-                monsterPartRef.myAnimator.SetBool("Swaying", false);
-            }
-        }
-
-        monsterPartRef.grounded = false;
-        endRunVisual();
-    }
     #endregion
-
-    public void triggerEmoteEnd()
+    #region VFX
+    public void setUpVFX()//new attack projectile-like types must be added here
     {
-        if (monsterPartRef.connected == false)
+        monsterPartRef.neutralAttack.SetupVFX();
+        monsterPartRef.heavyAttack.SetupVFX();
+
+        #region Neutral Hit VFX Holder
+        if (neutralHitVFXHolder != null)
         {
-            return;
-        }
-
-        if (monsterPartRef.isTorso)
-        {
-            monsterPartRef.myMainSystem.emoteEnded();
-        }
-    }
-    #endregion
-
-
-
-    public bool CheckAnimState(params string[] states)
-    {
-        foreach (string state in states)
-        {
-            if (monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).IsName(state))
+            if (neutralHitVFXHolder.GetComponent<vfxHolder>() != null)
             {
-                return true;
+                neutralHitVFXManager = neutralHitVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralAttackHitVFXArray = new Transform[neutralHitVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackHitVFXArray.Length; i++)
+            {
+                neutralAttackHitVFXArray[i] = neutralHitVFXHolder.transform.GetChild(i);
             }
         }
-        return false;
-    }
+        #endregion
 
-    private MonsterCalculations AttackCalculationsSetUp()
-    {
-        MonsterCalculations calc = new MonsterCalculations();
-
-        calc.AttackCalculationSetUp(monsterPartRef);
-
-        return calc;
-    }
-    public void attackCalculations()
-    {
-        MonsterCalculations calc = AttackCalculationsSetUp(); //does this in a separate script, it's too beefy :/
-        MonsterPartVisual partVisual = GetComponent<MonsterPartVisual>();
-
-        monsterPartRef.requiresBackwardStance = calc.requiresBackwardStance;
-        monsterPartRef.requiresForwardStance = calc.requiresForwardStance;
-        monsterPartRef.requiresRightStance = calc.requiresRightStance;
-        monsterPartRef.requiresLeftStance = calc.requiresLeftStance;
-
-        partVisual.hasTorsoCommand = calc.hasTorsoCommand;
-        partVisual.forwardInputTorsoCommand = calc.forwardInputTorsoCommand;
-        partVisual.backwardInputTorsoCommand = calc.backwardInputTorsoCommand; //make sure monster flips before attacking
-        partVisual.upwardInputTorsoCommand = calc.upwardInputTorsoCommand;
-        partVisual.downwardInputTorsoCommand = calc.downwardInputTorsoCommand;
-
-        partVisual.hasHeadCommand = calc.hasHeadCommand;
-        partVisual.forwardInputHeadCommand = calc.forwardInputHeadCommand;
-        partVisual.backwardInputHeadCommand = calc.backwardInputHeadCommand;
-        partVisual.upwardInputHeadCommand = calc.upwardInputHeadCommand;
-        partVisual.downwardInputHeadCommand = calc.downwardInputHeadCommand;
-
-        partVisual.hasNeutralMovementCommand = calc.hasNeutralMovementCommand;
-        partVisual.forwardNeutralMovementCommand = calc.forwardNeutralMovementCommand;
-        partVisual.upwardNeutralMovementCommand = calc.upwardNeutralMovementCommand;
-        partVisual.backwardNeutralMovementCommand = calc.backwardNeutralMovementCommand;
-        partVisual.downwardNeutralMovementCommand = calc.downwardNeutralMovementCommand;
-
-        partVisual.hasHeavyMovementCommand = calc.hasHeavyMovementCommand;
-        partVisual.forwardHeavyMovementCommand = calc.forwardHeavyMovementCommand;
-        partVisual.upwardHeavyMovementCommand = calc.upwardHeavyMovementCommand;
-        partVisual.backwardHeavyMovementCommand = calc.backwardHeavyMovementCommand;
-        partVisual.downwardHeavyMovementCommand = calc.downwardHeavyMovementCommand;
-    }
-
-    public void endRunVisual()
-    {
-        if (specialRunVisual != null)
+        #region Neutral Forward Swing VFX Holder
+        if (neutralForwardSwingVFXHolder != null)
         {
-            specialRunVisual.SetActive(false);
+            if (neutralForwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralForwardSwingVFXManager = neutralForwardSwingVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralAttackForwardSwingVFXArray = new Transform[neutralForwardSwingVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackForwardSwingVFXArray.Length; i++)
+            {
+                neutralAttackForwardSwingVFXArray[i] = neutralForwardSwingVFXHolder.transform.GetChild(i);
+            }
         }
-    }
+        #endregion
 
-    public void correctRollSpamControl()
-    {
-        monsterPartRef.myMainSystem.correctRollControl();
-    }
+        #region Neutral Backward Swing VFX Holder
+        if (neutralBackwardSwingVFXHolder != null)
+        {
+            if (neutralBackwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralBackwardSwingVFXManager = neutralBackwardSwingVFXHolder.GetComponent<vfxHolder>();
+            }
 
+            neutralAttackBackwardSwingVFXArray = new Transform[neutralBackwardSwingVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackBackwardSwingVFXArray.Length; i++)
+            {
+                neutralAttackBackwardSwingVFXArray[i] = neutralBackwardSwingVFXHolder.transform.GetChild(i);
+            }
+        }
+
+        #endregion
+
+        #region Neutral Downward Swing VFX Holder
+        if (neutralDownwardSwingVFXHolder != null)
+        {
+            if (neutralDownwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralDownwardSwingVFXManager = neutralDownwardSwingVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralAttackDownwardSwingVFXArray = new Transform[neutralDownwardSwingVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackDownwardSwingVFXArray.Length; i++)
+            {
+                neutralAttackDownwardSwingVFXArray[i] = neutralDownwardSwingVFXHolder.transform.GetChild(i);
+            }
+        }
+
+        #endregion
+
+        #region Neutral Miss VFX Holder
+        if (neutralMissVFXHolder != null)
+        {
+            if (neutralMissVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralMissVFXManager = neutralMissVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralAttackMissVFXArray = new Transform[neutralMissVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackMissVFXArray.Length; i++)
+            {
+                neutralAttackMissVFXArray[i] = neutralMissVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Neutral Default Spray Holder 
+        //new sprayable attack types must be added here
+        if (neutralDefaultSprayVFXHolder != null)
+        {
+            if (neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralDefaultSprayVFXManager = neutralDefaultSprayVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralAttackDefaultVFXArray = new Transform[neutralDefaultSprayVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralAttackDefaultVFXArray.Length; i++)
+            {
+                neutralAttackDefaultVFXArray[i] = neutralDefaultSprayVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Neutral Stomp VFX Holder
+        if (neutralStompVFXHolder != null)
+        {
+            if (neutralStompVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                neutralStompVFXManager = neutralStompVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            neutralStompVFXArray = new Transform[neutralStompVFXHolder.transform.childCount];
+            for (int i = 0; i < neutralStompVFXArray.Length; i++)
+            {
+                neutralStompVFXArray[i] = neutralStompVFXHolder.transform.GetChild(i);
+            }
+        }
+
+        #endregion
+
+
+        #region Heavy Hit VFX Holder
+        //new projectile-like attack types must be added here
+        if (heavyHitVFXHolder != null)
+        {
+            if (heavyHitVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyHitVFXManager = heavyHitVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackHitVFXArray = new Transform[heavyHitVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackHitVFXArray.Length; i++)
+            {
+                heavyAttackHitVFXArray[i] = heavyHitVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Heavy Forward Swing VFX Holder
+        if (heavyForwardSwingVFXHolder != null)
+        {
+            if (heavyForwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyForwardSwingVFXManager = heavyForwardSwingVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackForwardSwingVFXArray = new Transform[heavyForwardSwingVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackForwardSwingVFXArray.Length; i++)
+            {
+                heavyAttackForwardSwingVFXArray[i] = heavyForwardSwingVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Heavy Backward Swing VFX Holder
+        if (heavyBackwardSwingVFXHolder != null)
+        {
+            if (heavyBackwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyBackwardSwingVFXManager = heavyBackwardSwingVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackBackwardSwingVFXArray = new Transform[heavyBackwardSwingVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackBackwardSwingVFXArray.Length; i++)
+            {
+                heavyAttackBackwardSwingVFXArray[i] = heavyBackwardSwingVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Heavy Downward Swing VFX Holder
+        if (heavyDownwardSwingVFXHolder != null)
+        {
+            if (heavyDownwardSwingVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyDownwardSwingVFXManager = heavyDownwardSwingVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackDownwardSwingVFXArray = new Transform[heavyDownwardSwingVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackDownwardSwingVFXArray.Length; i++)
+            {
+                heavyAttackDownwardSwingVFXArray[i] = heavyDownwardSwingVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Heavy Miss VFX Holder
+        if (heavyMissVFXHolder != null)
+        {
+            if (heavyMissVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyMissVFXManager = heavyMissVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackMissVFXArray = new Transform[heavyMissVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackMissVFXArray.Length; i++)
+            {
+                heavyAttackMissVFXArray[i] = heavyMissVFXHolder.transform.GetChild(i);
+            }
+        }
+
+        if (heavyDefaultSprayVFXHolder != null)
+        {
+            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
+            {
+                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Heavy Default Spray Holder
+        //new sprayable attack types must be added here
+        if (heavyDefaultSprayVFXHolder != null)
+        {
+            if (heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyDefaultSprayVFXManager = heavyDefaultSprayVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyAttackDefaultVFXArray = new Transform[heavyDefaultSprayVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyAttackDefaultVFXArray.Length; i++)
+            {
+                heavyAttackDefaultVFXArray[i] = heavyDefaultSprayVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+        #region Heavy Stomp VFX Holder
+        if (heavyStompVFXHolder != null)
+        {
+            if (heavyStompVFXHolder.GetComponent<vfxHolder>() != null)
+            {
+                heavyStompVFXManager = heavyStompVFXHolder.GetComponent<vfxHolder>();
+            }
+
+            heavyStompVFXArray = new Transform[heavyStompVFXHolder.transform.childCount];
+            for (int i = 0; i < heavyStompVFXArray.Length; i++)
+            {
+                heavyStompVFXArray[i] = heavyStompVFXHolder.transform.GetChild(i);
+            }
+        }
+        #endregion
+
+    }
     public void endRemainingVFX()
     {
         monsterPartRef.heavyAttack.endRemainingVFX();
         endRunVisual();
     }
+    public void idleVFXSeparation()
+    {
+        ParticleSystem[] tempVFXGrab = GetComponentsInChildren<ParticleSystem>();
+        List<GameObject> tempDefaultSprayVFX = new List<GameObject>(); //this is to catch any VFX from default spray holders which, unlike other attack VFX, are active at this time
+        for (int i = 0; i < tempVFXGrab.Length; i++)
+        {
+            if (tempVFXGrab[i].transform.parent.GetComponent<vfxHolder>() != null)
+            {
+                tempVFXGrab[i].gameObject.SetActive(false);
+                tempDefaultSprayVFX.Add(tempVFXGrab[i].gameObject);
+            }
+        }
+
+        myIdleVFX = GetComponentsInChildren<ParticleSystem>();
+
+
+        for (int i = 0; i < tempDefaultSprayVFX.Count; i++)
+        {
+            tempDefaultSprayVFX[i].SetActive(true);
+        }
+    }
+    #endregion
 }

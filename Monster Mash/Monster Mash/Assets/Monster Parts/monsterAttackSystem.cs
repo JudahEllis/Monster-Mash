@@ -1504,7 +1504,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerGlide();
+                    allMonsterParts[i].PartVisual.triggerGlide();
                 }
             }
             else
@@ -1601,7 +1601,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerLand();
+                allMonsterParts[i].PartVisual.triggerLand();
             }
 
             isGliding = false;
@@ -1643,7 +1643,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerLateLand();
+            allMonsterParts[i].PartVisual.triggerLateLand();
         }
 
         requiresFlourishingRoll = true;
@@ -1674,7 +1674,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerSimpleUngrounded();
+                allMonsterParts[i].PartVisual.triggerSimpleUngrounded();
             }
 
             myAnimator.SetBool("Idle Bounce Allowed", false);
@@ -1781,7 +1781,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerCrouch();
+                    allMonsterParts[i].PartVisual.triggerCrouch();
                 }
 
                 forceEndEmote();
@@ -1815,7 +1815,7 @@ public class monsterAttackSystem : MonoBehaviour
 
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerCrouch();
+                allMonsterParts[i].PartVisual.triggerCrouch();
             }
 
             forceEndEmote();
@@ -1837,7 +1837,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].triggerCrouchStop();
+            allMonsterParts[i].PartVisual.triggerCrouchStop();
         }
 
         if (isRunning == false && isWalking == false)
@@ -1852,7 +1852,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++) //wrap this in a bool
         {
-            allMonsterParts[i].triggerCrouchStop();
+            allMonsterParts[i].PartVisual.triggerCrouchStop();
         }
     }
 
@@ -1872,7 +1872,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerForceFallStop();
+                    allMonsterParts[i].PartVisual.triggerForceFallStop();
                 }
 
                 forceFallingActivated = false;
@@ -1882,7 +1882,7 @@ public class monsterAttackSystem : MonoBehaviour
 
                 for (int i = 0; i < allMonsterParts.Length; i++)
                 {
-                    allMonsterParts[i].triggerForceFall();
+                    allMonsterParts[i].PartVisual.triggerForceFall();
                 }
 
                 forceFallingActivated = true;
@@ -1903,7 +1903,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerForceFall();
+                allMonsterParts[i].PartVisual.triggerForceFall();
             }
 
             forceFallingActivated = true;
@@ -1924,7 +1924,7 @@ public class monsterAttackSystem : MonoBehaviour
         {
             for (int i = 0; i < allMonsterParts.Length; i++)
             {
-                allMonsterParts[i].triggerForceFallStop();
+                allMonsterParts[i].PartVisual.triggerForceFallStop();
             }
 
             forceFallingActivated = false;

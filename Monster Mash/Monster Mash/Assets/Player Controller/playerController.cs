@@ -92,6 +92,9 @@ public class playerController : MonoBehaviour
     public playerController grapplePlayerTarget;
     public Vector3 wallGrapplePoint;
     //
+    public bool reeling = false;
+    public playerController reelPlayerSource;
+    //
     public bool chargingForward = false;
     //
     public bool grabbingWall = false;
@@ -683,6 +686,33 @@ public class playerController : MonoBehaviour
                 else
                 {
                     grappling = false;
+                }
+            }
+            #endregion
+
+            #region Reeling
+            if (reeling)
+            {
+                if (reelPlayerSource != null)
+                {
+                    float distanceFromTarget = Vector3.Distance(reelPlayerSource.transform.position, transform.position);
+
+                    if (distanceFromTarget > endPlayerGrappleDistance)
+                    {
+                        Vector3 directionOfReel = reelPlayerSource.transform.position - transform.position;
+                        directionOfReel.Normalize();
+                        myRigidbody.MovePosition(transform.position + (directionOfReel * grappleSpeed * Time.deltaTime));
+                    }
+                    else
+                    {
+                        reeling = false;
+                        reelPlayerSource = null;
+                        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+                    }
+                }
+                else
+                {
+                    reeling = false;
                 }
             }
             #endregion
@@ -1864,6 +1894,16 @@ public class playerController : MonoBehaviour
             grappling = true;
             grapplingWall = true;
             grapplingPlayer = false;
+            grappleTowardsVisual();
+        }
+    }
+
+    public void playerReel(playerController source)
+    {
+        if (reeling == false)
+        {
+            reelPlayerSource = source;
+            reeling = true;
             grappleTowardsVisual();
         }
     }

@@ -1576,7 +1576,7 @@ public class monsterPart : MonoBehaviour
 
         if (reelHeavyAttack)
         {
-            myMainSystem.grabbingCanceled();
+            //myMainSystem.grabbingCanceled();
         }
 
         if (isArm)
@@ -1855,7 +1855,7 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Reel Attack Specific Functions
-    public void triggerReelHitDetect() //marks whether or not the hit VFX is needed
+    /*public void triggerReelHitDetect() //marks whether or not the hit VFX is needed
     {
         //jabOrSlashLanded = true;
         reelAttackLanded = true;
@@ -1898,7 +1898,7 @@ public class monsterPart : MonoBehaviour
             heavyCollider.enabled = false;
         }
 
-    }
+    }*/
     #endregion
 
     #region Stomp Attack Specific Functions
@@ -1928,8 +1928,8 @@ public class monsterPart : MonoBehaviour
 
         if (reelHeavyAttack)
         {
-            reelAttackBuiltUpPower++;
-            powerUpCheckAllowed = true;
+            //reelAttackBuiltUpPower++;
+            //powerUpCheckAllowed = true;
         }
         else if (!beamHeavyAttack)
         {
@@ -1937,7 +1937,7 @@ public class monsterPart : MonoBehaviour
         }
     }
 
-    public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
+    /*public void triggerHeavyAttackPowerCheck() //called at same time intervals as power up but is instead called in the heavy animation 
     {
         if (reelHeavyAttack && powerUpCheckAllowed)
         {
@@ -1952,7 +1952,7 @@ public class monsterPart : MonoBehaviour
                 myAnimator.SetTrigger("Reel Back");
             }
         }
-    }
+    }*/
 
     private void neutralAttackPowerCalculation() //new attack types must be added here
     {
@@ -1978,7 +1978,7 @@ public class monsterPart : MonoBehaviour
         damage = baseHeavyAttackDamage + (builtUpAttackPower * builtUpAddedDamage);
         builtUpAttackPower = 0;
 
-        if (jabHeavyAttack || slashHeavyAttack || grappleHeavyAttack)
+        if (jabHeavyAttack || slashHeavyAttack || grappleHeavyAttack || reelHeavyAttack)
         {
             heavyColliderReference.resetAttackHistory();
             heavyColliderReference.damage = damage;
@@ -2757,7 +2757,7 @@ public class monsterPart : MonoBehaviour
 
             if (reelHeavyAttack)
             {
-                myMainSystem.grabbingCanceled();
+                //myMainSystem.grabbingCanceled();
             }
         }
 
@@ -2856,7 +2856,7 @@ public class monsterPart : MonoBehaviour
 
             if (reelHeavyAttack)
             {
-                myMainSystem.grabbingCanceled();
+                //myMainSystem.grabbingCanceled();
             }
         }
 
@@ -2940,7 +2940,7 @@ public class monsterPart : MonoBehaviour
 
             if (reelHeavyAttack)
             {
-                myMainSystem.grabbingCanceled();
+                //myMainSystem.grabbingCanceled();
             }
         }
 
@@ -3512,7 +3512,7 @@ public class monsterPart : MonoBehaviour
         }
         else if (reelHeavyAttack)
         {
-            if (reelAttackLanded == false)
+            /*if (reelAttackLanded == false)
             {
                 //miss visual
                 triggerReelCollisionsOff();
@@ -3520,7 +3520,7 @@ public class monsterPart : MonoBehaviour
 
             reelAttackBuiltUpPower = 0;
             reelAttackCurrentThreshold = 0;
-            powerUpCheckAllowed = false;
+            powerUpCheckAllowed = false;*/
         }
         else if (beamHeavyAttack)
         {
@@ -3721,8 +3721,6 @@ public class monsterPart : MonoBehaviour
             myAnimator.SetTrigger("Reel Back");
         }
     }
-
-    
 
     public void triggerChargeForward()
     {

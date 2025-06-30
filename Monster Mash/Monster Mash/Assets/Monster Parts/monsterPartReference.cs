@@ -117,6 +117,25 @@ public class monsterPartReference : MonoBehaviour
                                 //grapple into a body smash & jump
                             }
                         }
+
+                        if (isReel)
+                        {
+                            //mainSystem.myPlayer.leapAttackForward();
+
+                            if (directionOfAttack == 1 || directionOfAttack == -1)
+                            {
+                                //grapple into a body smash
+                                damagedMonster.myPlayer.playerReel(mainSystem.myPlayer);
+                            }
+                            else if (directionOfAttack == 2)
+                            {
+                                //grapple into a body smash upwards
+                            }
+                            else if (directionOfAttack == 0)
+                            {
+                                //grapple into a body smash & jump
+                            }
+                        }
                         #endregion
 
                         attackHistory.Add(damagedMonster);

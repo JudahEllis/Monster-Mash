@@ -133,7 +133,7 @@ public class monsterPart : MonoBehaviour
     public bool chargingHeavyAttack;
     public bool selfExplodingHeavyAttack;
     public bool powerBoostingHeavyAttack;
-    private int powerBoostingRequired = 10; //built up attack power must reach this int before launching attack
+    private int powerBoostingRequired = 6; //built up attack power must reach this int before launching attack
     private bool powerBoostingCharged = false;
     //
     public GameObject heavyHitVFXHolder;

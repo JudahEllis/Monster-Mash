@@ -30,7 +30,7 @@ public class BeamHeavy : HeavyAttack
     public override void CancelAttack()
     {
         //end functions + turn off visuals
-        monsterPartRef.triggerAttackToIdle();
+        monsterPartVisualRef.triggerAttackToIdle();
         monsterPartRef.StartCoroutine(beamAttackDelay());
     }
 

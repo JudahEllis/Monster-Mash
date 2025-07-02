@@ -40,7 +40,7 @@ public class monsterAttackSystem : MonoBehaviour
     private Animator myAnimator;
     private Animator mainTorso;
 
-    public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
+    public monsterPart[] oldattackSlotMonsterParts = new monsterPart[8];
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
 
@@ -406,7 +406,7 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void AssignMonsterPartAttackInfo(MonsterPartData.Button assignedButton, monsterPart part)
     {
-        attackSlotMonsterParts[(int)assignedButton] = part;
+        oldattackSlotMonsterParts[(int)assignedButton] = part;
     }
 
 

@@ -8,13 +8,15 @@ public class MonsterMovementEditor : EditorWindow
     private AttackConfigList ruleset = new();
     private Vector2 scrollPos;
     private const string jsonPath = "Assets/Resources/Data/attack_configs.json";
-    private int configToRemove = -1;
+    private AttackConfig configToRemove = null;
 
     private int startPageIndex = 0;
     private int endPageIndex = 5;
     private const int desiredPageCount = 5;
 
     private bool scrollToBottomNextFrame = false;
+
+    private string searchText = "";
 
     [MenuItem("Tools/Monster Movement Editor")]
     public static void ShowWindow()
@@ -29,7 +31,8 @@ public class MonsterMovementEditor : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("Movement Rules", EditorStyles.largeLabel);
+        TopBarLayout();
+
         if (ruleset == null)
         {
             GUILayout.Label("No Ruleset Loaded");
@@ -43,9 +46,11 @@ public class MonsterMovementEditor : EditorWindow
         // if a config has been marked for deletion by pressing the delete button this is where the config is actually removed
         CheckRemoveConfig();
 
-        AddButton();
-
-        PageControl();
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            AddButton();
+            PageControl();
+        }
 
         EditorGUILayout.Space();
 
@@ -54,30 +59,51 @@ public class MonsterMovementEditor : EditorWindow
 
     private void DisplayConfigList()
     {
-        int safeEndIndex = Mathf.Min(endPageIndex, ruleset.Configs.Count);
-
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-        
-        for (int i = startPageIndex; i < safeEndIndex; i++)
-        {
-            var config = ruleset.Configs[i];
 
+        List<AttackConfig> listToDisplay;
+
+        bool isSearching = !string.IsNullOrWhiteSpace(searchText);
+        string normalizedSearch = searchText?.Trim().ToLower() ?? "";
+
+        //if searching get the entire list and filter it by the search text and config name
+        if (isSearching)
+        {
+            listToDisplay = ruleset.Configs.FindAll(config =>
+                !string.IsNullOrEmpty(config.ConfigName) &&
+                config.ConfigName.ToLower().Contains(normalizedSearch)
+            );
+        }
+        // if not searching then get a subset of the list that only includes the current page
+        else
+        {
+            int safeStartIndex = Mathf.Clamp(startPageIndex, 0, Mathf.Max(0, ruleset.Configs.Count - 1));
+            int safeEndIndex = Mathf.Clamp(endPageIndex, 0, ruleset.Configs.Count);
+            int count = Mathf.Max(0, safeEndIndex - safeStartIndex);
+
+            listToDisplay = ruleset.Configs.GetRange(safeStartIndex, count);
+        }
+
+        // Display the contents of the list and hide the delete button if searching.
+        for (int i = 0; i < listToDisplay.Count; i++)
+        {
+            var config = listToDisplay[i];
             EditorGUILayout.BeginVertical("box");
             DisplayConfig(config);
-            DeleteButton(i);
+
+            DeleteButton(config);
+
             EditorGUILayout.EndVertical();
         }
 
-        EditorGUILayout.EndScrollView();
-
-        if (scrollToBottomNextFrame)
+        if (listToDisplay.Count == 0)
         {
-            scrollPos.y = float.MaxValue;
-            scrollToBottomNextFrame = false;
-
-            Repaint();
+            EditorGUILayout.HelpBox("No configs match your search.", MessageType.Info);
         }
+
+        EditorGUILayout.EndScrollView();
     }
+
 
     private void PageControl()
     {
@@ -137,6 +163,19 @@ public class MonsterMovementEditor : EditorWindow
         scrollPos.y = 0;
     }
 
+    private void TopBarLayout()
+    {
+        int searchBarWidth = 200;
+        float searchLabelWidth = 45;
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Movement Rules", EditorStyles.largeLabel);
+        GUILayout.FlexibleSpace();
+        EditorGUIUtility.labelWidth = searchLabelWidth;
+        searchText = EditorGUILayout.TextField("Search", searchText, GUILayout.Width(searchBarWidth));
+        EditorGUILayout.EndHorizontal();
+    }
+
     private void AddButton()
     {
         int buttonWidth = 110;
@@ -150,7 +189,7 @@ public class MonsterMovementEditor : EditorWindow
         }
     }
 
-    private void DeleteButton(int index)
+    private void DeleteButton(AttackConfig config)
     {
         int buttonWidth = 90;
         int buttonHeight = 25;
@@ -162,7 +201,7 @@ public class MonsterMovementEditor : EditorWindow
 
         if (GUILayout.Button("Delete Config", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
-            configToRemove = index;
+            configToRemove = config;
         }
 
         GUILayout.FlexibleSpace();
@@ -185,7 +224,16 @@ public class MonsterMovementEditor : EditorWindow
 
         if (GUILayout.Button("Save Changes", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
-            SaveJson();
+            bool confirm = EditorUtility.DisplayDialog(
+                "Confirm Save",
+                "This will overwrite all data in the JSON file. \nAre You sure you want to continue?",
+                "Yes",
+                "Cancel");
+
+            if (confirm)
+            {
+                SaveJson();
+            }
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
@@ -194,11 +242,11 @@ public class MonsterMovementEditor : EditorWindow
     private void CheckRemoveConfig()
     {
         // if we try to remove an element during the loop it causes an error so we need to mark it and delete it later.
-        if (configToRemove >= 0)
+        if (configToRemove != null)
         {
-            ruleset.Configs.RemoveAt(configToRemove);
+            ruleset.Configs.Remove(configToRemove);
             // reset index so it doesent try to repeatedly remove
-            configToRemove = -1;
+            configToRemove = null;
         }
     }
 
@@ -222,10 +270,32 @@ public class MonsterMovementEditor : EditorWindow
 
     private void SaveJson()
     {
-        string jsonText = JsonUtility.ToJson(ruleset, true);
-        File.WriteAllText(jsonPath, jsonText);
-        AssetDatabase.Refresh();
+        try
+        {
+            string jsonText = JsonUtility.ToJson(ruleset, true);
+            File.WriteAllText(jsonPath, jsonText);
+            AssetDatabase.Refresh();
+
+            // Show success popup only after successful write
+            EditorUtility.DisplayDialog(
+                "Saved",
+                "Changes have been successfully saved to the JSON file.",
+                "OK"
+            );
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error saving JSON: " + ex.Message);
+
+            // Optional: show an error dialog to the user
+            EditorUtility.DisplayDialog(
+                "Save Failed",
+                "An error occurred while saving the JSON file:\n" + ex.Message,
+                "OK"
+            );
+        }
     }
+
 
     private void DisplayConfig(AttackConfig config)
     {

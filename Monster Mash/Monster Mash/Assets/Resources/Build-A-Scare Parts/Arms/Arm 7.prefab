@@ -44373,6 +44373,7 @@ GameObject:
   - component: {fileID: 345465670521728287}
   - component: {fileID: 3575180661362224074}
   - component: {fileID: 5691367084033176096}
+  - component: {fileID: 5098096811479324648}
   m_Layer: 0
   m_Name: Arm 7
   m_TagString: Connection - Monster Part
@@ -44629,6 +44630,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.05
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5098096811479324648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6679641645737022274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Arms/Arm 7
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6685316956589241367
 GameObject:
   m_ObjectHideFlags: 0

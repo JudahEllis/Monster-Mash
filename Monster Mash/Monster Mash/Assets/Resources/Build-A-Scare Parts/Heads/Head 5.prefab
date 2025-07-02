@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 3537771196550907599}
   - component: {fileID: 5891745943174959097}
   - component: {fileID: 5909864650149218091}
+  - component: {fileID: -6012728993943568584}
   m_Layer: 0
   m_Name: Head 5
   m_TagString: Connection - Monster Part
@@ -500,6 +501,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: 0, y: -0.09, z: 0}
+--- !u!114 &-6012728993943568584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2185231888546048921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Heads/Head 5
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &2891577860306737142
 GameObject:
   m_ObjectHideFlags: 0

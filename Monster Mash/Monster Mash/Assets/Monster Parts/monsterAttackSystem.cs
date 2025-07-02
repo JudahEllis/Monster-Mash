@@ -39,8 +39,31 @@ public class monsterAttackSystem : MonoBehaviour
     public playerController myPlayer;
     private Animator myAnimator;
     private Animator mainTorso;
+
+    public monsterPart[] attackSlotMonsterParts = new monsterPart[8];
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
+
+    /*
+    [System.Serializable]
+    public class MonsterPartAttackData
+    {
+        public MonsterPartData.Button partAssignedButton;
+
+        public monsterPart partReference;
+
+        public MonsterPartAttackData(MonsterPartData.Button button, monsterPart part)
+        {
+            partAssignedButton = button;
+
+            partReference = part;
+        }
+    }
+
+    public List<MonsterPartAttackData> monsterAttackInformation;
+
+    */
+
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     public NewMonsterPart[] allMonsterParts;
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
@@ -360,6 +383,32 @@ public class monsterAttackSystem : MonoBehaviour
 
         SFXManager = FindObjectOfType<SFXManager>();
     }
+
+    public void AssignMyPlayer(playerController controller)
+    {
+        myPlayer = controller;
+    }
+
+    /*
+    public void AttackListSetUp()
+    {
+        monsterAttackInformation = new List<MonsterPartAttackData>();
+    }
+
+    public void AddMonsterAttackInformation(MonsterPartData.Button assignedButton, monsterPart assignedPart)
+    {
+        MonsterPartAttackData data = new MonsterPartAttackData(assignedButton, assignedPart);
+
+        monsterAttackInformation.Add(data);
+    }
+
+    */
+
+    public void AssignMonsterPartAttackInfo(MonsterPartData.Button assignedButton, monsterPart part)
+    {
+        attackSlotMonsterParts[(int)assignedButton] = part;
+    }
+
 
     IEnumerator spawnRenactment()
     {

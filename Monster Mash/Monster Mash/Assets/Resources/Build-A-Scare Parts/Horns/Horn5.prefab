@@ -1853,6 +1853,7 @@ GameObject:
   - component: {fileID: 5285885074470929418}
   - component: {fileID: 8748141275810366452}
   - component: {fileID: 5917779792228336587}
+  - component: {fileID: 4842665033851357641}
   m_Layer: 0
   m_Name: Horn5
   m_TagString: Connection - Monster Part
@@ -2099,6 +2100,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.01
   m_Center: {x: 0, y: -0.01, z: 0}
+--- !u!114 &4842665033851357641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6268594401107085955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Horns/Horn 5
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6394107416342887513
 GameObject:
   m_ObjectHideFlags: 0

@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 724654338358135442}
   - component: {fileID: 724654338358135453}
   - component: {fileID: 724654338358135452}
+  - component: {fileID: -6402879916318963997}
   m_Layer: 0
   m_Name: Decor 2
   m_TagString: Connection - Monster Part
@@ -259,13 +260,47 @@ MonoBehaviour:
   isReloadedHeavy: 1
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  heavyAttack:
-    Attack: 0
+  jabHeavyAttack: 0
+  slashHeavyAttack: 0
+  sprayHeavyAttack: 0
+  projectileHeavyAttack: 0
+  beamHeavyAttack: 0
+  reelHeavyAttack: 0
+  grappleHeavyAttack: 0
+  boomerangHeavyAttack: 0
+  homingMissileHeavyAttack: 0
+  anvilHeavyAttack: 0
+  bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
+  powerBoostingHeavyAttack: 0
+  shieldHeavyAttack: 0
+  reflectingHeavyAttack: 0
+  eatingHeavyAttack: 0
+  suctionHeavyAttack: 0
+  AOEHeavyAttack: 0
+  chargingHeavyAttack: 0
+  selfExplodingHeavyAttack: 0
+  heavyHitVFXHolder: {fileID: 0}
+  heavyForwardSwingVFXHolder: {fileID: 0}
+  heavyBackwardSwingVFXHolder: {fileID: 0}
+  heavyDownwardSwingVFXHolder: {fileID: 0}
+  heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
+  heavyStompVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
   reloadTimeHeavy: 1
+  chargeVisual: {fileID: 0}
+  heavyChargeVisual: {fileID: 0}
+  heavyAttackHitVFXArray: []
+  heavyAttackForwardSwingVFXArray: []
+  heavyAttackBackwardSwingVFXArray: []
+  heavyAttackDownwardSwingVFXArray: []
+  heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
+  heavyStompVFXArray: []
   heavyAttackHitAudioLibrary: []
   isJointed: 1
   isRightShoulderLimb: 0
@@ -414,6 +449,23 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &-6402879916318963997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724654338358135455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Decor/Decor 2
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &724654338593292085
 GameObject:
   m_ObjectHideFlags: 0

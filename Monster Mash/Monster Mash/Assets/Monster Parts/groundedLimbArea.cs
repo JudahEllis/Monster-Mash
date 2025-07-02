@@ -10,7 +10,7 @@ public class groundedLimbArea : MonoBehaviour
         {
             if (other.GetComponent<monsterPartReference>().partReference)
             {
-                monsterPart partOnGround = other.GetComponent<monsterPartReference>().partReference;
+                NewMonsterPart partOnGround = other.GetComponent<monsterPartReference>().partReference;
                 partOnGround.isGroundedLimb = true;
             }
         }
@@ -22,7 +22,7 @@ public class groundedLimbArea : MonoBehaviour
         {
             if (other.GetComponent<monsterPartReference>().partReference)
             {
-                monsterPart partOnGround = other.GetComponent<monsterPartReference>().partReference;
+                NewMonsterPart partOnGround = other.GetComponent<monsterPartReference>().partReference;
                 partOnGround.isGroundedLimb = false;
             }
         }

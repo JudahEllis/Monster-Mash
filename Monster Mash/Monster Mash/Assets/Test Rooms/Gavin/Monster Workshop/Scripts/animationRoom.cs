@@ -9,7 +9,7 @@ public class animationRoom : MonoBehaviour
     public GameObject floor;
     //public GameObject groundedLimbCheck;
     public monsterAttackSystem mainMonster;
-    public monsterPart[] monsterPartCollection;
+    public NewMonsterPart[] monsterPartCollection;
     public GameObject reMappingStartUpButton;
     public GameObject reMappingUI;
     public GameObject resetMappingUI;
@@ -91,7 +91,7 @@ public class animationRoom : MonoBehaviour
             mainMonster.awakenTheBeast();
             monsterAwake = true;
 
-            monsterPartCollection = mainMonster.GetComponentsInChildren<monsterPart>();
+            monsterPartCollection = mainMonster.GetComponentsInChildren<NewMonsterPart>();
             monsterPartAttackDirections = new string[monsterPartCollection.Length];
             monsterPartNameCollection = new string[monsterPartCollection.Length];
             monsterPartButtonInputs = new string[monsterPartCollection.Length];

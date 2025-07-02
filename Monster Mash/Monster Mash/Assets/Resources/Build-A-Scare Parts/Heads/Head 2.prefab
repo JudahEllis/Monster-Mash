@@ -160,7 +160,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7939447783023581310}
   - component: {fileID: 7540205822303569088}
-  - component: {fileID: 8729390167817179305}
+  - component: {fileID: 3384468884747917531}
+  - component: {fileID: 5320746492024871051}
   - component: {fileID: 3702859422528060206}
   - component: {fileID: 7294395932932337890}
   - component: {fileID: 1570920602225811500}
@@ -207,7 +208,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8729390167817179305
+--- !u!114 &3384468884747917531
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,13 +217,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2129312269552137041}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d062f9ecff7d37c419b1e0b88d4aaf39, type: 3}
+  m_Script: {fileID: 11500000, guid: e011b5bda4bd26c4e8a3f662c95e82aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myMainSystem: {fileID: 0}
   connectedMonsterPart: {fileID: 0}
   mainTorso: {fileID: 0}
-  specialRunVisual: {fileID: 0}
+  myAnimator: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
   monsterPartHealth: 100
@@ -241,7 +242,9 @@ MonoBehaviour:
   isDecor: 0
   baseNeutralAttackDamage: 0
   baseHeavyAttackDamage: 0
+  builtUpAttackPower: 0
   builtUpAddedDamage: 0
+  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -252,79 +255,24 @@ MonoBehaviour:
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
-  jabNeutralAttack: 0
-  slashNeutralAttack: 0
-  sprayNeutralAttack: 0
-  projectileNeutralAttack: 0
-  homingMissileNeutralAttack: 0
-  anvilNeutralAttack: 0
-  bowlingBallNeutralAttack: 0
-  gaseousNeutralAttack: 0
-  reflectingNeutralAttack: 0
-  suctionNeutralAttack: 0
-  AOENeutralAttack: 0
-  boomerangNeutralAttack: 0
-  neutralHitVFXHolder: {fileID: 0}
-  neutralForwardSwingVFXHolder: {fileID: 0}
-  neutralBackwardSwingVFXHolder: {fileID: 0}
-  neutralDownwardSwingVFXHolder: {fileID: 0}
-  neutralMissVFXHolder: {fileID: 0}
-  neutralDefaultSprayVFXHolder: {fileID: 0}
-  neutralStompVFXHolder: {fileID: 0}
+  grabbedStatusEffect: 0
+  neutralAttack:
+    Attack: 0
   neutralCollider: {fileID: 0}
-  neutralMuzzle: {fileID: 0}
+  neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
   reloadTimeNeutral: 1
   isReloadedNeutral: 1
   isReloadedHeavy: 1
-  neutralAttackHitVFXArray: []
-  neutralAttackForwardSwingVFXArray: []
-  neutralAttackBackwardSwingVFXArray: []
-  neutralAttackDownwardSwingVFXArray: []
-  neutralAttackMissVFXArray: []
-  neutralAttackDefaultVFXArray: []
-  neutralStompVFXArray: []
+  jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  jabHeavyAttack: 0
-  slashHeavyAttack: 0
-  sprayHeavyAttack: 0
-  projectileHeavyAttack: 0
-  beamHeavyAttack: 0
-  reelHeavyAttack: 0
-  grappleHeavyAttack: 0
-  boomerangHeavyAttack: 0
-  homingMissileHeavyAttack: 0
-  anvilHeavyAttack: 0
-  bowlingBallHeavyAttack: 0
-  gaseousHeavyAttack: 0
-  powerBoostingHeavyAttack: 0
-  shieldHeavyAttack: 0
-  reflectingHeavyAttack: 0
-  eatingHeavyAttack: 0
-  suctionHeavyAttack: 0
-  AOEHeavyAttack: 0
-  chargingHeavyAttack: 0
-  selfExplodingHeavyAttack: 0
-  heavyHitVFXHolder: {fileID: 0}
-  heavyForwardSwingVFXHolder: {fileID: 0}
-  heavyBackwardSwingVFXHolder: {fileID: 0}
-  heavyDownwardSwingVFXHolder: {fileID: 0}
-  heavyMissVFXHolder: {fileID: 0}
-  heavyDefaultSprayVFXHolder: {fileID: 0}
-  heavyStompVFXHolder: {fileID: 0}
+  heavyAttack:
+    Attack: 0
   heavyCollider: {fileID: 0}
+  heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
   reloadTimeHeavy: 1
-  chargeVisual: {fileID: 0}
-  heavyChargeVisual: {fileID: 0}
-  heavyAttackHitVFXArray: []
-  heavyAttackForwardSwingVFXArray: []
-  heavyAttackBackwardSwingVFXArray: []
-  heavyAttackDownwardSwingVFXArray: []
-  heavyAttackMissVFXArray: []
-  heavyAttackDefaultVFXArray: []
-  heavyStompVFXArray: []
   heavyAttackHitAudioLibrary: []
   isJointed: 1
   isRightShoulderLimb: 0
@@ -346,6 +294,8 @@ MonoBehaviour:
   isGroundedLimb: 0
   isBracing: 0
   attackMarkedHeavy: 0
+  heavyAttackInMotion: 0
+  fullActiveHeavy: 0
   requiresRightStance: 0
   requiresLeftStance: 0
   requiresForwardStance: 0
@@ -360,8 +310,70 @@ MonoBehaviour:
   isRunning: 0
   facingRight: 0
   grounded: 1
+  reelAttackBuiltUpPower: 0
+  reelAttackCurrentThreshold: 0
+  powerUpCheckAllowed: 1
+  reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
+--- !u!114 &5320746492024871051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129312269552137041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9179718352d80e44988ac796fe78ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neutralAttackHitVFXArray: []
+  neutralAttackForwardSwingVFXArray: []
+  neutralAttackBackwardSwingVFXArray: []
+  neutralAttackDownwardSwingVFXArray: []
+  neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
+  neutralStompVFXArray: []
+  neutralHitVFXHolder: {fileID: 0}
+  neutralForwardSwingVFXHolder: {fileID: 0}
+  neutralBackwardSwingVFXHolder: {fileID: 0}
+  neutralDownwardSwingVFXHolder: {fileID: 0}
+  neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
+  neutralStompVFXHolder: {fileID: 0}
+  heavyAttackHitVFXArray: []
+  heavyAttackForwardSwingVFXArray: []
+  heavyAttackBackwardSwingVFXArray: []
+  heavyAttackDownwardSwingVFXArray: []
+  heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
+  heavyStompVFXArray: []
+  heavyHitVFXHolder: {fileID: 0}
+  heavyForwardSwingVFXHolder: {fileID: 0}
+  heavyBackwardSwingVFXHolder: {fileID: 0}
+  heavyDownwardSwingVFXHolder: {fileID: 0}
+  heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
+  heavyStompVFXHolder: {fileID: 0}
+  myIdleVFX: []
+  neutralHitVFXManager: {fileID: 0}
+  neutralMissVFXManager: {fileID: 0}
+  neutralDefaultSprayVFXManager: {fileID: 0}
+  heavyHitVFXManager: {fileID: 0}
+  heavyMissVFXManager: {fileID: 0}
+  heavyDefaultSprayVFXManager: {fileID: 0}
+  neutralVFXStoredParent: {fileID: 0}
+  neutralVFXStoredPosition: {x: 0, y: 0, z: 0}
+  neutralVFXStoredRotation: {x: 0, y: 0, z: 0, w: 0}
+  heavyVFXStoredParent: {fileID: 0}
+  heavyVFXStoredPosition: {x: 0, y: 0, z: 0}
+  heavyVFXStoredRotation: {x: 0, y: 0, z: 0, w: 0}
+  chargeVisual: {fileID: 0}
+  heavyChargeVisual: {fileID: 0}
+  specialRunVisual: {fileID: 0}
+  neutralMuzzle: {fileID: 0}
+  heavyMuzzle: {fileID: 0}
 --- !u!54 &3702859422528060206
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -391,6 +403,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!114 &1570920602225811500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,6 +421,8 @@ MonoBehaviour:
     partRotation: {x: 0, y: 0, z: 0, w: 0}
     partScale: {x: 0, y: 0, z: 0}
     partPosition: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> main
 --- !u!1 &3651434121757875694
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,7 +759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSystem: {fileID: 0}
-  partReference: {fileID: 0}
+  partReference: {fileID: 3384468884747917531}
   referencesToIgnore: []
   isHitbox: 0
   isHurtbox: 1

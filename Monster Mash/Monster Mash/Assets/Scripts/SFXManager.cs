@@ -22,7 +22,7 @@ public class SFXManager : MonoBehaviour
         toPlay.Clear();
     }
 
-    public void footstepSFX(monsterPart part)
+    public void footstepSFX(NewMonsterPart part)
     {
         if (part.isLeg)
         {
@@ -65,7 +65,7 @@ public class SFXManager : MonoBehaviour
         }
     }
 
-    public void runSFX(monsterPart part)
+    public void runSFX(NewMonsterPart part)
     {
         if (part.isLeg)
         {
@@ -108,7 +108,7 @@ public class SFXManager : MonoBehaviour
         }
     }
 
-    public void JumpSFX(monsterPart part)
+    public void JumpSFX(NewMonsterPart part)
     {
         if (part.isLeg)
         {
@@ -118,7 +118,7 @@ public class SFXManager : MonoBehaviour
         playSFX();
     }
 
-    public void DoubleJumpSFX(monsterPart part)
+    public void DoubleJumpSFX(NewMonsterPart part)
     {
         toPlay.Add(baseSounds[2]);
         playSFX();
@@ -130,7 +130,7 @@ public class SFXManager : MonoBehaviour
         playSFX();
     }
 
-    public void LandSFX(monsterPart part)
+    public void LandSFX(NewMonsterPart part)
     {
         if (part.isLeg)
         {

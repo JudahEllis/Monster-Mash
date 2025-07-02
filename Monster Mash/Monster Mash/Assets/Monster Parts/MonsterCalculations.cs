@@ -85,7 +85,7 @@ public class MonsterCalculations
 
     private Dictionary<string, AttackConfig> configMap;
 
-    public void AttackCalculationSetUp(monsterPart part)
+    public void AttackCalculationSetUp(NewMonsterPart part)
     {
         // The varable assignments have been moved to attack_configs.json which is loacted in the Resources/Data folder. if you need to edit the varable assignments then open the json file.
         // if you need to add new varables to the json make sure you add them to the AttackConfig class first. 

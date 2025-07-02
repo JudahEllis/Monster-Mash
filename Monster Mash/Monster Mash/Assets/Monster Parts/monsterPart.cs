@@ -503,7 +503,8 @@ public class monsterPart : MonoBehaviour
 
         for (int i = 0; i < internalPartReferences.Length; i++)
         {
-            internalPartReferences[i].partReference = this.GetComponent<monsterPart>();
+            //TODO: Commented out to test new monster part script. Uncomment if transioning back to old script
+            //internalPartReferences[i].partReference = this.GetComponent<monsterPart>();
         }
 
         if (neutralCollider != null)
@@ -4050,7 +4051,8 @@ public class monsterPart : MonoBehaviour
     {
         if (isLeg && myMainSystem.SFXManager)
         {
-            myMainSystem.SFXManager.footstepSFX(this);
+            //TODO: commented out to test new monster part. Uncomment if transitioning back to old script
+            //myMainSystem.SFXManager.footstepSFX(this);
         }
     }
 
@@ -4058,7 +4060,8 @@ public class monsterPart : MonoBehaviour
     {
         if (isLeg && myMainSystem.SFXManager)
         {
-            myMainSystem.SFXManager.runSFX(this);
+            //TODO: Commented out to test new monster part. Uncomment if transitioning back to old script.
+            //myMainSystem.SFXManager.runSFX(this);
         }
     }
 
@@ -4262,7 +4265,8 @@ public class monsterPart : MonoBehaviour
     {
         MonsterCalculations calc = new MonsterCalculations();
 
-        calc.AttackCalculationSetUp(this);
+        //TODO: commented out to test new monster part script. Uncomment if transitiong back to old script
+        //calc.AttackCalculationSetUp(this);
 
         return calc;
     }

@@ -6,7 +6,7 @@ public class autoLimb_Connection : MonoBehaviour
 {
     public Collider triggerBubble;
     public Animator connectedBodyPiece;
-    public List<monsterPart> monsterPartMemory = new List<monsterPart>();
+    public List<NewMonsterPart> monsterPartMemory = new List<NewMonsterPart>();
 
     [Header("Head Connection Data")]
     public bool isLeftHeadConnection = false;
@@ -49,7 +49,7 @@ public class autoLimb_Connection : MonoBehaviour
         monsterPartMemory.Clear();
     }
 
-    public void clearSpecificMonsterPartMemory(monsterPart partToBeRemoved) //if a piece has been picked up/altered at all we clear its memory from autolimbs
+    public void clearSpecificMonsterPartMemory(NewMonsterPart partToBeRemoved) //if a piece has been picked up/altered at all we clear its memory from autolimbs
     {
         if (monsterPartMemory.Contains(partToBeRemoved))
         {
@@ -140,9 +140,9 @@ public class autoLimb_Connection : MonoBehaviour
     {
         if (other.gameObject.tag == "Connection - Monster Part")
         {
-            if (other.gameObject.GetComponent<monsterPart>() != null)
+            if (other.gameObject.GetComponent<NewMonsterPart>() != null)
             { 
-                monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
+                NewMonsterPart monsterPartScript = other.gameObject.GetComponent<NewMonsterPart>();
 
                 if (monsterPartMemory.Contains(monsterPartScript) == false)
                 {
@@ -215,9 +215,9 @@ public class autoLimb_Connection : MonoBehaviour
     {
         if (other.gameObject.tag == "Connection - Monster Part")
         {
-            if (other.gameObject.GetComponent<monsterPart>() != null)
+            if (other.gameObject.GetComponent<NewMonsterPart>() != null)
             {
-                monsterPart monsterPartScript = other.gameObject.GetComponent<monsterPart>();
+                NewMonsterPart monsterPartScript = other.gameObject.GetComponent<NewMonsterPart>();
 
                 if (monsterPartMemory.Contains(monsterPartScript))
                 {

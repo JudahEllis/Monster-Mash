@@ -5,20 +5,21 @@ using UnityEditor;
 
 public class MonsterMovementEditor : EditorWindow
 {
-    private AttackConfigList ruleset = new AttackConfigList();
+    private AttackConfigList ruleset = new();
     private Vector2 scrollPos;
-    private readonly string jsonPath = "Assets/Resources/Data/attack_configs.json";
+    private const string jsonPath = "Assets/Resources/Data/attack_configs.json";
+    private int configToRemove = -1;
 
-    private const int deleteButtonWidth = 90;
-    private const int deleteButtonHeight = 25;
-    private const int deleteButtonMargin = 5;
+    private int startPageIndex = 0;
+    private int endPageIndex = 5;
+    private const int desiredPageCount = 5;
 
-    private const int configLabelWidth = 233;
+    private bool scrollToBottomNextFrame = false;
 
     [MenuItem("Tools/Monster Movement Editor")]
     public static void ShowWindow()
     {
-        GetWindow<MonsterMovementEditor>("Monster Movement Editor");
+        GetWindow<MonsterMovementEditor>("Monster Movement Editor", true);
     }
 
     private void OnEnable()
@@ -36,62 +37,169 @@ public class MonsterMovementEditor : EditorWindow
         }
 
         EditorGUILayout.Space();
-        
+
+        // Loops through the ruleset list and displays the configs
+        DisplayConfigList();
+        // if a config has been marked for deletion by pressing the delete button this is where the config is actually removed
+        CheckRemoveConfig();
+
+        AddButton();
+
+        PageControl();
+
+        EditorGUILayout.Space();
+
+        SaveAndLoadButtons();
+    }
+
+    private void DisplayConfigList()
+    {
+        int safeEndIndex = Mathf.Min(endPageIndex, ruleset.Configs.Count);
 
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-
-        int configToRemove = -1;
-        for (int i = 0; i < ruleset.Configs.Count; i++)
+        
+        for (int i = startPageIndex; i < safeEndIndex; i++)
         {
             var config = ruleset.Configs[i];
+
             EditorGUILayout.BeginVertical("box");
             DisplayConfig(config);
-            GUILayout.Space(deleteButtonMargin);
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-           
-            if (GUILayout.Button("Delete Config", GUILayout.Width(deleteButtonWidth), GUILayout.Height(deleteButtonHeight)))
-            {
-                configToRemove = i;
-            }
-            
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.Space(deleteButtonMargin);
-
+            DeleteButton(i);
             EditorGUILayout.EndVertical();
         }
 
         EditorGUILayout.EndScrollView();
 
-        // if we try to remove an element during the loop it causes an error so we need to mark it and delete it later.
-        if (configToRemove >= 0)
+        if (scrollToBottomNextFrame)
         {
-            ruleset.Configs.RemoveAt(configToRemove);
+            scrollPos.y = float.MaxValue;
+            scrollToBottomNextFrame = false;
+
+            Repaint();
+        }
+    }
+
+    private void PageControl()
+    {
+        int buttonWidth = 60;
+        int buttonHeight = 25;
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("|<-", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        {
+            startPageIndex = 0;
+            endPageIndex = desiredPageCount;
+            ResetScroll();
         }
 
-        if (GUILayout.Button("Add New Config", GUILayout.Width(110), GUILayout.Height(25)))
+        if (GUILayout.Button("<-", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        {
+            if (startPageIndex > 0)
+            {
+                endPageIndex = startPageIndex;
+                startPageIndex -= desiredPageCount;
+                startPageIndex = Mathf.Clamp(startPageIndex, 0, ruleset.Configs.Count);
+                ResetScroll();
+            }
+        }
+
+        if (GUILayout.Button("->", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        {
+            if (endPageIndex < ruleset.Configs.Count)
+            {
+                startPageIndex = endPageIndex;
+                endPageIndex += desiredPageCount;
+                endPageIndex = Mathf.Clamp(endPageIndex, 0, ruleset.Configs.Count);
+                ResetScroll();
+            }
+        }
+
+        if (GUILayout.Button("->|", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        {
+            GoToLastPage();
+            ResetScroll();
+        }
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void GoToLastPage()
+    {
+        int count = ruleset.Configs.Count;
+
+        startPageIndex = Mathf.Max(0, count - desiredPageCount);
+        endPageIndex = count;
+    }
+
+    private void ResetScroll()
+    {
+        scrollPos.y = 0;
+    }
+
+    private void AddButton()
+    {
+        int buttonWidth = 110;
+        int buttonHeight = 25;
+
+        if (GUILayout.Button("Add New Config", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             ruleset.Configs.Add(new AttackConfig());
+            GoToLastPage();
+            scrollToBottomNextFrame = true;
+        }
+    }
+
+    private void DeleteButton(int index)
+    {
+        int buttonWidth = 90;
+        int buttonHeight = 25;
+        int margin = 5;
+
+        GUILayout.Space(margin);
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+
+        if (GUILayout.Button("Delete Config", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        {
+            configToRemove = index;
         }
 
-        EditorGUILayout.Space();
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(margin);
+    }
+
+    private void SaveAndLoadButtons()
+    {
+        int buttonWidth = 150;
+        int buttonHeight = 25;
 
         GUILayout.Label("Warning: Saving overwrites all existing data. Do not save with an empty list.", EditorStyles.helpBox);
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Reload Data", GUILayout.Width(150),  GUILayout.Height(25)))
+        if (GUILayout.Button("Reload Data", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             LoadJson();
         }
 
-        if (GUILayout.Button("Save Changes", GUILayout.Width(150), GUILayout.Height(25)))
+        if (GUILayout.Button("Save Changes", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             SaveJson();
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        
+    }
+
+    private void CheckRemoveConfig()
+    {
+        // if we try to remove an element during the loop it causes an error so we need to mark it and delete it later.
+        if (configToRemove >= 0)
+        {
+            ruleset.Configs.RemoveAt(configToRemove);
+            // reset index so it doesent try to repeatedly remove
+            configToRemove = -1;
+        }
     }
 
     private void LoadJson()
@@ -121,8 +229,9 @@ public class MonsterMovementEditor : EditorWindow
 
     private void DisplayConfig(AttackConfig config)
     {
+        int labelWidth = 233;
         float previousLabelWidth = EditorGUIUtility.labelWidth;
-        EditorGUIUtility.labelWidth = configLabelWidth;
+        EditorGUIUtility.labelWidth = labelWidth;
 
         config.ConfigName = EditorGUILayout.TextField("Config Name", config.ConfigName);
         config.forwardInputTorsoCommand = EditorGUILayout.TextField("Forward Input Torso Command", config.forwardInputTorsoCommand);

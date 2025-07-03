@@ -304,6 +304,11 @@ public class MonsterMovementEditor : EditorWindow
         EditorGUIUtility.labelWidth = labelWidth;
 
         config.ConfigName = EditorGUILayout.TextField("Config Name", config.ConfigName);
+        config.PartType = (MonsterPartType)EditorGUILayout.EnumPopup("Monster Part Type", config.PartType);
+        config.PartConnections = (MonsterPartConnectionMask)EditorGUILayout.EnumFlagsField("Targeted Connection Points", config.PartConnections);
+        GUILayout.Space(10);
+
+        GUILayout.Label("Movement Commands", EditorStyles.boldLabel);
         config.forwardInputTorsoCommand = EditorGUILayout.TextField("Forward Input Torso Command", config.forwardInputTorsoCommand);
         config.backwardInputTorsoCommand = EditorGUILayout.TextField("Backward Input Torso Command", config.backwardInputTorsoCommand);
         config.upwardInputTorsoCommand = EditorGUILayout.TextField("Upward Input Torso Command", config.upwardInputTorsoCommand);

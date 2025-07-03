@@ -8,6 +8,8 @@ using UnityEngine;
 public class AttackConfig
 {
     public string ConfigName;
+    public MonsterPartType PartType;
+    public MonsterPartConnectionMask PartConnections;
     public string forwardInputTorsoCommand;
     public string backwardInputTorsoCommand;
     public string upwardInputTorsoCommand;

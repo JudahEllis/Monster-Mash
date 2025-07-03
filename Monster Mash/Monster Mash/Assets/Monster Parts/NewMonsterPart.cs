@@ -20,6 +20,7 @@ public class NewMonsterPart : MonoBehaviour
     public int monsterPartID = 1;
     public int attackAnimationID = 1;
     public bool connected = true;
+    public MonsterPartType PartType;
     //
     private AudioSource myPartAudio;
 
@@ -229,6 +230,51 @@ public class NewMonsterPart : MonoBehaviour
 
     public void disableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = false; }
     public void reenableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = true; }
+
+    // This is bad practice, but I have to do it this way untill I finish refactoring the script.
+    public void AssignType()
+    {
+        if (isArm)
+        {
+            PartType = MonsterPartType.Arm;
+        }
+        else if (isLeg)
+        {
+            PartType = MonsterPartType.Leg;
+        }
+        else if(isHead)
+        {
+            PartType = MonsterPartType.Head;
+        }
+        else if(isTail)
+        {
+            PartType = MonsterPartType.Tail;
+        }
+        else if(isMouth)
+        {
+            PartType = MonsterPartType.Mouth;
+        }
+        else if (isEye)
+        {
+            PartType = MonsterPartType.Eye;
+        }
+        else if(isHorn)
+        {
+            PartType = MonsterPartType.Horn;
+        }
+        else if (isWing)
+        {
+            PartType = MonsterPartType.Wing;
+        }
+        else if (isDecor)
+        {
+            PartType = MonsterPartType.Decor;
+        }
+        else
+        {
+            PartType = MonsterPartType.None;
+        }
+    }
 
     #endregion
 

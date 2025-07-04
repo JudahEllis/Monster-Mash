@@ -20,7 +20,7 @@ public class NewMonsterPart : MonoBehaviour
     public int monsterPartID = 1;
     public int attackAnimationID = 1;
     public bool connected = true;
-    public MonsterPartType PartType;
+    
     //
     private AudioSource myPartAudio;
 
@@ -39,6 +39,8 @@ public class NewMonsterPart : MonoBehaviour
     public bool isTorso;
     public bool isHorn;
     public bool isDecor;
+
+    public MonsterPartType PartType;
 
     [Header("Damage and Status Effects")]
     public int baseNeutralAttackDamage = 0;
@@ -88,22 +90,10 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Monster Part Positioning Info")]
     [HideInInspector] public bool isJointed = true;
-    [HideInInspector] public bool isRightShoulderLimb;
-    [HideInInspector] public bool isLeftShoudlerLimb;
-    [HideInInspector] public bool isRightPelvisLimb;
-    [HideInInspector] public bool isLeftPelvisLimb;
-    [HideInInspector] public bool isChestLimb;
-    [HideInInspector] public bool isBellyLimb;
-    [HideInInspector] public bool isNeckLimb;
-    [HideInInspector] public bool isTailLimb;
-    [HideInInspector] public bool isShoulderBladeLimb;
-    [HideInInspector] public bool isTopHeadLimb;
-    [HideInInspector] public bool isBacksideHeadLimb;
-    [HideInInspector] public bool isRightEarLimb;
-    [HideInInspector] public bool isLeftEarLimb;
-    [HideInInspector] public bool isFacialLimb;
+   
     [HideInInspector] public bool isRightSidedLimb;
     [HideInInspector] public bool isLeftSidedLimb;
+    [HideInInspector] public MonsterPartConnectionPoint connectionPoint = MonsterPartConnectionPoint.None;
     [HideInInspector] public bool isGroundedLimb;
     private string torsoCommand = "";
     private string torsoCommandOverride = "";

@@ -5,6 +5,7 @@ using UnityEngine;
 public enum MonsterPartType
 {
     None,
+    Torso,
     Arm,
     Leg,
     Head,

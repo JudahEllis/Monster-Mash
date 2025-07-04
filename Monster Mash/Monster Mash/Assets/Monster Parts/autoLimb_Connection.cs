@@ -8,23 +8,8 @@ public class autoLimb_Connection : MonoBehaviour
     public Animator connectedBodyPiece;
     public List<NewMonsterPart> monsterPartMemory = new List<NewMonsterPart>();
 
-    [Header("Head Connection Data")]
-    public bool isLeftHeadConnection = false;
-    public bool isRightHeadConnection = false;
-    public bool isFaceConnection = false;
-    public bool isTopHeadConnection = false;
-    public bool isBackHeadConnection = false;
-
-    [Header("Torso Connection Data")]
-    public bool isLeftUpperTorsoConnection = false;
-    public bool isRightUpperTorsoConnection = false;
-    public bool isNeckTorsoConnection = false;
-    public bool isLeftLowerTorsoConnection = false;
-    public bool isRightLowerTorsoConnection = false;
-    public bool isTailTorsoConnection = false;
-    public bool isShoulderBladeTorsoConnection = false;
-    public bool isChestTorsoConnection = false;
-    public bool isBellyTorsoConnection = false;
+    [Header("Connection Data")]
+    public MonsterPartConnectionPoint connectionPoint = MonsterPartConnectionPoint.None;
 
     public void enableColliders() //rename this for easier outside knowledge
     {
@@ -82,20 +67,7 @@ public class autoLimb_Connection : MonoBehaviour
             monsterPartMemory[i].transform.parent = this.gameObject.transform;
             monsterPartMemory[i].connectedMonsterPart = connectedBodyPiece;
             monsterPartMemory[i].isJointed = true;
-            monsterPartMemory[i].isLeftEarLimb = isLeftHeadConnection;
-            monsterPartMemory[i].isRightEarLimb = isRightHeadConnection;
-            monsterPartMemory[i].isFacialLimb = isFaceConnection;
-            monsterPartMemory[i].isTopHeadLimb = isTopHeadConnection;
-            monsterPartMemory[i].isBacksideHeadLimb = isBackHeadConnection;
-            monsterPartMemory[i].isLeftShoudlerLimb = isLeftUpperTorsoConnection;
-            monsterPartMemory[i].isRightShoulderLimb = isRightUpperTorsoConnection;
-            monsterPartMemory[i].isNeckLimb = isNeckTorsoConnection;
-            monsterPartMemory[i].isLeftPelvisLimb = isLeftLowerTorsoConnection;
-            monsterPartMemory[i].isRightPelvisLimb = isRightLowerTorsoConnection;
-            monsterPartMemory[i].isTailLimb = isTailTorsoConnection;
-            monsterPartMemory[i].isShoulderBladeLimb = isShoulderBladeTorsoConnection;
-            monsterPartMemory[i].isChestLimb = isChestTorsoConnection;
-            monsterPartMemory[i].isBellyLimb = isBellyTorsoConnection;
+            monsterPartMemory[i].connectionPoint = connectionPoint;
 
             //this section may be removed at a later date if we decide to separate left and right limbs as separate limbs and deserving of a hardcoded orientation
             //Dont forget!!! Horns, Eyes, and Mouths need to be excluded from this grouping 

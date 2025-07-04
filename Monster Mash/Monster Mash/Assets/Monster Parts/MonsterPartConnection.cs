@@ -4,20 +4,20 @@ using System;
 public enum MonsterPartConnectionPoint
 {
     None = -1,
-    TopHeadLimb = 0,
-    BacksideHeadLimb = 1,
-    LeftEarLimb = 2,
-    RightEarLimb = 3,
-    FacialLimb = 4,
-    NeckLimb = 5,
-    LeftShoudlerLimb = 6,
-    RightShoulderLimb = 7,
-    ChestLimb = 8,
-    ShoulderBladeLimb = 9,
-    BellyLimb = 10,
-    LeftPelvisLimb = 11,
-    RightPelvisLimb = 12,
-    TailLimb = 13,
+    TopHeadConnection = 0,
+    BackHeadConnection = 1,
+    LeftHeadConnection = 2,
+    RightHeadConnection = 3,
+    FaceConnection = 4,
+    NeckTorsoConnection = 5,
+    LeftUpperTorsoConnection = 6,
+    RightUpperTorsoConnection = 7,
+    ChestTorsoConnection = 8,
+    ShoulderBladeTorsoConnection = 9,
+    BellyTorsoConnection = 10,
+    LeftLowerTorsoConnection = 11,
+    RightLowerTorsoConnection = 12,
+    TailTorsoConnection = 13,
 }
 
 // The indexes for flag enums need to be powers of 2 in order to avoid overlaping binary values.
@@ -46,6 +46,11 @@ public static class MonsterPartConnection
 {
     public static bool Matches(this MonsterPartConnectionMask mask, MonsterPartConnectionPoint connectionPoint)
     {
-        return (mask & (MonsterPartConnectionMask)connectionPoint) != 0;
+        if (connectionPoint == MonsterPartConnectionPoint.None || (int)connectionPoint < 0)
+            return false;
+
+        // Create a bitmask from the ConnectionPoint index
+        int bit = 1 << (int)connectionPoint;
+        return (mask & (MonsterPartConnectionMask)bit) != 0;
     }
 }

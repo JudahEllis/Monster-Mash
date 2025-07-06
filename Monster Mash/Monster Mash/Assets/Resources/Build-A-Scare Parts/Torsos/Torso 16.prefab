@@ -92,20 +92,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 7568579269228350738}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 1
-  isBellyTorsoConnection: 0
+  connectionPoint: 8
 --- !u!1 &905505896127641295
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,20 +154,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 1139654436576956759}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 1
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 13
 --- !u!1 &986620385958280184
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +229,7 @@ MonoBehaviour:
   connectedMonsterPart: {fileID: 0}
   mainTorso: {fileID: 0}
   myAnimator: {fileID: 0}
+  PartVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
   monsterPartHealth: 100
@@ -271,6 +246,7 @@ MonoBehaviour:
   isTorso: 1
   isHorn: 0
   isDecor: 0
+  PartType: 1
   baseNeutralAttackDamage: 0
   baseHeavyAttackDamage: 0
   builtUpAttackPower: 0
@@ -306,23 +282,11 @@ MonoBehaviour:
   reloadTimeHeavy: 1
   heavyAttackHitAudioLibrary: []
   isJointed: 1
-  isRightShoulderLimb: 0
-  isLeftShoudlerLimb: 0
-  isRightPelvisLimb: 0
-  isLeftPelvisLimb: 0
-  isChestLimb: 0
-  isBellyLimb: 0
-  isNeckLimb: 0
-  isTailLimb: 0
-  isShoulderBladeLimb: 0
-  isTopHeadLimb: 0
-  isBacksideHeadLimb: 0
-  isRightEarLimb: 0
-  isLeftEarLimb: 0
-  isFacialLimb: 0
   isRightSidedLimb: 0
   isLeftSidedLimb: 0
+  connectionPoint: -1
   isGroundedLimb: 0
+  hasTorsoCommandOverride: 0
   isBracing: 0
   attackMarkedHeavy: 0
   heavyAttackInMotion: 0
@@ -337,7 +301,9 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  isAttacking: 0
   attackFocusOn: 0
+  isWalking: 0
   isRunning: 0
   facingRight: 0
   grounded: 1
@@ -405,6 +371,26 @@ MonoBehaviour:
   specialRunVisual: {fileID: 0}
   neutralMuzzle: {fileID: 0}
   heavyMuzzle: {fileID: 0}
+  hasHeavyMovementCommand: 0
+  forwardHeavyMovementCommand: 
+  upwardHeavyMovementCommand: 
+  backwardHeavyMovementCommand: 
+  downwardHeavyMovementCommand: 
+  hasNeutralMovementCommand: 0
+  forwardNeutralMovementCommand: 
+  upwardNeutralMovementCommand: 
+  backwardNeutralMovementCommand: 
+  downwardNeutralMovementCommand: 
+  hasTorsoCommand: 0
+  hasHeadCommand: 0
+  forwardInputTorsoCommand: 
+  backwardInputTorsoCommand: 
+  upwardInputTorsoCommand: 
+  downwardInputTorsoCommand: 
+  forwardInputHeadCommand: 
+  backwardInputHeadCommand: 
+  upwardInputHeadCommand: 
+  downwardInputHeadCommand: 
 --- !u!54 &5298834414481013891
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -531,20 +517,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 3137331286986606691}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 1
+  connectionPoint: 10
 --- !u!1 &2144954667731123032
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,20 +759,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 7296088363510307473}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 1
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 6
 --- !u!1 &3692314427830180777
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,20 +1029,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 3502809630138378337}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 1
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 12
 --- !u!1 &4467890606361296491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,20 +1091,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 488616374074742741}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 1
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 5
 --- !u!1 &4711718723205489621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,20 +1153,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 1544901393635047441}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 1
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 6
 --- !u!1 &5595342136761887254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,20 +1320,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 8478298660470843457}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 1
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 11
 --- !u!1 &6584089028950738588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,20 +1382,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 1092604810562667030}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 1
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 9
 --- !u!1 &7268076231155373728
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,20 +1444,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 3914389397765007574}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 1
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 7
 --- !u!1 &7284418187450161951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1690,20 +1572,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 941703512511741560}
   connectedBodyPiece: {fileID: 6559284465765361436}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 1
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: 7
 --- !u!1 &9100496670393900644
 GameObject:
   m_ObjectHideFlags: 0

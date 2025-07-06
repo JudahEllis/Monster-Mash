@@ -214,6 +214,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
+            allMonsterParts[i].AssignType();
             allMonsterParts[i].AttackSetup();
 
             if (allMonsterParts[i].isGroundedLimb)

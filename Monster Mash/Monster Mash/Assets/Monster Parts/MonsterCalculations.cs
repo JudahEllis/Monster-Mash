@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.IO;
 
 public class MonsterCalculations
 {
@@ -36,62 +37,27 @@ public class MonsterCalculations
     public string downwardHeavyMovementCommand;
     #endregion
 
-    #region Config Names
-    private const string ArmShoulderConfig = "ArmShoulderConfig";
-    private const string ArmPelvisConfig = "ArmPelvisConfig";
-    private const string ArmTailConfig = "ArmTailConfig";
-    private const string ArmEarConfig = "ArmEarConfig";
-    private const string ArmTopHeadConfig = "ArmTopHeadConfig";
-    private const string ArmBackSideHeadConfig = "ArmBackSideHeadConfig";
-
-    private const string LegShoulderConfig = "LegShoulderConfig";
-    private const string LegPelvisConfig = "LegPelvisConfig";
-    private const string LegBellyShoulderBladeConfig = "LegBellyShoulderBladeConfig";
-    private const string LegTailConfig = "LegTailConfig";
-    private const string LegEarConfig = "LegEarConfig";
-    private const string LegTopHeadConfig = "LegTopHeadConfig";
-    private const string LegBackSideHeadConfig = "LegBackSideHeadConfig";
-
-    private const string TailShoulderConfig = "TailShoulderConfig";
-    private const string TailPelvisConfig = "TailPelvisConfig";
-    private const string TailBellyShoulderBladeConfig = "TailBellyShoulderBladeConfig";
-    private const string TailTailConfig = "TailTailConfig";
-    private const string TailEarConfig = "TailEarConfig";
-    private const string TailTopHeadConfig = "TailTopHeadConfig";
-    private const string TailBackSideHeadConfig = "TailBackSideHeadConfig";
-
-    private const string HornShoulderConfig = "HornShoulderConfig";
-    private const string HornPelvisConfig = "HornPelvisConfig";
-    private const string HornTailConfig = "HornTailConfig";
-    private const string HornEarConfig = "HornEarConfig";
-    private const string HornTopHeadConfig = "HornTopHeadConfig";
-    private const string HornBackSideHeadConfig = "HornBackSideHeadConfig";
-
-    private const string EyeShoulderConfig = "EyeShoulderConfig";
-    private const string EyePelvisConfig = "EyePelvisConfig";
-    private const string EyeTailConfig = "EyeTailConfig";
-    private const string EyeEarConfig = "EyeEarConfig";
-    private const string EyeTopHeadConfig = "EyeTopHeadConfig";
-    private const string EyeBackSideHeadConfig = "EyeBackSideHeadConfig";
-
-    private const string MouthShoulderConfig = "MouthShoulderConfig";
-    private const string MouthPelvisConfig = "MouthPelvisConfig";
-    private const string MouthTailConfig = "MouthTailConfig";
-    private const string MouthEarConfig = "MouthEarConfig";
-    private const string MouthTopHeadConfig = "MouthTopHeadConfig";
-    private const string MouthBackSideHeadConfig = "MouthBackSideHeadConfig";
-    #endregion
-
-
-    private Dictionary<string, AttackConfig> configMap;
+    private AttackConfigList attackConfigList;
 
     public void AttackCalculationSetUp(NewMonsterPart part)
     {
+        LoadJSON();
+
+        foreach (AttackConfig config in attackConfigList.Configs)
+        {
+            if (part.PartType == config.PartType)
+            {
+                if (config.PartConnections.Matches(part.connectionPoint))
+                {
+                    ApplyConfig(config);
+                }
+            }
+        }
         // The varable assignments have been moved to attack_configs.json which is loacted in the Resources/Data folder. if you need to edit the varable assignments then open the json file.
         // if you need to add new varables to the json make sure you add them to the AttackConfig class first. 
-        LoadConfigs();
+        //LoadConfigs();
 
-        #region Arms
+        /*#region Arms
         if (part.isArm)
         {
             //arms can move in forwards, upwards, and downwards motions. We should make it so backwards moves will flip your character and perform a forwards
@@ -303,10 +269,10 @@ public class MonsterCalculations
                 ApplyConfig(MouthBackSideHeadConfig);
             }
         }
-        #endregion
+        #endregion*/
     }
 
-    private void LoadConfigs()
+    /*private void LoadConfigs()
     {
         // Loads the json file
         TextAsset jsonText = Resources.Load<TextAsset>("Data/attack_configs");
@@ -320,46 +286,49 @@ public class MonsterCalculations
         // Builds a Dictionary that maps the config object with the name of the config so that it can be retrived by name elsewhere in the code.
         AttackConfigList configList = JsonUtility.FromJson<AttackConfigList>(jsonText.text);
         configMap = configList.Configs.ToDictionary(config => config.ConfigName);
+    }*/
+
+    private void ApplyConfig(AttackConfig config)
+    {
+        requiresBackwardStance = false;
+        requiresForwardStance = false;
+        requiresRightStance = true;
+        requiresLeftStance = false;
+
+
+        hasTorsoCommand = true;
+        forwardInputTorsoCommand = config.forwardInputTorsoCommand;
+        backwardInputTorsoCommand = config.backwardInputTorsoCommand;
+        upwardInputTorsoCommand = config.upwardInputTorsoCommand;
+        downwardInputTorsoCommand = config.downwardInputTorsoCommand;
+
+        hasHeadCommand = false;
+        forwardInputHeadCommand = config.forwardInputHeadCommand;
+        backwardInputHeadCommand = config.backwardInputHeadCommand;
+        upwardInputHeadCommand = config.upwardInputHeadCommand;
+        downwardInputHeadCommand = config.downwardInputHeadCommand;
+
+        hasNeutralMovementCommand = true;
+        forwardNeutralMovementCommand = config.forwardNeutralMovementCommand;
+        upwardNeutralMovementCommand = config.upwardNeutralMovementCommand;
+        backwardNeutralMovementCommand = config.backwardNeutralMovementCommand;
+        downwardNeutralMovementCommand = config.downwardNeutralMovementCommand;
+
+        hasHeavyMovementCommand = true;
+        forwardHeavyMovementCommand = config.forwardHeavyMovementCommand;
+        upwardHeavyMovementCommand = config.upwardHeavyMovementCommand;
+        backwardHeavyMovementCommand = config.backwardHeavyMovementCommand;
+        downwardHeavyMovementCommand = config.downwardHeavyMovementCommand;
     }
 
-    private void ApplyConfig(string configName)
+    private void LoadJSON()
     {
-        // Searches the config map for the config object that is paired with the passed in name.
-        if (configMap.TryGetValue(configName, out var config))
+        string jsonPath = "Assets/Resources/Data/attack_configs.json";
+
+        if (File.Exists(jsonPath))
         {
-            requiresBackwardStance = false;
-            requiresForwardStance = false;
-            requiresRightStance = true;
-            requiresLeftStance = false;
-
-
-            hasTorsoCommand = true;
-            forwardInputTorsoCommand = config.forwardInputTorsoCommand;
-            backwardInputTorsoCommand = config.backwardInputTorsoCommand;
-            upwardInputTorsoCommand = config.upwardInputTorsoCommand;
-            downwardInputTorsoCommand = config.downwardInputTorsoCommand;
-
-            hasHeadCommand = false;
-            forwardInputHeadCommand = config.forwardInputHeadCommand;
-            backwardInputHeadCommand = config.backwardInputHeadCommand;
-            upwardInputHeadCommand = config.upwardInputHeadCommand;
-            downwardInputHeadCommand = config.downwardInputHeadCommand;
-
-            hasNeutralMovementCommand = true;
-            forwardNeutralMovementCommand = config.forwardNeutralMovementCommand;
-            upwardNeutralMovementCommand = config.upwardNeutralMovementCommand;
-            backwardNeutralMovementCommand = config.backwardNeutralMovementCommand;
-            downwardNeutralMovementCommand = config.downwardNeutralMovementCommand;
-
-            hasHeavyMovementCommand = true;
-            forwardHeavyMovementCommand = config.forwardHeavyMovementCommand;
-            upwardHeavyMovementCommand = config.upwardHeavyMovementCommand;
-            backwardHeavyMovementCommand = config.backwardHeavyMovementCommand;
-            downwardHeavyMovementCommand = config.downwardHeavyMovementCommand;
-        }
-        else
-        {
-            Debug.LogError(configName + " could not be found in attack_configs.json");
+            string jsonText = File.ReadAllText(jsonPath);
+            attackConfigList = JsonUtility.FromJson<AttackConfigList>(jsonText);
         }
     }
 }

@@ -20,6 +20,7 @@ public class NewMonsterPart : MonoBehaviour
     public int monsterPartID = 1;
     public int attackAnimationID = 1;
     public bool connected = true;
+    
     //
     private AudioSource myPartAudio;
 
@@ -38,6 +39,8 @@ public class NewMonsterPart : MonoBehaviour
     public bool isTorso;
     public bool isHorn;
     public bool isDecor;
+
+    public MonsterPartType PartType;
 
     [Header("Damage and Status Effects")]
     public int baseNeutralAttackDamage = 0;
@@ -87,22 +90,10 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Monster Part Positioning Info")]
     [HideInInspector] public bool isJointed = true;
-    [HideInInspector] public bool isRightShoulderLimb;
-    [HideInInspector] public bool isLeftShoudlerLimb;
-    [HideInInspector] public bool isRightPelvisLimb;
-    [HideInInspector] public bool isLeftPelvisLimb;
-    [HideInInspector] public bool isChestLimb;
-    [HideInInspector] public bool isBellyLimb;
-    [HideInInspector] public bool isNeckLimb;
-    [HideInInspector] public bool isTailLimb;
-    [HideInInspector] public bool isShoulderBladeLimb;
-    [HideInInspector] public bool isTopHeadLimb;
-    [HideInInspector] public bool isBacksideHeadLimb;
-    [HideInInspector] public bool isRightEarLimb;
-    [HideInInspector] public bool isLeftEarLimb;
-    [HideInInspector] public bool isFacialLimb;
+   
     [HideInInspector] public bool isRightSidedLimb;
     [HideInInspector] public bool isLeftSidedLimb;
+    [HideInInspector] public MonsterPartConnectionPoint connectionPoint = MonsterPartConnectionPoint.None;
     [HideInInspector] public bool isGroundedLimb;
     private string torsoCommand = "";
     private string torsoCommandOverride = "";
@@ -229,6 +220,51 @@ public class NewMonsterPart : MonoBehaviour
 
     public void disableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = false; }
     public void reenableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = true; }
+
+    // This is bad practice, but I have to do it this way untill I finish refactoring the script.
+    public void AssignType()
+    {
+        if (isArm)
+        {
+            PartType = MonsterPartType.Arm;
+        }
+        else if (isLeg)
+        {
+            PartType = MonsterPartType.Leg;
+        }
+        else if(isHead)
+        {
+            PartType = MonsterPartType.Head;
+        }
+        else if(isTail)
+        {
+            PartType = MonsterPartType.Tail;
+        }
+        else if(isMouth)
+        {
+            PartType = MonsterPartType.Mouth;
+        }
+        else if (isEye)
+        {
+            PartType = MonsterPartType.Eye;
+        }
+        else if(isHorn)
+        {
+            PartType = MonsterPartType.Horn;
+        }
+        else if (isWing)
+        {
+            PartType = MonsterPartType.Wing;
+        }
+        else if (isDecor)
+        {
+            PartType = MonsterPartType.Decor;
+        }
+        else
+        {
+            PartType = MonsterPartType.None;
+        }
+    }
 
     #endregion
 

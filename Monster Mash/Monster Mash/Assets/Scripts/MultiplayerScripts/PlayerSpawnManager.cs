@@ -35,8 +35,11 @@ public class PlayerSpawnManager : MonoBehaviour
 
         GameObject monsterEmpty = Resources.Load("Monster/MonsterParts") as GameObject;
 
+        if (transfer == null) { return; }
+
         for (int i = 0; i < transfer.storedPlayerInformation.Count; i++)
         {
+
             GameObject spawnedPlayer = Instantiate(playerPrefab, playerSpawnLocations[i].position, Quaternion.identity);
 
             spawnedPlayer.name = ("Player " + (transfer.storedPlayerInformation[i].playerIndex + 1));

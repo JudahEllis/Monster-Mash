@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8056022331716067000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1345655351191376865}
+  - component: {fileID: 6796192190171436703}
+  - component: {fileID: 7786053163782883715}
+  m_Layer: 0
+  m_Name: PlayerInputAsset_New
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1345655351191376865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8056022331716067000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6796192190171436703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8056022331716067000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: d0265dd6cb2835843847c2c2c8813dc0,
+    type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e2d86e18-7529-4731-bff1-715cf6012fa5
+    m_ActionName: Starting Action Map/Enter Game - Controller Map[/SwitchProControllerHID/buttonNorth,/DualSenseGamepadHID/buttonNorth,/SwitchProControllerHID/buttonSouth,/DualSenseGamepadHID/buttonSouth,/SwitchProControllerHID/buttonEast,/DualSenseGamepadHID/buttonEast,/SwitchProControllerHID/buttonWest,/DualSenseGamepadHID/buttonWest,/SwitchProControllerHID/start,/DualSenseGamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b13cdd7-4397-4f62-b01e-2d77bad62756
+    m_ActionName: UI/Navigate
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 882e4ab3-bbe2-42ee-b9ab-e4c1c2df1136
+    m_ActionName: UI/Submit
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2e5c6021-55cb-4b9c-992c-7846b83cdc6e
+    m_ActionName: UI/Cancel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d9f2c1cd-6d3d-4c61-9eed-b6270e9b5bf4
+    m_ActionName: UI/Point
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b63101f-8df9-4e5d-9dbe-9dc1941ee114
+    m_ActionName: UI/Click
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1d01a8b6-50b5-400e-8379-13306abe23ab
+    m_ActionName: UI/ScrollWheel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fe4b726a-7aa5-4a6c-8197-427fb1a4c6f6
+    m_ActionName: UI/MiddleClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f84d9437-0bbf-43db-a9ab-8684058b0ca5
+    m_ActionName: UI/RightClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fa723524-9af9-43f2-97e2-239c5f17aa8f
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 43b7aa08-7a12-427a-bc38-7c3a3123d22b
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 20d73ea1-c242-47d4-9f61-e1b8668f6fec
+    m_ActionName: Monster Controls/Left Stick[/DualSenseGamepadHID/leftStick/up,/SwitchProControllerHID/leftStick/up,/DualSenseGamepadHID/leftStick/down,/SwitchProControllerHID/leftStick/down,/DualSenseGamepadHID/leftStick/left,/SwitchProControllerHID/leftStick/left,/DualSenseGamepadHID/leftStick/right,/SwitchProControllerHID/leftStick/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a397b105-6e4e-4480-9244-19f1a759ce1c
+    m_ActionName: Monster Controls/Right Stick[/DualSenseGamepadHID/rightStick/up,/SwitchProControllerHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/SwitchProControllerHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/SwitchProControllerHID/rightStick/left,/DualSenseGamepadHID/rightStick/right,/SwitchProControllerHID/rightStick/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0931720f-ac71-4b1e-b0b8-a818a6cd45dd
+    m_ActionName: Monster Controls/A[/DualSenseGamepadHID/buttonSouth,/SwitchProControllerHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3cdc195f-374b-492e-b773-50b25549cc67
+    m_ActionName: Monster Controls/B[/DualSenseGamepadHID/buttonEast,/SwitchProControllerHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0a25f797-3bf3-4573-b7e0-963dc732dc10
+    m_ActionName: Monster Controls/X[/DualSenseGamepadHID/buttonWest,/SwitchProControllerHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a7810095-ed16-4c5c-a33d-f05b0488cf7d
+    m_ActionName: Monster Controls/Y[/DualSenseGamepadHID/buttonNorth,/SwitchProControllerHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 28fc63e2-0537-4a31-aff6-d3349e015b55
+    m_ActionName: UI Navagation/Move Cursor  - Generic Gamepad[/DualSenseGamepadHID/leftStick,/SwitchProControllerHID/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5490c4d2-a3f5-430f-ac02-28e23fd92b5e
+    m_ActionName: UI Navagation/Select Action - Generic Gamepad[/DualSenseGamepadHID/buttonSouth,/SwitchProControllerHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9690badf-b577-40b4-9c65-35062d17db04
+    m_ActionName: UI Navagation/Deselect Action - Generic Gamepad[/DualSenseGamepadHID/buttonEast,/SwitchProControllerHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b122a2ff-7766-46e9-b57d-fa9e147f3d58
+    m_ActionName: UI Navagation/Start Game - Generic Gamepad[/DualSenseGamepadHID/start,/SwitchProControllerHID/start]
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Starting Action Map
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &7786053163782883715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8056022331716067000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be04dd3bfc5e88e48b442a2037d3f323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -462,6 +462,7 @@ GameObject:
   - component: {fileID: 8205021909025256439}
   - component: {fileID: 1271858966566092069}
   - component: {fileID: 7335760319349966814}
+  - component: {fileID: -8425749139495500680}
   m_Layer: 0
   m_Name: Tail 7
   m_TagString: Connection - Monster Part
@@ -713,6 +714,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.05
   m_Center: {x: 0, y: 0, z: -0.06}
+--- !u!114 &-8425749139495500680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2884867802398760828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Tails/Tail 7
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &3001473753191841852
 GameObject:
   m_ObjectHideFlags: 0

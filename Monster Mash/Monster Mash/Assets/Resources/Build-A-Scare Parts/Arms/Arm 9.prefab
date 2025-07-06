@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSystem: {fileID: 0}
-  partReference: {fileID: 6913439902998570381}
+  partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
   isHurtbox: 1
@@ -528,7 +528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSystem: {fileID: 0}
-  partReference: {fileID: 6913439902998570381}
+  partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
   isHurtbox: 1
@@ -830,7 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSystem: {fileID: 0}
-  partReference: {fileID: 6913439902998570381}
+  partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
   isHurtbox: 1
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSystem: {fileID: 0}
-  partReference: {fileID: 6913439902998570381}
+  partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
   isHurtbox: 1
@@ -1305,7 +1305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSystem: {fileID: 0}
-  partReference: {fileID: 6913439902998570381}
+  partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 1
   isHurtbox: 0
@@ -1409,10 +1409,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8708942045216457256}
   - component: {fileID: 9175760814968808897}
-  - component: {fileID: 6913439902998570381}
-  - component: {fileID: 7617058807709815061}
-  - component: {fileID: 1699566272175749745}
-  - component: {fileID: 802781541659446913}
+  - component: {fileID: 6878652007632591126}
+  - component: {fileID: 7180194906259602554}
+  - component: {fileID: 2669465061646903294}
   m_Layer: 0
   m_Name: Arm 9
   m_TagString: Connection - Monster Part
@@ -1457,7 +1456,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6913439902998570381
+--- !u!114 &6878652007632591126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1480,7 +1479,7 @@ MonoBehaviour:
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
-  isArm: 1
+  isArm: 0
   isLeg: 0
   isTail: 0
   isWing: 0
@@ -1557,7 +1556,7 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
---- !u!114 &7617058807709815061
+--- !u!114 &7180194906259602554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1635,35 +1634,27 @@ MonoBehaviour:
   backwardInputHeadCommand: 
   upwardInputHeadCommand: 
   downwardInputHeadCommand: 
---- !u!54 &1699566272175749745
-Rigidbody:
+--- !u!114 &2669465061646903294
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8329319590494935186}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!135 &802781541659446913
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8329319590494935186}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Center: {x: 0.09, y: 0, z: -0.01}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Arms/Arm 9
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
 --- !u!1 &8346686606578034647
 GameObject:
   m_ObjectHideFlags: 0

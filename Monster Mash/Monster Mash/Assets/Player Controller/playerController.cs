@@ -19,7 +19,7 @@ public class playerController : MonoBehaviour
     public Transform headCheck;
     public LayerMask solidGroundLayer;
     public LayerMask semiSolidGroundLayer;
-    private PlayerInput playerInput;
+    public PlayerInput playerInput;
     private PlayerControls playerControlsMap;
     private InputActionMap startingActionMap;
     private InputActionMap UIcontrols;
@@ -119,16 +119,90 @@ public class playerController : MonoBehaviour
         myAudioSystem = GetComponentInChildren<playerAudioManager>();
         gravityPower = myRigidbody.gravityScale;
 
+        if(playerInput != null)
+        {
+            startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
+            UIcontrols = playerInput.actions.FindActionMap("UI Controls");
+            monsterControls = playerInput.actions.FindActionMap("Monster Controls");
+
+            if (UIcontrols != null)
+            {
+                playerInput.SwitchCurrentActionMap("UI Controls");
+                playerControlsMap.StartingActionMap.Disable();
+                //print("New Action Map: " + playerInput.currentActionMap);
+            }
+        }
+    }
+
+    public void PlayerInputSetUp()
+    {
         startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
         UIcontrols = playerInput.actions.FindActionMap("UI Controls");
         monsterControls = playerInput.actions.FindActionMap("Monster Controls");
 
-        if (UIcontrols!= null)
+        if (UIcontrols != null)
         {
             playerInput.SwitchCurrentActionMap("UI Controls");
             playerControlsMap.StartingActionMap.Disable();
             //print("New Action Map: " + playerInput.currentActionMap);
         }
+
+        switchActionMap("Monster Controls");
+
+        Subscribe();
+    }
+
+    void Subscribe()
+    {
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += OnLeftStick;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled += OnLeftStick;
+
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed += OnRightStick;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled += OnRightStick;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started += onButtonA;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled += onButtonA;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started += onButtonB;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled += onButtonB;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started += onButtonX;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled += onButtonX;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started += onButtonY;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += onButtonY;
+    }
+
+    void Unsubscribe()
+    {
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= OnLeftStick;
+
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed -= OnRightStick;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled -= OnRightStick;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started -= onButtonA;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled -= onButtonA;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started -= onButtonB;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled -= onButtonB;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started -= onButtonX;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled -= onButtonX;
+
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started -= onButtonY;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= onButtonY;
+    }
+
+    private void OnDisable()
+    {
+        Unsubscribe();
     }
 
     public void switchActionMap(string newActionMap)

@@ -881,6 +881,138 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI Navagation"",
+            ""id"": ""6a8b4c9a-c871-47c4-a153-ebb68dce652a"",
+            ""actions"": [
+                {
+                    ""name"": ""Move Cursor  - Generic Gamepad"",
+                    ""type"": ""Value"",
+                    ""id"": ""28fc63e2-0537-4a31-aff6-d3349e015b55"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Select Action - Generic Gamepad"",
+                    ""type"": ""Button"",
+                    ""id"": ""5490c4d2-a3f5-430f-ac02-28e23fd92b5e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Deselect Action - Generic Gamepad"",
+                    ""type"": ""Button"",
+                    ""id"": ""9690badf-b577-40b4-9c65-35062d17db04"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Start Game - Generic Gamepad"",
+                    ""type"": ""Button"",
+                    ""id"": ""b122a2ff-7766-46e9-b57d-fa9e147f3d58"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ae68aca2-e405-4a48-b4bf-4e35a1066e52"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move Cursor  - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""010f86f2-7115-42f3-a147-1c0d3c987410"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move Cursor  - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c0f8ef3-3c1a-46d3-ad26-ba35c0b01c45"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Start Game - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1346c2d6-e559-471a-91e7-a067925d933b"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Start Game - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddab4835-b877-4d91-affb-2a907e30162f"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select Action - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a0c0e7c-7b16-4acf-ac62-a95052fc5f0f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select Action - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1873ffd8-668b-4356-a944-35c6a0ff041e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Deselect Action - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cef4363e-6901-46f6-be86-5e01405c8d58"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Deselect Action - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -936,6 +1068,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_MonsterControls_B = m_MonsterControls.FindAction("B", throwIfNotFound: true);
         m_MonsterControls_X = m_MonsterControls.FindAction("X", throwIfNotFound: true);
         m_MonsterControls_Y = m_MonsterControls.FindAction("Y", throwIfNotFound: true);
+        // UI Navagation
+        m_UINavagation = asset.FindActionMap("UI Navagation", throwIfNotFound: true);
+        m_UINavagation_MoveCursorGenericGamepad = m_UINavagation.FindAction("Move Cursor  - Generic Gamepad", throwIfNotFound: true);
+        m_UINavagation_SelectActionGenericGamepad = m_UINavagation.FindAction("Select Action - Generic Gamepad", throwIfNotFound: true);
+        m_UINavagation_DeselectActionGenericGamepad = m_UINavagation.FindAction("Deselect Action - Generic Gamepad", throwIfNotFound: true);
+        m_UINavagation_StartGameGenericGamepad = m_UINavagation.FindAction("Start Game - Generic Gamepad", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1202,6 +1340,63 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public MonsterControlsActions @MonsterControls => new MonsterControlsActions(this);
+
+    // UI Navagation
+    private readonly InputActionMap m_UINavagation;
+    private IUINavagationActions m_UINavagationActionsCallbackInterface;
+    private readonly InputAction m_UINavagation_MoveCursorGenericGamepad;
+    private readonly InputAction m_UINavagation_SelectActionGenericGamepad;
+    private readonly InputAction m_UINavagation_DeselectActionGenericGamepad;
+    private readonly InputAction m_UINavagation_StartGameGenericGamepad;
+    public struct UINavagationActions
+    {
+        private @PlayerControls m_Wrapper;
+        public UINavagationActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MoveCursorGenericGamepad => m_Wrapper.m_UINavagation_MoveCursorGenericGamepad;
+        public InputAction @SelectActionGenericGamepad => m_Wrapper.m_UINavagation_SelectActionGenericGamepad;
+        public InputAction @DeselectActionGenericGamepad => m_Wrapper.m_UINavagation_DeselectActionGenericGamepad;
+        public InputAction @StartGameGenericGamepad => m_Wrapper.m_UINavagation_StartGameGenericGamepad;
+        public InputActionMap Get() { return m_Wrapper.m_UINavagation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UINavagationActions set) { return set.Get(); }
+        public void SetCallbacks(IUINavagationActions instance)
+        {
+            if (m_Wrapper.m_UINavagationActionsCallbackInterface != null)
+            {
+                @MoveCursorGenericGamepad.started -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnMoveCursorGenericGamepad;
+                @MoveCursorGenericGamepad.performed -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnMoveCursorGenericGamepad;
+                @MoveCursorGenericGamepad.canceled -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnMoveCursorGenericGamepad;
+                @SelectActionGenericGamepad.started -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnSelectActionGenericGamepad;
+                @SelectActionGenericGamepad.performed -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnSelectActionGenericGamepad;
+                @SelectActionGenericGamepad.canceled -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnSelectActionGenericGamepad;
+                @DeselectActionGenericGamepad.started -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnDeselectActionGenericGamepad;
+                @DeselectActionGenericGamepad.performed -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnDeselectActionGenericGamepad;
+                @DeselectActionGenericGamepad.canceled -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnDeselectActionGenericGamepad;
+                @StartGameGenericGamepad.started -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnStartGameGenericGamepad;
+                @StartGameGenericGamepad.performed -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnStartGameGenericGamepad;
+                @StartGameGenericGamepad.canceled -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnStartGameGenericGamepad;
+            }
+            m_Wrapper.m_UINavagationActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MoveCursorGenericGamepad.started += instance.OnMoveCursorGenericGamepad;
+                @MoveCursorGenericGamepad.performed += instance.OnMoveCursorGenericGamepad;
+                @MoveCursorGenericGamepad.canceled += instance.OnMoveCursorGenericGamepad;
+                @SelectActionGenericGamepad.started += instance.OnSelectActionGenericGamepad;
+                @SelectActionGenericGamepad.performed += instance.OnSelectActionGenericGamepad;
+                @SelectActionGenericGamepad.canceled += instance.OnSelectActionGenericGamepad;
+                @DeselectActionGenericGamepad.started += instance.OnDeselectActionGenericGamepad;
+                @DeselectActionGenericGamepad.performed += instance.OnDeselectActionGenericGamepad;
+                @DeselectActionGenericGamepad.canceled += instance.OnDeselectActionGenericGamepad;
+                @StartGameGenericGamepad.started += instance.OnStartGameGenericGamepad;
+                @StartGameGenericGamepad.performed += instance.OnStartGameGenericGamepad;
+                @StartGameGenericGamepad.canceled += instance.OnStartGameGenericGamepad;
+            }
+        }
+    }
+    public UINavagationActions @UINavagation => new UINavagationActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1245,5 +1440,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnB(InputAction.CallbackContext context);
         void OnX(InputAction.CallbackContext context);
         void OnY(InputAction.CallbackContext context);
+    }
+    public interface IUINavagationActions
+    {
+        void OnMoveCursorGenericGamepad(InputAction.CallbackContext context);
+        void OnSelectActionGenericGamepad(InputAction.CallbackContext context);
+        void OnDeselectActionGenericGamepad(InputAction.CallbackContext context);
+        void OnStartGameGenericGamepad(InputAction.CallbackContext context);
     }
 }

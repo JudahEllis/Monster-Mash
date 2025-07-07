@@ -69,8 +69,8 @@ public class NewMonsterPart : MonoBehaviour
     private vfxHolder neutralHitVFXManager;
     public bool needsReloadNeutral; //determines if part must be reloaded before attacking again
     public float reloadTimeNeutral = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
-    [SerializeField] private bool isReloadedNeutral = true;
-    [SerializeField] private bool isReloadedHeavy = true;
+    private bool isReloadedNeutral = true;
+    private bool isReloadedHeavy = true;
     public bool jabOrSlashLanded = false;
     public AudioClip[] neutralAttackHitAudioLibrary;
     private int neutralHitCounter = 0;
@@ -87,6 +87,10 @@ public class NewMonsterPart : MonoBehaviour
     public float reloadTimeHeavy = 1f; //jab/slash/ or anything not a projecile* with reload is handled here instead of projectile script
     public AudioClip[] heavyAttackHitAudioLibrary;
     private int heavyHitCounter = 0;
+    public bool powerBoostingHeavyAttack; //does this attack use the power boosting modifier?
+    private int powerBoostingRequired = 6; //built up attack power must reach this int before launching attack
+    private bool powerBoostingCharged = false;
+
 
     [Header("Monster Part Positioning Info")]
     [HideInInspector] public bool isJointed = true;
@@ -503,6 +507,17 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerNeutralOrHeavy()
     {
+        if (powerBoostingHeavyAttack)
+        {
+            if (powerBoostingCharged)
+            {
+                attackMarkedHeavy = true;
+                myAnimator.SetBool("Attack Marked Heavy", true);
+
+                myAnimator.SetTrigger("Force Heavy Attack");
+            }
+        }
+
         if (!attackMarkedHeavy && needsReloadNeutral)
         {
             if (!isReloadedNeutral)
@@ -544,6 +559,14 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerHeavyAttackPowerUp()
     {
+        if (powerBoostingHeavyAttack)
+        {
+            if (!powerBoostingCharged && builtUpAttackPower >= powerBoostingRequired)
+            {
+                PowerBoostCheck();
+            }
+        }
+
         heavyAttack.triggerHeavyAttackPowerUp();
     }
 
@@ -937,6 +960,38 @@ public class NewMonsterPart : MonoBehaviour
     {
         stompDetection.enabled = false;
     }
+    #endregion
+
+    #region PowerBoost Attack Specific Functions
+    public void PowerBoostCancel()
+    {
+        powerBoostingCharged = true;
+    }
+
+    public void PowerBoostChargedFalse()
+    {
+        powerBoostingCharged = false;
+    }
+    public void PowerBoostCheck()
+    {
+        if (powerBoostingHeavyAttack)
+        {
+            if (!powerBoostingCharged)
+            {
+                if (builtUpAttackPower >= powerBoostingRequired) //final check 
+                {
+                    powerBoostingCharged = true;
+
+                    myAnimator.SetTrigger("Cancel Heavy");
+
+                    PartVisual.triggerUnbrace();
+                    PartVisual.triggerAttackToIdle();
+                    triggerAttackCorrections();
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region Heavy Attack Power Up

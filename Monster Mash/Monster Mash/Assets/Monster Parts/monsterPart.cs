@@ -1314,6 +1314,10 @@ public class monsterPart : MonoBehaviour
 
     public void triggerAttackRelease()
     {
+        if (powerBoostingHeavyAttack && attackMarkedHeavy)
+        {
+            powerBoostingCharged = false;
+        }
 
         if (isJointed)
         {

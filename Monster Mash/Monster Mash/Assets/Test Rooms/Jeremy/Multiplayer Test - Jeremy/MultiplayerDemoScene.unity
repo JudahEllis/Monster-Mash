@@ -317,6 +317,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 2023495422108177590, guid: a6bd656e0c163f24ca342e676372b672,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2023495422108177594, guid: a6bd656e0c163f24ca342e676372b672,
         type: 3}
       propertyPath: m_RootOrder
@@ -1010,11 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f726d68454da44a8e7fd438167455d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransforms:
-  - {fileID: 625227818}
-  - {fileID: 1048457881}
-  - {fileID: 649562324}
-  - {fileID: 1166460459}
+  playerTransforms: []
   dynamicCam: {fileID: 1339863532}
   camFovCurve:
     serializedVersion: 2
@@ -2263,6 +2264,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6165458017028694131, guid: b0a831eba6b333844b3f0f555c5a3064,
         type: 3}
+      propertyPath: dynamicCamObj
+      value: 
+      objectReference: {fileID: 834986734}
+    - target: {fileID: 6165458017028694131, guid: b0a831eba6b333844b3f0f555c5a3064,
+        type: 3}
       propertyPath: playerSpawnLocations.Array.data[0]
       value: 
       objectReference: {fileID: 625227818}
@@ -2347,7 +2353,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6165458018302951209}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
   m_Name: 
@@ -2759,22 +2765,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: input_handler, Assembly-CSharp
-        m_MethodName: keyboardMouseSetUp
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: aa9cde63-8749-43a1-9b42-61959077431e
-    m_ActionName: Starting Action Map/Enter Game - Keyboard/Mouse Map[/Keyboard/anyKey,/Mouse/press]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: input_handler, Assembly-CSharp
         m_MethodName: W_key
         m_Mode: 0
         m_Arguments:
@@ -3045,46 +3035,6 @@ MonoBehaviour:
     m_ActionName: UI Navagation/Deselect Action - Generic Gamepad[/SwitchProControllerHID/buttonEast,/Keyboard/backspace]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: f6b59085-b14b-4790-8921-932e21972dda
-    m_ActionName: UI/Navigate[/SwitchProControllerHID/leftStick/up,/SwitchProControllerHID/rightStick/up,/SwitchProControllerHID/leftStick/down,/SwitchProControllerHID/rightStick/down,/SwitchProControllerHID/leftStick/left,/SwitchProControllerHID/rightStick/left,/SwitchProControllerHID/leftStick/right,/SwitchProControllerHID/rightStick/right,/SwitchProControllerHID/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 79137aca-38b9-4afa-91d2-034236cac17b
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 8197766e-7013-40d7-96f8-5df7fb505a4c
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e88da43c-f6fb-4cd5-b694-ddee440ac027
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: d56e3848-1ffc-4e5b-9582-b2637a0c2062
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: a0ba0683-20cc-4fc0-93ef-268af0d46874
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c908e164-c9e0-4e88-9f49-c011d10954a9
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2eedc330-4acd-4eee-9678-a8cf06914f15
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: dfae800a-bc67-4a4d-94a9-c99f629cb194
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: d95e19c7-e991-43ad-a00e-0a5b1a9d58ed
-    m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 032aa579-e6f5-4ba4-88e1-0a656f41bc53
     m_ActionName: Build-A-Scare/Move Part[/SwitchProControllerHID/leftStick,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
@@ -3143,6 +3093,46 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 5dafa663-e485-4c70-8635-9bd0c8727476
     m_ActionName: Build-A-Scare/Undo Part[/DualSenseGamepadHID/buttonEast,/Keyboard/backspace]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b13cdd7-4397-4f62-b01e-2d77bad62756
+    m_ActionName: UI/Navigate[/DualSenseGamepadHID/leftStick/up,/SwitchProControllerHID/leftStick/up,/DualSenseGamepadHID/rightStick/up,/SwitchProControllerHID/rightStick/up,/DualSenseGamepadHID/leftStick/down,/SwitchProControllerHID/leftStick/down,/DualSenseGamepadHID/rightStick/down,/SwitchProControllerHID/rightStick/down,/DualSenseGamepadHID/leftStick/left,/SwitchProControllerHID/leftStick/left,/DualSenseGamepadHID/rightStick/left,/SwitchProControllerHID/rightStick/left,/DualSenseGamepadHID/leftStick/right,/SwitchProControllerHID/leftStick/right,/DualSenseGamepadHID/rightStick/right,/SwitchProControllerHID/rightStick/right,/DualSenseGamepadHID/dpad,/SwitchProControllerHID/dpad]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 882e4ab3-bbe2-42ee-b9ab-e4c1c2df1136
+    m_ActionName: UI/Submit[/DualSenseGamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2e5c6021-55cb-4b9c-992c-7846b83cdc6e
+    m_ActionName: UI/Cancel[/DualSenseGamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d9f2c1cd-6d3d-4c61-9eed-b6270e9b5bf4
+    m_ActionName: UI/Point
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b63101f-8df9-4e5d-9dbe-9dc1941ee114
+    m_ActionName: UI/Click
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1d01a8b6-50b5-400e-8379-13306abe23ab
+    m_ActionName: UI/ScrollWheel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fe4b726a-7aa5-4a6c-8197-427fb1a4c6f6
+    m_ActionName: UI/MiddleClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f84d9437-0bbf-43db-a9ab-8684058b0ca5
+    m_ActionName: UI/RightClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fa723524-9af9-43f2-97e2-239c5f17aa8f
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 43b7aa08-7a12-427a-bc38-7c3a3123d22b
+    m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Starting Action Map

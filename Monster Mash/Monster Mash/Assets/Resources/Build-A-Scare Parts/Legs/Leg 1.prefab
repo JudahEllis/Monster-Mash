@@ -1061,6 +1061,7 @@ GameObject:
   - component: {fileID: 5215025874775062166}
   - component: {fileID: 8024796071805918010}
   - component: {fileID: 8024796071805918011}
+  - component: {fileID: -5059998091789357374}
   m_Layer: 0
   m_Name: Leg 1
   m_TagString: Connection - Monster Part
@@ -1311,6 +1312,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: 0, y: -0.3, z: 0}
+--- !u!114 &-5059998091789357374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8024796071805918008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Legs/Leg 1
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &8024796071838776284
 GameObject:
   m_ObjectHideFlags: 0

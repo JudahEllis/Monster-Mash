@@ -2610,6 +2610,7 @@ GameObject:
   - component: {fileID: 5619757047837715487}
   - component: {fileID: 2970737224965660157}
   - component: {fileID: 906834785710729804}
+  - component: {fileID: -2134967011292729414}
   m_Layer: 0
   m_Name: Head 11
   m_TagString: Connection - Monster Part
@@ -2860,6 +2861,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: 0, y: -0.02, z: 0}
+--- !u!114 &-2134967011292729414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8138992886746014596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Heads/Head 11
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &8143011334993083035
 GameObject:
   m_ObjectHideFlags: 0

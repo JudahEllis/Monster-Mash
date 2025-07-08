@@ -10,22 +10,22 @@ public class AttackConfig
     public string ConfigName;
     public MonsterPartType PartType;
     public MonsterPartConnectionMask PartConnections;
-    public string forwardInputTorsoCommand;
-    public string backwardInputTorsoCommand;
-    public string upwardInputTorsoCommand;
-    public string downwardInputTorsoCommand;
-    public string forwardInputHeadCommand;
-    public string backwardInputHeadCommand;
-    public string upwardInputHeadCommand;
-    public string downwardInputHeadCommand;
-    public string forwardNeutralMovementCommand;
-    public string upwardNeutralMovementCommand;
-    public string backwardNeutralMovementCommand;
-    public string downwardNeutralMovementCommand;
-    public string forwardHeavyMovementCommand;
-    public string upwardHeavyMovementCommand;
-    public string backwardHeavyMovementCommand;
-    public string downwardHeavyMovementCommand;
+    public TorsoCommand forwardInputTorsoCommand;
+    public TorsoCommand backwardInputTorsoCommand;
+    public TorsoCommand upwardInputTorsoCommand;
+    public TorsoCommand downwardInputTorsoCommand;
+    public HeadCommand forwardInputHeadCommand;
+    public HeadCommand backwardInputHeadCommand;
+    public HeadCommand upwardInputHeadCommand;
+    public HeadCommand downwardInputHeadCommand;
+    public NeutralMovementCommand forwardNeutralMovementCommand;
+    public NeutralMovementCommand upwardNeutralMovementCommand;
+    public NeutralMovementCommand backwardNeutralMovementCommand;
+    public NeutralMovementCommand downwardNeutralMovementCommand;
+    public HeavyMovementCommand forwardHeavyMovementCommand;
+    public HeavyMovementCommand upwardHeavyMovementCommand;
+    public HeavyMovementCommand backwardHeavyMovementCommand;
+    public HeavyMovementCommand downwardHeavyMovementCommand;
 }
 
 // You cant load json directly into a list so we need a wrapper class

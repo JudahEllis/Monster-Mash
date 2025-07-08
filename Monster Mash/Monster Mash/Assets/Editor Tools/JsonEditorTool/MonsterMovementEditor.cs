@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
+using System;
 
 public class MonsterMovementEditor : EditorWindow
 {
@@ -272,11 +274,48 @@ public class MonsterMovementEditor : EditorWindow
     {
         try
         {
+            // create a backup just incase
+            if (File.Exists(jsonPath))
+            {
+                string folder = Path.GetDirectoryName(jsonPath);
+                string backupFileName = $"attack_configs_backup_{DateTime.Now:MM-dd-yyyy}.json";
+                string backupPath = Path.Combine(folder, backupFileName);
+                int maxBackups = 3;
+
+                
+                File.Copy(jsonPath, backupPath, overwrite: true);
+
+                string[] backupFiles = Directory.GetFiles(folder, "attack_configs_backup_*.json");
+
+                var datedBackups = backupFiles
+                    .Select(path =>
+                    {
+                        string filename = Path.GetFileNameWithoutExtension(path);
+                        string datePart = filename.Replace("attack_configs_backup_", "");
+                        if (DateTime.TryParseExact(datePart, "MM-dd-yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime date))
+                            return new { Path = path, Date = date };
+                        return null;
+                    })
+                    .Where(entry => entry != null)
+                    .OrderBy(entry => entry.Date)
+                    .ToList();
+
+                if (datedBackups.Count > maxBackups)
+                {
+                    for (int i = 0; i < datedBackups.Count - maxBackups; i++)
+                    {
+                        File.Delete(datedBackups[i].Path);
+                    }
+                }
+            }
+
+            // save the data to the main json file
+
             string jsonText = JsonUtility.ToJson(ruleset, true);
             File.WriteAllText(jsonPath, jsonText);
             AssetDatabase.Refresh();
 
-            // Show success popup only after successful write
+            
             EditorUtility.DisplayDialog(
                 "Saved",
                 "Changes have been successfully saved to the JSON file.",
@@ -287,7 +326,6 @@ public class MonsterMovementEditor : EditorWindow
         {
             Debug.LogError("Error saving JSON: " + ex.Message);
 
-            // Optional: show an error dialog to the user
             EditorUtility.DisplayDialog(
                 "Save Failed",
                 "An error occurred while saving the JSON file:\n" + ex.Message,
@@ -295,6 +333,7 @@ public class MonsterMovementEditor : EditorWindow
             );
         }
     }
+
 
 
     private void DisplayConfig(AttackConfig config)
@@ -309,26 +348,28 @@ public class MonsterMovementEditor : EditorWindow
         GUILayout.Space(10);
 
         GUILayout.Label("Movement Commands", EditorStyles.boldLabel);
-        config.forwardInputTorsoCommand = EditorGUILayout.TextField("Forward Input Torso Command", config.forwardInputTorsoCommand);
-        config.backwardInputTorsoCommand = EditorGUILayout.TextField("Backward Input Torso Command", config.backwardInputTorsoCommand);
-        config.upwardInputTorsoCommand = EditorGUILayout.TextField("Upward Input Torso Command", config.upwardInputTorsoCommand);
-        config.downwardInputTorsoCommand = EditorGUILayout.TextField("Downward Input Torso Command", config.downwardInputTorsoCommand);
 
-        config.forwardInputHeadCommand = EditorGUILayout.TextField("Forward Input Head Command", config.forwardInputHeadCommand);
-        config.backwardInputHeadCommand = EditorGUILayout.TextField("Backward Input Head Command", config.backwardInputHeadCommand);
-        config.upwardInputHeadCommand = EditorGUILayout.TextField("Upward Input Head Command", config.upwardInputHeadCommand);
-        config.downwardInputHeadCommand = EditorGUILayout.TextField("Downward Input Head Command", config.downwardInputHeadCommand);
+        config.forwardInputTorsoCommand = (TorsoCommand)EditorGUILayout.EnumPopup("Forward Input Torso Command", config.forwardInputTorsoCommand);
+        config.backwardInputTorsoCommand = (TorsoCommand)EditorGUILayout.EnumPopup("Backward Input Torso Command", config.backwardInputTorsoCommand);
+        config.upwardInputTorsoCommand = (TorsoCommand)EditorGUILayout.EnumPopup("Upward Input Torso Command", config.upwardInputTorsoCommand);
+        config.downwardInputTorsoCommand = (TorsoCommand)EditorGUILayout.EnumPopup("Downward Input Torso Command", config.downwardInputTorsoCommand);
 
-        config.forwardNeutralMovementCommand = EditorGUILayout.TextField("Forward Neutral Movement Command", config.forwardNeutralMovementCommand);
-        config.backwardNeutralMovementCommand = EditorGUILayout.TextField("Backward Neutral Movement Command", config.backwardNeutralMovementCommand);
-        config.upwardNeutralMovementCommand = EditorGUILayout.TextField("Upward Neutral Movement Command", config.upwardNeutralMovementCommand);
-        config.downwardNeutralMovementCommand = EditorGUILayout.TextField("Downward Neutral Movement Command", config.downwardNeutralMovementCommand);
+        config.forwardInputHeadCommand = (HeadCommand)EditorGUILayout.EnumPopup("Forward Input Head Command", config.forwardInputHeadCommand);
+        config.backwardInputHeadCommand = (HeadCommand)EditorGUILayout.EnumPopup("Backward Input Head Command", config.backwardInputHeadCommand);
+        config.upwardInputHeadCommand = (HeadCommand)EditorGUILayout.EnumPopup("Upward Input Head Command", config.upwardInputHeadCommand);
+        config.downwardInputHeadCommand = (HeadCommand)EditorGUILayout.EnumPopup("Downward Input Head Command", config.downwardInputHeadCommand);
 
-        config.forwardHeavyMovementCommand = EditorGUILayout.TextField("Forward Heavy Movement Command", config.forwardHeavyMovementCommand);
-        config.backwardHeavyMovementCommand = EditorGUILayout.TextField("Backward Heavy Movement Command", config.backwardHeavyMovementCommand);
-        config.upwardHeavyMovementCommand = EditorGUILayout.TextField("Upward Heavy Movement Command", config.upwardHeavyMovementCommand);
-        config.downwardHeavyMovementCommand = EditorGUILayout.TextField("Downward Heavy Movement Command", config.downwardHeavyMovementCommand);
+        config.forwardNeutralMovementCommand = (NeutralMovementCommand)EditorGUILayout.EnumPopup("Forward Neutral Movement Command", config.forwardNeutralMovementCommand);
+        config.backwardNeutralMovementCommand = (NeutralMovementCommand)EditorGUILayout.EnumPopup("Backward Neutral Movement Command", config.backwardNeutralMovementCommand);
+        config.upwardNeutralMovementCommand = (NeutralMovementCommand)EditorGUILayout.EnumPopup("Upward Neutral Movement Command", config.upwardNeutralMovementCommand);
+        config.downwardNeutralMovementCommand = (NeutralMovementCommand)EditorGUILayout.EnumPopup("Downward Neutral Movement Command", config.downwardNeutralMovementCommand);
+
+        config.forwardHeavyMovementCommand = (HeavyMovementCommand)EditorGUILayout.EnumPopup("Forward Heavy Movement Command", config.forwardHeavyMovementCommand);
+        config.backwardHeavyMovementCommand = (HeavyMovementCommand)EditorGUILayout.EnumPopup("Backward Heavy Movement Command", config.backwardHeavyMovementCommand);
+        config.upwardHeavyMovementCommand = (HeavyMovementCommand)EditorGUILayout.EnumPopup("Upward Heavy Movement Command", config.upwardHeavyMovementCommand);
+        config.downwardHeavyMovementCommand = (HeavyMovementCommand)EditorGUILayout.EnumPopup("Downward Heavy Movement Command", config.downwardHeavyMovementCommand);
 
         EditorGUIUtility.labelWidth = previousLabelWidth;
     }
+
 }

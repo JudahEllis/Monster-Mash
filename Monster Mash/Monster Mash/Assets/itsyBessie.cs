@@ -738,6 +738,7 @@ public class itsyBessie : MonoBehaviour
     private bool facingLeft;
     private int directionModifier = 1;
     public float runSpeed;
+    public float spinSpeed;
     public float stopDistance;
     public float greyDistance;
     private bool greyDistanceActivated;
@@ -749,11 +750,15 @@ public class itsyBessie : MonoBehaviour
     public Transform boundingBox_maxY;
 
     public GameObject playerTarget;
+    public GameObject[] allPlayersInGame;
+    public List<GameObject> playersInTriggerArea;
     private Vector2 playerPosition;
     private float playerDistance;
     private int bossBehavior = 0;
 
-    public GameObject smackTriggers;
+    public GameObject smackTrigger;
+    public GameObject stabTrigger;
+    public GameObject spinTrigger;
     [SerializeField]
     private int attackAttempts = 3;
 
@@ -762,6 +767,7 @@ public class itsyBessie : MonoBehaviour
     {
         myRotationAnimator = this.gameObject.GetComponent<Animator>();
         myRigidbody = this.gameObject.GetComponent<Rigidbody2D>();
+        allPlayersInGame = GameObject.FindGameObjectsWithTag("Player");
     }
 
     private void Update()
@@ -771,29 +777,129 @@ public class itsyBessie : MonoBehaviour
             playerPosition = new Vector2(playerTarget.transform.position.x, this.transform.position.y);
             playerDistance = Vector2.Distance(this.transform.position, playerPosition);
         }
+        else
+        {
+            fetchRandomPlayer();
+            playerPosition = new Vector2(playerTarget.transform.position.x, this.transform.position.y);
+            playerDistance = Vector2.Distance(this.transform.position, playerPosition);
+        }
 
         if(bossBehavior == 1)
         {
-            if ((playerDistance > 1 || playerDistance == 1) && allowedToMove)
+            if (allowedToMove)
             {
-                float adjustedMoveSpeed = runSpeed - (runSpeed / playerDistance);
-                float adjustedAnimationSpeed = adjustedMoveSpeed / runSpeed;
+                fetchRandomTargetInArea();
 
-
-                if (playerPosition.x > this.transform.position.x && directionModifier != 1)
+                if (playerDistance > 1 || playerDistance == 1)
                 {
-                    //right of me
-                    directionModifier = 1;
-                }
-                else if (playerPosition.x < this.transform.position.x && directionModifier != -1)
-                {
-                    //left of me
-                    directionModifier = -1;
-                }
+                    float adjustedMoveSpeed = runSpeed - (runSpeed / playerDistance);
+                    float adjustedAnimationSpeed = adjustedMoveSpeed / runSpeed;
 
-                myRigidbody.velocity = new Vector2(directionModifier * adjustedMoveSpeed, myRigidbody.velocity.y);
-                //myVisualAnimator.SetFloat("Run Speed Modifier", adjustedAnimationSpeed);
+
+                    if (playerPosition.x > this.transform.position.x && directionModifier != 1)
+                    {
+                        //right of me
+                        directionModifier = 1;
+                    }
+                    else if (playerPosition.x < this.transform.position.x && directionModifier != -1)
+                    {
+                        //left of me
+                        directionModifier = -1;
+                    }
+
+                    myRigidbody.velocity = new Vector2(directionModifier * adjustedMoveSpeed, myRigidbody.velocity.y);
+                    //myVisualAnimator.SetFloat("Run Speed Modifier", adjustedAnimationSpeed);
+                }
             }
+        }
+
+        if (bossBehavior == 2)
+        {
+            if (allowedToMove)
+            {
+                fetchRandomTargetInArea();
+
+                if (playerDistance > stopDistance && greyDistanceActivated == false)
+                {
+                    if (playerPosition.x > this.transform.position.x && directionModifier != 1)
+                    {
+                        //right of me
+                        directionModifier = 1;
+                        moveRight();
+                    }
+                    else if (playerPosition.x < this.transform.position.x && directionModifier != -1)
+                    {
+                        //left of me
+                        directionModifier = -1;
+                        moveLeft();
+                    }
+
+                    myRigidbody.velocity = new Vector2(directionModifier * runSpeed, myRigidbody.velocity.y);
+                }
+                else
+                {
+                    if (directionModifier != 0)
+                    {
+                        directionModifier = 0;
+                        myRigidbody.velocity = new Vector2(0, 0);
+                        greyDistanceActivated = true;
+                        idle(2);
+                    }
+
+                    if (greyDistanceActivated && playerDistance > greyDistance)
+                    {
+                        greyDistanceActivated = false;
+                    }
+                }
+            }
+
+        }
+
+        if (bossBehavior == 3)
+        {
+            if (allowedToMove)
+            {
+                fetchRandomTargetInArea();
+
+                if (playerDistance > stopDistance && greyDistanceActivated == false)
+                {
+                    if (playerPosition.x > this.transform.position.x && directionModifier != 1)
+                    {
+                        //right of me
+                        directionModifier = 1;
+                        moveRight();
+                    }
+                    else if (playerPosition.x < this.transform.position.x && directionModifier != -1)
+                    {
+                        //left of me
+                        directionModifier = -1;
+                        moveLeft();
+                    }
+
+                    myRigidbody.velocity = new Vector2(directionModifier * runSpeed, myRigidbody.velocity.y);
+                }
+                else
+                {
+                    if (directionModifier != 0)
+                    {
+                        directionModifier = 0;
+                        myRigidbody.velocity = new Vector2(0, 0);
+                        greyDistanceActivated = true;
+                        idle(3);
+                    }
+
+                    if (greyDistanceActivated && playerDistance > greyDistance)
+                    {
+                        greyDistanceActivated = false;
+                    }
+                }
+            }
+
+        }
+
+        if (bossBehavior == 30)
+        {
+            myRigidbody.velocity = new Vector2(directionModifier * spinSpeed, myRigidbody.velocity.y);
         }
 
         if (bossBehavior == 8) //this behavior keeps Bessie close to the player at all times
@@ -822,7 +928,7 @@ public class itsyBessie : MonoBehaviour
                     directionModifier = 0;
                     myRigidbody.velocity = new Vector2(0, 0);
                     greyDistanceActivated = true;
-                    idle();
+                    idle(0);
                 }
 
                 if (greyDistanceActivated && playerDistance > greyDistance)
@@ -831,42 +937,6 @@ public class itsyBessie : MonoBehaviour
                 }
             }
         }
-    }
-
-    public void smack()
-    {
-        //find a target
-        isAttacking = false;
-        bossBehavior = 1; //tell update to approach that target
-        attackAttempts = 3; //replace with unique number of attempts
-        myVisualAnimator.SetTrigger("Smack"); //tell visual animator to trigger smack animation
-        smackTriggers.SetActive(true);//turn on specific trigger area for this attack
-        StartCoroutine(smackWindUpDelay());
-    }
-
-    IEnumerator smackWindUpDelay()
-    {
-        yield return new WaitForSeconds(1f);//allow this to be a unique number or have a function passed upstream somehow
-        allowedToMove = true;
-    }
-
-    public void stab()
-    {
-        //tell visual animator to trigger stab animation
-        //find a target
-        //tell update to approach that target
-        //turn on specific trigger area for this attack
-        //make sure we are facing the direction of our target in update
-        //make sure that when a player is in our trigger to play a reaction time before releasing attack
-    }
-
-    public void spin()
-    {
-        //tell visual animator to trigger spin animation
-        //find a target
-        //tell update to approach that target
-        //turn on specific trigger area for this attack
-        //make sure that when a player is in our trigger to play a reaction time before releasing attack
     }
 
     public void charge()
@@ -887,67 +957,150 @@ public class itsyBessie : MonoBehaviour
         //tell visual animator to trigger spin animation
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if(bossBehavior == 1 && isAttacking == false)
+            if (playersInTriggerArea.Contains(collision.gameObject) == false)
             {
-                if (collision.transform.position.y > boundingBox_maxY.position.y)
-                {
-                    isAttacking = true;
-                    StartCoroutine(airAttackDelay());
-                }
-                else
-                {
-                    isAttacking = true;
-                    StartCoroutine(attackDelay());
-                }
+                playersInTriggerArea.Add(collision.gameObject);
             }
         }
     }
 
-    IEnumerator attackDelay()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        yield return new WaitForSeconds(0.2f);//replace with a unique attack delay
-        releaseAttack();
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            if (playersInTriggerArea.Contains(collision.gameObject))
+            {
+                playersInTriggerArea.Remove(collision.gameObject);
+            }
+        }
     }
 
-    IEnumerator airAttackDelay()
+    private void fetchRandomTargetInArea()
     {
-        yield return new WaitForSeconds(0.2f);//replace with a unique attack delay
-        releaseAirAttack();
+        if (isAttacking == false && playersInTriggerArea.Count > 0)
+        {
+            isAttacking = true;
+            int chosenTarget = Random.Range(0, playersInTriggerArea.Count);
+            playerTarget = playersInTriggerArea[chosenTarget];
+
+            if (bossBehavior == 1)
+            {
+                if (playerTarget.transform.position.y > boundingBox_maxY.position.y)
+                {
+                    StartCoroutine(airSmackAttackDelay());
+                }
+                else
+                {
+                    StartCoroutine(smackAttackDelay());
+                }
+            }
+            else if (bossBehavior == 2)
+            {
+                allowedToMove = false;
+                directionModifier = 0;
+                myRigidbody.velocity = new Vector2(0, 0);
+                greyDistanceActivated = true;
+                idle(3);
+                myVisualAnimator.SetTrigger("Stab");
+                StartCoroutine(stabAttackDelay());
+            }
+            else if (bossBehavior == 3)
+            {
+                allowedToMove = false;
+                directionModifier = 0;
+                myRigidbody.velocity = new Vector2(0, 0);
+                greyDistanceActivated = true;
+                idle(3);
+                myVisualAnimator.SetTrigger("Spin");
+                StartCoroutine(spinAttackDelay());
+            }
+        }
     }
 
-    public void releaseAttack()
+    private void fetchRandomPlayer()
+    {
+        int chosenPlayer = Random.Range(0, allPlayersInGame.Length);
+
+        if (allPlayersInGame[chosenPlayer] != null)
+        {
+            float playerHeightFromGround = allPlayersInGame[chosenPlayer].transform.position.y;
+
+            if (bossBehavior == 3 && playerHeightFromGround > boundingBox_maxY.position.y)
+            {
+                fetchRandomPlayer();
+                return;
+            }
+            else
+            {
+                playerTarget = allPlayersInGame[chosenPlayer];
+            }
+        }
+        else
+        {
+            fetchRandomPlayer();
+        }
+    }
+
+    #region Smack Attack
+    public void smack()
+    {
+        //find a target
+        isAttacking = false;
+        bossBehavior = 1;
+        attackAttempts = 3;
+        myVisualAnimator.SetTrigger("Smack");
+        smackTrigger.SetActive(true);
+        StartCoroutine(smackWindUpDelay());
+    }
+
+    IEnumerator smackWindUpDelay()
+    {
+        yield return new WaitForSeconds(1f);//allow this to be a unique number or have a function passed upstream somehow
+        allowedToMove = true;
+    }
+    IEnumerator smackAttackDelay()
+    {
+        yield return new WaitForSeconds(0.2f);//replace with a unique attack delay
+        releaseSmackAttack();
+    }
+
+    IEnumerator airSmackAttackDelay()
+    {
+        yield return new WaitForSeconds(0.2f);//replace with a unique attack delay
+        releaseAirSmackAttack();
+    }
+
+    private void releaseSmackAttack()
     {
         attackAttempts--;
         allowedToMove = false;
+        playerTarget = null;
         myRigidbody.velocity = new Vector2(0, 0);
-        myVisualAnimator.SetTrigger("Attack"); //tell visual animator to trigger animation
-        //reset attack triggers
-        //play charging movement if necessary
-        StartCoroutine(attackCooldown());
+        myVisualAnimator.SetTrigger("Attack");
+        StartCoroutine(smackAttackCooldown());
     }
 
-    public void releaseAirAttack()
+    private void releaseAirSmackAttack()
     {
         attackAttempts--;
         allowedToMove = false;
+        playerTarget = null;
         myRigidbody.velocity = new Vector2(0, 0);
-        myVisualAnimator.SetTrigger("Air Attack"); //tell visual animator to trigger animation
-        //reset attack triggers
-        //play charging movement if necessary
-        StartCoroutine(attackCooldown());
+        myVisualAnimator.SetTrigger("Air Attack");
+        StartCoroutine(smackAttackCooldown());
     }
 
-    IEnumerator attackCooldown()
+    IEnumerator smackAttackCooldown()
     {
         yield return new WaitForSeconds(1f); //replace with a unique cooldown
 
         if (attackAttempts == 0 || attackAttempts < 0)
         {
-            idle();
+            idle(0);
         }
         else
         {
@@ -956,28 +1109,175 @@ public class itsyBessie : MonoBehaviour
         }
     }
 
-    public void idle()
+    #endregion
+
+    #region Stab Attack
+    public void stab()
+    {
+        allowedToMove = true;
+        isAttacking = false;
+        bossBehavior = 2;
+        attackAttempts = 2;
+        stabTrigger.SetActive(true);
+    }
+
+    IEnumerator stabAttackDelay()
+    {
+        yield return new WaitForSeconds(1f);//allow this to be a unique number or have a function passed upstream somehow
+        releaseStabAttack();
+
+    }
+
+    private void releaseStabAttack()
+    {
+        attackAttempts--;
+        myVisualAnimator.SetTrigger("Attack");
+        StartCoroutine(stabAttackDuration());
+
+        if (playerPosition.x > this.transform.position.x && directionModifier != 1)
+        {
+            //right of me
+            directionModifier = 1;
+            faceRight();
+        }
+        else if (playerPosition.x < this.transform.position.x && directionModifier != -1)
+        {
+            //left of me
+            directionModifier = -1;
+            faceLeft();
+        }
+    }
+
+    IEnumerator stabAttackDuration()
+    {
+        yield return new WaitForSeconds(2f); //replace with a unique cooldown
+        directionModifier = 0;
+        myRigidbody.velocity = new Vector2(0, 0);
+        myVisualAnimator.SetBool("Ready to Go Idle", true);
+        playerTarget = null;
+        StartCoroutine(stabAttackCooldown());
+    }
+
+    IEnumerator stabAttackCooldown()
+    {
+        yield return new WaitForSeconds(2f); //replace with a unique cooldown
+
+        if (attackAttempts == 0 || attackAttempts < 0)
+        {
+            idle(0);
+        }
+        else
+        {
+            idle(2);
+        }
+
+        yield return new WaitForSeconds(5f);
+        isAttacking = false;
+        allowedToMove = true;
+    }
+
+    #endregion
+
+    #region Spin Attack
+    public void spin()
+    {
+        allowedToMove = true;
+        isAttacking = false;
+        bossBehavior = 3;
+        attackAttempts = 1;
+        spinTrigger.SetActive(true);
+    }
+
+    IEnumerator spinAttackDelay()
+    {
+        yield return new WaitForSeconds(2f);//replace with a unique attack delay  
+        releaseSpinAttack();
+    }
+
+    private void releaseSpinAttack()
+    {
+        attackAttempts--;
+        myVisualAnimator.SetTrigger("Attack");
+        StartCoroutine(spinAttackDuration());
+
+        if (playerPosition.x > this.transform.position.x && directionModifier != 1)
+        {
+            //right of me
+            directionModifier = 1;
+        }
+        else if (playerPosition.x < this.transform.position.x && directionModifier != -1)
+        {
+            //left of me
+            directionModifier = -1;
+        }
+
+        bossBehavior = 30;
+        /*
+        attackAttempts--;
+        //bossBehavior = 30;
+        //allowedToMove = true;
+        */
+    }
+
+    IEnumerator spinAttackDuration()
+    {
+        yield return new WaitForSeconds(2f); //replace with a unique cooldown
+        bossBehavior = 0;
+        directionModifier = 0;
+        myRigidbody.velocity = new Vector2(0, 0);
+        myVisualAnimator.SetBool("Ready to Go Idle", true);
+        playerTarget = null;
+        StartCoroutine(spinAttackCooldown());
+    }
+
+    IEnumerator spinAttackCooldown()
+    {
+        yield return new WaitForSeconds(1f); //replace with a unique cooldown
+
+        if (attackAttempts == 0 || attackAttempts < 0)
+        {
+            idle(0);
+        }
+        else
+        {
+            isAttacking = false;
+            allowedToMove = true;
+        }
+    }
+    #endregion
+
+    public void idle(int intendedState)
     {
         if (facingRight || facingLeft)
         {
             myVisualAnimator.SetTrigger("Jump");
         }
 
-        bossBehavior = 0;
-        attackAttempts = 0;
         directionModifier = 0;
         myRigidbody.velocity = new Vector2(0, 0);
         facingRight = false;
         facingLeft = false;
-        allowedToMove = false;
         myRotationAnimator.SetTrigger("Idle");
         myVisualAnimator.SetBool("Move Left", false);
         myVisualAnimator.SetBool("Move Right", false);
         myVisualAnimator.SetBool("Facing Left", false);
         myVisualAnimator.SetBool("Facing Right", false);
-        myVisualAnimator.SetBool("Ready to Go Idle", true);
         myVisualAnimator.SetFloat("Run Speed Modifier", 1);
-        smackTriggers.SetActive(false);
+
+        //do we want just the visual of the idle or do we want to reset EVERYTHING
+        if (intendedState == 0)
+        {
+            bossBehavior = 0;
+            attackAttempts = 0;
+            playerTarget = null;
+            allowedToMove = false;
+            greyDistanceActivated = false;
+            smackTrigger.SetActive(false);
+            stabTrigger.SetActive(false);
+            spinTrigger.SetActive(false);
+            myVisualAnimator.SetBool("Ready to Go Idle", true);
+        }
+
         StartCoroutine(cleanFunctions());
     }
 
@@ -990,6 +1290,8 @@ public class itsyBessie : MonoBehaviour
         myVisualAnimator.ResetTrigger("Attack");
         myVisualAnimator.ResetTrigger("Air Attack");
         myVisualAnimator.ResetTrigger("Smack");
+        myVisualAnimator.ResetTrigger("Stab");
+        myVisualAnimator.ResetTrigger("Spin");
         myVisualAnimator.SetBool("Ready to Go Idle", false);
     }
 
@@ -1007,6 +1309,18 @@ public class itsyBessie : MonoBehaviour
         }
     }
 
+    public void faceRight()
+    {
+        if (facingRight == false)
+        {
+            facingRight = true;
+            facingLeft = false;
+            myRotationAnimator.SetTrigger("Face Right");
+            myVisualAnimator.SetBool("Facing Left", false);
+            myVisualAnimator.SetBool("Facing Right", true);
+        }
+    }
+
     public void turnLeft()
     {
         if (facingLeft == false)
@@ -1016,6 +1330,18 @@ public class itsyBessie : MonoBehaviour
             facingRight = false;
             facingLeft = true;
             myRotationAnimator.SetTrigger("Turn Left");
+            myVisualAnimator.SetBool("Facing Left", true);
+            myVisualAnimator.SetBool("Facing Right", false);
+        }
+    }
+
+    public void faceLeft()
+    {
+        if (facingLeft == false)
+        {
+            facingRight = false;
+            facingLeft = true;
+            myRotationAnimator.SetTrigger("Face Left");
             myVisualAnimator.SetBool("Facing Left", true);
             myVisualAnimator.SetBool("Facing Right", false);
         }

@@ -493,36 +493,35 @@ public class MonsterPartVisual : MonoBehaviour
     public void attackCalculations()
     {
         MonsterCalculations calc = AttackCalculationsSetUp(); //does this in a separate script, it's too beefy :/
-        MonsterPartVisual partVisual = GetComponent<MonsterPartVisual>();
 
         monsterPartRef.requiresBackwardStance = calc.requiresBackwardStance;
         monsterPartRef.requiresForwardStance = calc.requiresForwardStance;
         monsterPartRef.requiresRightStance = calc.requiresRightStance;
         monsterPartRef.requiresLeftStance = calc.requiresLeftStance;
 
-        partVisual.hasTorsoCommand = calc.hasTorsoCommand;
-        partVisual.forwardInputTorsoCommand = calc.forwardInputTorsoCommand;
-        partVisual.backwardInputTorsoCommand = calc.backwardInputTorsoCommand; //make sure monster flips before attacking
-        partVisual.upwardInputTorsoCommand = calc.upwardInputTorsoCommand;
-        partVisual.downwardInputTorsoCommand = calc.downwardInputTorsoCommand;
+        hasTorsoCommand = calc.hasTorsoCommand;
+        forwardInputTorsoCommand = calc.forwardInputTorsoCommand;
+        backwardInputTorsoCommand = calc.backwardInputTorsoCommand; //make sure monster flips before attacking
+        upwardInputTorsoCommand = calc.upwardInputTorsoCommand;
+        downwardInputTorsoCommand = calc.downwardInputTorsoCommand;
 
-        partVisual.hasHeadCommand = calc.hasHeadCommand;
-        partVisual.forwardInputHeadCommand = calc.forwardInputHeadCommand;
-        partVisual.backwardInputHeadCommand = calc.backwardInputHeadCommand;
-        partVisual.upwardInputHeadCommand = calc.upwardInputHeadCommand;
-        partVisual.downwardInputHeadCommand = calc.downwardInputHeadCommand;
+        hasHeadCommand = calc.hasHeadCommand;
+        forwardInputHeadCommand = calc.forwardInputHeadCommand;
+        backwardInputHeadCommand = calc.backwardInputHeadCommand;
+        upwardInputHeadCommand = calc.upwardInputHeadCommand;
+        downwardInputHeadCommand = calc.downwardInputHeadCommand;
 
-        partVisual.hasNeutralMovementCommand = calc.hasNeutralMovementCommand;
-        partVisual.forwardNeutralMovementCommand = calc.forwardNeutralMovementCommand;
-        partVisual.upwardNeutralMovementCommand = calc.upwardNeutralMovementCommand;
-        partVisual.backwardNeutralMovementCommand = calc.backwardNeutralMovementCommand;
-        partVisual.downwardNeutralMovementCommand = calc.downwardNeutralMovementCommand;
+        hasNeutralMovementCommand = calc.hasNeutralMovementCommand;
+        forwardNeutralMovementCommand = calc.forwardNeutralMovementCommand;
+        upwardNeutralMovementCommand = calc.upwardNeutralMovementCommand;
+        backwardNeutralMovementCommand = calc.backwardNeutralMovementCommand;
+        downwardNeutralMovementCommand = calc.downwardNeutralMovementCommand;
 
-        partVisual.hasHeavyMovementCommand = calc.hasHeavyMovementCommand;
-        partVisual.forwardHeavyMovementCommand = calc.forwardHeavyMovementCommand;
-        partVisual.upwardHeavyMovementCommand = calc.upwardHeavyMovementCommand;
-        partVisual.backwardHeavyMovementCommand = calc.backwardHeavyMovementCommand;
-        partVisual.downwardHeavyMovementCommand = calc.downwardHeavyMovementCommand;
+        hasHeavyMovementCommand = calc.hasHeavyMovementCommand;
+        forwardHeavyMovementCommand = calc.forwardHeavyMovementCommand;
+        upwardHeavyMovementCommand = calc.upwardHeavyMovementCommand;
+        backwardHeavyMovementCommand = calc.backwardHeavyMovementCommand;
+        downwardHeavyMovementCommand = calc.downwardHeavyMovementCommand;
     }
 
     private MonsterCalculations AttackCalculationsSetUp()

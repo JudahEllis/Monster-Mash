@@ -16,7 +16,6 @@ public class MonsterMovementEditor : EditorWindow
     private int endPageIndex = 5;
     private const int desiredPageCount = 5;
 
-    private bool scrollToBottomNextFrame = false;
 
     private string searchText = "";
 
@@ -91,8 +90,8 @@ public class MonsterMovementEditor : EditorWindow
         {
             var config = listToDisplay[i];
             EditorGUILayout.BeginVertical("box");
-            DisplayConfig(config);
 
+            DisplayConfig(config);
             DeleteButton(config);
 
             EditorGUILayout.EndVertical();
@@ -109,8 +108,8 @@ public class MonsterMovementEditor : EditorWindow
 
     private void PageControl()
     {
-        int buttonWidth = 60;
-        int buttonHeight = 25;
+        const int buttonWidth = 60;
+        const int buttonHeight = 25;
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
@@ -167,8 +166,8 @@ public class MonsterMovementEditor : EditorWindow
 
     private void TopBarLayout()
     {
-        int searchBarWidth = 200;
-        float searchLabelWidth = 45;
+        const int searchBarWidth = 200;
+        const float searchLabelWidth = 45;
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Movement Rules", EditorStyles.largeLabel);
@@ -180,22 +179,22 @@ public class MonsterMovementEditor : EditorWindow
 
     private void AddButton()
     {
-        int buttonWidth = 110;
-        int buttonHeight = 25;
+        const int buttonWidth = 110;
+        const int buttonHeight = 25;
 
         if (GUILayout.Button("Add New Config", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             ruleset.Configs.Add(new AttackConfig());
             GoToLastPage();
-            scrollToBottomNextFrame = true;
+            scrollPos.y = int.MaxValue;
         }
     }
 
     private void DeleteButton(AttackConfig config)
     {
-        int buttonWidth = 90;
-        int buttonHeight = 25;
-        int margin = 5;
+        const int buttonWidth = 90;
+        const int buttonHeight = 25;
+        const int margin = 5;
 
         GUILayout.Space(margin);
         GUILayout.BeginHorizontal();
@@ -213,8 +212,8 @@ public class MonsterMovementEditor : EditorWindow
 
     private void SaveAndLoadButtons()
     {
-        int buttonWidth = 150;
-        int buttonHeight = 25;
+        const int buttonWidth = 150;
+        const int buttonHeight = 25;
 
         GUILayout.Label("Warning: Saving overwrites all existing data. Do not save with an empty list.", EditorStyles.helpBox);
         GUILayout.BeginHorizontal();
@@ -280,7 +279,7 @@ public class MonsterMovementEditor : EditorWindow
                 string folder = Path.GetDirectoryName(jsonPath);
                 string backupFileName = $"attack_configs_backup_{DateTime.Now:MM-dd-yyyy}.json";
                 string backupPath = Path.Combine(folder, backupFileName);
-                int maxBackups = 3;
+                const int maxBackups = 3;
 
                 
                 File.Copy(jsonPath, backupPath, overwrite: true);
@@ -318,11 +317,11 @@ public class MonsterMovementEditor : EditorWindow
             
             EditorUtility.DisplayDialog(
                 "Saved",
-                "Changes have been successfully saved to the JSON file.",
+                "Changes have been successfully saved to the JSON file. A backup has been created",
                 "OK"
             );
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError("Error saving JSON: " + ex.Message);
 
@@ -338,14 +337,16 @@ public class MonsterMovementEditor : EditorWindow
 
     private void DisplayConfig(AttackConfig config)
     {
-        int labelWidth = 233;
+        const int labelWidth = 233;
+        const int contentSpacing = 10;
         float previousLabelWidth = EditorGUIUtility.labelWidth;
+
         EditorGUIUtility.labelWidth = labelWidth;
 
         config.ConfigName = EditorGUILayout.TextField("Config Name", config.ConfigName);
         config.PartType = (MonsterPartType)EditorGUILayout.EnumPopup("Monster Part Type", config.PartType);
         config.PartConnections = (MonsterPartConnectionMask)EditorGUILayout.EnumFlagsField("Targeted Connection Points", config.PartConnections);
-        GUILayout.Space(10);
+        GUILayout.Space(contentSpacing);
 
         GUILayout.Label("Movement Commands", EditorStyles.boldLabel);
 

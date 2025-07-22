@@ -134,6 +134,17 @@ public class playerController : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        BaseAttack.OnAttackRelease += ApplyMovementModifier;
+    }
+
+    private void OnDisable()
+    {
+        BaseAttack.OnAttackRelease -= ApplyMovementModifier;
+        UnsubscribeActionMap();
+    }
+
     public void PlayerInputSetUp()
     {
         startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
@@ -149,10 +160,10 @@ public class playerController : MonoBehaviour
 
         switchActionMap("Monster Controls");
 
-        Subscribe();
+        SubscribeActionMap();
     }
 
-    void Subscribe()
+    void SubscribeActionMap()
     {
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += OnLeftStick;
 
@@ -176,8 +187,9 @@ public class playerController : MonoBehaviour
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += onButtonY;
     }
 
-    void Unsubscribe()
+    void UnsubscribeActionMap()
     {
+
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= OnLeftStick;
@@ -200,10 +212,7 @@ public class playerController : MonoBehaviour
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= onButtonY;
     }
 
-    private void OnDisable()
-    {
-        Unsubscribe();
-    }
+    
 
     public void switchActionMap(string newActionMap)
     {
@@ -2083,6 +2092,12 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
         }
         */
+    }
+
+    // Listens for when an attack calls Trigger Attack Release
+    public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
+    {
+        myRigidbody.AddForce(eventArgs.movementModifier, ForceMode2D.Impulse);
     }
 
     IEnumerator leapAttackForwardControl()

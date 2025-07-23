@@ -122,6 +122,18 @@ public class monsterAttackSystem : MonoBehaviour
     public SFXManager SFXManager;
     public GameObject floorCheck;
 
+
+    private void OnDisable()
+    {
+        // the events are already unsubscribed in popoffmonsterpart() but this is just for safety in case the object is suddenely disabled for some reason.
+        foreach (NewMonsterPart monsterPart in attackSlotMonsterParts)
+        {
+            monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+            monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+        }
+    }
+
+
     #region Monster Start Up
 
     public void connectNecessaryLocomotionComponents()
@@ -375,6 +387,13 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
             allMonsterParts[i].triggerIdle();
+        }
+
+        // connects all the attacking monster parts OnAttackrelease event to the player controller
+        foreach (NewMonsterPart monsterPart in attackSlotMonsterParts)
+        {
+            monsterPart.neutralAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
+            monsterPart.heavyAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
@@ -2531,6 +2550,8 @@ public class monsterAttackSystem : MonoBehaviour
                 if (attackSlotMonsterParts[i] == partRemoved)
                 {
                     partRemoved.disconnectThisPart();
+                    partRemoved.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                    partRemoved.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     destructionPhysicsHelper.SetActive(true);
                     StartCoroutine(removeMonsterPartFromStage(attackSlotMonsterParts[i].gameObject));
                     //store some sort of parental and location data

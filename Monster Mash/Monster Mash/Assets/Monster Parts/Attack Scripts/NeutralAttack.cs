@@ -22,20 +22,20 @@ public class NeutralAttack: BaseAttack
         AOE,
         Boomerang
     }
-
+    // a property drawer relies on this var using string lookup. Please do not change the var name or the property drawer will stop working
     public AttackType Attack;
 
+    // factory pattern to assign the subclass
     public NeutralAttack GetAttack()
     {
         return Attack switch
         {
-            AttackType.None => new NeutralAttack(), 
-            AttackType.Jab => new JabNeutral(),
-            AttackType.Slash => new SlashNeutral(),
-            AttackType.Spray => new SprayNeutral(),
-            AttackType.Projectile => new ProjectileNeutral(),
-            AttackType.Boomerang => new BoomerangNeutral(),
-            _ => new NeutralAttack(),
+            AttackType.Jab => new JabNeutral { Attack = AttackType.Jab},
+            AttackType.Slash => new SlashNeutral { Attack = AttackType.Slash},
+            AttackType.Spray => new SprayNeutral { Attack = AttackType.Spray},
+            AttackType.Projectile => new ProjectileNeutral { Attack = AttackType.Projectile},
+            AttackType.Boomerang => new BoomerangNeutral { Attack = AttackType.Boomerang},
+            _ => new NeutralAttack { Attack = AttackType.None},
         };
     }
 

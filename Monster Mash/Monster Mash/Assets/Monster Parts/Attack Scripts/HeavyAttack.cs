@@ -30,7 +30,7 @@ public class HeavyAttack : BaseAttack
         Charging,
         SelfExploding,
     }
-
+    // a property drawer relies on this var using string lookup. Please do not change the var name or the property drawer will stop working
     public HeavyAttackType Attack;
 
 
@@ -38,16 +38,15 @@ public class HeavyAttack : BaseAttack
     {
         return Attack switch
         {
-            HeavyAttackType.None => new HeavyAttack(),
-            HeavyAttackType.Jab => new JabHeavy(),
-            HeavyAttackType.Slash => new SlashHeavy(),
-            HeavyAttackType.Spray => new SprayHeavy(),
-            HeavyAttackType.Projectile => new ProjectileHeavy(),
-            HeavyAttackType.Beam => new BeamHeavy(),
-            HeavyAttackType.Reel => new ReelHeavy(),
-            HeavyAttackType.Grapple => new GrappleHeavy(),
-            HeavyAttackType.Boomerang => new BoomerangHeavy(),
-            _ => new HeavyAttack()
+            HeavyAttackType.Jab => new JabHeavy { Attack = HeavyAttackType.Jab},
+            HeavyAttackType.Slash => new SlashHeavy { Attack = HeavyAttackType.Slash},
+            HeavyAttackType.Spray => new SprayHeavy { Attack = HeavyAttackType.Spray},
+            HeavyAttackType.Projectile => new ProjectileHeavy { Attack = HeavyAttackType.Projectile},
+            HeavyAttackType.Beam => new BeamHeavy { Attack = HeavyAttackType.Beam},
+            HeavyAttackType.Reel => new ReelHeavy { Attack = HeavyAttackType.Reel},
+            HeavyAttackType.Grapple => new GrappleHeavy { Attack = HeavyAttackType.Grapple},
+            HeavyAttackType.Boomerang => new BoomerangHeavy { Attack = HeavyAttackType.Boomerang},
+            _ => new HeavyAttack { Attack = HeavyAttackType.None}
         };
     }
 

@@ -1,14 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
+[Serializable]
 public class ProjectileNeutral : NeutralAttack
 {
-    public override void Init(NewMonsterPart monsterPartRef)
-    {
-        base.Init(monsterPartRef);
-        Attack = AttackType.Projectile;
-    }
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

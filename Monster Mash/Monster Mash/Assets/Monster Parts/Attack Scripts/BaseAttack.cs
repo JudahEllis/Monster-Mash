@@ -5,37 +5,29 @@ using UnityEngine;
 
 public class TriggerAttackReleaseEventArgs : EventArgs
 {
-    public Vector2 movementModifier { get; set; }
+    public Vector2 MovementModifier { get; set; }
 
     public TriggerAttackReleaseEventArgs(Vector2 movementModifier)
     {
-        this.movementModifier = movementModifier;
+        MovementModifier = movementModifier;
     }
 }
 
 
-public class BaseAttack
+public abstract class BaseAttack
 {
     protected NewMonsterPart monsterPartRef;
     protected MonsterPartVisual monsterPartVisualRef;
     [SerializeField] protected Vector2 movementModifier;
-    public static event EventHandler<TriggerAttackReleaseEventArgs> OnAttackRelease;
+    public event EventHandler<TriggerAttackReleaseEventArgs> OnAttackRelease;
 
     /// <summary>
     /// Used to grab public varables from the monster part script
     /// </summary>
     /// <param name="monsterPartRef">Instance of the monster part script</param>
-    public virtual void Init(NewMonsterPart monsterPartRef)
+    public virtual void Init(NewMonsterPart monsterPartRef, MonsterPartVisual monsterPartVisualRef)
     {
         this.monsterPartRef = monsterPartRef;
-    }
-
-    /// <summary>
-    /// Used to grab public varables from MonsterPartVisual
-    /// </summary>
-    /// <param name="monsterPartVisualRef">Instance of MonsterPartVisual</param>
-    public void Init(MonsterPartVisual monsterPartVisualRef)
-    {
         this.monsterPartVisualRef = monsterPartVisualRef;
     }
 

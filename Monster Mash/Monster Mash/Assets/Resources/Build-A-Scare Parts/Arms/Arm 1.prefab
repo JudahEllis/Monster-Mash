@@ -44949,7 +44949,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    Attack: 1
+    rid: 8001967990336913525
   neutralCollider: {fileID: 9042840373748160034}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -44959,7 +44959,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    Attack: 1
+    rid: 8001967990336913409
   heavyCollider: {fileID: 2530626749398687388}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -45001,6 +45001,19 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 8001967990336913409
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+      data:
+        movementModifier: {x: 0, y: 0}
+        Attack: 0
+    - rid: 8001967990336913525
+      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+      data:
+        movementModifier: {x: 0, y: 0}
+        Attack: 0
 --- !u!114 &1750710558831751638
 MonoBehaviour:
   m_ObjectHideFlags: 0

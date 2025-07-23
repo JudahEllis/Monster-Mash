@@ -134,14 +134,10 @@ public class playerController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        BaseAttack.OnAttackRelease += ApplyMovementModifier;
-    }
+   
 
     private void OnDisable()
     {
-        BaseAttack.OnAttackRelease -= ApplyMovementModifier;
         UnsubscribeActionMap();
     }
 
@@ -2097,7 +2093,7 @@ public class playerController : MonoBehaviour
     // Listens for when an attack calls Trigger Attack Release
     public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
     {
-        myRigidbody.AddForce(eventArgs.movementModifier, ForceMode2D.Impulse);
+        myRigidbody.AddForce(eventArgs.MovementModifier, ForceMode2D.Impulse);
     }
 
     IEnumerator leapAttackForwardControl()

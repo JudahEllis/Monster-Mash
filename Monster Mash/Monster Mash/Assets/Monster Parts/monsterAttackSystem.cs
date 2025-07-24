@@ -123,13 +123,16 @@ public class monsterAttackSystem : MonoBehaviour
     public GameObject floorCheck;
 
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        // the events are already unsubscribed in popoffmonsterpart() but this is just for safety in case the object is suddenely disabled for some reason.
+        // the events are already unsubscribed in popoffmonsterpart() but this is just for safety in case the object is suddenely distroyed for some reason.
         foreach (NewMonsterPart monsterPart in attackSlotMonsterParts)
         {
-            monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
-            monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+            if (monsterPart != null)
+            {
+                monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+            }
         }
     }
 
@@ -389,11 +392,19 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerIdle();
         }
 
+       
         // connects all the attacking monster parts OnAttackrelease event to the player controller
         foreach (NewMonsterPart monsterPart in attackSlotMonsterParts)
         {
-            monsterPart.neutralAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
-            monsterPart.heavyAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
+            if (monsterPart != null)
+            {
+                // if we don't unsubscribe first then ApplyMovemnetModifer can be called multiple times for one action
+                monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+
+                monsterPart.neutralAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
+                monsterPart.heavyAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
+            }
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);

@@ -2093,10 +2093,37 @@ public class playerController : MonoBehaviour
     // Listens for when an attack calls Trigger Attack Release
     public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
     {
-        myRigidbody.AddForce(eventArgs.MovementModifier, ForceMode2D.Impulse);
+        Vector2 movementModifier = eventArgs.MovementModifier;
+
+        if (!facingRight)
+            movementModifier.x *= -1;
+
+        // using the animation clip length so that the movement duration matches the animation
+        StartCoroutine(ApplySmoothedMovementModifier(movementModifier, eventArgs.ClipLength));
     }
 
-    IEnumerator leapAttackForwardControl()
+    // smooths out the movement so that it is not instant and it looks a bit better
+    private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float delta = Time.fixedDeltaTime;
+            float previousT = elapsed / duration;
+            elapsed += delta;
+            float currentT = Mathf.Clamp01(elapsed / duration);
+
+            
+            Vector2 frameOffset = (currentT - previousT) * totalOffset;
+
+            myRigidbody.MovePosition(myRigidbody.position + frameOffset);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+
+        IEnumerator leapAttackForwardControl()
     {
         yield return new WaitForSeconds(0.1f);
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);

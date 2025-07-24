@@ -23,6 +23,7 @@ public class SlashHeavy : HeavyAttack
     }
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
+        base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

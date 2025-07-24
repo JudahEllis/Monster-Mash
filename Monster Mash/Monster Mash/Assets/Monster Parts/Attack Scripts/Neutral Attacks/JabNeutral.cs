@@ -22,6 +22,7 @@ public class JabNeutral : NeutralAttack
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
+        base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

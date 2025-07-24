@@ -6,10 +6,12 @@ using UnityEngine;
 public class TriggerAttackReleaseEventArgs : EventArgs
 {
     public Vector2 MovementModifier { get; set; }
+    public float ClipLength { get; set; }
 
-    public TriggerAttackReleaseEventArgs(Vector2 movementModifier)
+    public TriggerAttackReleaseEventArgs(Vector2 movementModifier, float clipLength)
     {
         MovementModifier = movementModifier;
+        ClipLength = clipLength;
     }
 }
 
@@ -43,7 +45,10 @@ public abstract class BaseAttack
 
     public virtual void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
-        OnAttackRelease?.Invoke(this, new TriggerAttackReleaseEventArgs(movementModifier));
+        // Get the attack animation length so that the movement is timed to the animation
+        float clipLength = monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).length;
+
+        OnAttackRelease?.Invoke(this, new TriggerAttackReleaseEventArgs(movementModifier, clipLength));
     }
 
     public virtual void CancelAttack()

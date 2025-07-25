@@ -122,6 +122,21 @@ public class monsterAttackSystem : MonoBehaviour
     public SFXManager SFXManager;
     public GameObject floorCheck;
 
+
+    private void OnDestroy()
+    {
+        // the events are already unsubscribed in popoffmonsterpart() but this is just for safety in case the object is suddenely distroyed for some reason.
+        foreach (NewMonsterPart monsterPart in attackSlotMonsterParts)
+        {
+            if (monsterPart != null)
+            {
+                monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+            }
+        }
+    }
+
+
     #region Monster Start Up
 
     public void connectNecessaryLocomotionComponents()
@@ -375,6 +390,21 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
             allMonsterParts[i].triggerIdle();
+        }
+
+       
+        // connects all the attacking monster parts OnAttackrelease event to the player controller
+        foreach (NewMonsterPart monsterPart in attackSlotMonsterParts)
+        {
+            if (monsterPart != null)
+            {
+                // if we don't unsubscribe first then ApplyMovemnetModifer can be called multiple times for one action
+                monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+
+                monsterPart.neutralAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
+                monsterPart.heavyAttack.OnAttackRelease += myPlayer.ApplyMovementModifier;
+            }
         }
 
         myAnimator.SetBool("Idle Bounce Allowed", true);
@@ -1983,6 +2013,8 @@ public class monsterAttackSystem : MonoBehaviour
         getOutOfLaunch();
     }
 
+    
+
     #endregion
 
     #region Reactions
@@ -2529,6 +2561,8 @@ public class monsterAttackSystem : MonoBehaviour
                 if (attackSlotMonsterParts[i] == partRemoved)
                 {
                     partRemoved.disconnectThisPart();
+                    partRemoved.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                    partRemoved.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     destructionPhysicsHelper.SetActive(true);
                     StartCoroutine(removeMonsterPartFromStage(attackSlotMonsterParts[i].gameObject));
                     //store some sort of parental and location data

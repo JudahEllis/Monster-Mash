@@ -1,14 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
+[Serializable]
 public class SlashHeavy : HeavyAttack
 {
-    public override void Init(NewMonsterPart monsterPartRef)
-    {
-        base.Init(monsterPartRef);
-        Attack = HeavyAttackType.Slash;
-    }
     public override void triggerHeavyAttackVisuals()
     {
         if (monsterPartRef.jabOrSlashLanded == false && monsterPartVisualRef.heavyMissVFXHolder != null)
@@ -29,6 +23,7 @@ public class SlashHeavy : HeavyAttack
     }
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
+        base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

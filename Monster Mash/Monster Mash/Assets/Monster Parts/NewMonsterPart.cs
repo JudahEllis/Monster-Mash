@@ -27,7 +27,18 @@ public class NewMonsterPart : MonoBehaviour
     //also because there is a pretty big oversight right now for "right" sided limbs that may end up being repositioned or rotated to act as a "left" sided limb
     //public enum WhichPart{ isArm, isLeg, isTail, isWing, isHead, isEye, isMouth, isTorso, isHorn, isDecor};
     //public WhichPart thisPart;
-    [Header("Monster Part Questionaire")]
+   
+#if UNITY_EDITOR
+    void OnValidate()
+    {
+        if (neutralAttack == null)
+            neutralAttack = new NeutralAttack();
+
+        if (heavyAttack == null)
+            heavyAttack = new HeavyAttack();
+    }
+#endif
+   [Header("Monster Part Questionaire")]
 
     public bool isArm;
     public bool isLeg;
@@ -61,8 +72,8 @@ public class NewMonsterPart : MonoBehaviour
     public bool slowedStatusEffect;
     public bool grabbedStatusEffect;
 
-    [Header("Neutral Attack Questionaire")]
-    public NeutralAttack neutralAttack;
+   [Header("Neutral Attack Questionaire")]
+   [SerializeReference] public NeutralAttack neutralAttack = new NeutralAttack();
 
     public Collider neutralCollider;
     public monsterPartReference neutralColliderReference;
@@ -77,7 +88,7 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Heavy Attack Questionaire")]
 
-    public HeavyAttack heavyAttack;
+    [SerializeReference] public HeavyAttack heavyAttack = new HeavyAttack();
     //
     public Collider heavyCollider;
     public monsterPartReference heavyColliderReference;
@@ -151,14 +162,8 @@ public class NewMonsterPart : MonoBehaviour
 
         PartVisual = GetComponent<MonsterPartVisual>();
 
-        neutralAttack = neutralAttack.GetAttack();
-        heavyAttack = heavyAttack.GetAttack();
-
-        neutralAttack.Init(this);
-        heavyAttack.Init(this);
-
-        neutralAttack.Init(PartVisual);
-        heavyAttack.Init(PartVisual);
+        neutralAttack.Init(this, PartVisual);
+        heavyAttack.Init(this, PartVisual);
 
         attackSetupDone = true;
     }

@@ -134,6 +134,13 @@ public class playerController : MonoBehaviour
         }
     }
 
+   
+
+    private void OnDisable()
+    {
+        UnsubscribeActionMap();
+    }
+
     public void PlayerInputSetUp()
     {
         startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
@@ -149,10 +156,10 @@ public class playerController : MonoBehaviour
 
         switchActionMap("Monster Controls");
 
-        Subscribe();
+        SubscribeActionMap();
     }
 
-    void Subscribe()
+    void SubscribeActionMap()
     {
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += OnLeftStick;
 
@@ -176,8 +183,9 @@ public class playerController : MonoBehaviour
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += onButtonY;
     }
 
-    void Unsubscribe()
+    void UnsubscribeActionMap()
     {
+
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= OnLeftStick;
@@ -200,10 +208,7 @@ public class playerController : MonoBehaviour
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= onButtonY;
     }
 
-    private void OnDisable()
-    {
-        Unsubscribe();
-    }
+    
 
     public void switchActionMap(string newActionMap)
     {
@@ -2085,7 +2090,40 @@ public class playerController : MonoBehaviour
         */
     }
 
-    IEnumerator leapAttackForwardControl()
+    // Listens for when an attack calls Trigger Attack Release
+    public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
+    {
+        Vector2 movementModifier = eventArgs.MovementModifier;
+
+        if (!facingRight)
+            movementModifier.x *= -1;
+
+        // using the animation clip length so that the movement duration matches the animation
+        StartCoroutine(ApplySmoothedMovementModifier(movementModifier, eventArgs.ClipLength));
+    }
+
+    // smooths out the movement so that it is not instant and it looks a bit better
+    private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float delta = Time.fixedDeltaTime;
+            float previousT = elapsed / duration;
+            elapsed += delta;
+            float currentT = Mathf.Clamp01(elapsed / duration);
+
+            
+            Vector2 frameOffset = (currentT - previousT) * totalOffset;
+
+            myRigidbody.MovePosition(myRigidbody.position + frameOffset);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+
+        IEnumerator leapAttackForwardControl()
     {
         yield return new WaitForSeconds(0.1f);
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);

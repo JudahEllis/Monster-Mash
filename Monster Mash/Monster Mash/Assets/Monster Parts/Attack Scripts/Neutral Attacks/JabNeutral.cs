@@ -1,15 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
+[Serializable]
 public class JabNeutral : NeutralAttack
 {
-
-    public override void Init(NewMonsterPart monsterPartRef)
-    {
-        base.Init(monsterPartRef);
-        Attack = AttackType.Jab;
-    }
 
     public override void neutralAttackPowerCalculation()
     {
@@ -29,6 +22,7 @@ public class JabNeutral : NeutralAttack
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
+        base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

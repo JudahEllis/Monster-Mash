@@ -1,15 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
+[Serializable]
 public class SprayNeutral : NeutralAttack
 {
-    public override void Init(NewMonsterPart monsterPartRef)
-    {
-        base.Init(monsterPartRef);
-        Attack = AttackType.Spray;
-    }
-
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

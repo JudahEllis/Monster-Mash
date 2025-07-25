@@ -1058,7 +1058,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    Attack: 0
+    rid: 8001968035020406817
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -1068,7 +1068,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    Attack: 0
+    rid: 8001968035020406818
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -1107,6 +1107,19 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 8001968035020406817
+      type: {class: SprayNeutral, ns: , asm: Assembly-CSharp}
+      data:
+        movementModifier: {x: 0, y: 0}
+        Attack: 3
+    - rid: 8001968035020406818
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+      data:
+        movementModifier: {x: 0, y: 0}
+        Attack: 13
 --- !u!114 &3612200419161604414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,6 +1244,10 @@ MonoBehaviour:
     partRotation: {x: 0, y: 0, z: 0, w: 0}
     partScale: {x: 0, y: 0, z: 0}
     partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
 --- !u!1 &6623776135738468033
 GameObject:
   m_ObjectHideFlags: 0

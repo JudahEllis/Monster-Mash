@@ -111,6 +111,7 @@ public class playerController : MonoBehaviour
     [SerializeField]
     private Rigidbody2D myRigidbody;
     private int inputModifier = 1;
+    private Vector2Int lastInputDirection;
 
     private void Awake()
     {
@@ -243,6 +244,7 @@ public class playerController : MonoBehaviour
         //This section moves the x axis of the player
         //For moving the y axis of the player, check out the jumping category of the movement section
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
+        UpdateInputDirection();
         if (monsterControllerActive)
         {
             if (isGrounded() && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f))
@@ -924,6 +926,17 @@ public class playerController : MonoBehaviour
         canDash = true;
         insideFloor = false;
         //canRoll = true;
+
+        if (facingRight)
+        {
+            lastInputDirection = new Vector2Int(1, 0);
+        }
+        else
+        {
+            lastInputDirection = new Vector2Int(-1, 0);
+        }
+
+
         if (grabbingWall)
         {
             endWallGrabVisual();
@@ -2090,35 +2103,70 @@ public class playerController : MonoBehaviour
         */
     }
 
+    private void UpdateInputDirection()
+    {
+        float deadZone = 0.2f;
+        Vector2 input = leftJoystickVector.normalized;
+        if (leftJoystickValue >= deadZone)
+        {
+           
+
+            if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+            {
+                lastInputDirection = new Vector2Int(input.x > 0 ? 1 : -1, 0);
+            }
+            else if (Mathf.Abs(input.y) > 0)
+            {
+                lastInputDirection = new Vector2Int(0, input.y > 0 ? 1 : -1);
+            }
+        }
+    }
+
     // Listens for when an attack calls Trigger Attack Release
     public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
     {
-        Vector2 movementModifier = eventArgs.MovementModifier;
 
-        if (!facingRight)
-            movementModifier.x *= -1;
+        var currentMovementModifier = lastInputDirection switch
+        {
+            var dir when dir == Vector2Int.left => eventArgs.MovementModifier.Left,
+            var dir when dir == Vector2Int.right => eventArgs.MovementModifier.Right,
+            var dir when dir == Vector2Int.up => eventArgs.MovementModifier.Up,
+            var dir when dir == Vector2Int.down => eventArgs.MovementModifier.Down,
+            _ => Vector2.zero,
+        };
 
         // using the animation clip length so that the movement duration matches the animation
-        StartCoroutine(ApplySmoothedMovementModifier(movementModifier, eventArgs.ClipLength));
+        StartCoroutine(ApplySmoothedMovementModifier(currentMovementModifier, eventArgs.ClipLength));
     }
 
-    // smooths out the movement so that it is not instant and it looks a bit better
+    // smooths out the movement so that it is not instant and it looks better
     private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
     {
         float elapsed = 0f;
 
+        Vector2 totalAppliedOffset = Vector2.zero;
+
         while (elapsed < duration)
         {
             float delta = Time.fixedDeltaTime;
-            float previousT = elapsed / duration;
             elapsed += delta;
-            float currentT = Mathf.Clamp01(elapsed / duration);
+            float t = Mathf.Clamp01(elapsed / duration); // Progress from 0 to 1
 
-            
-            Vector2 frameOffset = (currentT - previousT) * totalOffset;
+            // Calculate how much total offset should be applied at time t
+            Vector2 desiredOffset = Vector2.Lerp(Vector2.zero, totalOffset, t);
 
-            myRigidbody.MovePosition(myRigidbody.position + frameOffset);
-            yield return new WaitForFixedUpdate();
+            // Calculate how much new offset to apply this frame
+            Vector2 frameAttackOffset = desiredOffset - totalAppliedOffset;
+            totalAppliedOffset = desiredOffset;
+
+            // Sample the *current* player velocity (so it works even while moving/jumping/etc.)
+            Vector2 liveVelocity = myRigidbody.velocity;
+            Vector2 baseMovement = liveVelocity * delta;
+
+            // Move by current velocity + attack offset for this frame
+            myRigidbody.MovePosition(myRigidbody.position + baseMovement + frameAttackOffset);
+
+            yield return new WaitForFixedUpdate(); // Wait for next physics update
         }
     }
 

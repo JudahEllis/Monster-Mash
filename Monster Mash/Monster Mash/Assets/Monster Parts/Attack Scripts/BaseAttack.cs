@@ -3,12 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public class MovementModifier
+{
+    [field:SerializeField] public Vector2 Left { get; set; }
+    [field:SerializeField] public Vector2 Right { get; set; }
+    [field:SerializeField] public Vector2 Up { get; set; }
+    [field: SerializeField] public Vector2 Down { get; set; }
+}
+
 public class TriggerAttackReleaseEventArgs : EventArgs
 {
-    public Vector2 MovementModifier { get; set; }
+    public MovementModifier MovementModifier { get; set; }
     public float ClipLength { get; set; }
 
-    public TriggerAttackReleaseEventArgs(Vector2 movementModifier, float clipLength)
+    public TriggerAttackReleaseEventArgs(MovementModifier movementModifier, float clipLength)
     {
         MovementModifier = movementModifier;
         ClipLength = clipLength;
@@ -20,7 +29,7 @@ public abstract class BaseAttack
 {
     protected NewMonsterPart monsterPartRef;
     protected MonsterPartVisual monsterPartVisualRef;
-    [SerializeField] protected Vector2 movementModifier;
+    [SerializeField] protected MovementModifier movementModifier;
     public event EventHandler<TriggerAttackReleaseEventArgs> OnAttackRelease;
 
     /// <summary>

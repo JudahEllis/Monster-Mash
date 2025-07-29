@@ -45007,12 +45007,20 @@ MonoBehaviour:
     - rid: 8001968010203758640
       type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
       data:
-        movementModifier: {x: 5, y: 0}
+        movementModifier:
+          <Left>k__BackingField: {x: -5, y: 0}
+          <Right>k__BackingField: {x: 5, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
         Attack: 1
     - rid: 8001968035020406788
       type: {class: JabHeavy, ns: , asm: Assembly-CSharp}
       data:
-        movementModifier: {x: 0, y: 0}
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
         Attack: 1
 --- !u!114 &1750710558831751638
 MonoBehaviour:

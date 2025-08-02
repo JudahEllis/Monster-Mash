@@ -457,7 +457,7 @@ public class MonsterPartVisual : MonoBehaviour
             return;
         }
 
-        if (monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myMainSystem.emoteEnded();
         }
@@ -550,14 +550,14 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.isWalking = true;
             monsterPartRef.isRunning = false;
 
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
                 monsterPartRef.myAnimator.SetBool("Teeter", false);
             }
         }
 
-        if (monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
             monsterPartRef.myAnimator.SetBool("Walking", true);
@@ -565,19 +565,19 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.isWalking = true;
             monsterPartRef.isRunning = false;
 
-            if (monsterPartRef.isTorso)
+            if (monsterPartRef.PartType is MonsterPartType.Torso)
             {
                 monsterPartRef.myAnimator.SetBool("Teeter", false);
             }
         }
-        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Tail or MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Walking", true);
             monsterPartRef.myAnimator.SetBool("Running", false);
             monsterPartRef.isWalking = true;
             monsterPartRef.isRunning = false;
 
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -592,7 +592,7 @@ public class MonsterPartVisual : MonoBehaviour
             return;
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
 
@@ -603,12 +603,12 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.isWalking = false;
             }
         }
-        else if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Tail or MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Walking", false);
             monsterPartRef.isWalking = false;
 
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -630,13 +630,13 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.isWalking = false;
             monsterPartRef.isRunning = true;
 
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
         }
 
-        if (monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.ResetTrigger("Walk to Idle");
             monsterPartRef.myAnimator.SetBool("Running", true);
@@ -645,14 +645,14 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.isRunning = true;
         }
 
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
+        if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Arm or MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Running", true);
             monsterPartRef.myAnimator.SetBool("Walking", false);
             monsterPartRef.isWalking = false;
             monsterPartRef.isRunning = true;
 
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -665,7 +665,7 @@ public class MonsterPartVisual : MonoBehaviour
             return;
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso)
         {
             if (monsterPartRef.isRunning)
             {
@@ -675,12 +675,12 @@ public class MonsterPartVisual : MonoBehaviour
             }
         }
 
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail)
+        if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Arm or MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Running", false);
             monsterPartRef.isRunning = false;
 
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -695,14 +695,14 @@ public class MonsterPartVisual : MonoBehaviour
             return;
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.SetTrigger("Run to Screech");
         }
     }
     public void triggerJump()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.attackFocusOn || (monsterPartRef.isTorso && monsterPartRef.isBracing))
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Decor || monsterPartRef.attackFocusOn || (monsterPartRef.PartType is MonsterPartType.Torso && monsterPartRef.isBracing))
         {
             return;
         }
@@ -713,21 +713,21 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetTrigger("Jump");
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Arm)
         {
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
         }
 
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Arm or MonsterPartType.Tail or MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             monsterPartRef.myAnimator.SetBool("Walking", false);
             monsterPartRef.isWalking = false;
 
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -738,12 +738,12 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerRoll(bool groundedWhenTriggered, bool trueRoll)
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Decor || monsterPartRef.PartType is MonsterPartType.Horn)
         {
             return;
         }
 
-        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        if (monsterPartRef.PartType is MonsterPartType.Horn && monsterPartRef.myAnimator != null)
         {
             monsterPartRef.myAnimator.SetBool("Grounded", groundedWhenTriggered);
             monsterPartRef.grounded = groundedWhenTriggered;
@@ -755,7 +755,7 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetTrigger("Roll");
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Tail or MonsterPartType.Torso)
         {
             if (trueRoll)
             {
@@ -770,23 +770,23 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.isWalking = false;
             }
 
-            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            if (monsterPartRef.PartType is MonsterPartType.Wing or MonsterPartType.Head)
             {
                 monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             }
 
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
 
-            if (monsterPartRef.isTorso)
+            if (monsterPartRef.PartType is MonsterPartType.Torso)
             {
                 monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             }
         }
 
-        if (monsterPartRef.isArm)
+        if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             monsterPartRef.myAnimator.SetBool("Swaying", false);
@@ -814,30 +814,30 @@ public class MonsterPartVisual : MonoBehaviour
             return;
         }
 
-        if (monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.SetTrigger("Upper Flap"); //change this so that its calculated at start with the other animations
             //allows us to use something like "lower flap" for wings on the butt
         }
 
-        if (monsterPartRef.isWing)
+        if (monsterPartRef.PartType is MonsterPartType.Wing)
         {
             monsterPartRef.myAnimator.SetTrigger("Big Flap");
         }
 
-        if (monsterPartRef.isArm)
+        if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetTrigger("Roll");
         }
 
-        if (monsterPartRef.isLeg || monsterPartRef.isHead || monsterPartRef.isTail)
+        if (monsterPartRef.PartType is MonsterPartType.Leg or MonsterPartType.Head or MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetTrigger("Jump");
         }
 
-        if ((monsterPartRef.isMouth || monsterPartRef.isEye) && monsterPartRef.myAnimator != null)
+        if ((monsterPartRef.PartType is MonsterPartType.Mouth or MonsterPartType.Eye) && monsterPartRef.myAnimator != null)
         {
-            if (monsterPartRef.isMouth)
+            if (monsterPartRef.PartType is MonsterPartType.Mouth)
             {
                 monsterPartRef.myAnimator.SetTrigger("Roll");
             }
@@ -849,7 +849,7 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerFall()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        if (monsterPartRef.connected == false ||monsterPartRef.PartType is MonsterPartType.Decor or MonsterPartType.Horn)
         {
             return;
         }
@@ -860,17 +860,17 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetTrigger("Fall");
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso)
         {
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
         }
 
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Arm or MonsterPartType.Tail or MonsterPartType.Torso)
         {
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -881,7 +881,7 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerSimpleUngrounded()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Decor || monsterPartRef.PartType is MonsterPartType.Horn)
         {
             return;
         }
@@ -891,17 +891,17 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetBool("Grounded", false);
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso)
         {
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
         }
 
-        if (monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Arm or MonsterPartType.Tail or MonsterPartType.Torso)
         {
-            if (monsterPartRef.isArm)
+            if (monsterPartRef.PartType is MonsterPartType.Arm)
             {
                 monsterPartRef.myAnimator.SetBool("Swaying", false);
             }
@@ -914,12 +914,12 @@ public class MonsterPartVisual : MonoBehaviour
     {
         monsterPartRef.attackFocusOn = false;
 
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn)
+        if (monsterPartRef.connected == false ||monsterPartRef.PartType is MonsterPartType.Decor or MonsterPartType.Horn)
         {
             return;
         }
 
-        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        if (monsterPartRef.PartType is MonsterPartType.Horn && monsterPartRef.myAnimator != null)
         {
             monsterPartRef.myAnimator.SetBool("Grounded", true);
             monsterPartRef.grounded = true;
@@ -929,31 +929,31 @@ public class MonsterPartVisual : MonoBehaviour
         {
             monsterPartRef.myAnimator.SetBool("Grounded", true);
 
-            if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isArm || monsterPartRef.isLeg)
+            if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso or MonsterPartType.Head or MonsterPartType.Arm or MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetTrigger("Land");
             }
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso or MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Tail)
         {
-            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            if (monsterPartRef.PartType is MonsterPartType.Wing or MonsterPartType.Head)
             {
                 monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             }
 
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
 
-            if (monsterPartRef.isTorso)
+            if (monsterPartRef.PartType is MonsterPartType.Torso)
             {
                 monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             }
         }
 
-        if (monsterPartRef.isArm)
+        if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             monsterPartRef.myAnimator.SetBool("Swaying", false);
@@ -965,16 +965,16 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerLateLand()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isDecor || monsterPartRef.isHorn || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isAttacking)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Decor or MonsterPartType.Horn or MonsterPartType.Torso or MonsterPartType.Head || monsterPartRef.isAttacking)
         {
-            if (monsterPartRef.isAttacking || monsterPartRef.isTorso)
+            if (monsterPartRef.isAttacking || monsterPartRef.PartType is MonsterPartType.Torso)
             {
                 monsterPartRef.myAnimator.SetBool("Grounded", true);
             }
             return;
         }
 
-        if (monsterPartRef.isHorn && monsterPartRef.myAnimator != null)
+        if (monsterPartRef.PartType is MonsterPartType.Horn && monsterPartRef.myAnimator != null)
         {
             monsterPartRef.myAnimator.SetBool("Grounded", true);
             monsterPartRef.grounded = true;
@@ -984,31 +984,31 @@ public class MonsterPartVisual : MonoBehaviour
         {
             monsterPartRef.myAnimator.SetBool("Grounded", true);
 
-            if (monsterPartRef.isGroundedLimb || monsterPartRef.isHead || monsterPartRef.isArm || monsterPartRef.isLeg)
+            if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Head or MonsterPartType.Arm or MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetTrigger("Land");
             }
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isHead || monsterPartRef.isWing || monsterPartRef.isTail)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso or MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Tail)
         {
-            if (monsterPartRef.isWing || monsterPartRef.isHead)
+            if (monsterPartRef.PartType is MonsterPartType.Wing or MonsterPartType.Head)
             {
                 monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             }
 
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.SetBool("Calm", false);
             }
 
-            if (monsterPartRef.isTorso)
+            if (monsterPartRef.PartType is MonsterPartType.Torso)
             {
                 monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             }
         }
 
-        if (monsterPartRef.isArm)
+        if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Glide Activated", false);
             monsterPartRef.myAnimator.SetBool("Swaying", false);
@@ -1025,7 +1025,7 @@ public class MonsterPartVisual : MonoBehaviour
             return;
         }
 
-        if (monsterPartRef.isWing || monsterPartRef.isHead || monsterPartRef.isArm || monsterPartRef.isTail || monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Wing or MonsterPartType.Head or MonsterPartType.Arm or MonsterPartType.Tail or MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.SetBool("Glide Activated", true);
         }
@@ -1034,7 +1034,7 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerCrouch()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Horn or MonsterPartType.Decor or MonsterPartType.Eye or MonsterPartType.Mouth)
         {
             return;
         }
@@ -1042,7 +1042,7 @@ public class MonsterPartVisual : MonoBehaviour
         monsterPartRef.isWalking = false;
         monsterPartRef.isRunning = false;
 
-        if (monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.SetBool("Crouching", true);
             monsterPartRef.myAnimator.SetTrigger("Crouch");
@@ -1059,7 +1059,7 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetBool("Running", false);
         }
 
-        if (monsterPartRef.isArm)
+        if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Crouching", true);
             monsterPartRef.myAnimator.SetTrigger("Crouch");
@@ -1068,7 +1068,7 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetBool("Running", false);
         }
 
-        if (monsterPartRef.isTail)
+        if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Crouching", true);
             monsterPartRef.myAnimator.SetTrigger("Crouch");
@@ -1076,7 +1076,7 @@ public class MonsterPartVisual : MonoBehaviour
             monsterPartRef.myAnimator.SetBool("Running", false);
         }
 
-        if (monsterPartRef.isWing || monsterPartRef.isHead)
+        if (monsterPartRef.PartType is MonsterPartType.Wing or MonsterPartType.Head)
         {
             monsterPartRef.myAnimator.SetBool("Walking", false);
             monsterPartRef.myAnimator.SetBool("Running", false);
@@ -1086,34 +1086,34 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerCrouchStop()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Horn or MonsterPartType.Decor or MonsterPartType.Eye or MonsterPartType.Mouth)
         {
             return;
         }
 
-        if (monsterPartRef.isGroundedLimb || monsterPartRef.isTorso || monsterPartRef.isArm || monsterPartRef.isTail)
+        if (monsterPartRef.isGroundedLimb || monsterPartRef.PartType is MonsterPartType.Torso or MonsterPartType.Arm or MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Crouching", false);
         }
     }
     public void triggerForceFall()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth || monsterPartRef.grounded)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Horn or MonsterPartType.Decor or MonsterPartType.Eye or MonsterPartType.Mouth || monsterPartRef.grounded)
         {
             return;
         }
 
-        if (monsterPartRef.isTorso)
+        if (monsterPartRef.PartType is MonsterPartType.Torso)
         {
             monsterPartRef.myAnimator.SetBool("Force Falling", true);
         }
 
-        if (monsterPartRef.isArm)
+        if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             monsterPartRef.myAnimator.SetBool("Force Falling", true);
         }
 
-        if (monsterPartRef.isTail)
+        if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Force Falling", true);
         }
@@ -1122,12 +1122,12 @@ public class MonsterPartVisual : MonoBehaviour
     }
     public void triggerForceFallStop()
     {
-        if (monsterPartRef.connected == false || monsterPartRef.isHorn || monsterPartRef.isDecor || monsterPartRef.isEye || monsterPartRef.isMouth)
+        if (monsterPartRef.connected == false || monsterPartRef.PartType is MonsterPartType.Horn or MonsterPartType.Decor or MonsterPartType.Eye or MonsterPartType.Mouth)
         {
             return;
         }
 
-        if (monsterPartRef.isTorso || monsterPartRef.isArm || monsterPartRef.isTail)
+        if (monsterPartRef.PartType is MonsterPartType.Torso or MonsterPartType.Arm or MonsterPartType.Tail)
         {
             monsterPartRef.myAnimator.SetBool("Force Falling", false);
         }
@@ -1176,7 +1176,7 @@ public class MonsterPartVisual : MonoBehaviour
             }
 
         }
-        else if (monsterPartRef.isLeg)
+        else if (monsterPartRef.PartType is MonsterPartType.Leg)
         {
             if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
             {
@@ -1189,7 +1189,7 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
             }
         }
-        else if (monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1203,7 +1203,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        else if (monsterPartRef.PartType is MonsterPartType.Mouth && monsterPartRef.myAnimator != null)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1213,7 +1213,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isWing)
+        else if (monsterPartRef.PartType is MonsterPartType.Wing)
         {
             if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
             {
@@ -1226,7 +1226,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isTail)
+        else if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
             {
@@ -1282,7 +1282,7 @@ public class MonsterPartVisual : MonoBehaviour
             }
 
         }
-        else if (monsterPartRef.isLeg)
+        else if (monsterPartRef.PartType is MonsterPartType.Leg)
         {
             if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
             {
@@ -1295,7 +1295,7 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
             }
         }
-        else if (monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1309,7 +1309,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        else if (monsterPartRef.PartType is MonsterPartType.Mouth && monsterPartRef.myAnimator != null)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1319,7 +1319,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isWing)
+        else if (monsterPartRef.PartType is MonsterPartType.Wing)
         {
             if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
             {
@@ -1332,7 +1332,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isTail)
+        else if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
             {
@@ -1387,7 +1387,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isLeg)
+        else if (monsterPartRef.PartType is MonsterPartType.Leg)
         {
             if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
             {
@@ -1400,7 +1400,7 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
             }
         }
-        else if (monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1414,7 +1414,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        else if (monsterPartRef.PartType is MonsterPartType.Mouth && monsterPartRef.myAnimator != null)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1424,7 +1424,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isWing)
+        else if (monsterPartRef.PartType is MonsterPartType.Wing)
         {
             if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
             {
@@ -1437,7 +1437,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isTail)
+        else if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
             {
@@ -1494,7 +1494,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isLeg)
+        else if (monsterPartRef.PartType is MonsterPartType.Leg)
         {
             if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
             {
@@ -1507,7 +1507,7 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
             }
         }
-        else if (monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1521,7 +1521,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        else if (monsterPartRef.PartType is MonsterPartType.Mouth && monsterPartRef.myAnimator != null)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1531,7 +1531,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isWing)
+        else if (monsterPartRef.PartType is MonsterPartType.Wing)
         {
             if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
             {
@@ -1544,7 +1544,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isTail)
+        else if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
             {
@@ -1602,7 +1602,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isLeg)
+        else if (monsterPartRef.PartType is MonsterPartType.Leg)
         {
             if (monsterPartRef.isRightSidedLimb && monsterPartRef.isAttacking == false)
             {
@@ -1615,7 +1615,7 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.myAnimator.SetTrigger("Airborn Brace");
             }
         }
-        else if (monsterPartRef.isArm)
+        else if (monsterPartRef.PartType is MonsterPartType.Arm)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1629,7 +1629,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+        else if (monsterPartRef.PartType is MonsterPartType.Mouth && monsterPartRef.myAnimator != null)
         {
             if (CheckAnimState("Idle", "Fall", "Land"))
             {
@@ -1639,7 +1639,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isWing)
+        else if (monsterPartRef.PartType is MonsterPartType.Wing)
         {
             if (CheckAnimState("Idle Fly", "Idle Grounded", "Fall", "Land", "Glide", "Running"))
             {
@@ -1652,7 +1652,7 @@ public class MonsterPartVisual : MonoBehaviour
                 }
             }
         }
-        else if (monsterPartRef.isTail)
+        else if (monsterPartRef.PartType is MonsterPartType.Tail)
         {
             if (CheckAnimState("Idle", "Fall", "Land", "Glide"))
             {
@@ -1677,7 +1677,7 @@ public class MonsterPartVisual : MonoBehaviour
 
         if (monsterPartRef.isAttacking == false)
         {
-            if (monsterPartRef.isLeg)
+            if (monsterPartRef.PartType is MonsterPartType.Leg)
             {
                 monsterPartRef.myAnimator.ResetTrigger("Unbrace");
                 monsterPartRef.myAnimator.SetTrigger("Unbrace");
@@ -1685,24 +1685,24 @@ public class MonsterPartVisual : MonoBehaviour
                 monsterPartRef.myAnimator.ResetTrigger("Forward Brace");
             }
 
-            if (monsterPartRef.isArm || monsterPartRef.isWing || monsterPartRef.isTail)
+            if (monsterPartRef.PartType is MonsterPartType.Arm or MonsterPartType.Wing or MonsterPartType.Tail)
             {
                 monsterPartRef.myAnimator.ResetTrigger("Unbrace");
                 monsterPartRef.myAnimator.SetTrigger("Unbrace");
                 monsterPartRef.myAnimator.ResetTrigger("Brace");
 
-                if (monsterPartRef.isWing)
+                if (monsterPartRef.PartType is MonsterPartType.Wing or MonsterPartType.Tail)
                 {
                     monsterPartRef.myAnimator.SetBool("Glide Activated", false);
                 }
 
-                if (monsterPartRef.isArm)
+                if (monsterPartRef.PartType is MonsterPartType.Arm)
                 {
                     monsterPartRef.myAnimator.SetBool("Swaying", false);
                 }
             }
 
-            if (monsterPartRef.isMouth && monsterPartRef.myAnimator != null)
+            if (monsterPartRef.PartType is MonsterPartType.Mouth && monsterPartRef.myAnimator != null)
             {
                 monsterPartRef.myAnimator.ResetTrigger("Unbrace");
                 monsterPartRef.myAnimator.SetTrigger("Unbrace");

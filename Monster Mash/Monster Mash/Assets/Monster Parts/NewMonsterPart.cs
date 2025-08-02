@@ -40,17 +40,6 @@ public class NewMonsterPart : MonoBehaviour
 #endif
    [Header("Monster Part Questionaire")]
 
-    public bool isArm;
-    public bool isLeg;
-    public bool isTail;
-    public bool isWing;
-    public bool isHead;
-    public bool isEye;
-    public bool isMouth;
-    public bool isTorso;
-    public bool isHorn;
-    public bool isDecor;
-
     public MonsterPartType PartType;
 
     [Header("Damage and Status Effects")]
@@ -170,13 +159,13 @@ public class NewMonsterPart : MonoBehaviour
     public void changeAttackAnimationAtRuntime()
     {
         //this will be expanded to include all monster parts
-        if (isLeg || isArm || isTail || isHorn || isEye)
+        if (PartType is MonsterPartType.Leg or MonsterPartType.Arm or MonsterPartType.Tail or MonsterPartType.Horn or MonsterPartType.Eye)
         {
-            if (isLeg && attackAnimationID == 2) //corrections for if up attack is selected with leg
+            if (PartType is MonsterPartType.Leg && attackAnimationID == 2) //corrections for if up attack is selected with leg
             {
                 attackAnimationID = 1;
             }
-            else if (isArm && attackAnimationID == -1) //corrections for if backwards attack is selected with arm
+            else if (PartType is MonsterPartType.Arm && attackAnimationID == -1) //corrections for if backwards attack is selected with arm
             {
                 attackAnimationID = 1;
             }
@@ -226,76 +215,31 @@ public class NewMonsterPart : MonoBehaviour
     public void disableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = false; }
     public void reenableOutline() { if (visualForAnimationTests != null) visualForAnimationTests.enabled = true; }
 
-    // This is bad practice, but I have to do it this way untill I finish refactoring the script.
-    public void AssignType()
-    {
-        if (isArm)
-        {
-            PartType = MonsterPartType.Arm;
-        }
-        else if (isLeg)
-        {
-            PartType = MonsterPartType.Leg;
-        }
-        else if(isHead)
-        {
-            PartType = MonsterPartType.Head;
-        }
-        else if(isTail)
-        {
-            PartType = MonsterPartType.Tail;
-        }
-        else if(isMouth)
-        {
-            PartType = MonsterPartType.Mouth;
-        }
-        else if (isEye)
-        {
-            PartType = MonsterPartType.Eye;
-        }
-        else if(isHorn)
-        {
-            PartType = MonsterPartType.Horn;
-        }
-        else if (isWing)
-        {
-            PartType = MonsterPartType.Wing;
-        }
-        else if (isDecor)
-        {
-            PartType = MonsterPartType.Decor;
-        }
-        else
-        {
-            PartType = MonsterPartType.None;
-        }
-    }
-
     #endregion
 
     #region Animation Set Up
 
     public void triggerAnimationSetUp()
     {
-        myAnimator = this.GetComponent<Animator>();
+        myAnimator = GetComponent<Animator>();
 
-        if (isLeg && isGroundedLimb == false)
+        if (PartType is MonsterPartType.Leg && isGroundedLimb == false)
         {
             myAnimator.SetBool("Grounded Limb", false); //This is just so that loose legs do a spike kick instead of a stomp on ground
         }
 
-        if ((isLeg && isFloatingGroundedLeg) || (isTorso && isFloatingTorso))
+        if ((PartType is MonsterPartType.Leg && isFloatingGroundedLeg) || (PartType is MonsterPartType.Torso && isFloatingTorso))
         {
             myAnimator.SetBool("Has Floating Idle", true);
         }
 
 
-        if (isLeg || isArm || isTail || isHorn || isEye) //this will be expanded to include heads and horns
+        if (PartType is MonsterPartType.Leg or MonsterPartType.Arm or MonsterPartType.Tail or MonsterPartType.Horn or MonsterPartType.Eye) //this will be expanded to include heads and horns
         {
             myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
         }
 
-        if (isMouth && myAnimator != null) //this will be expanded to include arms, tails, wings and heads
+        if (PartType is MonsterPartType.Mouth && myAnimator != null) //this will be expanded to include arms, tails, wings and heads
         {
             myAnimator.SetInteger("Attack Animation ID", attackAnimationID);
         }
@@ -388,7 +332,7 @@ public class NewMonsterPart : MonoBehaviour
                     myAnimator.SetFloat("Run Offset", leftRunOffset);
                 }
             }
-            else if (isArm || isHead || isMouth || isTail || isLeg || requiresUniqueAnimationOffset)
+            else if (PartType is MonsterPartType.Arm or MonsterPartType.Head or MonsterPartType.Mouth or MonsterPartType.Tail or MonsterPartType.Leg || requiresUniqueAnimationOffset)
             {
                 float randomOffset = Random.Range(0, 0.5f);
                 myAnimator.SetFloat("Idle Offset", randomOffset);
@@ -579,7 +523,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Walk to Idle");
 
@@ -602,7 +546,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        if (isHead)
+        if (PartType is MonsterPartType.Head)
         {
             myAnimator.SetBool("Walking", false);
         }
@@ -629,7 +573,7 @@ public class NewMonsterPart : MonoBehaviour
             reel.CancelGrab();
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Swaying", false);
         }
@@ -642,7 +586,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isGroundedLimb || isTorso)
+        if (isGroundedLimb || PartType is MonsterPartType.Torso)
         {
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Walking", false);
@@ -650,13 +594,13 @@ public class NewMonsterPart : MonoBehaviour
             isRunning = false;
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
         }
-        if (isHead || isTail || isWing)
+        if (PartType is MonsterPartType.Head or MonsterPartType.Tail or MonsterPartType.Wing)
         {
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Walking", false);
@@ -668,7 +612,7 @@ public class NewMonsterPart : MonoBehaviour
     #region Launching Attacks
     public void triggerRollingAttack()
     {
-        if (connected == false || isDecor)
+        if (connected == false || PartType is MonsterPartType.Decor)
         {
             return;
         }
@@ -683,7 +627,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isHorn && myAnimator != null)
+        if (PartType is MonsterPartType.Horn && myAnimator != null)
         {
             myAnimator.SetBool("Grounded", false);
             return;
@@ -695,30 +639,30 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetTrigger("Roll");
             myAnimator.SetBool("Ready to Unroll", false);
         }
-        if (isGroundedLimb || isTorso || isHead || isWing || isTail)
+        if (isGroundedLimb || PartType is MonsterPartType.Torso or MonsterPartType.Head or MonsterPartType.Wing or MonsterPartType.Tail)
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
 
-            if (isWing || isHead)
+            if (PartType is MonsterPartType.Wing or MonsterPartType.Head)
             {
                 myAnimator.SetBool("Glide Activated", false);
             }
 
-            if (isLeg)
+            if (PartType is MonsterPartType.Leg)
             {
                 myAnimator.SetBool("Calm", false);
             }
 
-            if (isTorso)
+            if (PartType is MonsterPartType.Torso)
             {
                 myAnimator.SetBool("Teeter", false);
             }
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Running", false);
@@ -730,7 +674,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerUpwardsLeapingAttack()
     {
-        if (connected == false || isDecor)
+        if (connected == false || PartType is MonsterPartType.Decor)
         {
             return;
         }
@@ -746,7 +690,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Walking", false);
@@ -757,7 +701,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isHead)
+        if (PartType is MonsterPartType.Head)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Glide Activated", false);
@@ -768,7 +712,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Glide Activated", false);
@@ -777,7 +721,7 @@ public class NewMonsterPart : MonoBehaviour
             isWalking = false;
             isRunning = false;
 
-            if (isArm)
+            if (PartType is MonsterPartType.Arm)
             {
                 myAnimator.SetBool("Swaying", false);
             }
@@ -785,7 +729,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isHorn && myAnimator != null)
+        if (PartType is MonsterPartType.Horn && myAnimator != null)
         {
             myAnimator.SetBool("Grounded", false);
             return;
@@ -806,7 +750,7 @@ public class NewMonsterPart : MonoBehaviour
             isRunning = false;
         }
 
-        if (isWing || isTail)
+        if (PartType is MonsterPartType.Wing or MonsterPartType.Tail)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.SetBool("Walking", false);
@@ -814,7 +758,7 @@ public class NewMonsterPart : MonoBehaviour
             isWalking = false;
             isRunning = false;
 
-            if (isArm)
+            if (PartType is MonsterPartType.Arm)
             {
                 myAnimator.SetBool("Swaying", false);
             }
@@ -977,7 +921,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerNeutralDamage(bool damageAltNeeded)
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor || PartType is MonsterPartType.Horn)
         {
             return;
         }
@@ -1011,14 +955,14 @@ public class NewMonsterPart : MonoBehaviour
             isAttacking = false;
         }
 
-        if (isGroundedLimb || isTorso || isHead || isTail)
+        if (isGroundedLimb || PartType is MonsterPartType.Torso || PartType is MonsterPartType.Head || PartType is MonsterPartType.Leg)
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
 
-            if (isTorso)
+            if (PartType is MonsterPartType.Torso)
             {
                 myAnimator.SetBool("Teeter", false);
                 myAnimator.ResetTrigger("Upper Flap");
@@ -1031,7 +975,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Swaying", false);
@@ -1039,7 +983,7 @@ public class NewMonsterPart : MonoBehaviour
             isRunning = false;
         }
 
-        if (isWing)
+        if (PartType is MonsterPartType.Wing)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.ResetTrigger("Big Flap");
@@ -1050,7 +994,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerNeutralDamageRecovery()
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor || PartType is MonsterPartType.Horn)
         {
             return;
         }
@@ -1063,7 +1007,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerHeavyDamageRecovery()
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor || PartType is MonsterPartType.Horn)
         {
             return;
         }
@@ -1076,7 +1020,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerHeavyDamage()
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor || PartType is MonsterPartType.Horn)
         {
             return;
         }
@@ -1109,14 +1053,14 @@ public class NewMonsterPart : MonoBehaviour
             isAttacking = false;
         }
 
-        if (isGroundedLimb || isTorso || isHead || isTail)
+        if (isGroundedLimb || PartType is MonsterPartType.Torso || PartType is MonsterPartType.Head || PartType is MonsterPartType.Leg)
         {
             myAnimator.SetBool("Walking", false);
             myAnimator.SetBool("Running", false);
             isWalking = false;
             isRunning = false;
 
-            if (isTorso)
+            if (PartType is MonsterPartType.Torso)
             {
                 myAnimator.SetBool("Teeter", false);
                 myAnimator.ResetTrigger("Upper Flap");
@@ -1128,7 +1072,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Running", false);
             myAnimator.SetBool("Swaying", false);
@@ -1136,7 +1080,7 @@ public class NewMonsterPart : MonoBehaviour
             isRunning = false;
         }
 
-        if (isWing)
+        if (PartType is MonsterPartType.Wing)
         {
             myAnimator.SetBool("Glide Activated", false);
             myAnimator.ResetTrigger("Big Flap");
@@ -1147,12 +1091,12 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerDamageAirtime()
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor || PartType is MonsterPartType.Horn)
         {
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetTrigger("Airtime");
         }
@@ -1160,7 +1104,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerLaunch()
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor || PartType is MonsterPartType.Horn)
         {
             return;
         }
@@ -1187,7 +1131,7 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Teeter", false);
@@ -1206,7 +1150,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetTrigger("Heavy Damage");
@@ -1218,7 +1162,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isHead || isTail)
+        if (PartType is MonsterPartType.Head || PartType is MonsterPartType.Leg)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetTrigger("Heavy Damage");
@@ -1238,7 +1182,7 @@ public class NewMonsterPart : MonoBehaviour
             isAttacking = false;
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Running", false);
@@ -1247,7 +1191,7 @@ public class NewMonsterPart : MonoBehaviour
             isRunning = false;
         }
 
-        if (isWing)
+        if (PartType is MonsterPartType.Wing)
         {
             myAnimator.SetBool("Grounded", false);
             myAnimator.SetBool("Glide Activated", false);
@@ -1384,7 +1328,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetBool("Teeter", true);
         }
@@ -1395,7 +1339,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Teeter", true);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Swaying", true);
             myAnimator.SetBool("Teeter", true);
@@ -1440,7 +1384,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Fierce Emote");
@@ -1463,7 +1407,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Gas Emote");
@@ -1484,7 +1428,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Mocking Emote");
@@ -1497,7 +1441,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Swaying", true);
@@ -1511,7 +1455,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Dance Emote");
@@ -1524,7 +1468,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Dancing", true);
@@ -1538,7 +1482,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Jack Emote");
@@ -1551,7 +1495,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Swaying", true);
@@ -1570,7 +1514,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Boo Emote");
@@ -1596,7 +1540,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Hula Emote");
@@ -1609,7 +1553,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Swaying", true);
@@ -1623,7 +1567,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Vomit Emote");
@@ -1649,7 +1593,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Sleep Emote");
@@ -1670,7 +1614,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Boo Emote");
@@ -1683,7 +1627,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Swaying", true);
@@ -1702,7 +1646,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetTrigger("Sneeze Emote");
@@ -1715,7 +1659,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.ResetTrigger("Force Stop Emote");
             myAnimator.SetBool("Swaying", true);
@@ -1729,7 +1673,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetTrigger("Force Stop Emote");
         }
@@ -1740,7 +1684,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", false);
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetTrigger("Force Stop Emote");
             myAnimator.SetBool("Dancing", false);
@@ -1755,7 +1699,7 @@ public class NewMonsterPart : MonoBehaviour
             return;
         }
 
-        if (isArm)
+        if (PartType is MonsterPartType.Arm)
         {
             myAnimator.SetBool("Dancing", false);
             myAnimator.SetBool("Swaying", false);
@@ -1774,7 +1718,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void playFootstepSFXOnAnimation()
     {
-        if (isLeg && myMainSystem.SFXManager)
+        if (PartType is MonsterPartType.Leg && myMainSystem.SFXManager)
         {
             myMainSystem.SFXManager.footstepSFX(this);
         }
@@ -1782,7 +1726,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void playRunSFXOnAnimation()
     {
-        if (isLeg && myMainSystem.SFXManager)
+        if (PartType is MonsterPartType.Leg && myMainSystem.SFXManager)
         {
             
             myMainSystem.SFXManager.runSFX(this);
@@ -1795,7 +1739,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void isAtEdge()
     {
-        if (isGroundedLimb || isTorso || isArm)
+        if (isGroundedLimb || PartType is MonsterPartType.Torso or MonsterPartType.Arm)
         {
             myAnimator.SetBool("Teeter", true);
         }
@@ -1803,7 +1747,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void notAtEdge()
     {
-        if (isGroundedLimb || isTorso || isArm)
+        if (isGroundedLimb ||PartType is MonsterPartType.Torso or MonsterPartType.Arm)
         {
             myAnimator.SetBool("Teeter", false);
         }
@@ -1818,7 +1762,7 @@ public class NewMonsterPart : MonoBehaviour
 
         if (isAttacking == false)
         {
-            if (isLeg || isArm || isWing || isTail || (isMouth && myAnimator != null))
+            if (PartType is MonsterPartType.Leg or MonsterPartType.Arm or MonsterPartType.Wing or MonsterPartType.Tail || (PartType is MonsterPartType.Mouth && myAnimator != null))
             {
                 myAnimator.ResetTrigger("Unbrace");
 
@@ -1844,7 +1788,7 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetBool("Calm", !bounceAllowed);
         }
 
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetBool("Teeter", false);
         }
@@ -1852,7 +1796,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void stopInfiniteRoll()
     {
-        if (connected == false || isDecor || isHorn)
+        if (connected == false || PartType is MonsterPartType.Decor or MonsterPartType.Horn)
         {
             return;
         }
@@ -1869,7 +1813,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void headTurnToTarget()
     {
-        if (isHead)
+        if (PartType is MonsterPartType.Head)
         {
             myAnimator.SetBool("Force Idle on Start", true);
             myAnimator.enabled = false;
@@ -1879,7 +1823,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void returnHeadToNormalState()
     {
-        if (isHead)
+        if (PartType is MonsterPartType.Head)
         {
             myAnimator.enabled = true;
             //turn off head turning script
@@ -1889,7 +1833,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void torsoTurnToTarget()
     {
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.SetBool("Force Idle on Start", true);
             myAnimator.enabled = false;
@@ -1899,7 +1843,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void returnTorsoToNormalState()
     {
-        if (isTorso)
+        if (PartType is MonsterPartType.Torso)
         {
             myAnimator.enabled = true;
             //turn off head turning script
@@ -1911,7 +1855,7 @@ public class NewMonsterPart : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        if (isTorso || isHead)
+        if (PartType is MonsterPartType.Torso || PartType is MonsterPartType.Head)
         {
             myAnimator.SetBool("Force Idle on Start", false);
         }

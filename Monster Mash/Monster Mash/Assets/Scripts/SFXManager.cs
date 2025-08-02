@@ -24,7 +24,7 @@ public class SFXManager : MonoBehaviour
 
     public void footstepSFX(NewMonsterPart part)
     {
-        if (part.isLeg)
+        if (part.PartType is MonsterPartType.Leg)
         {
             RaycastHit hit;
             if (Physics.Raycast(part.transform.position, Vector3.down, out hit))
@@ -67,7 +67,7 @@ public class SFXManager : MonoBehaviour
 
     public void runSFX(NewMonsterPart part)
     {
-        if (part.isLeg)
+        if (part.PartType is MonsterPartType.Leg)
         {
             RaycastHit hit;
             if (Physics.Raycast(part.transform.position, Vector3.down, out hit))
@@ -110,7 +110,7 @@ public class SFXManager : MonoBehaviour
 
     public void JumpSFX(NewMonsterPart part)
     {
-        if (part.isLeg)
+        if (part.PartType is MonsterPartType.Leg)
         {
             footstepSFX(part);
         }
@@ -132,7 +132,7 @@ public class SFXManager : MonoBehaviour
 
     public void LandSFX(NewMonsterPart part)
     {
-        if (part.isLeg)
+        if (part.PartType is MonsterPartType.Leg)
         {
             footstepSFX(part);
         }

@@ -156,7 +156,7 @@ public class monsterAttackSystem : MonoBehaviour
         NewMonsterPart[] monsterPartList = GetComponentsInChildren<NewMonsterPart>();
         for (int i = 0; i < monsterPartList.Length; i++)
         {
-            if (monsterPartList[i].isTorso == false && monsterPartList[i].isHead == false && monsterPartList[i].monsterPartID == 1)
+            if (monsterPartList[i].PartType is not MonsterPartType.Torso && monsterPartList[i].PartType is not MonsterPartType.Head && monsterPartList[i].monsterPartID == 1)
             {
                 monsterPartList[i].transform.parent = null;
             }
@@ -229,7 +229,6 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].AssignType();
             allMonsterParts[i].AttackSetup();
 
             if (allMonsterParts[i].isGroundedLimb)
@@ -246,7 +245,7 @@ public class monsterAttackSystem : MonoBehaviour
                 }
             }
 
-            if (allMonsterParts[i].isGroundedLimb == false && allMonsterParts[i].isLeg)
+            if (allMonsterParts[i].isGroundedLimb == false && allMonsterParts[i].PartType is MonsterPartType.Leg)
             {
                 if (allMonsterParts[i].isLeftSidedLimb)
                 {
@@ -258,14 +257,14 @@ public class monsterAttackSystem : MonoBehaviour
                 }
             }
 
-            if (allMonsterParts[i].isWing)
+            if (allMonsterParts[i].PartType is MonsterPartType.Wing)
             {
                 allWings.Add(allMonsterParts[i]);
                 hasWings = true;
                 isWinged = true;
             }
 
-            if (allMonsterParts[i].isTorso)
+            if (allMonsterParts[i].PartType is MonsterPartType.Torso)
             {
                 mainTorso = allMonsterParts[i].GetComponent<Animator>();
                 allMonsterParts[i].isFloatingTorso = isFloatingMonster;// this is here just for monsters who are set to float even though they have grounded legs
@@ -313,7 +312,7 @@ public class monsterAttackSystem : MonoBehaviour
                 {
                     for (int i = 0; i < allMonsterParts.Length; i++)
                     {
-                        if (allMonsterParts[i].isTorso)
+                        if (allMonsterParts[i].PartType is MonsterPartType.Torso)
                         {
                             isFloatingMonster = true;
                             allMonsterParts[i].isFloatingTorso = isFloatingMonster;
@@ -507,12 +506,12 @@ public class monsterAttackSystem : MonoBehaviour
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
 
-            if (allMonsterParts[i].isWing)
+            if (allMonsterParts[i].PartType is MonsterPartType.Wing)
             {
                 allMonsterParts[i].hasFlightedIdle = false;
             }
 
-            if (allMonsterParts[i].isLeg)
+            if (allMonsterParts[i].PartType is MonsterPartType.Leg)
             {
                 allMonsterParts[i].isLeadingLeg = false;
             }

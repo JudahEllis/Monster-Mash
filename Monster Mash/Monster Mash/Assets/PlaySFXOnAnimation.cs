@@ -10,7 +10,7 @@ public class PlaySFXOnAnimation : MonoBehaviour
 
     public void playFootstepSFXOnAnimation()
     {
-        if (part.isLeg)
+        if (part.PartType is MonsterPartType.Leg)
         {
             sfxManager.footstepSFX(part);
         }

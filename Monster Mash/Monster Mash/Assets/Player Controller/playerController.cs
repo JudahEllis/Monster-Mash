@@ -58,6 +58,14 @@ public class playerController : MonoBehaviour
     //public bool primedForBigJump = false;
     public int numberOfJumps = 2;
     public int numberOfJumpsLeft = 2;
+    /// <summary>
+    /// When holding the left stick up how many secounds before the jump actually activates
+    /// </summary>
+    [SerializeField, Tooltip("When holding the left stick up how many secounds before the jump actually activates")] private float LeftStickJumpDelayTime = 0.3f;
+    /// <summary>
+    /// How many secounds the player has been holding the left stick in the upwards direction
+    /// </summary>
+    private float leftStickElapsedJumpTime;
     private Vector2 jumpValue;
     private bool jumpValueHasBeenRead = true;
     private float bigJumpPower = 65;//80
@@ -551,13 +559,21 @@ public class playerController : MonoBehaviour
                     }
                     */
 
-                    if (leftJoystickVector.y > 0.2f && (leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f))
+                    if (leftJoystickVector.y > 0.2f && (leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f) && isAttacking == false)
                     {
-                        //big jump
+                        leftStickElapsedJumpTime += Time.deltaTime;
                         if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
                         {
-                            bigJump();
+                            // Adds a delay so that the movement modifiers have time to activate
+                            if (leftStickElapsedJumpTime >= LeftStickJumpDelayTime)
+                            {
+                                bigJump();
+                            }
                         }
+                    }
+                    else
+                    {
+                        leftStickElapsedJumpTime = 0;
                     }
 
                     if (leftJoystickVector.y < 0.05f && jumpButtonReset == false)

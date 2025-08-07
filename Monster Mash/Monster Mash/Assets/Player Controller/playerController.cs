@@ -33,6 +33,8 @@ public class playerController : MonoBehaviour
     Vector2 leftJoystickVector; //gives us direction on x axis
     float leftJoystickValue; //gives us nuance of input between magnitudes
     public bool isAttacking = false;
+    // Normal is attacking only works when player is on the ground and we need it to work while in the air for the left stick jump
+    private bool leftStickIsAttacking = false;
     //
     private float walkSpeed = 5f;
     private float runSpeed = 25f;
@@ -61,7 +63,7 @@ public class playerController : MonoBehaviour
     /// <summary>
     /// When holding the left stick up how many secounds before the jump actually activates
     /// </summary>
-    [SerializeField, Tooltip("When holding the left stick up how many secounds before the jump actually activates")] private float LeftStickJumpDelayTime = 0.3f;
+    private float LeftStickJumpDelayTime = 0.1f;
     /// <summary>
     /// How many secounds the player has been holding the left stick in the upwards direction
     /// </summary>
@@ -558,9 +560,14 @@ public class playerController : MonoBehaviour
                         }
                     }
                     */
-
-                    if (leftJoystickVector.y > 0.2f && (leftJoystickVector.x < 0.2f && leftJoystickVector.x > -0.2f) && isAttacking == false)
+                    if (leftJoystickVector.y > 0.4f && Mathf.Abs(leftJoystickVector.x) < 0.4f)
                     {
+                        // Cancels the jump if you attack during the delay window. I don't like using a seperate bool for this but isAttacking does not work reliably 
+                        if (leftStickIsAttacking)
+                        {
+                            return;
+                        }
+                       
                         leftStickElapsedJumpTime += Time.deltaTime;
                         if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
                         {
@@ -573,7 +580,12 @@ public class playerController : MonoBehaviour
                     }
                     else
                     {
-                        leftStickElapsedJumpTime = 0;
+                        if (leftJoystickValue < 0.1f)
+                        {
+                            leftStickElapsedJumpTime = 0;
+                            leftStickIsAttacking = false;
+                        }
+                        
                     }
 
                     if (leftJoystickVector.y < 0.05f && jumpButtonReset == false)
@@ -2141,6 +2153,7 @@ public class playerController : MonoBehaviour
     // Listens for when an attack calls Trigger Attack Release
     public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
     {
+        leftStickIsAttacking = true;
 
         var currentMovementModifier = lastInputDirection switch
         {

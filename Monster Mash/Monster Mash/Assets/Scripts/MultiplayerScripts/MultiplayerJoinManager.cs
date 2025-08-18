@@ -12,9 +12,11 @@ public class MultiplayerJoinManager : MonoBehaviour
 {
     public enum CurrentScreen { CharacterSelect, StageSelect}
 
-    public CurrentScreen currentScreen = CurrentScreen.CharacterSelect;
+    public CurrentScreen currentScreen = CurrentScreen.StageSelect;
 
     private PlayerInputManager playerInputController;
+
+    public bool soloTesting;
 
     // The Scene's UI Canvas that the Player UI Controllers are spawned under
     [SerializeField]
@@ -184,9 +186,37 @@ public class MultiplayerJoinManager : MonoBehaviour
     //Is Assigned to the Start Button, only works when all players have selected a charcater
     void StartAction(InputAction.CallbackContext context)
     { 
-        if(allowStartGame)
+        if(allowStartGame && currentScreen == CurrentScreen.CharacterSelect)
         {
-            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, 11, Camera.main.transform.position.z);
+            if (CharacterSelectManager.Instance.storedPlayerInformation.Count > 0)
+            {
+                CharacterSelectManager.Instance.storedPlayerInformation.Clear();
+            }
+
+            foreach (PlayerInformation info in playerInfo)
+            {
+                CharacterSelectManager.Instance.storedPlayerInformation.Add(info);
+            }
+
+            SceneManager.LoadSceneAsync(stageData[stageSelectionIndex].stageIndex);
+        }
+    }
+
+    public void StartVersusMatch()
+    {
+        if (allowStartGame && currentScreen == CurrentScreen.CharacterSelect)
+        {
+            if (CharacterSelectManager.Instance.storedPlayerInformation.Count > 0)
+            {
+                CharacterSelectManager.Instance.storedPlayerInformation.Clear();
+            }
+
+            foreach (PlayerInformation info in playerInfo)
+            {
+                CharacterSelectManager.Instance.storedPlayerInformation.Add(info);
+            }
+
+            SceneManager.LoadSceneAsync(stageData[stageSelectionIndex].stageIndex);
         }
     }
 
@@ -228,16 +258,18 @@ public class MultiplayerJoinManager : MonoBehaviour
 
     public void SelectStage()
     {
-        if (CharacterSelectManager.Instance.storedPlayerInformation.Count > 0)
-        {
-            CharacterSelectManager.Instance.storedPlayerInformation.Clear();
-        }
+        stageSelectButtons.alpha = 0;
 
-        foreach (PlayerInformation info in playerInfo)
-        {
-            CharacterSelectManager.Instance.storedPlayerInformation.Add(info);
-        }
+        stageSelectButtons.interactable = false;
 
-        SceneManager.LoadSceneAsync(stageData[stageSelectionIndex].stageIndex);
+        stageSelectButtons.blocksRaycasts = false;
+
+        currentScreen = CurrentScreen.CharacterSelect;
+
+        characterSelectButtons.alpha = 1;
+
+        characterSelectButtons.interactable = true;
+
+        characterSelectButtons.blocksRaycasts = true;
     }
 }

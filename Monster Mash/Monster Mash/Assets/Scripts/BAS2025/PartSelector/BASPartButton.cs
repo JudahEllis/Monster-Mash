@@ -7,6 +7,8 @@ public class BASPartButton : MonoBehaviour
     public string monsterPartReference;
 
     Animator anim;
+
+    public bool isTorso;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -17,6 +19,14 @@ public class BASPartButton : MonoBehaviour
     {
         
     }
+
+    public void SpawnPart()
+    {
+
+        GameObject prefabRef = Resources.Load(monsterPartReference) as GameObject;
+
+        BuildAScareManager.instance.SpawnPart(isTorso, prefabRef);
+    }    
 
     public void PlayJostleAnim()
     {

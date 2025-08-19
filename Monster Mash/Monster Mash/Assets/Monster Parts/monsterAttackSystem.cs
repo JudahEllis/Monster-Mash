@@ -5,16 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-[Serializable]
-public class InputMap
-{
-    public InputActionReference Button;
-    public UnityEvent FunctionToCall;
-
-    // fixes issue with unsubscribing anon functions not working
-    [NonSerialized] public Action<InputAction.CallbackContext> cachedHandler;
-}
-
 
 public class monsterAttackSystem : MonoBehaviour
 {
@@ -135,9 +125,6 @@ public class monsterAttackSystem : MonoBehaviour
     public SFXManager SFXManager;
     public GameObject floorCheck;
 
-    [Header("Input Remaping")]
-    [SerializeField] private InputMap[] inputMaps;
-
 
     private void OnDestroy()
     {
@@ -146,17 +133,17 @@ public class monsterAttackSystem : MonoBehaviour
         {
             if (monsterPart != null)
             {
-                monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
-                monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
-            }
-        }
-
-        foreach (var inputMap in inputMaps)
-        {
-            if (inputMap != null)
-            {
-                inputMap.Button.action.performed -= ctx => inputMap.FunctionToCall.Invoke();
-                inputMap.Button.action.Disable();
+                // if you enter player mode and immeditely exit this will throw an error because the event was never subscribed to.
+                // We can't check events for null so this is a simple work arround to prevent the error.
+                try
+                {
+                    monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                    monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                }
+                catch
+                {
+                    
+                }
             }
         }
     }
@@ -242,7 +229,6 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Facing Right", facingRight);
 
         allMonsterParts = GetComponentsInChildren<NewMonsterPart>();
-        InputRemapSetup();
 
         #region Figuring out if this Monster has one leg, many legs, or is a legless guy
 
@@ -438,35 +424,6 @@ public class monsterAttackSystem : MonoBehaviour
         calm = false;
 
         SFXManager = FindObjectOfType<SFXManager>();
-    }
-
-
-    public void InputRemapSetup()
-    {
-        foreach (var inputMap in inputMaps)
-        {
-            if (inputMap != null)
-            {
-                // Awaken the beast gets called multiple times which is dangerous for events because if you subscribe an event multiple times then one button press will trigger multiple function calls.
-                // to prevent this we unsubscribe before we subscribe so that no matter what each button is only subscribed once.
-
-                if (inputMap.cachedHandler == null)
-                {
-                    inputMap.cachedHandler = ctx => inputMap.FunctionToCall.Invoke();
-                }
-
-                inputMap.Button.action.performed -= inputMap.cachedHandler;
-                inputMap.Button.action.Disable();
-
-                inputMap.Button.action.performed += inputMap.cachedHandler;
-                inputMap.Button.action.Enable();
-            } 
-        }
-    }
-
-    public void InputRemapTest()
-    {
-        Debug.Log("Test function called");
     }
 
     public void AssignMyPlayer(playerController controller)

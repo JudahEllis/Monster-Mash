@@ -13,6 +13,8 @@ public class InputRemaper : MonoBehaviour
 
     private void Start()
     {
+        LoadRebinds();
+
         foreach (ControlItemData controlItem in allControlItems)
         {
             SetButtonTextToDisplayString(controlItem);
@@ -35,12 +37,34 @@ public class InputRemaper : MonoBehaviour
             .WithControlsHavingToMatchPath("<Gamepad>")
             .WithCancelingThrough(Gamepad.current.buttonEast)
             .OnComplete(callback => 
-            {
-                Debug.Log("Test");
-                SetButtonTextToDisplayString(controlItem, callback); 
+            { 
+                SetButtonTextToDisplayString(controlItem, callback);
+                var rebinds = controlItem.rebindTarget.action.actionMap.SaveBindingOverridesAsJson();
+                PlayerPrefs.SetString(controlItem.rebindTarget.action.actionMap.name, rebinds);
             })
             .OnCancel(callback => { SetButtonTextToDisplayString(controlItem, callback); })
             .Start();
+    }
+
+
+    private void LoadRebinds()
+    {
+        string lastActionMapName = "";
+
+        foreach (ControlItemData controlItem in allControlItems)
+        {
+            string actionMapName = controlItem.rebindTarget.action.actionMap.name;
+           
+            if (lastActionMapName.Equals(actionMapName)) { return; }
+
+            if (PlayerPrefs.HasKey(actionMapName))
+            {
+                string rebinds = PlayerPrefs.GetString(actionMapName);
+                controlItem.rebindTarget.action.actionMap.LoadBindingOverridesFromJson(rebinds);
+            }
+
+            lastActionMapName = actionMapName;
+        }
     }
 
     private void SetButtonTextToDisplayString(ControlItemData controlItem, InputActionRebindingExtensions.RebindingOperation callback = null)

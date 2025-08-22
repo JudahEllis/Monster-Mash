@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
@@ -9,10 +6,12 @@ using UnityEngine.EventSystems;
 public class InputRemaper : MonoBehaviour
 {
 
-    [SerializeField] private ControlItemData[] allControlItems;
+    private ControlItemData[] allControlItems;
 
     private void Start()
     {
+        allControlItems = GetComponentsInChildren<ControlItemData>();
+
         LoadRebinds();
 
         foreach (ControlItemData controlItem in allControlItems)
@@ -31,13 +30,13 @@ public class InputRemaper : MonoBehaviour
     {
         controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().text = "";
 
-       controlItem.rebindTarget.action.Disable();
+        controlItem.rebindTarget.action.Disable();
         controlItem.rebindTarget.action.PerformInteractiveRebinding()
             .WithAction(controlItem.rebindTarget.action)
-            .WithControlsHavingToMatchPath("<Gamepad>")
+            .WithControlsHavingToMatchPath("<Gamepad>") // limits accepted inputs to gamepad buttons
             .WithCancelingThrough(Gamepad.current.buttonEast)
-            .OnComplete(callback => 
-            { 
+            .OnComplete(callback =>
+            {
                 SetButtonTextToDisplayString(controlItem, callback);
                 var rebinds = controlItem.rebindTarget.action.actionMap.SaveBindingOverridesAsJson();
                 PlayerPrefs.SetString(controlItem.rebindTarget.action.actionMap.name, rebinds);
@@ -69,6 +68,7 @@ public class InputRemaper : MonoBehaviour
 
     private void SetButtonTextToDisplayString(ControlItemData controlItem, InputActionRebindingExtensions.RebindingOperation callback = null)
     {
+        // Rebind operation cleanup
         if (callback != null)
         {
             controlItem.rebindTarget.action.Enable();

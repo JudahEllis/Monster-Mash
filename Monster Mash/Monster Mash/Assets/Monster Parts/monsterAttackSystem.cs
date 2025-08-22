@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
+
 
 public class monsterAttackSystem : MonoBehaviour
 {
@@ -130,8 +133,17 @@ public class monsterAttackSystem : MonoBehaviour
         {
             if (monsterPart != null)
             {
-                monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
-                monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                // if you enter player mode and immeditely exit this will throw an error because the event was never subscribed to.
+                // We can't check events for null so this is a simple work arround to prevent the error.
+                try
+                {
+                    monsterPart.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                    monsterPart.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
+                }
+                catch
+                {
+                    
+                }
             }
         }
     }

@@ -134,7 +134,7 @@ public class MultiplayerCursor : MonoBehaviour
 
             selectedCharacter = true;
 
-            if (joinManager.charactersSelected == inputManager.playerCount && inputManager.playerCount != 1)
+            if (joinManager.charactersSelected == inputManager.playerCount && inputManager.playerCount != 1 || joinManager.soloTesting)
             {
                 print("Start Game!");
 

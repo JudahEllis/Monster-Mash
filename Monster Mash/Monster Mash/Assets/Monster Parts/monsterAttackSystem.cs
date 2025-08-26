@@ -47,6 +47,19 @@ public class monsterAttackSystem : MonoBehaviour
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
 
+    // Emotes
+    private static readonly int maxEmotes = 4;
+    private Action<InputAction.CallbackContext>[] emoteHandlers = new Action<InputAction.CallbackContext>[maxEmotes];
+
+    // makes the set emote function more readable by not just passing in magic numbers
+    public enum EmoteSlot
+    {
+        Emote1 = 0,
+        Emote2 = 1,
+        Emote3 = 2,
+        Emote4 = 3,
+    }
+
     /*
     [System.Serializable]
     public class MonsterPartAttackData
@@ -424,6 +437,15 @@ public class monsterAttackSystem : MonoBehaviour
         calm = false;
 
         SFXManager = FindObjectOfType<SFXManager>();
+
+        // set default emotes
+        myPlayer.playerControlsMap.Emotes.Enable();
+
+        SetEmote(EmoteSlot.Emote1, myPlayer.playerControlsMap.Emotes.Emote1, danceEmote);
+        SetEmote(EmoteSlot.Emote2, myPlayer.playerControlsMap.Emotes.Emote2, fierceEmote);
+        SetEmote(EmoteSlot.Emote3, myPlayer.playerControlsMap.Emotes.Emote3, gasEmote);
+        SetEmote(EmoteSlot.Emote4, myPlayer.playerControlsMap.Emotes.Emote4, mockingEmote);
+        
     }
 
     public void AssignMyPlayer(playerController controller)
@@ -2733,6 +2755,30 @@ public class monsterAttackSystem : MonoBehaviour
     #endregion
 
     #region Emotes
+
+    /// <summary>
+    /// Assigns an emote to a specified slot and binds it to an input action.
+    /// </summary>
+    /// <remarks>If an emote is already assigned to the specified slot, the previous input action binding will
+    /// be removed before the new one is added.</remarks>
+    /// <param name="emoteIndex">The slot to which the emote will be assigned. Must be a valid <see cref="EmoteSlot"/> value.</param>
+    /// <param name="emoteInputAction">The input action that triggers the emote. Cannot be null.</param>
+    /// <param name="callback">The action to execute when the input action is performed. Cannot be null.</param>
+    public void SetEmote(EmoteSlot emoteIndex, InputAction emoteInputAction, Action callback)
+    {
+        // Unsubscribe previous function if there is one
+        if (emoteHandlers[(int)emoteIndex] != null)
+        {
+            emoteInputAction.performed -= emoteHandlers[(int)emoteIndex];
+        }
+
+        // store the function that we are subscribing to so that we can unsubscribe it later
+        emoteHandlers[(int)emoteIndex] = ctx => callback();
+        // subscribe the input action to the passed in function
+        emoteInputAction.performed += emoteHandlers[(int)emoteIndex];
+    }
+
+
     public void fierceEmote()
     {
         if (damageLocked)

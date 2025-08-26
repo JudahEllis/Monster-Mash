@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour
     public LayerMask solidGroundLayer;
     public LayerMask semiSolidGroundLayer;
     public PlayerInput playerInput;
-    private PlayerControls playerControlsMap;
+    public PlayerControls playerControlsMap;
     private InputActionMap startingActionMap;
     private InputActionMap UIcontrols;
     //private bool UIcontrolsNeeded = true;

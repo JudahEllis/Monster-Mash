@@ -33,7 +33,7 @@ public class monsterAttackSystem : MonoBehaviour
     bool requiresFlourishingTwirl = false;
     bool requiresFlourishingRoll = false;
     bool calm = false;
-    bool emoteActive = false;
+    public bool emoteActive = false;
     public bool onPlatformEdge;
     private bool damageLocked = false;
     private bool forceFallingActivated = false;
@@ -447,11 +447,7 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetTrigger("Spawn In");
         yield return new WaitForSeconds(0.2f);
 
-        fierceEmote();//something here to choose the emote
-        //gasEmote();
-        //danceEmote();
-        //jackEmote();
-        //mockingEmote();
+        emoteManager.PlayRandomEmote();
 
         yield return new WaitForSeconds(2f);
         //myAnimator.SetBool("Idle Bounce Allowed", true);

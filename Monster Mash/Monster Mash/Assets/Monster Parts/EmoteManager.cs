@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class DefaultEmote
@@ -30,16 +32,13 @@ public class EmoteManager
         Mocking,
         Dance,
         Jack,
-        Thinking,
         Boo,
-        Excercise,
         Hula,
         Vomit,
-        Brian,
         Sleep,
         Explosive,
-        Laughing,
-        Sneezing
+        Sneezing,
+        Random,
     }
 
     public DefaultEmote[] defaultEmotes = new DefaultEmote[maxEmotes];
@@ -47,10 +46,12 @@ public class EmoteManager
     private static readonly int maxEmotes = 4;
     private Action<InputAction.CallbackContext>[] emoteHandlers = new Action<InputAction.CallbackContext>[maxEmotes];
     private playerController player;
+    private monsterAttackSystem attackSystem;
 
     public void Initilize(monsterAttackSystem attackSystem, playerController player)
     {
         this.player = player;
+        this.attackSystem = attackSystem;
 
         emoteNameToActionRef = new Dictionary<Emote, Action>()
         {
@@ -59,16 +60,13 @@ public class EmoteManager
             { Emote.Mocking, attackSystem.mockingEmote },
             { Emote.Dance, attackSystem.danceEmote },
             { Emote.Jack, attackSystem.jackEmote },
-            { Emote.Thinking, attackSystem.thinkingEmote },
             { Emote.Boo, attackSystem.booEmote },
-            { Emote.Excercise, attackSystem.excerciseEmote },
             { Emote.Hula, attackSystem.hulaEmote },
             { Emote.Vomit, attackSystem.vomitEmote },
-            { Emote.Brian, attackSystem.brianEmote },
             { Emote.Sleep, attackSystem.sleepEmote },
             { Emote.Explosive, attackSystem.explosiveEmote },
-            { Emote.Laughing, attackSystem.laughingEmote },
             { Emote.Sneezing, attackSystem.sneezingEmote },
+            { Emote.Random, PlayRandomEmote },
         };
 
         if (defaultEmotes == null || defaultEmotes.Length == 0) { return; }
@@ -100,6 +98,22 @@ public class EmoteManager
         emoteHandlers[(int)emoteSlot] = ctx => emoteAction();
         // subscribe the input action to the passed in function
         emoteInputAction.performed += emoteHandlers[(int)emoteSlot];
+    }
+
+    /// <summary>
+    /// Plays a randomly selected emote
+    /// </summary>
+    public void PlayRandomEmote()
+    {
+        if (attackSystem.emoteActive) { return; }
+
+        var emoteFunctions = emoteNameToActionRef
+            .Where(entry => entry.Key != Emote.Random)
+            .Select(entry => entry.Value)
+            .ToArray();
+
+        int randIndex = Random.Range(0, emoteFunctions.Length);
+        emoteFunctions[randIndex].Invoke();
     }
 
     // Converts the enum name to the InputAction so that it does not have to be passed in to SetEmote()

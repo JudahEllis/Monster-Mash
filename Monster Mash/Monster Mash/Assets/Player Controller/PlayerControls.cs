@@ -1527,6 +1527,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Emotes"",
+            ""id"": ""5e084b5f-4876-462b-be77-9344c143f440"",
+            ""actions"": [
+                {
+                    ""name"": ""Emote 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""8bf68b1a-bf95-4e67-a3c0-5ad57b2d158a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Emote 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""ccd9d835-b420-4f7b-98ea-bbb627ac0b0d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Emote 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce58b017-342d-4d67-b2c1-1bba9c7259ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Emote 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""4af455ae-2aae-471f-b62b-d2dedc2a93fe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""dfeb061c-ed9c-475a-b6d0-3a5f9ce269e9"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""AllGamepads"",
+                    ""action"": ""Emote 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03585554-835a-4fa9-9f9b-f4c1c004686b"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""AllGamepads"",
+                    ""action"": ""Emote 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a0ab0b7-65e0-4805-baa1-fadb58429442"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Emote 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""739e8cb9-9566-4ea2-a5fa-5184804aba06"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""AllGamepads"",
+                    ""action"": ""Emote 4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1612,6 +1700,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // BuildAScare-DragAndDrop
         m_BuildAScareDragAndDrop = asset.FindActionMap("BuildAScare-DragAndDrop", throwIfNotFound: true);
         m_BuildAScareDragAndDrop_CursorMovement = m_BuildAScareDragAndDrop.FindAction("Cursor Movement", throwIfNotFound: true);
+        // Emotes
+        m_Emotes = asset.FindActionMap("Emotes", throwIfNotFound: true);
+        m_Emotes_Emote1 = m_Emotes.FindAction("Emote 1", throwIfNotFound: true);
+        m_Emotes_Emote2 = m_Emotes.FindAction("Emote 2", throwIfNotFound: true);
+        m_Emotes_Emote3 = m_Emotes.FindAction("Emote 3", throwIfNotFound: true);
+        m_Emotes_Emote4 = m_Emotes.FindAction("Emote 4", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -2105,6 +2199,63 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public BuildAScareDragAndDropActions @BuildAScareDragAndDrop => new BuildAScareDragAndDropActions(this);
+
+    // Emotes
+    private readonly InputActionMap m_Emotes;
+    private IEmotesActions m_EmotesActionsCallbackInterface;
+    private readonly InputAction m_Emotes_Emote1;
+    private readonly InputAction m_Emotes_Emote2;
+    private readonly InputAction m_Emotes_Emote3;
+    private readonly InputAction m_Emotes_Emote4;
+    public struct EmotesActions
+    {
+        private @PlayerControls m_Wrapper;
+        public EmotesActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Emote1 => m_Wrapper.m_Emotes_Emote1;
+        public InputAction @Emote2 => m_Wrapper.m_Emotes_Emote2;
+        public InputAction @Emote3 => m_Wrapper.m_Emotes_Emote3;
+        public InputAction @Emote4 => m_Wrapper.m_Emotes_Emote4;
+        public InputActionMap Get() { return m_Wrapper.m_Emotes; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EmotesActions set) { return set.Get(); }
+        public void SetCallbacks(IEmotesActions instance)
+        {
+            if (m_Wrapper.m_EmotesActionsCallbackInterface != null)
+            {
+                @Emote1.started -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote1;
+                @Emote1.performed -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote1;
+                @Emote1.canceled -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote1;
+                @Emote2.started -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote2;
+                @Emote2.performed -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote2;
+                @Emote2.canceled -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote2;
+                @Emote3.started -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote3;
+                @Emote3.performed -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote3;
+                @Emote3.canceled -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote3;
+                @Emote4.started -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote4;
+                @Emote4.performed -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote4;
+                @Emote4.canceled -= m_Wrapper.m_EmotesActionsCallbackInterface.OnEmote4;
+            }
+            m_Wrapper.m_EmotesActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Emote1.started += instance.OnEmote1;
+                @Emote1.performed += instance.OnEmote1;
+                @Emote1.canceled += instance.OnEmote1;
+                @Emote2.started += instance.OnEmote2;
+                @Emote2.performed += instance.OnEmote2;
+                @Emote2.canceled += instance.OnEmote2;
+                @Emote3.started += instance.OnEmote3;
+                @Emote3.performed += instance.OnEmote3;
+                @Emote3.canceled += instance.OnEmote3;
+                @Emote4.started += instance.OnEmote4;
+                @Emote4.performed += instance.OnEmote4;
+                @Emote4.canceled += instance.OnEmote4;
+            }
+        }
+    }
+    public EmotesActions @Emotes => new EmotesActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -2176,5 +2327,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IBuildAScareDragAndDropActions
     {
         void OnCursorMovement(InputAction.CallbackContext context);
+    }
+    public interface IEmotesActions
+    {
+        void OnEmote1(InputAction.CallbackContext context);
+        void OnEmote2(InputAction.CallbackContext context);
+        void OnEmote3(InputAction.CallbackContext context);
+        void OnEmote4(InputAction.CallbackContext context);
     }
 }

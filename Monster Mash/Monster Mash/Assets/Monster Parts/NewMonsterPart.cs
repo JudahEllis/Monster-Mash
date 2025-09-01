@@ -1396,8 +1396,6 @@ public class NewMonsterPart : MonoBehaviour
             myAnimator.SetTrigger("Emote");
             myAnimator.SetBool("Calm", false);
         }
-
-
     }
 
     public void gasEmote()
@@ -1504,7 +1502,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void thinkingEmote()
     {
-
+        
     }
 
     public void booEmote()
@@ -1530,7 +1528,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void excerciseEmote()
     {
-
+        
     }
 
     public void hulaEmote()
@@ -1583,7 +1581,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void brianEmote()
     {
-
+        
     }
 
     public void sleepEmote()
@@ -1636,7 +1634,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void laughingEmote()
     {
-
+        
     }
 
     public void sneezingEmote()

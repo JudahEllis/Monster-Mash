@@ -33,7 +33,7 @@ public class monsterAttackSystem : MonoBehaviour
     bool requiresFlourishingTwirl = false;
     bool requiresFlourishingRoll = false;
     bool calm = false;
-    bool emoteActive = false;
+    public bool emoteActive = false;
     public bool onPlatformEdge;
     private bool damageLocked = false;
     private bool forceFallingActivated = false;
@@ -46,27 +46,6 @@ public class monsterAttackSystem : MonoBehaviour
     public monsterPart[] oldattackSlotMonsterParts = new monsterPart[8];
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
-
-    /*
-    [System.Serializable]
-    public class MonsterPartAttackData
-    {
-        public MonsterPartData.Button partAssignedButton;
-
-        public monsterPart partReference;
-
-        public MonsterPartAttackData(MonsterPartData.Button button, monsterPart part)
-        {
-            partAssignedButton = button;
-
-            partReference = part;
-        }
-    }
-
-    public List<MonsterPartAttackData> monsterAttackInformation;
-
-    */
-
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
     public NewMonsterPart[] allMonsterParts;
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
@@ -125,6 +104,9 @@ public class monsterAttackSystem : MonoBehaviour
     public SFXManager SFXManager;
     public GameObject floorCheck;
 
+    // Emotes
+    [Header("Emotes")]
+    public EmoteManager emoteManager;
 
     private void OnDestroy()
     {
@@ -223,7 +205,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void awakenTheBeast()
     {
-        myAnimator = this.GetComponent<Animator>();
+        myAnimator = GetComponent<Animator>();
+        emoteManager.Initilize(this, myPlayer);
         floorCheck.SetActive(false);
         grabAttackSlotInfo();
         myAnimator.SetBool("Facing Right", facingRight);
@@ -424,6 +407,12 @@ public class monsterAttackSystem : MonoBehaviour
         calm = false;
 
         SFXManager = FindObjectOfType<SFXManager>();
+
+        // set default emotes
+        myPlayer.playerControlsMap.Emotes.Enable();
+
+        
+        
     }
 
     public void AssignMyPlayer(playerController controller)
@@ -458,11 +447,7 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetTrigger("Spawn In");
         yield return new WaitForSeconds(0.2f);
 
-        fierceEmote();//something here to choose the emote
-        //gasEmote();
-        //danceEmote();
-        //jackEmote();
-        //mockingEmote();
+        emoteManager.PlayRandomEmote();
 
         yield return new WaitForSeconds(2f);
         //myAnimator.SetBool("Idle Bounce Allowed", true);
@@ -2733,6 +2718,8 @@ public class monsterAttackSystem : MonoBehaviour
     #endregion
 
     #region Emotes
+
+
     public void fierceEmote()
     {
         if (damageLocked)

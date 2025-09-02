@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using System.Collections;
 
 public class RedButtonWrapper
 {
@@ -17,14 +19,18 @@ public class RedButtonWrapper
 
 public class InputRemapper : MonoBehaviour
 {
-
+    [SerializeField] private GameObject remappingUI;
+    public static UnityEvent OnRebind = new();
     private ControlItemData[] allControlItems;
     // using the input action name as a key to identify specific buttons when the game loads
     private RedButtonWrapper redButtonWrapper = new();
+    [SerializeField] private InputActionAsset playerActionAsset;
+    private InputAction showMenuAction;
     private readonly string redButtonsKey = "redButtons";
 
     private void Start()
     {
+        DontDestroyOnLoad(transform.parent);
         allControlItems = GetComponentsInChildren<ControlItemData>();
 
         if (PlayerPrefs.HasKey(redButtonsKey))
@@ -44,10 +50,25 @@ public class InputRemapper : MonoBehaviour
             }
         }
 
+        remappingUI.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        showMenuAction = playerActionAsset.FindAction("ShowMenu");
+        showMenuAction.Enable();
+        showMenuAction.performed += ctx => ShowMenu();
+
         if (allControlItems != null && allControlItems.Length > 0)
         {
             EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
         }
+    }
+
+    private void OnDisable()
+    {
+        showMenuAction.Disable();
+        showMenuAction.performed -= ctx => ShowMenu();
     }
 
     // called from button event
@@ -62,12 +83,20 @@ public class InputRemapper : MonoBehaviour
             .WithCancelingThrough(Gamepad.current.buttonEast)
             .OnComplete(callback =>
             {
-                SetButtonTextToDisplayString(controlItem, callback);
+                SetButtonTextToDisplayString(controlItem);
+                StartCoroutine(DelayReenable(controlItem.rebindTarget.action));
+                callback.Dispose();
 
                 var rebinds = controlItem.rebindTarget.action.actionMap.SaveBindingOverridesAsJson();
                 PlayerPrefs.SetString(controlItem.rebindTarget.action.actionMap.name, rebinds);
+                OnRebind.Invoke();
             })
-            .OnCancel(callback => { SetButtonTextToDisplayString(controlItem, callback); })
+            .OnCancel(callback => 
+            { 
+                SetButtonTextToDisplayString(controlItem);
+                StartCoroutine(DelayReenable(controlItem.rebindTarget.action));
+                callback.Dispose();
+            })
             .OnPotentialMatch(callback =>
             {
                 if (controlItem.rebindTarget.action.actionMap.name.Equals("XBOX")) { return; }
@@ -141,16 +170,34 @@ public class InputRemapper : MonoBehaviour
         }
     }
 
-    private void SetButtonTextToDisplayString(ControlItemData controlItem, InputActionRebindingExtensions.RebindingOperation callback = null)
+    private void SetButtonTextToDisplayString(ControlItemData controlItem)
     {
-
-        // Rebind operation cleanup
-        if (callback != null)
-        {
-            controlItem.rebindTarget.action.Enable();
-            callback.Dispose();
-        }
-
         controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().text = controlItem.rebindTarget.action.GetBindingDisplayString();
+    }
+
+    private void ShowMenu()
+    {
+        if (!remappingUI.activeSelf)
+        {
+            remappingUI.SetActive(true);
+
+            if (allControlItems != null && allControlItems.Length > 0)
+            {
+                EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
+            }
+
+            playerActionAsset.FindActionMap("Monster Controls").Disable();
+        }
+        else
+        {
+            remappingUI.SetActive(false);
+            playerActionAsset.FindActionMap("Monster Controls").Enable();
+        }
+    }
+
+    IEnumerator DelayReenable(InputAction actionRef)
+    {
+        yield return new WaitUntil(() => remappingUI.activeSelf);
+        actionRef.Enable();
     }
 }

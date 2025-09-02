@@ -10,8 +10,9 @@ using Random = UnityEngine.Random;
 [Serializable]
 public class DefaultEmote
 {
-    public EmoteManager.EmoteSlot EmoteSlot;
+    [HideInInspector] public EmoteManager.EmoteSlot EmoteSlot;
     public EmoteManager.Emote EmoteName;
+    public InputActionReference emoteInputAction;
 }
 
 [Serializable]
@@ -41,16 +42,16 @@ public class EmoteManager
         Random,
     }
 
-    public DefaultEmote[] defaultEmotes = new DefaultEmote[maxEmotes];
+    [Tooltip("Only Assign 4 emotes")] public DefaultEmote[] defaultEmotes = new DefaultEmote[4];
     private Dictionary<Emote, Action> emoteNameToActionRef;
-    private static readonly int maxEmotes = 4;
-    private Action<InputAction.CallbackContext>[] emoteHandlers = new Action<InputAction.CallbackContext>[maxEmotes];
-    private playerController player;
+    private Action<InputAction.CallbackContext>[] emoteHandlers = new Action<InputAction.CallbackContext>[4];
     private monsterAttackSystem attackSystem;
+    private bool isInitilised;
 
     public void Initilize(monsterAttackSystem attackSystem, playerController player)
     {
-        this.player = player;
+        if (isInitilised) { return; }
+
         this.attackSystem = attackSystem;
 
         emoteNameToActionRef = new Dictionary<Emote, Action>()
@@ -69,14 +70,14 @@ public class EmoteManager
             { Emote.Random, PlayRandomEmote },
         };
 
-        if (defaultEmotes == null || defaultEmotes.Length == 0) { return; }
-
-        foreach (var emote in defaultEmotes)
+        for (int i = 0; i < defaultEmotes.Length; i++)
         {
-            SwapEmote(emote.EmoteSlot, emote.EmoteName);
+            defaultEmotes[i].EmoteSlot = (EmoteSlot)i;
+            SwapEmote(defaultEmotes[i].EmoteSlot, defaultEmotes[i].EmoteName);
         }
+
+        isInitilised = true;
     }
-    
 
     /// <summary>
     /// Swaps the passed in emote slot's current emote 
@@ -85,19 +86,30 @@ public class EmoteManager
     /// <param name="emoteName">The Enum name of the emote you want to set the slot to</param>
     public void SwapEmote(EmoteSlot emoteSlot, Emote emoteName)
     {
-        InputAction emoteInputAction = GetEmoteInputAction(emoteSlot);
+        int slotIndex = (int)emoteSlot;
+        var defaultEmoteForSlot = Array.Find(defaultEmotes, e => e.EmoteSlot == emoteSlot);
+
+        if (defaultEmoteForSlot == null ||
+            defaultEmoteForSlot.emoteInputAction == null ||
+            defaultEmoteForSlot.emoteInputAction.action == null)
+            return;
+
+        var inputAction = defaultEmoteForSlot.emoteInputAction.action;
+        if (!inputAction.enabled)
+            inputAction.Enable();
+
         Action emoteAction = emoteNameToActionRef[emoteName];
 
         // Unsubscribe previous function if there is one
-        if (emoteHandlers[(int)emoteSlot] != null)
-        {
-            emoteInputAction.performed -= emoteHandlers[(int)emoteSlot];
-        }
+        if (emoteHandlers[slotIndex] != null)
+            inputAction.performed -= emoteHandlers[slotIndex];
 
-        // store the function that we are subscribing to so that we can unsubscribe it later
-        emoteHandlers[(int)emoteSlot] = ctx => emoteAction();
-        // subscribe the input action to the passed in function
-        emoteInputAction.performed += emoteHandlers[(int)emoteSlot];
+        // Store and subscribe the new handler
+        emoteHandlers[slotIndex] = ctx => emoteAction();
+        inputAction.performed += emoteHandlers[slotIndex];
+
+        // Update the emote name for this slot
+        defaultEmoteForSlot.EmoteName = emoteName;
     }
 
     /// <summary>
@@ -114,15 +126,5 @@ public class EmoteManager
 
         int randIndex = Random.Range(0, emoteFunctions.Length);
         emoteFunctions[randIndex].Invoke();
-    }
-
-    // Converts the enum name to the InputAction so that it does not have to be passed in to SetEmote()
-    private InputAction GetEmoteInputAction(EmoteSlot emoteIndex)
-    {
-        string actionName = emoteIndex.ToString();
-        var emotesType = player.playerControlsMap.Emotes.GetType();
-        var prop = emotesType.GetProperty(actionName);
-
-        return prop == null ? null : (InputAction)prop.GetValue(player.playerControlsMap.Emotes);
     }
 }

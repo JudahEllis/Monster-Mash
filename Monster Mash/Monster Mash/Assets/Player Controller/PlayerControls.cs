@@ -998,6 +998,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""04917842-53ea-493a-971b-255cbdcfcb43"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1086,6 +1095,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Deselect Action - Generic Gamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f0f5809-0b98-4d68-b011-39383eabd34a"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1681,6 +1701,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_UINavagation_SelectActionGenericGamepad = m_UINavagation.FindAction("Select Action - Generic Gamepad", throwIfNotFound: true);
         m_UINavagation_DeselectActionGenericGamepad = m_UINavagation.FindAction("Deselect Action - Generic Gamepad", throwIfNotFound: true);
         m_UINavagation_StartGameGenericGamepad = m_UINavagation.FindAction("Start Game - Generic Gamepad", throwIfNotFound: true);
+        m_UINavagation_ShowMenu = m_UINavagation.FindAction("ShowMenu", throwIfNotFound: true);
         // BuildAScare-DirectControl
         m_BuildAScareDirectControl = asset.FindActionMap("BuildAScare-DirectControl", throwIfNotFound: true);
         m_BuildAScareDirectControl_PartLocomotion = m_BuildAScareDirectControl.FindAction("Part Locomotion", throwIfNotFound: true);
@@ -1980,6 +2001,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_UINavagation_SelectActionGenericGamepad;
     private readonly InputAction m_UINavagation_DeselectActionGenericGamepad;
     private readonly InputAction m_UINavagation_StartGameGenericGamepad;
+    private readonly InputAction m_UINavagation_ShowMenu;
     public struct UINavagationActions
     {
         private @PlayerControls m_Wrapper;
@@ -1988,6 +2010,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @SelectActionGenericGamepad => m_Wrapper.m_UINavagation_SelectActionGenericGamepad;
         public InputAction @DeselectActionGenericGamepad => m_Wrapper.m_UINavagation_DeselectActionGenericGamepad;
         public InputAction @StartGameGenericGamepad => m_Wrapper.m_UINavagation_StartGameGenericGamepad;
+        public InputAction @ShowMenu => m_Wrapper.m_UINavagation_ShowMenu;
         public InputActionMap Get() { return m_Wrapper.m_UINavagation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2009,6 +2032,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @StartGameGenericGamepad.started -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnStartGameGenericGamepad;
                 @StartGameGenericGamepad.performed -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnStartGameGenericGamepad;
                 @StartGameGenericGamepad.canceled -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnStartGameGenericGamepad;
+                @ShowMenu.started -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnShowMenu;
+                @ShowMenu.performed -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnShowMenu;
+                @ShowMenu.canceled -= m_Wrapper.m_UINavagationActionsCallbackInterface.OnShowMenu;
             }
             m_Wrapper.m_UINavagationActionsCallbackInterface = instance;
             if (instance != null)
@@ -2025,6 +2051,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @StartGameGenericGamepad.started += instance.OnStartGameGenericGamepad;
                 @StartGameGenericGamepad.performed += instance.OnStartGameGenericGamepad;
                 @StartGameGenericGamepad.canceled += instance.OnStartGameGenericGamepad;
+                @ShowMenu.started += instance.OnShowMenu;
+                @ShowMenu.performed += instance.OnShowMenu;
+                @ShowMenu.canceled += instance.OnShowMenu;
             }
         }
     }
@@ -2306,6 +2335,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnSelectActionGenericGamepad(InputAction.CallbackContext context);
         void OnDeselectActionGenericGamepad(InputAction.CallbackContext context);
         void OnStartGameGenericGamepad(InputAction.CallbackContext context);
+        void OnShowMenu(InputAction.CallbackContext context);
     }
     public interface IBuildAScareDirectControlActions
     {

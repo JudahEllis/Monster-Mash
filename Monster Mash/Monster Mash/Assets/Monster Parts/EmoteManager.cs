@@ -47,11 +47,16 @@ public class EmoteManager
     private Action<InputAction.CallbackContext>[] emoteHandlers = new Action<InputAction.CallbackContext>[maxEmotes];
     private playerController player;
     private monsterAttackSystem attackSystem;
+    private bool isInitilised;
 
     public void Initilize(monsterAttackSystem attackSystem, playerController player)
     {
+        if (isInitilised) { return; }
+
         this.player = player;
         this.attackSystem = attackSystem;
+        LoadEmoteRebinds();
+        InputRemapper.onRebind.AddListener(LoadEmoteRebinds);
 
         emoteNameToActionRef = new Dictionary<Emote, Action>()
         {
@@ -75,8 +80,9 @@ public class EmoteManager
         {
             SwapEmote(emote.EmoteSlot, emote.EmoteName);
         }
+
+        isInitilised = true;
     }
-    
 
     /// <summary>
     /// Swaps the passed in emote slot's current emote 
@@ -124,5 +130,17 @@ public class EmoteManager
         var prop = emotesType.GetProperty(actionName);
 
         return prop == null ? null : (InputAction)prop.GetValue(player.playerControlsMap.Emotes);
+    }
+
+    private void LoadEmoteRebinds()
+    {
+        // Getting a ref to the action map through the first emote slot. This works with any slot
+        InputActionMap emoteActionMap = GetEmoteInputAction(EmoteSlot.Emote1).actionMap;
+
+        if (PlayerPrefs.HasKey(emoteActionMap.name))
+        {
+            string rebinds = PlayerPrefs.GetString(emoteActionMap.name);
+            emoteActionMap.LoadBindingOverridesFromJson(rebinds);
+        }
     }
 }

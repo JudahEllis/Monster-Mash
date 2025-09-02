@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class RedButtonWrapper
 {
@@ -17,7 +18,7 @@ public class RedButtonWrapper
 
 public class InputRemapper : MonoBehaviour
 {
-
+    public static UnityEvent onRebind = new();
     private ControlItemData[] allControlItems;
     // using the input action name as a key to identify specific buttons when the game loads
     private RedButtonWrapper redButtonWrapper = new();
@@ -66,6 +67,7 @@ public class InputRemapper : MonoBehaviour
 
                 var rebinds = controlItem.rebindTarget.action.actionMap.SaveBindingOverridesAsJson();
                 PlayerPrefs.SetString(controlItem.rebindTarget.action.actionMap.name, rebinds);
+                onRebind.Invoke();
             })
             .OnCancel(callback => { SetButtonTextToDisplayString(controlItem, callback); })
             .OnPotentialMatch(callback =>

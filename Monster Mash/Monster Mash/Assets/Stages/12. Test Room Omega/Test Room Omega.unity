@@ -1177,6 +1177,7 @@ MonoBehaviour:
   isWalking: 0
   isRunning: 0
   focusedAttackActive: 0
+  emoteActive: 0
   onPlatformEdge: 0
   myPlayer: {fileID: 0}
   oldattackSlotMonsterParts:
@@ -1238,6 +1239,20 @@ MonoBehaviour:
   nativeReel: {fileID: 1331814316}
   SFXManager: {fileID: 0}
   floorCheck: {fileID: 0}
+  emoteManager:
+    defaultEmotes:
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
 --- !u!114 &288664679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3395,7 +3410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &942355575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3764,7 +3779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1017421086
 Transform:
   m_ObjectHideFlags: 0

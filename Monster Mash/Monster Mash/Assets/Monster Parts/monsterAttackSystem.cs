@@ -309,7 +309,6 @@ public class monsterAttackSystem : MonoBehaviour
                     {
                         if (allMonsterParts[i].PartType is MonsterPartType.Torso)
                         {
-                            isFloatingMonster = true;
                             allMonsterParts[i].isFloatingTorso = isFloatingMonster;
                         }
                     }
@@ -410,8 +409,6 @@ public class monsterAttackSystem : MonoBehaviour
 
         // set default emotes
         myPlayer.playerControlsMap.Emotes.Enable();
-
-        
         
     }
 

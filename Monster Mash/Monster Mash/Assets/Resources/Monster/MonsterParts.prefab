@@ -73439,8 +73439,18 @@ MonoBehaviour:
   isWalking: 0
   isRunning: 0
   focusedAttackActive: 0
+  emoteActive: 0
   onPlatformEdge: 0
   myPlayer: {fileID: 0}
+  oldattackSlotMonsterParts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   attackSlotMonsterParts:
   - {fileID: 0}
   - {fileID: 0}
@@ -73491,6 +73501,24 @@ MonoBehaviour:
   nativeReel: {fileID: 4738599461250381942}
   SFXManager: {fileID: 0}
   floorCheck: {fileID: 4738599461417792765}
+  emoteManager:
+    defaultEmotes:
+    - EmoteSlot: 0
+      EmoteName: 1
+      emoteInputAction: {fileID: -1192461737310355906, guid: d0265dd6cb2835843847c2c2c8813dc0,
+        type: 3}
+    - EmoteSlot: 0
+      EmoteName: 2
+      emoteInputAction: {fileID: 2736645304501883484, guid: d0265dd6cb2835843847c2c2c8813dc0,
+        type: 3}
+    - EmoteSlot: 0
+      EmoteName: 3
+      emoteInputAction: {fileID: -1549193555657038599, guid: d0265dd6cb2835843847c2c2c8813dc0,
+        type: 3}
+    - EmoteSlot: 0
+      EmoteName: 4
+      emoteInputAction: {fileID: 6295891054830190810, guid: d0265dd6cb2835843847c2c2c8813dc0,
+        type: 3}
 --- !u!1 &4738599462116782143
 GameObject:
   m_ObjectHideFlags: 0

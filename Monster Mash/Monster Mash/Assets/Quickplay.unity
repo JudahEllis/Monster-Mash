@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18293469, g: 0.22862719, b: 0.3068683, a: 1}
+  m_IndirectSpecularColor: {r: 0.18293446, g: 0.22862685, b: 0.30686772, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -6469,7 +6469,7 @@ MonoBehaviour:
     stageDisplayName: BLOCK PARTY
   - stageIndex: 4
     stageDisplayName: THE BEASTDOME
-  - stageIndex: 7
+  - stageIndex: 8
     stageDisplayName: HUBWORLD
   - stageIndex: 9
     stageDisplayName: ITSY BESSY BOSS ARENA
@@ -10245,6 +10245,7 @@ MonoBehaviour:
   isWalking: 0
   isRunning: 0
   focusedAttackActive: 0
+  emoteActive: 0
   onPlatformEdge: 0
   myPlayer: {fileID: 0}
   oldattackSlotMonsterParts:
@@ -10306,6 +10307,20 @@ MonoBehaviour:
   nativeReel: {fileID: 0}
   SFXManager: {fileID: 0}
   floorCheck: {fileID: 0}
+  emoteManager:
+    defaultEmotes:
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
 --- !u!95 &1253434600
 Animator:
   serializedVersion: 4

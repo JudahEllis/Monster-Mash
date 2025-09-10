@@ -150,11 +150,6 @@ public class playerController : MonoBehaviour
         UnsubscribeActionMap();
     }
 
-    private void OnApplicationQuit()
-    {
-        UnsubscribeActionMap();
-    }
-
     public void PlayerInputSetUp()
     {
         startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
@@ -199,6 +194,7 @@ public class playerController : MonoBehaviour
 
     void UnsubscribeActionMap()
     {
+        if (playerInput == null) {  return; }
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
 

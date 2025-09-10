@@ -432,9 +432,9 @@ public class monsterAttackSystem : MonoBehaviour
 
     */
 
-    public void AssignMonsterPartAttackInfo(MonsterPartData.Button assignedButton, monsterPart part)
+    public void AssignMonsterPartAttackInfo(MonsterPartData.Button assignedButton, NewMonsterPart part)
     {
-        oldattackSlotMonsterParts[(int)assignedButton] = part;
+        attackSlotMonsterParts[(int)assignedButton] = part;
     }
 
 

@@ -87,14 +87,14 @@ public class EmoteManager
     public void SwapEmote(EmoteSlot emoteSlot, Emote emoteName)
     {
         int slotIndex = (int)emoteSlot;
-        var defaultEmoteForSlot = Array.Find(defaultEmotes, e => e.EmoteSlot == emoteSlot);
+        DefaultEmote defaultEmoteForSlot = Array.Find(defaultEmotes, e => e.EmoteSlot == emoteSlot);
 
         if (defaultEmoteForSlot == null ||
             defaultEmoteForSlot.emoteInputAction == null ||
             defaultEmoteForSlot.emoteInputAction.action == null)
             return;
 
-        var inputAction = defaultEmoteForSlot.emoteInputAction.action;
+        var inputAction = attackSystem.myPlayer.playerInput.actions.FindAction(defaultEmoteForSlot.emoteInputAction.name);
         if (!inputAction.enabled)
             inputAction.Enable();
 

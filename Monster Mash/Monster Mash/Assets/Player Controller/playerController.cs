@@ -145,9 +145,12 @@ public class playerController : MonoBehaviour
         }
     }
 
-   
+    private void OnDestroy()
+    {
+        UnsubscribeActionMap();
+    }
 
-    private void OnDisable()
+    private void OnApplicationQuit()
     {
         UnsubscribeActionMap();
     }

@@ -122,6 +122,13 @@ public class BuildAScareManager : MonoBehaviour
     [SerializeField]
     List<float> cameraPosNumb;
 
+    Vector2 zoomClamp = new Vector2(40f, 30f);
+
+    bool partZoom;
+
+    [SerializeField]
+    CinemachineVirtualCamera[] mainScreenCameras;
+
     void Awake()
     {
         if (instance != null && instance != this)
@@ -296,7 +303,11 @@ public class BuildAScareManager : MonoBehaviour
 
             directControl.FindAction("Zoom - In").performed += ZoomIn;
 
+            directControl.FindAction("Zoom - In").canceled += ZoomIn;
+
             directControl.FindAction("Zoom - Out").performed += ZoomOut;
+
+            directControl.FindAction("Zoom - Out").canceled += ZoomOut;
 
             directControl.FindAction("Confirm").performed += Confirm;
 
@@ -333,7 +344,11 @@ public class BuildAScareManager : MonoBehaviour
 
             directControl.FindAction("Zoom - In").performed -= ZoomIn;
 
+            directControl.FindAction("Zoom - In").canceled -= ZoomIn;
+
             directControl.FindAction("Zoom - Out").performed -= ZoomOut;
+
+            directControl.FindAction("Zoom - Out").canceled -= ZoomOut;
 
             directControl.FindAction("Confirm").performed -= Confirm;
 
@@ -639,14 +654,18 @@ public class BuildAScareManager : MonoBehaviour
 
     void DirectControlMovement(Vector2 partControl)
     {
-        Vector3 movementControl = new Vector3(partControl.x, partControl.y, 0);
+        Vector3 verticalMovementHandler = new Vector3(0, partControl.y, 0);
+
+        Vector3 horizontalMovementHandler = Camera.main.transform.right * partControl.x;
+
+        Vector3 movementControl = horizontalMovementHandler + verticalMovementHandler;
 
         partMovementRB.MovePosition(partMovementEmpty.transform.position + movementControl * Time.fixedDeltaTime * 5);
     }
 
     void DirectControlRotation(Vector2 partControl)
     {
-        if(torsoSelected)
+        if(!torsoSelected)
         {
             switch (rotAxis)
             {
@@ -803,6 +822,31 @@ public class BuildAScareManager : MonoBehaviour
         }
     }
 
+    IEnumerator CameraZoom(int modifier)
+    {
+        float  lensModifer = 0.05f;
+
+        lensModifer *= modifier;
+
+        while(partZoom)
+        {
+            foreach(CinemachineVirtualCamera cam in mainScreenCameras)
+            {
+                cam.m_Lens.FieldOfView += lensModifer;
+
+                float currentFov = cam.m_Lens.FieldOfView;
+
+                currentFov = Mathf.Clamp(currentFov, zoomClamp.y, zoomClamp.x);
+
+                cam.m_Lens.FieldOfView = currentFov;
+            }
+
+            yield return null;
+        }
+
+        StopCoroutine(CameraZoom(modifier));
+    }
+
     void RotateLeft(InputAction.CallbackContext context)
     {
         if(currentScreen == CurrentBASScreen.PartPlacer)
@@ -945,6 +989,14 @@ public class BuildAScareManager : MonoBehaviour
 
             partMovementEmpty.position = monsterTorso.limbPoints[torsoLimbIndex].position;
         }
+
+        else if(!partSelectorOpen && currentScreen == CurrentBASScreen.PartSelector)
+        {
+            if(currentMonster.monsterParts.Count >= 2)
+            {
+
+            }
+        }
     }
 
     void DirectControlSelectRight(InputAction.CallbackContext context)
@@ -969,12 +1021,16 @@ public class BuildAScareManager : MonoBehaviour
         {
             if (context.performed)
             {
+                partZoom = true;
 
+                StartCoroutine(CameraZoom(-1));
             }
 
             else if (context.canceled)
             {
+                partZoom = false;
 
+                //StopCoroutine(CameraZoom(-1));
             }
         }
 
@@ -986,12 +1042,16 @@ public class BuildAScareManager : MonoBehaviour
         {
             if (context.performed)
             {
+                partZoom = true;
 
+                StartCoroutine(CameraZoom(1));
             }
 
             else if (context.canceled)
             {
+                partZoom = false;
 
+                //StopCoroutine(CameraZoom(1));
             }
         }
     }

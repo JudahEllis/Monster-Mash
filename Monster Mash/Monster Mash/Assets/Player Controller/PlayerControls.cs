@@ -1618,7 +1618,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""AllGamepads"",
                     ""action"": ""Emote 3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

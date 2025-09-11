@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Obsolete("Use NewMonsterPart instead")]
 public class monsterPart : MonoBehaviour
 {
     [Header("Monster Part Info")]
@@ -257,7 +259,6 @@ public class monsterPart : MonoBehaviour
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
 
     #region Build a Scare Tools
-
     public void changeAttackAnimationAtRuntime()
     {
         //this will be expanded to include all monster parts
@@ -470,7 +471,7 @@ public class monsterPart : MonoBehaviour
             }
             else if (isArm || isHead || isMouth || isTail || isLeg || requiresUniqueAnimationOffset)
             {
-                float randomOffset = Random.Range(0, 0.5f);
+                float randomOffset = UnityEngine.Random.Range(0, 0.5f);
                 myAnimator.SetFloat("Idle Offset", randomOffset);
             }
         }

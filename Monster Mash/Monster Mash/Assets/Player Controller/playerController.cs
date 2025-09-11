@@ -145,9 +145,7 @@ public class playerController : MonoBehaviour
         }
     }
 
-   
-
-    private void OnDisable()
+    private void OnDestroy()
     {
         UnsubscribeActionMap();
     }
@@ -170,7 +168,7 @@ public class playerController : MonoBehaviour
         SubscribeActionMap();
     }
 
-    void SubscribeActionMap()
+    private void SubscribeActionMap()
     {
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += OnLeftStick;
 
@@ -192,10 +190,14 @@ public class playerController : MonoBehaviour
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started += onButtonY;
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += onButtonY;
+
+        playerInput.actions.FindAction("ShowMenu").Enable();
+        playerInput.actions.FindAction("ShowMenu").performed += ShowRemappingMenu;
     }
 
-    void UnsubscribeActionMap()
+    private void UnsubscribeActionMap()
     {
+        if (playerInput == null) {  return; }
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
 
@@ -217,6 +219,16 @@ public class playerController : MonoBehaviour
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started -= onButtonY;
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= onButtonY;
+
+        playerInput.actions.FindAction("ShowMenu").Disable();
+        playerInput.actions.FindAction("ShowMenu").performed -= ShowRemappingMenu;
+    }
+
+    private void ShowRemappingMenu(InputAction.CallbackContext ctx)
+    {
+        if (InputRemapper.Instance == null) {  return; }
+
+        InputRemapper.Instance.ShowMenu(playerInput);
     }
 
     

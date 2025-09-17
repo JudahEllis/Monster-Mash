@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 8510780471669680750}
   - component: {fileID: 6494927997127269214}
   - component: {fileID: 4997002437287250357}
+  - component: {fileID: 8154938629561725986}
   m_Layer: 0
   m_Name: Leg 10
   m_TagString: Connection - Monster Part
@@ -164,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myMainSystem: {fileID: 0}
-  connectedMonsterPart: {fileID: 0}
+  connectedMonsterPart: {fileID: 6766019975389645038}
   mainTorso: {fileID: 0}
   myAnimator: {fileID: 0}
   PartVisual: {fileID: 0}
@@ -202,7 +203,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 7677421681398775811
+    rid: 7677421688789401600
   heavyCollider: {fileID: 2526541991895001222}
   heavyColliderReference: {fileID: 6654590439339331405}
   heavyMuzzle: {fileID: 0}
@@ -253,15 +254,15 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 1
-    - rid: 7677421681398775811
-      type: {class: SpinningHeavy, ns: , asm: Assembly-CSharp}
+    - rid: 7677421688789401600
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 21
+        Attack: 0
 --- !u!114 &8510780471669680750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,6 +370,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8154938629561725986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379014074071477553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Legs/Leg 10
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
 --- !u!1 &1748759954065194329
 GameObject:
   m_ObjectHideFlags: 0

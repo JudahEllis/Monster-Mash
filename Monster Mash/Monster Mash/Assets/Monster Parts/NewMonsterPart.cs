@@ -31,11 +31,9 @@ public class NewMonsterPart : MonoBehaviour
 #if UNITY_EDITOR
     void OnValidate()
     {
-        if (neutralAttack == null)
-            neutralAttack = new NeutralAttack();
+        neutralAttack ??= new NeutralAttack();
 
-        if (heavyAttack == null)
-            heavyAttack = new HeavyAttack();
+        heavyAttack ??= new HeavyAttack();
     }
 #endif
    [Header("Monster Part Questionaire")]

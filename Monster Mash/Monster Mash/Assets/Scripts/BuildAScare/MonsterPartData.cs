@@ -13,7 +13,17 @@ public class MonsterPartData
 
     public Vector3 partPosition;
 
-    public enum Button { NONE, BTTN_NORTH, BTTN_EAST, BTTN_WEST, R_BUMPER, L_BUMPER, R_TRIGGER, L_TRIGGER }
+    public enum Button 
+    { 
+        NONE = 0, 
+        BTTN_NORTH = 3, 
+        BTTN_EAST = 1, 
+        BTTN_WEST = 2, 
+        R_BUMPER = 5, 
+        L_BUMPER = 4, 
+        R_TRIGGER = 7, 
+        L_TRIGGER = 6,
+    }
 
     public Button partButton;
 

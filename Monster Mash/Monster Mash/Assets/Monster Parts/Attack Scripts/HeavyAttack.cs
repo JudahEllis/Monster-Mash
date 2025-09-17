@@ -29,6 +29,7 @@ public class HeavyAttack : BaseAttack
         AOE,
         Charging,
         SelfExploding,
+        Spinning,
     }
     // a property drawer relies on this var using string lookup. Please do not change the var name or the property drawer will stop working
     public HeavyAttackType Attack;
@@ -46,6 +47,7 @@ public class HeavyAttack : BaseAttack
             HeavyAttackType.Reel => new ReelHeavy { Attack = HeavyAttackType.Reel},
             HeavyAttackType.Grapple => new GrappleHeavy { Attack = HeavyAttackType.Grapple},
             HeavyAttackType.Boomerang => new BoomerangHeavy { Attack = HeavyAttackType.Boomerang},
+            HeavyAttackType.Spinning => new SpinningHeavy { Attack = HeavyAttackType.Spinning },
             _ => new HeavyAttack { Attack = HeavyAttackType.None}
         };
     }

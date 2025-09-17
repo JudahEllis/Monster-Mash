@@ -2309,7 +2309,7 @@ public class playerController : MonoBehaviour
     #region Health
 
     //damage as to how it relates to the initial strike and the knockback effect
-    public void damaged(int damageRecieved, bool markedForHeavyAttack, int attackDirection, Vector3 contactPoint)
+    public void damaged(int damageRecieved, bool markedForHeavyAttack, Vector3 attackingPlayerDir, Vector3 contactPoint)
     {
         canMove = false;
         isRunning = false;
@@ -2358,6 +2358,11 @@ public class playerController : MonoBehaviour
             myAudioSystem.playNeutralDamageSound();
             StartCoroutine(damageRecoveryTime(0.1f));
         }
+
+        // Damge launch
+        Vector3 launchDir = (attackingPlayerDir - transform.position).normalized;
+        float launchForce = 500;
+        myRigidbody.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
 
     }
 

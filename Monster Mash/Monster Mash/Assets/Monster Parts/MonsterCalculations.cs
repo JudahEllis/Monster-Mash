@@ -53,6 +53,20 @@ public class MonsterCalculations
                 }
             }
         }
+
+        bool partConnectedToLeftLower = (part.connectionPoint & MonsterPartConnectionPoint.LeftLowerTorsoConnection) == 
+            MonsterPartConnectionPoint.LeftLowerTorsoConnection;
+        bool partConnectedToRightLower = (part.connectionPoint & MonsterPartConnectionPoint.RightLowerTorsoConnection) ==
+            MonsterPartConnectionPoint.RightLowerTorsoConnection;
+
+        if (partConnectedToLeftLower)
+        {
+            part.isLeftSidedLimb = true;
+        }
+        else if (partConnectedToRightLower)
+        {
+            part.isRightSidedLimb = true;
+        }
     }
 
     private void ApplyConfig(AttackConfig config)

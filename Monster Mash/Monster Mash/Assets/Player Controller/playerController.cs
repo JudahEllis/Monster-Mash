@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.WSA;
 
 public class playerController : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class playerController : MonoBehaviour
     private float groundedModifer = 1;
     private float airbornModifer = 0.75f;
     private float currentGroundedStateModifier = 1;
+    private bool isDamageLaunching;
     public bool canMove = true;
     public bool isWalking = false;
     public bool isRunning = false;
@@ -954,6 +956,7 @@ public class playerController : MonoBehaviour
 
     private void land()
     {
+        isDamageLaunching = false;
         grounded = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
@@ -2309,7 +2312,7 @@ public class playerController : MonoBehaviour
     #region Health
 
     //damage as to how it relates to the initial strike and the knockback effect
-    public void damaged(int damageRecieved, bool markedForHeavyAttack, Vector3 attackingPlayerDir, Vector3 contactPoint)
+    public void damaged(int damageRecieved, bool markedForHeavyAttack, bool attackerFacingRight, Vector3 contactPoint)
     {
         canMove = false;
         isRunning = false;
@@ -2360,9 +2363,16 @@ public class playerController : MonoBehaviour
         }
 
         // Damge launch
-        Vector3 launchDir = (attackingPlayerDir - transform.position).normalized;
-        float launchForce = 500;
+        isDamageLaunching = true;
+
+        Vector2 launchDir = attackerFacingRight ? new Vector2(1f, 0.5f) : new Vector2(-1f, 0.5f);
+        launchDir.Normalize();
+
+        float launchForce = 150;
         myRigidbody.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+
+        myRigidbody.gravityScale = gravityPower;
+        groundFrictionCollider.enabled = false;
 
     }
 
@@ -2376,7 +2386,11 @@ public class playerController : MonoBehaviour
         isWalking = false;
         isAttacking = false;
         //myRigidbody.gravityScale = gravityPower;
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        if (!isDamageLaunching)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
+        
 
         if (isGrounded())
         {

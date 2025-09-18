@@ -66,7 +66,7 @@ public class EmoteManager
             { Emote.Vomit, () => vomitEmote(attackSystem) },
             { Emote.Sleep, () => sleepEmote(attackSystem) },
             { Emote.Explosive, () => explosiveEmote(attackSystem) },
-            { Emote.Sneezing, attackSystem.sneezingEmote },
+            { Emote.Sneezing, () => sneezingEmote(attackSystem) },
             { Emote.Random, PlayRandomEmote },
         };
 
@@ -448,6 +448,52 @@ public class EmoteManager
             for (int i = 0; i < attackSystem.allMonsterParts.Length; i++)
             {
                 attackSystem.allMonsterParts[i].explosiveEmote();
+            }
+
+            attackSystem.forceStopCrouch();
+        }
+    }
+
+    public void laughingEmote(monsterAttackSystem attackSystem)
+    {
+        if (attackSystem.damageLocked)
+        {
+            return;
+        }
+
+        if (attackSystem.focusedAttackActive == false && attackSystem.isGrounded && attackSystem.emoteActive == false && attackSystem.isRunning == false && attackSystem.isWalking == false && attackSystem.isCrouching == false)
+        {
+            attackSystem.emoteActive = true;
+            attackSystem.calm = false;
+            attackSystem.myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < attackSystem.allMonsterParts.Length; i++)
+            {
+                attackSystem.allMonsterParts[i].laughingEmote();
+            }
+
+            attackSystem.forceStopCrouch();
+        }
+    }
+
+    public void sneezingEmote(monsterAttackSystem attackSystem)
+    {
+        if (attackSystem.damageLocked)
+        {
+            return;
+        }
+
+        if (attackSystem.focusedAttackActive == false && attackSystem.isGrounded && attackSystem.emoteActive == false && attackSystem.isRunning == false && attackSystem.isWalking == false && attackSystem.isCrouching == false)
+        {
+            attackSystem.emoteActive = true;
+            attackSystem.calm = false;
+            attackSystem.sneezeVisual.Stop();
+            attackSystem.sneezeVisual.Play();
+            attackSystem.myAnimator.SetBool("Idle Bounce Allowed", false);
+
+            for (int i = 0; i < attackSystem.allMonsterParts.Length; i++)
+            {
+                attackSystem.allMonsterParts[i].sneezingEmote();
             }
 
             attackSystem.forceStopCrouch();

@@ -125,6 +125,12 @@ public class playerController : MonoBehaviour
     private int inputModifier = 1;
     private Vector2Int lastInputDirection;
 
+    [Header("Damage Launching")]
+    [SerializeField] private bool debug;
+    [SerializeField] private float xForce;
+    [SerializeField] private float yForce;
+    private int timesHit;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -2314,6 +2320,8 @@ public class playerController : MonoBehaviour
     //damage as to how it relates to the initial strike and the knockback effect
     public void damaged(int damageRecieved, bool markedForHeavyAttack, bool attackerFacingRight, Vector3 contactPoint)
     {
+        timesHit += 1;
+
         canMove = false;
         isRunning = false;
         isWalking = false;
@@ -2362,18 +2370,57 @@ public class playerController : MonoBehaviour
             StartCoroutine(damageRecoveryTime(0.1f));
         }
 
+        if (timesHit >= 3)
+        {
+            DammageLaunch(attackerFacingRight);
+        }
+
+    }
+
+    private void DammageLaunch(bool attackerFacingRight)
+    {
         // Damge launch
         isDamageLaunching = true;
 
-        Vector2 launchDir = attackerFacingRight ? new Vector2(1f, 0.5f) : new Vector2(-1f, 0.5f);
+        Vector2 launchDir = attackerFacingRight ? new Vector2(1, 1) : new Vector2(-1, 1);
         launchDir.Normalize();
 
-        float launchForce = 150;
-        myRigidbody.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+        Vector2 scalerVector = new(xForce, yForce);
+
+        myRigidbody.AddForce(launchDir * scalerVector, ForceMode2D.Impulse);
 
         myRigidbody.gravityScale = gravityPower;
         groundFrictionCollider.enabled = false;
 
+        timesHit = 0;
+    }
+
+    // visualize the launch arc in the editor for damage launching
+    private void OnDrawGizmosSelected()
+    {
+        if (!debug) { return; }
+
+        Vector2 launchDir = facingRight ? new Vector2(1, 1) : new Vector2(-1, 1);
+        launchDir.Normalize();
+        Vector2 scalerVector = new(xForce, yForce);
+
+        float mass = myRigidbody != null ? myRigidbody.mass : 1f;
+        Vector2 initialVelocity = (launchDir * scalerVector) / mass;
+
+        float gravity = myRigidbody != null ? myRigidbody.gravityScale * Physics2D.gravity.y : -9.81f;
+        Vector2 startPos = transform.position;
+
+        int steps = 30;
+        float timeStep = 0.05f;
+        Vector2 prevPoint = startPos;
+        for (int i = 1; i <= steps; i++)
+        {
+            float t = i * timeStep;
+            Vector2 point = startPos + initialVelocity * t + 0.5f * t * t * new Vector2(0, gravity);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(prevPoint, point);
+            prevPoint = point;
+        }
     }
 
     IEnumerator damageRecoveryTime(float recoveryTime)

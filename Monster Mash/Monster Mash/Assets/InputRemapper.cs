@@ -67,7 +67,7 @@ public class InputRemapper : MonoBehaviour
     public void ShowMenu(PlayerInput player)
     {
         currentPlayer = player;
-        playerActions = currentPlayer.actions;
+        playerActions = player.actions;
 
         if (!remappingUI.activeSelf)
         {
@@ -80,12 +80,19 @@ public class InputRemapper : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
             }
 
-            playerActions.FindActionMap("Monster Controls").Disable();
+            foreach (var players in PlayerInput.all)
+            {
+                players.actions.FindActionMap("Monster Controls").Disable();
+            }
         }
         else
         {
             remappingUI.SetActive(false);
-            playerActions.FindActionMap("Monster Controls").Enable();
+
+            foreach (var players in PlayerInput.all)
+            {
+                players.actions.FindActionMap("Monster Controls").Enable();
+            }
         }
     }
 

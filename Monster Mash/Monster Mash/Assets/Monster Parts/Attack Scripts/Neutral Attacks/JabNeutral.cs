@@ -4,6 +4,12 @@ using System;
 public class JabNeutral : NeutralAttack
 {
 
+    public JabNeutral()
+    {
+        Attack = AttackType.Jab;
+        DamageRange = DamageRange.Range2;
+    }
+
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

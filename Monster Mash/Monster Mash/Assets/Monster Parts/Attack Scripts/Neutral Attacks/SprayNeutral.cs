@@ -3,6 +3,11 @@ using System;
 [Serializable]
 public class SprayNeutral : NeutralAttack
 {
+    public SprayNeutral()
+    {
+        Attack = AttackType.Spray;
+        DamageRange = DamageRange.Range3;
+    }
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

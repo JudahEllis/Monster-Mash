@@ -27,6 +27,11 @@ public class TriggerAttackReleaseEventArgs : EventArgs
 
 public abstract class BaseAttack
 {
+    public DamageRange DamageRange { get; protected set; } = DamageRange.Range0;
+    /// <summary>
+    /// The amount of damge the attack deals. The value is automaticaly clamped by the damage range.
+    /// </summary>
+    [field: SerializeField, DamageRange] public int Damage { get; private set; }
     protected NewMonsterPart monsterPartRef;
     protected MonsterPartVisual monsterPartVisualRef;
     [SerializeField] protected MovementModifier movementModifier;

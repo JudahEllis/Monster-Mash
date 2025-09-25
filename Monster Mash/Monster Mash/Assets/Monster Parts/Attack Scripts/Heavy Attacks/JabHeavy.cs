@@ -3,6 +3,11 @@ using System;
 [Serializable]
 public class JabHeavy : HeavyAttack
 {
+    public JabHeavy()
+    {
+        Attack = HeavyAttackType.Jab;
+        DamageRange = DamageRange.Range3;
+    }
     public override void triggerHeavyAttackVisuals()
     {
         if (monsterPartRef.jabOrSlashLanded == false && monsterPartVisualRef.heavyMissVFXHolder != null)

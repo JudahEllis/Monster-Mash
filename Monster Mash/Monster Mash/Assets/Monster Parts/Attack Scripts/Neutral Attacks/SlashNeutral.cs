@@ -3,6 +3,11 @@ using System;
 [Serializable]
 public class SlashNeutral : NeutralAttack
 {
+    public SlashNeutral()
+    {
+        Attack = AttackType.Slash;
+        DamageRange = DamageRange.Range3;
+    }
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

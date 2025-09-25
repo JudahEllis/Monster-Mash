@@ -3,6 +3,12 @@ using System;
 [Serializable]
 public class ProjectileNeutral : NeutralAttack
 {
+    public ProjectileNeutral()
+    {
+        Attack = AttackType.Projectile;
+        DamageRange = DamageRange.Range2;
+    }
+
     public override void neutralAttackPowerCalculation()
     {
         base.neutralAttackPowerCalculation();

@@ -5,6 +5,11 @@ using UnityEngine;
 [Serializable]
 public class BeamHeavy : HeavyAttack
 {
+    public BeamHeavy()
+    {
+        Attack = HeavyAttackType.Beam;
+        DamageRange = DamageRange.Range0;
+    }
 
     public override void triggerHeavyAttackVisuals()
     {

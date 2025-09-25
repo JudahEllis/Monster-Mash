@@ -30,12 +30,12 @@ public class NeutralAttack: BaseAttack
     {
         return Attack switch
         {
-            AttackType.Jab => new JabNeutral { Attack = AttackType.Jab},
-            AttackType.Slash => new SlashNeutral { Attack = AttackType.Slash},
-            AttackType.Spray => new SprayNeutral { Attack = AttackType.Spray},
-            AttackType.Projectile => new ProjectileNeutral { Attack = AttackType.Projectile},
-            AttackType.Boomerang => new BoomerangNeutral { Attack = AttackType.Boomerang},
-            _ => new NeutralAttack { Attack = AttackType.None},
+            AttackType.Jab => new JabNeutral(),
+            AttackType.Slash => new SlashNeutral(),
+            AttackType.Spray => new SprayNeutral(),
+            AttackType.Projectile => new ProjectileNeutral(),
+            AttackType.Boomerang => new BoomerangNeutral(),
+            _ => new NeutralAttack(),
         };
     }
 

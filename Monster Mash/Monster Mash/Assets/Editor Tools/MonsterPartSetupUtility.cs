@@ -23,65 +23,150 @@ public class MonsterPartSetupUtility : EditorWindow
     private bool mainScriptsAndComponentsSetup;
     private bool colliderTagsAndScriptsSetup;
 
+    private bool templateAssetsMissing;
+
+    float buttonHeight = 50;
+    float buttonWidth = 300;
+
+    float fieldWidth = 300;
+
     [MenuItem("Tools/Monster Part Setup Utility")]
     public static void ShowWindow()
     {
-        GetWindow<MonsterPartSetupUtility>("Monster Part Setup Utility", true);
+        var window = GetWindow<MonsterPartSetupUtility>("Monster Part Setup Utility", true);
+        window.minSize = new Vector2 (790, 700);
+        
     }
 
     private void OnGUI()
     {
+        GUILayout.Label("Part Info", EditorStyles.boldLabel);
+        GUILayout.Space(5);
+
         monsterPartPrefab = (GameObject)EditorGUILayout.ObjectField(
         "Monster Part Prefab",
         monsterPartPrefab,
         typeof(GameObject),
-        false
+        false,
+        GUILayout.Width(fieldWidth)
     );
 
-        monsterPartType = (MonsterPartType)EditorGUILayout.EnumPopup("Monster Part Type", monsterPartType);
-        neutralAttackType = (NeutralAttack.AttackType)EditorGUILayout.EnumPopup("Neutral Attack Type", neutralAttackType);
-        heavyAttackType = (HeavyAttack.HeavyAttackType)EditorGUILayout.EnumPopup("Heavy Attack Type", heavyAttackType);
+        monsterPartType = (MonsterPartType)EditorGUILayout.EnumPopup("Monster Part Type", monsterPartType, GUILayout.Width(fieldWidth));
+        neutralAttackType = (NeutralAttack.AttackType)EditorGUILayout.EnumPopup("Neutral Attack Type", neutralAttackType, GUILayout.Width(fieldWidth));
+        heavyAttackType = (HeavyAttack.HeavyAttackType)EditorGUILayout.EnumPopup("Heavy Attack Type", heavyAttackType, GUILayout.Width(fieldWidth));
 
-        EditorGUILayout.Space(5);
+        GUILayout.Space(10);
 
+        GUILayout.Label("", GUI.skin.horizontalScrollbar);
+
+        EditorGUILayout.Space(10);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Monster Part Setup", EditorStyles.boldLabel);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        
+        AnimationControllerSetupButton();
+        MainScriptsAndComponentsSetupButton();
+        ColliderTagsAndScriptSetupButton();
+
+        GUILayout.Space(15);
+
+        GUILayout.Label("", GUI.skin.horizontalScrollbar);
+
+        DisplayHelpInfo();
+
+        EditorGUILayout.Space(10);
+        ResetButton();
+    }
+
+    #region Buttons
+    private void AnimationControllerSetupButton()
+    {
         EditorGUI.BeginDisabledGroup(animationControllerSetup);
-        if (GUILayout.Button("Setup Animation Controller"))
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Setup Animation Controller", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
-            if (CheckForMissingRefs()) { return; }
-            animationControllerSetup = true;
-            SetupAnimationController();
-            UpdatePrefab();
-        }
-        EditorGUI.EndDisabledGroup();
+            if (!CheckForMissingRefs())
+            {
+                animationControllerSetup = true;
+                SetupAnimationController();
+                UpdatePrefab();
 
+                if (!templateAssetsMissing)
+                {
+                    EditorUtility.DisplayDialog("Success", $"The animation controller for {monsterPartPrefab.name} has been setup successfully. " +
+                        "You may need to manually move the animator to the top if other components were already attached.", "Ok");
+                }
+            }
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        EditorGUI.EndDisabledGroup();
+    }
+
+    private void MainScriptsAndComponentsSetupButton()
+    {
         EditorGUI.BeginDisabledGroup(mainScriptsAndComponentsSetup);
-        if (GUILayout.Button("Add Main Scripts and Components"))
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Add Main Scripts and Components", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             if (CheckForMissingRefs()) { return; }
             mainScriptsAndComponentsSetup = true;
 
             AddScriptsAndTags();
             AddComponents();
-
             UpdatePrefab();
-        }
-        EditorGUI.EndDisabledGroup();
 
+            EditorUtility.DisplayDialog("Success", "The required scripts and components have been setup on the monster part. " +
+                "Not every field is automatically set so you should still look over the monster part to see if everything looks right.", "Ok");
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        EditorGUI.EndDisabledGroup();
+    }
+
+    private void ColliderTagsAndScriptSetupButton()
+    {
         EditorGUI.BeginDisabledGroup(colliderTagsAndScriptsSetup);
-        if (GUILayout.Button("Add Tags and Scripts to Colliders"))
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Add Tags and Scripts to Colliders", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             if (CheckForMissingRefs()) { return; }
             colliderTagsAndScriptsSetup = true;
 
             ColliderSetup();
             UpdatePrefab();
-        }
-        EditorGUI.EndDisabledGroup();
-        DisplayHelpInfo();
 
+            EditorUtility.DisplayDialog("Success", "All colliders have been tagged and the monster part refrence script has been added and setup. " +
+                "The setup utility is not perfect and can make mistakes if colliders are not named properly. It is recomended that you look over all the colliders to check for mistakes.", "Ok");
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        EditorGUI.EndDisabledGroup();
     }
 
-   
+    private void ResetButton()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Reset Buttons", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        {
+            animationControllerSetup = false;
+            mainScriptsAndComponentsSetup = false;
+            colliderTagsAndScriptsSetup = false;
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+    }
+    #endregion
 
     #region Animation Controller Setup
     private void SetupAnimationController()
@@ -101,7 +186,6 @@ public class MonsterPartSetupUtility : EditorWindow
         if (partTypeToPath.TryGetValue(monsterPartType, out string monsterPartPath))
         {
             string templatePath = monsterPartPath + "/Template Assets";
-            AnimationClip[] templateClips = GetAnimationClips(templatePath + "/Template Clips");
 
             if (!Directory.Exists(templatePath)) 
             {
@@ -109,9 +193,12 @@ public class MonsterPartSetupUtility : EditorWindow
                     $"Look at how the template assets for arm 1 are setup if you need an example", "Ok"))
                 {
                     animationControllerSetup = false;
+                    templateAssetsMissing = true;
                     return;
                 }
             }
+
+            AnimationClip[] templateClips = GetAnimationClips(templatePath + "/Template Clips");
 
             CopyTemplateAssets(templatePath, templateClips, monsterPartPath);
             SwapAnimationControllerClips();
@@ -155,7 +242,7 @@ public class MonsterPartSetupUtility : EditorWindow
 
     private void CopyTemplateAssets(string templatePath, AnimationClip[] templateClips, string partPath)
     {
-        string templateAnimationControllerPath = templatePath + "/Arm Template.controller";
+        string templateAnimationControllerPath = templatePath + $"/{monsterPartType.ToString()} Template.controller";
         newMonsterPartAnimationPath = $"{partPath}/{monsterPartPrefab.name}/Animations";
         newAnimControllerPath = $"{newMonsterPartAnimationPath}/{monsterPartPrefab.name}.controller";
 
@@ -170,14 +257,23 @@ public class MonsterPartSetupUtility : EditorWindow
 
         foreach (AnimationClip clip in templateClips)
         {
-            string templateClipPrefix = "Arm 11 ";
+            string templateClipPrefix = "Template ";
             string clipName = clip.name;
             string removedPrefixClipName = "";
 
-            if (clipName.StartsWith(templateClipPrefix))
+            if (clipName.ToLower().StartsWith(templateClipPrefix.ToLower()))
             {
                 removedPrefixClipName = clipName.Substring(templateClipPrefix.Length);
                 removedPrefixClipName = removedPrefixClipName.Trim();
+            }
+            else
+            {
+                if (EditorUtility.DisplayDialog("Template Clip Not Named Correctly", 
+                    "In order for the setup utility to find the template clips they need to start with the word \"Template\"", "Ok"))
+                {
+                    animationControllerSetup = false;
+                    return;
+                }
             }
 
             string templateClipPath = $"{allTemplateClipsPath}/{clipName}.anim";
@@ -358,7 +454,7 @@ public class MonsterPartSetupUtility : EditorWindow
     }
     #endregion
 
-
+    #region Helper Functions
     private void UpdatePrefab()
     {
         EditorUtility.SetDirty(monsterPartPrefab);
@@ -369,18 +465,18 @@ public class MonsterPartSetupUtility : EditorWindow
     private void DisplayHelpInfo()
     {
         EditorGUILayout.Space(10);
-        EditorGUILayout.LabelField("Important Info:");
+        EditorGUILayout.LabelField("Important Info:", EditorStyles.boldLabel);
         EditorGUILayout.Space(5);
         EditorGUILayout.HelpBox("This tool aims to automate mostly all aspects of setting up a monster part but there are some things that can not be automated like placing colliders." +
             " So please look over the monster part after using the setup utility to make sure everything is correct.", MessageType.Info);
         EditorGUILayout.HelpBox("In order for the animation controller setup to work please make sure that the part type has template assets setup. " +
-            "Please refer to the folder structure for arm 1 as an example.", MessageType.Info);
+            "Please refer to the folder structure for arm 1 as an example. The template clips need to start with the word \"Template\" in order for the setup utility to find them.", MessageType.Info);
+        EditorGUILayout.HelpBox("In order for the animation clips to be Copied an empty folder needs to exit for the monster part under the monster parts folder.", MessageType.Info);
         EditorGUILayout.HelpBox("After clicking the button for \"setup animation controller\" it may look like the window has stalled. " +
             "This is because setting up the animation controller involves a lot of steps and it accesses the file system which can be slow. " +
             "While the setup process is executing please do not try to click anything or try to spam the button as this could cause a crash.", MessageType.Info);
         EditorGUILayout.HelpBox("In order for hitboxes and hurtboxes to be tagged correctly the game object they are attached to needs to have the word \"Hitbox\" or \"Hurtbox\" in the name. Not case sensitive", MessageType.Info);
         EditorGUILayout.HelpBox("In order for neutral and heavy hitboxes to have special attacks automatically enabled, the game object they are attached to needs to have the word \"Neutral\" or \"Heavy\" in the name. Not case sensitive", MessageType.Info);
-        EditorGUILayout.HelpBox("After each step is completed the button will be disabled, this is to make it easier to know what steps have been completed. If you need to redo a step you can open and close the window to reset it.", MessageType.Info);
     }
 
     private bool CheckForMissingRefs()
@@ -395,12 +491,27 @@ public class MonsterPartSetupUtility : EditorWindow
 
         if (monsterPartPrefab == null)
         {
-            if (EditorUtility.DisplayDialog("Monster Part Prefab Not Set", "The monster part prefab has not been assigned. This is required for the setup utility to work. you can't really setup a monster part without well... a monster part.", "Ok"))
+            if (EditorUtility.DisplayDialog("Monster Part Prefab Not Set", 
+                "The monster part prefab has not been assigned. This is required for the setup utility to work. you can't really setup a monster part without well... a monster part.", "Ok"))
             {
                 return true;
             }
         }
+
+        if (monsterPartType != MonsterPartType.Torso && monsterPartType != MonsterPartType.Head)
+        {
+            if (neutralAttackType == NeutralAttack.AttackType.None || heavyAttackType == HeavyAttack.HeavyAttackType.None)
+            {
+                if (EditorUtility.DisplayDialog("Neutral or Heavy Attack Type Not Assigned",
+                    "The neutral or heavy attack is not assigned. This is required for the setup utility to work unless the part is a head or torso.", "Okay"))
+                {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
+    #endregion
 }
 

@@ -36,7 +36,7 @@ public class SprayHeavy : HeavyAttack
     {
         base.heavyAttackPowerCalculation();
 
-        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.damage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
 
         damageClearance();
@@ -44,7 +44,7 @@ public class SprayHeavy : HeavyAttack
 
     public override void statusEffectAndDamageCalculations()
     {
-        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.baseHeavyAttackDamage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnSpray();
         ApplyStatusEffectsToVFXHolder(monsterPartVisualRef.heavyHitVFXManager);
         monsterPartVisualRef.heavyHitVFXManager.updateStatusEffectsOnSpray();

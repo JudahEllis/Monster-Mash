@@ -41,11 +41,8 @@ public class NewMonsterPart : MonoBehaviour
     public MonsterPartType PartType;
 
     [Header("Damage and Status Effects")]
-    public int baseNeutralAttackDamage = 0;
-    public int baseHeavyAttackDamage = 0;
     [HideInInspector] public int builtUpAttackPower = 0;
     public int builtUpAddedDamage = 0;
-    [HideInInspector] public int damage = 0;
     //Status Effects
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;

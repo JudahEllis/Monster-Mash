@@ -31,7 +31,7 @@ public abstract class BaseAttack
     /// <summary>
     /// The amount of damge the attack deals. The value is automaticaly clamped by the damage range.
     /// </summary>
-    [field: SerializeField, DamageRange] public int Damage { get; private set; }
+    [field: SerializeField, DamageRange] public int Damage { get; protected set; }
     protected NewMonsterPart monsterPartRef;
     protected MonsterPartVisual monsterPartVisualRef;
     [SerializeField] protected MovementModifier movementModifier;
@@ -49,7 +49,7 @@ public abstract class BaseAttack
 
     protected void damageClearance()
     {
-        monsterPartRef.damage = 0;
+        Damage = 0;
     }
 
     public virtual void statusEffectAndDamageCalculations()

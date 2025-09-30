@@ -21,7 +21,7 @@ public class SlashHeavy : HeavyAttack
         base.heavyAttackPowerCalculation();
 
         monsterPartRef.heavyColliderReference.resetAttackHistory();
-        monsterPartRef.heavyColliderReference.damage = monsterPartRef.damage;
+        monsterPartRef.heavyColliderReference.damage = Damage;
         monsterPartRef.heavyColliderReference.markedHeavy = true;
 
         damageClearance();

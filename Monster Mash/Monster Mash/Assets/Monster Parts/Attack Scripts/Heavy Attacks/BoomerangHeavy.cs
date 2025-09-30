@@ -41,7 +41,7 @@ public class BoomerangHeavy : HeavyAttack
     {
         base.heavyAttackPowerCalculation();
 
-        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.damage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
 
         damageClearance();
@@ -49,7 +49,7 @@ public class BoomerangHeavy : HeavyAttack
 
     public override void statusEffectAndDamageCalculations()
     {
-        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.baseHeavyAttackDamage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
         ApplyStatusEffectsToVFXHolder(monsterPartVisualRef.heavyHitVFXManager);
         monsterPartVisualRef.heavyHitVFXManager.updateStatusEffectsOnProjectiles();

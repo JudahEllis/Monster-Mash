@@ -2375,6 +2375,8 @@ public class playerController : MonoBehaviour
             DammageLaunch(attackerFacingRight);
         }
 
+        Debug.Log(damageRecieved);
+
     }
 
     private void DammageLaunch(bool attackerFacingRight)

@@ -113,7 +113,7 @@ public class HeavyAttack : BaseAttack
 
     public virtual void heavyAttackPowerCalculation()
     {
-        monsterPartRef.damage = monsterPartRef.baseHeavyAttackDamage + (monsterPartRef.builtUpAttackPower * monsterPartRef.builtUpAddedDamage);
+        Damage = DamageRange.Clamp(Damage + (monsterPartRef.builtUpAttackPower * monsterPartRef.builtUpAddedDamage));
         monsterPartRef.builtUpAttackPower = 0;
     }
 

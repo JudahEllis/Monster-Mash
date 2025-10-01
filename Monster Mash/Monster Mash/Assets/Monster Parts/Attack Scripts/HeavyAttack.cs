@@ -6,6 +6,9 @@ using UnityEngine;
 [Serializable]
 public class HeavyAttack : BaseAttack
 {
+    public bool IsHeavyAttackHeld { get; private set; }
+    private float heavyChargeElapsed;
+
     public enum HeavyAttackType
     {
         None,
@@ -113,12 +116,51 @@ public class HeavyAttack : BaseAttack
 
     public virtual void heavyAttackPowerCalculation()
     {
+        
+
         Damage = DamageRange.Clamp(Damage + (monsterPartRef.builtUpAttackPower * monsterPartRef.builtUpAddedDamage));
         monsterPartRef.builtUpAttackPower = 0;
     }
 
     public virtual void triggerHeavyAttackPowerUp()
     {
+        
+    }
 
+    // Increases the heavy damage from the min -> max depending on how long you hold down the button
+    public void ChargeHeavyAttack(float animationClipLength)
+    {
+        if (animationClipLength <= 0f || Damage >= DamageRange.Max)
+            return;
+
+        // Track elapsed charge time
+        heavyChargeElapsed += Time.deltaTime;
+
+        int min = DamageRange.Min;
+        int max = DamageRange.Max;
+
+        // Calculate the proportion of the animation completed
+        float t = Mathf.Clamp01(heavyChargeElapsed / animationClipLength);
+
+        // Lerp damage from min to max based on t
+        Damage = Mathf.RoundToInt(Mathf.Lerp(min, max, t));
+
+        // If finished, clamp and stop charging
+        if (heavyChargeElapsed >= animationClipLength)
+        {
+            Damage = max;
+        }
+
+    }
+
+    public void OnHeavyAttackStarted()
+    {
+        IsHeavyAttackHeld = true;
+    }
+
+    public void OnHeavyAttackEnded()
+    {
+        IsHeavyAttackHeld = false;
+        heavyChargeElapsed = 0f;
     }
 }

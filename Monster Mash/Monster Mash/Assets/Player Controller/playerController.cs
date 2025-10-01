@@ -131,6 +131,10 @@ public class playerController : MonoBehaviour
     [SerializeField] private float yForce;
     private int timesHit;
 
+
+    // damage timer
+    float lastAttackTime = -Mathf.Infinity;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -2320,6 +2324,10 @@ public class playerController : MonoBehaviour
     //damage as to how it relates to the initial strike and the knockback effect
     public void damaged(int damageRecieved, bool markedForHeavyAttack, bool attackerFacingRight, Vector3 contactPoint)
     {
+        // Prevents dammage being applied multiple times for one attack
+        if (Time.time - lastAttackTime <= 0.5f) { return; }
+        lastAttackTime = Time.time;
+
         timesHit += 1;
 
         canMove = false;

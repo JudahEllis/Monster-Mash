@@ -139,6 +139,16 @@ public class NewMonsterPart : MonoBehaviour
     public ParticleSystem[] myIdleVFX;
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
 
+    private void Update()
+    {
+        // gets the clip length so that the heavy finishes charging when the attack animation ends 
+        if (heavyAttack.IsHeavyAttackHeld)
+        {
+            float clipLength = GetCurrentAnimationClipLength();
+            heavyAttack.ChargeHeavyAttack(clipLength);
+        }
+    }
+
     #region Build a Scare Tools
     public void AttackSetup()
     {
@@ -436,11 +446,13 @@ public class NewMonsterPart : MonoBehaviour
                     myAnimator.SetBool("Attack Marked Heavy", false);
                     triggerNeutralOrHeavy();
                 }
+                heavyAttack.OnHeavyAttackEnded();
             }
             else
             {
                 attackMarkedHeavy = true;
                 myAnimator.SetBool("Attack Marked Heavy", true);
+                heavyAttack.OnHeavyAttackStarted();
             }
         }
     }
@@ -759,6 +771,21 @@ public class NewMonsterPart : MonoBehaviour
             }
         }
 
+    }
+
+    private float GetCurrentAnimationClipLength()
+    {
+        if (myAnimator != null)
+        {
+            AnimatorClipInfo[] clipInfo = myAnimator.GetCurrentAnimatorClipInfo(0);
+            if (clipInfo.Length > 0)
+            {
+                // this is the run time of the clip and not the array length
+                return clipInfo[0].clip.length;
+            }
+            
+        }
+        return 0f;
     }
 
     #endregion
@@ -1355,6 +1382,7 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (attackFocusOn)
         {
+            heavyAttack.OnHeavyAttackEnded();
             heavyCollider.gameObject.GetComponent<monsterPartReference>().isFullyChargedHeavy = true;
             myAnimator.SetBool("Charge Attack Active", true);
             myMainSystem.chargeForward();

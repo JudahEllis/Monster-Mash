@@ -10,7 +10,7 @@ public class JabNeutral : NeutralAttack
         DamageRange = DamageRange.Range2;
     }
 
-    public override void neutralAttackPowerCalculation()
+    public override void PassDamage()
     {
         monsterPartRef.neutralColliderReference.resetAttackHistory();
         monsterPartRef.neutralColliderReference.damage = Damage;

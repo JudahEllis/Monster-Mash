@@ -9,7 +9,7 @@ public class ProjectileNeutral : NeutralAttack
         DamageRange = DamageRange.Range2;
     }
 
-    public override void neutralAttackPowerCalculation()
+    public override void PassDamage()
     {
         if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;

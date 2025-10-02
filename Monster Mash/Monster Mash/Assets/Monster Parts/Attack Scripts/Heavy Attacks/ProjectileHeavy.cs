@@ -32,14 +32,10 @@ public class ProjectileHeavy : HeavyAttack
         }
     }
 
-    public override void heavyAttackPowerCalculation()
+    public override void PassDamage()
     {
-        base.heavyAttackPowerCalculation();
-
         monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
-
-        damageClearance();
     }
 
     public override void statusEffectAndDamageCalculations()

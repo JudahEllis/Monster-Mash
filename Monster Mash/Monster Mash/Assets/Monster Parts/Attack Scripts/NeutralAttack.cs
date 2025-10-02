@@ -39,11 +39,6 @@ public class NeutralAttack: BaseAttack
         };
     }
 
-    public virtual void neutralAttackPowerCalculation()
-    {
-        
-    }
-
     public virtual void triggerNeutralAttackVisuals()
     {
         

@@ -8,7 +8,7 @@ public class SlashNeutral : NeutralAttack
         Attack = AttackType.Slash;
         DamageRange = DamageRange.Range3;
     }
-    public override void neutralAttackPowerCalculation()
+    public override void PassDamage()
     {
         monsterPartRef.neutralColliderReference.resetAttackHistory();
         monsterPartRef.neutralColliderReference.damage = Damage;

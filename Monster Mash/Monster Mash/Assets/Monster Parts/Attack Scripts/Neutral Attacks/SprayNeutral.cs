@@ -8,7 +8,7 @@ public class SprayNeutral : NeutralAttack
         Attack = AttackType.Spray;
         DamageRange = DamageRange.Range3;
     }
-    public override void neutralAttackPowerCalculation()
+    public override void PassDamage()
     {
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();

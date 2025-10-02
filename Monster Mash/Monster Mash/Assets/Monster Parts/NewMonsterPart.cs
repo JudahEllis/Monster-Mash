@@ -40,9 +40,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public MonsterPartType PartType;
 
-    [Header("Damage and Status Effects")]
-    [HideInInspector] public int builtUpAttackPower = 0;
-    public int builtUpAddedDamage = 0;
+    [Header("Status Effects")]
     //Status Effects
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -489,18 +487,12 @@ public class NewMonsterPart : MonoBehaviour
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
-            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
             PartVisual.triggerChargeVisual();
         }
         else
         {
             myAnimator.SetTrigger("Force Neutral Attack");
         }
-    }
-
-    public void triggerHeavyAttackPowerUp()
-    {
-        heavyAttack.triggerHeavyAttackPowerUp();
     }
 
     public void triggerHeavyLegStance()
@@ -786,6 +778,11 @@ public class NewMonsterPart : MonoBehaviour
             
         }
         return 0f;
+    }
+
+    private void triggerHeavyAttackPowerUp()
+    {
+
     }
 
     #endregion

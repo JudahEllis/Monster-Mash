@@ -8,7 +8,7 @@ public class BoomerangNeutral : NeutralAttack
         Attack = AttackType.Boomerang;
         DamageRange = DamageRange.Range2;
     }
-    public override void neutralAttackPowerCalculation()
+    public override void PassDamage()
     {
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();

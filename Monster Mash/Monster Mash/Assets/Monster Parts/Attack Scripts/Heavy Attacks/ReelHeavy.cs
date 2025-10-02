@@ -21,6 +21,7 @@ public class ReelHeavy : HeavyAttack
         monsterPartRef.powerUpCheckAllowed = false;
     }
 
+    // Reel attacks need to be rewritten. Damage system no longer uses built up power
     public override void triggerHeavyAttackPowerCheck()
     {
         if (monsterPartRef.powerUpCheckAllowed)
@@ -36,12 +37,6 @@ public class ReelHeavy : HeavyAttack
                 monsterPartRef.myAnimator.SetTrigger("Reel Back");
             }
         }
-    }
-
-    public override void triggerHeavyAttackPowerUp()
-    {
-        monsterPartRef.reelAttackBuiltUpPower++;
-        monsterPartRef.powerUpCheckAllowed = true;
     }
 
     public void triggerReelCollisionsOff() //called in attack animation

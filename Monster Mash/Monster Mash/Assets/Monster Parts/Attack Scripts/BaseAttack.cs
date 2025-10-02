@@ -47,11 +47,6 @@ public abstract class BaseAttack
         this.monsterPartVisualRef = monsterPartVisualRef;
     }
 
-    protected void damageClearance()
-    {
-        Damage = 0;
-    }
-
     public virtual void statusEffectAndDamageCalculations()
     {
 
@@ -71,6 +66,14 @@ public abstract class BaseAttack
     }
 
     public virtual void TriggerAttack()
+    {
+
+    }
+
+    /// <summary>
+    /// Passes the damage value to the colliders and VFX which eventually get passed to the function that deals damage in monster part refrence.
+    /// </summary>
+    public virtual void PassDamage()
     {
 
     }

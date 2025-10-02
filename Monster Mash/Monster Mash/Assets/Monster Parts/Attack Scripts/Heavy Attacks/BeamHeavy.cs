@@ -20,11 +20,6 @@ public class BeamHeavy : HeavyAttack
         monsterPartVisualRef.heavyHitVFXManager.endBeamVisual();
     }
 
-    public override void triggerHeavyAttackPowerUp()
-    {
-        monsterPartRef.builtUpAttackPower++;
-    }
-
     public override void TriggerAttack()
     {
         monsterPartRef.heavyAttackInMotion = true;

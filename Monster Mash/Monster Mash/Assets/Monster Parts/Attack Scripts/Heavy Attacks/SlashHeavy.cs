@@ -16,15 +16,11 @@ public class SlashHeavy : HeavyAttack
             monsterPartVisualRef.heavyMissVFXManager.unleashJabOrSlash();
         }
     }
-    public override void heavyAttackPowerCalculation()
+    public override void PassDamage()
     {
-        base.heavyAttackPowerCalculation();
-
         monsterPartRef.heavyColliderReference.resetAttackHistory();
         monsterPartRef.heavyColliderReference.damage = Damage;
         monsterPartRef.heavyColliderReference.markedHeavy = true;
-
-        damageClearance();
     }
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {

@@ -8,6 +8,7 @@ public class HeavyAttack : BaseAttack
 {
     public bool IsHeavyAttackHeld { get; private set; }
     private float heavyChargeElapsed;
+    private int startingDamage;
 
     public enum HeavyAttackType
     {
@@ -109,22 +110,10 @@ public class HeavyAttack : BaseAttack
         monsterPartVisualRef.heavyVFXStoredRotation = monsterPartRef.transform.localRotation;
     }
 
+    // Needs to be removed once reel attacks are rewritten
     public virtual void triggerHeavyAttackPowerCheck()
     {
 
-    }
-
-    public virtual void heavyAttackPowerCalculation()
-    {
-        
-
-        Damage = DamageRange.Clamp(Damage + (monsterPartRef.builtUpAttackPower * monsterPartRef.builtUpAddedDamage));
-        monsterPartRef.builtUpAttackPower = 0;
-    }
-
-    public virtual void triggerHeavyAttackPowerUp()
-    {
-        
     }
 
     // Increases the heavy damage from the min -> max depending on how long you hold down the button
@@ -136,31 +125,39 @@ public class HeavyAttack : BaseAttack
         // Track elapsed charge time
         heavyChargeElapsed += Time.deltaTime;
 
-        int min = DamageRange.Min;
-        int max = DamageRange.Max;
+        int start = startingDamage;
+        int end = DamageRange.Max;
 
         // Calculate the proportion of the animation completed
         float t = Mathf.Clamp01(heavyChargeElapsed / animationClipLength);
 
-        // Lerp damage from min to max based on t
-        Damage = Mathf.RoundToInt(Mathf.Lerp(min, max, t));
+        // Need to round to int because lerp returns a float
+        Damage = Mathf.RoundToInt(Mathf.Lerp(start, end, t));
 
         // If finished, clamp and stop charging
         if (heavyChargeElapsed >= animationClipLength)
         {
-            Damage = max;
+            Damage = end;
         }
+
+        Debug.Log(Damage);
 
     }
 
     public void OnHeavyAttackStarted()
     {
         IsHeavyAttackHeld = true;
+
+        if (startingDamage == 0)
+        {
+            startingDamage = Damage;
+        }
     }
 
     public void OnHeavyAttackEnded()
     {
         IsHeavyAttackHeld = false;
         heavyChargeElapsed = 0f;
+        Damage = startingDamage;
     }
 }

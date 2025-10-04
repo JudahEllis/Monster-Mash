@@ -1928,16 +1928,6 @@ MonoBehaviour:
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
-  isArm: 0
-  isLeg: 0
-  isTail: 0
-  isWing: 0
-  isHead: 0
-  isEye: 0
-  isMouth: 0
-  isTorso: 0
-  isHorn: 1
-  isDecor: 0
   PartType: 8
   baseNeutralAttackDamage: 0
   baseHeavyAttackDamage: 0
@@ -2011,12 +2001,22 @@ MonoBehaviour:
     - rid: 8001968035020406834
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
-        movementModifier: {x: 0, y: 0}
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
     - rid: 8001968035020406835
       type: {class: ProjectileNeutral, ns: , asm: Assembly-CSharp}
       data:
-        movementModifier: {x: 0, y: 0}
+        <Damage>k__BackingField: 10
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
         Attack: 4
 --- !u!114 &5285885074470929418
 MonoBehaviour:

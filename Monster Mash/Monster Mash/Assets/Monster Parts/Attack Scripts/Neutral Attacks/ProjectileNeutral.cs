@@ -3,20 +3,23 @@ using System;
 [Serializable]
 public class ProjectileNeutral : NeutralAttack
 {
-    public override void neutralAttackPowerCalculation()
+    public ProjectileNeutral()
     {
-        base.neutralAttackPowerCalculation();
-        if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
-        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.damage;
-        monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
+        Attack = AttackType.Projectile;
+        DamageRange = DamageRange.Range2;
+    }
 
-        damageClearance();
+    public override void PassDamage()
+    {
+        if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
+        monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
+        monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
     }
 
     public override void statusEffectAndDamageCalculations()
     {
         if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
-        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.baseNeutralAttackDamage;
+        monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
     }
 

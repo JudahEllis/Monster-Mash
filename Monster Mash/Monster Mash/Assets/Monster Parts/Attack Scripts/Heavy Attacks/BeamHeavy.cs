@@ -5,6 +5,11 @@ using UnityEngine;
 [Serializable]
 public class BeamHeavy : HeavyAttack
 {
+    public BeamHeavy()
+    {
+        Attack = HeavyAttackType.Beam;
+        DamageRange = DamageRange.Range0;
+    }
 
     public override void triggerHeavyAttackVisuals()
     {
@@ -13,11 +18,6 @@ public class BeamHeavy : HeavyAttack
     public override void endRemainingVFX()
     {
         monsterPartVisualRef.heavyHitVFXManager.endBeamVisual();
-    }
-
-    public override void triggerHeavyAttackPowerUp()
-    {
-        monsterPartRef.builtUpAttackPower++;
     }
 
     public override void TriggerAttack()

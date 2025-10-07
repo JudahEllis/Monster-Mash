@@ -3,6 +3,11 @@ using System;
 [Serializable]
 public class BoomerangHeavy : HeavyAttack
 {
+    public BoomerangHeavy()
+    {
+        Attack = HeavyAttackType.Boomerang;
+        DamageRange = DamageRange.Range3;
+    }
     public override void SetupVFX()
     {
         if (monsterPartVisualRef.heavyHitVFXHolder != null || monsterPartVisualRef.heavyDefaultSprayVFXHolder != null)
@@ -32,19 +37,15 @@ public class BoomerangHeavy : HeavyAttack
         }
     }
 
-    public override void heavyAttackPowerCalculation()
+    public override void PassDamage()
     {
-        base.heavyAttackPowerCalculation();
-
-        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.damage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
-
-        damageClearance();
     }
 
     public override void statusEffectAndDamageCalculations()
     {
-        monsterPartVisualRef.heavyHitVFXManager.damage = monsterPartRef.baseHeavyAttackDamage;
+        monsterPartVisualRef.heavyHitVFXManager.damage = Damage;
         monsterPartVisualRef.heavyHitVFXManager.updateDamageOnProjectiles();
         ApplyStatusEffectsToVFXHolder(monsterPartVisualRef.heavyHitVFXManager);
         monsterPartVisualRef.heavyHitVFXManager.updateStatusEffectsOnProjectiles();

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -31,7 +32,6 @@ public class InputRemapper : MonoBehaviour
     private InputActionAsset playerActions;
     private readonly string redButtonsKey = "redButtons";
 
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,16 +58,34 @@ public class InputRemapper : MonoBehaviour
 
     private void OnEnable()
     {
-        if (allControlItems != null && allControlItems.Length > 0)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnApplicationQuit()
+    {
+        EnableDevices();
+    }
+
+    private void EnableDevices()
+    {
+        foreach (var players in PlayerInput.all)
         {
-            EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
+            for (int i = 0; i < players.devices.Count; i++)
+            {
+                InputSystem.EnableDevice(players.devices[i]);
+            }
         }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EnableDevices();
     }
 
     public void ShowMenu(PlayerInput player)
     {
         currentPlayer = player;
-        playerActions = currentPlayer.actions;
+        playerActions = player.actions;
 
         if (!remappingUI.activeSelf)
         {
@@ -80,12 +98,35 @@ public class InputRemapper : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
             }
 
-            playerActions.FindActionMap("Monster Controls").Disable();
+            foreach (var players in PlayerInput.all)
+            {
+                players.actions.FindActionMap("Monster Controls").Disable();
+
+                if (players.playerIndex != currentPlayer.playerIndex)
+                {
+                    for (int i = 0; i < players.devices.Count; i++)
+                    {
+                        InputSystem.DisableDevice(players.devices[i]);
+                    }
+                }
+            }
         }
         else
         {
             remappingUI.SetActive(false);
-            playerActions.FindActionMap("Monster Controls").Enable();
+
+            foreach (var players in PlayerInput.all)
+            {
+                players.actions.FindActionMap("Monster Controls").Enable();
+
+                if (players.playerIndex != currentPlayer.playerIndex)
+                {
+                    for (int i = 0; i < players.devices.Count; i++)
+                    {
+                        InputSystem.EnableDevice(players.devices[i]);
+                    }
+                }
+            }
         }
     }
 

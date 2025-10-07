@@ -4,20 +4,23 @@ using System;
 public class JabNeutral : NeutralAttack
 {
 
-    public override void neutralAttackPowerCalculation()
+    public JabNeutral()
     {
-        base.neutralAttackPowerCalculation();
-        monsterPartRef.neutralColliderReference.resetAttackHistory();
-        monsterPartRef.neutralColliderReference.damage = monsterPartRef.damage;
-        monsterPartRef.heavyColliderReference.markedHeavy = false;
+        Attack = AttackType.Jab;
+        DamageRange = DamageRange.Range2;
+    }
 
-        damageClearance();
+    public override void PassDamage()
+    {
+        monsterPartRef.neutralColliderReference.resetAttackHistory();
+        monsterPartRef.neutralColliderReference.damage = Damage;
+        monsterPartRef.heavyColliderReference.markedHeavy = false;
     }
 
     public override void statusEffectAndDamageCalculations()
     {
         base.statusEffectAndDamageCalculations();
-        monsterPartRef.neutralColliderReference.damage = monsterPartRef.baseNeutralAttackDamage;
+        monsterPartRef.neutralColliderReference.damage = Damage;
     }
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)

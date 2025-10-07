@@ -6,6 +6,10 @@ using UnityEngine;
 [Serializable]
 public class HeavyAttack : BaseAttack
 {
+    public bool IsHeavyAttackHeld { get; private set; }
+    private float heavyChargeElapsed;
+    private int startingDamage;
+
     public enum HeavyAttackType
     {
         None,
@@ -34,21 +38,21 @@ public class HeavyAttack : BaseAttack
     // a property drawer relies on this var using string lookup. Please do not change the var name or the property drawer will stop working
     public HeavyAttackType Attack;
 
-
+    // factory pattern to assign the subclass
     public HeavyAttack GetAttack()
     {
         return Attack switch
         {
-            HeavyAttackType.Jab => new JabHeavy { Attack = HeavyAttackType.Jab},
-            HeavyAttackType.Slash => new SlashHeavy { Attack = HeavyAttackType.Slash},
-            HeavyAttackType.Spray => new SprayHeavy { Attack = HeavyAttackType.Spray},
-            HeavyAttackType.Projectile => new ProjectileHeavy { Attack = HeavyAttackType.Projectile},
-            HeavyAttackType.Beam => new BeamHeavy { Attack = HeavyAttackType.Beam},
-            HeavyAttackType.Reel => new ReelHeavy { Attack = HeavyAttackType.Reel},
-            HeavyAttackType.Grapple => new GrappleHeavy { Attack = HeavyAttackType.Grapple},
-            HeavyAttackType.Boomerang => new BoomerangHeavy { Attack = HeavyAttackType.Boomerang},
-            HeavyAttackType.Spinning => new SpinningHeavy { Attack = HeavyAttackType.Spinning },
-            _ => new HeavyAttack { Attack = HeavyAttackType.None}
+            HeavyAttackType.Jab => new JabHeavy(),
+            HeavyAttackType.Slash => new SlashHeavy(),
+            HeavyAttackType.Spray => new SprayHeavy(),
+            HeavyAttackType.Projectile => new ProjectileHeavy(),
+            HeavyAttackType.Beam => new BeamHeavy(),
+            HeavyAttackType.Reel => new ReelHeavy(),
+            HeavyAttackType.Grapple => new GrappleHeavy(),
+            HeavyAttackType.Boomerang => new BoomerangHeavy(),
+            HeavyAttackType.Spinning => new SpinningHeavy(),
+            _ => new HeavyAttack ()
         };
     }
 
@@ -106,22 +110,54 @@ public class HeavyAttack : BaseAttack
         monsterPartVisualRef.heavyVFXStoredRotation = monsterPartRef.transform.localRotation;
     }
 
+    // Needs to be removed once reel attacks are rewritten
     public virtual void triggerHeavyAttackPowerCheck()
     {
 
     }
 
-    public virtual void heavyAttackPowerCalculation()
+    // Increases the heavy damage from the min -> max depending on how long you hold down the button
+    public void ChargeHeavyAttack(float animationClipLength)
     {
-        monsterPartRef.damage = monsterPartRef.baseHeavyAttackDamage + (monsterPartRef.builtUpAttackPower * monsterPartRef.builtUpAddedDamage);
-        monsterPartRef.builtUpAttackPower = 0;
+        if (animationClipLength <= 0f || Damage >= DamageRange.Max)
+            return;
+
+        // Track elapsed charge time
+        heavyChargeElapsed += Time.deltaTime;
+
+        int start = startingDamage;
+        int end = DamageRange.Max;
+
+        // Calculate the proportion of the animation completed
+        float t = Mathf.Clamp01(heavyChargeElapsed / animationClipLength);
+
+        // Need to round to int because lerp returns a float
+        Damage = Mathf.RoundToInt(Mathf.Lerp(start, end, t));
+
+        // If finished, clamp and stop charging
+        if (heavyChargeElapsed >= animationClipLength)
+        {
+            Damage = end;
+        }
+
+        Debug.Log(Damage);
+
     }
 
-    public virtual void triggerHeavyAttackPowerUp()
+    public void OnHeavyAttackStarted()
     {
+        IsHeavyAttackHeld = true;
 
+        if (startingDamage == 0)
+        {
+            startingDamage = Damage;
+        }
     }
 
-
-
+    public void OnHeavyAttackEnded()
+    {
+        IsHeavyAttackHeld = false;
+        heavyChargeElapsed = 0f;
+        Damage = startingDamage;
+    }
 }

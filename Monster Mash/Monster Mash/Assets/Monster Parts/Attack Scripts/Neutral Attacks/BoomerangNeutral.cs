@@ -3,18 +3,20 @@ using System;
 [Serializable]
 public class BoomerangNeutral : NeutralAttack
 {
-    public override void neutralAttackPowerCalculation()
+    public BoomerangNeutral()
     {
-        base.neutralAttackPowerCalculation();
-        monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.damage;
+        Attack = AttackType.Boomerang;
+        DamageRange = DamageRange.Range2;
+    }
+    public override void PassDamage()
+    {
+        monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
         monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
-
-        damageClearance();
     }
 
     public override void statusEffectAndDamageCalculations()
     {
-       monsterPartVisualRef.neutralHitVFXManager.damage = monsterPartRef.baseNeutralAttackDamage;
+       monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
        monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
     }
 

@@ -298,7 +298,7 @@ public class MonsterPartVisual : MonoBehaviour
 
             if (monsterPartRef.attackMarkedHeavy)
             {
-                monsterPartRef.heavyAttack.heavyAttackPowerCalculation();
+                monsterPartRef.heavyAttack.PassDamage();
                 triggerHeavyChargeVisual();
 
                 if (hasHeavyMovementCommand)
@@ -365,7 +365,7 @@ public class MonsterPartVisual : MonoBehaviour
             }
             else
             {
-                monsterPartRef.neutralAttack.neutralAttackPowerCalculation();
+                monsterPartRef.neutralAttack.PassDamage();
 
                 if (hasNeutralMovementCommand)
                 {

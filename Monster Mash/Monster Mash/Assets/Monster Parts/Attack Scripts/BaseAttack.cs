@@ -27,6 +27,11 @@ public class TriggerAttackReleaseEventArgs : EventArgs
 
 public abstract class BaseAttack
 {
+    public DamageRange DamageRange { get; protected set; } = DamageRange.Range0;
+    /// <summary>
+    /// The amount of damge the attack deals. The value is automaticaly clamped by the damage range.
+    /// </summary>
+    [field: SerializeField, DamageRange] public int Damage { get; protected set; }
     protected NewMonsterPart monsterPartRef;
     protected MonsterPartVisual monsterPartVisualRef;
     [SerializeField] protected MovementModifier movementModifier;
@@ -40,11 +45,6 @@ public abstract class BaseAttack
     {
         this.monsterPartRef = monsterPartRef;
         this.monsterPartVisualRef = monsterPartVisualRef;
-    }
-
-    protected void damageClearance()
-    {
-        monsterPartRef.damage = 0;
     }
 
     public virtual void statusEffectAndDamageCalculations()
@@ -66,6 +66,14 @@ public abstract class BaseAttack
     }
 
     public virtual void TriggerAttack()
+    {
+
+    }
+
+    /// <summary>
+    /// Passes the damage value to the colliders and VFX which eventually get passed to the function that deals damage in monster part refrence.
+    /// </summary>
+    public virtual void PassDamage()
     {
 
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -2404,7 +2404,39 @@ public class playerController : MonoBehaviour
 
         Vector2 finalLaunchVector = (launchDir * damage) * launchMultiplier;
 
-        myRigidbody.AddForce(finalLaunchVector, ForceMode2D.Impulse);
+        //myRigidbody.AddForce(finalLaunchVector, ForceMode2D.Impulse);
+        float launchDuration = 0.1f;
+        StartCoroutine(SmoothLaunch(finalLaunchVector, launchDuration));
+    }
+
+    // Makes the launch happen over multiple frames instead of all at once which makes the movement less choppy.
+    IEnumerator SmoothLaunch(Vector2 totalForce, float duration)
+    {
+        if (duration <= 0f)
+        {
+            myRigidbody.AddForce(totalForce, ForceMode2D.Impulse);
+            yield break;
+        }
+
+        float elapsed = 0f;
+
+        // Divides the total force by the mass to get the total velocity change for the current hit.
+        Vector2 targetVelocityChange = totalForce / myRigidbody.mass;
+        Vector2 startVelocity = myRigidbody.velocity;
+
+        while (elapsed < duration)
+        {
+            // Get a percentage (0 -> 1) of how far we are through the launch
+            float t = elapsed / duration;
+            // based on the percentage lerp the current velocity towards the total velocity change
+            Vector2 desiredVelocity = Vector2.Lerp(startVelocity, startVelocity + targetVelocityChange, t);
+            myRigidbody.velocity = desiredVelocity;
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        // Ensure final velocity equals what the impulse would’ve done
+        myRigidbody.velocity = startVelocity + targetVelocityChange;
     }
 
     IEnumerator damageRecoveryTime(float recoveryTime)

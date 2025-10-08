@@ -2402,10 +2402,16 @@ public class playerController : MonoBehaviour
 
         launchDir.Normalize();
 
-        Vector2 finalLaunchVector = (launchDir * damage) * launchMultiplier;
+        Vector2 finalLaunchVector = (launchDir * damage);
+
+        if (damage <= 70)
+        {
+            finalLaunchVector *= launchMultiplier;
+        }
 
         //myRigidbody.AddForce(finalLaunchVector, ForceMode2D.Impulse);
         float launchDuration = 0.1f;
+        myRigidbody.velocity = Vector2.zero;
         StartCoroutine(SmoothLaunch(finalLaunchVector, launchDuration));
     }
 

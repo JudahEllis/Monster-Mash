@@ -508,9 +508,86 @@ MonoBehaviour:
   chargingForward: 0
   grabbingWall: 0
   myRigidbody: {fileID: 5364141700156790741}
-  debug: 0
-  xForce: 56.7
-  yForce: 72.5
+  launchMultiplier: 1.5
+  damageToForceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 10.001376
+      value: 0.010593414
+      inSlope: 2.4781144
+      outSlope: 2.4781144
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.11651373
+    - serializedVersion: 3
+      time: 40.01598
+      value: 20.012722
+      inSlope: 0.12977597
+      outSlope: 0.12977597
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.54550356
+    - serializedVersion: 3
+      time: 50.022324
+      value: 40.02509
+      inSlope: -0.10038175
+      outSlope: -0.10038175
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.67987114
+      outWeight: 0.08906197
+    - serializedVersion: 3
+      time: 80.12954
+      value: 60.000008
+      inSlope: 1.9873992
+      outSlope: 1.9873992
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.17061819
+    - serializedVersion: 3
+      time: 90.08542
+      value: 80.00367
+      inSlope: -0.011489554
+      outSlope: -0.011489554
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14246511
+      outWeight: 0
+    - serializedVersion: 3
+      time: 119.98575
+      value: 90.076866
+      inSlope: 0.0488681
+      outSlope: 0.0488681
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07380477
+      outWeight: 0.7436248
+    - serializedVersion: 3
+      time: 130.0114
+      value: 89.99649
+      inSlope: -0.008017004
+      outSlope: 0.0000016362113
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 199.95403
+      value: 89.996605
+      inSlope: 0.0000016362113
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yIncrease: 1.5
 --- !u!50 &5364141700156790741
 Rigidbody2D:
   serializedVersion: 4

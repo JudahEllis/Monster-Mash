@@ -140,7 +140,7 @@ public class NewMonsterPart : MonoBehaviour
     private void Update()
     {
         // gets the clip length so that the heavy finishes charging when the attack animation ends 
-        if (heavyAttack.IsHeavyAttackHeld)
+        if (attackMarkedHeavy && heavyAttack.IsHeavyAttackHeld)
         {
             float clipLength = GetCurrentAnimationClipLength();
             heavyAttack.ChargeHeavyAttack(clipLength);
@@ -444,6 +444,7 @@ public class NewMonsterPart : MonoBehaviour
                     myAnimator.SetBool("Attack Marked Heavy", false);
                     triggerNeutralOrHeavy();
                 }
+
                 heavyAttack.OnHeavyAttackEnded();
             }
             else
@@ -461,7 +462,11 @@ public class NewMonsterPart : MonoBehaviour
         {
             if (!isReloadedNeutral)
             {
-                triggerNeutralOrHeavyRefresh(true);
+                if (attackFocusOn && isAttacking)
+                {
+                    triggerNeutralOrHeavyRefresh(true);
+                }
+                
                 return;
             }
         }
@@ -470,7 +475,11 @@ public class NewMonsterPart : MonoBehaviour
         {
             if (!isReloadedHeavy)
             {
-                triggerNeutralOrHeavyRefresh(true);
+                if (attackFocusOn && isAttacking)
+                {
+                    triggerNeutralOrHeavyRefresh(true);
+                }
+                
                 return;
             }
         }

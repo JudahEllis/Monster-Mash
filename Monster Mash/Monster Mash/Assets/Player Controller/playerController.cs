@@ -126,8 +126,8 @@ public class playerController : MonoBehaviour
     private Vector2Int lastInputDirection;
 
     [Header("Damage Launching")]
-    [SerializeField, Tooltip("After being multiplied by damge the vector is scaled up by multiplying by this value.")] private float launchMultiplier = 1.5f;
-    [SerializeField, Tooltip("Adds to the y component of the initial launch direction. Use this to give the left and right launch more or less of an arc.")] private float yIncrease = 1.5f;
+    [SerializeField] private AnimationCurve damageToForceCurve;
+    [SerializeField, Tooltip("Controls how much of an arc the launch has for left and right")] private float yMultiplier = 1.5f;
 
 
     // damage timer
@@ -2373,7 +2373,7 @@ public class playerController : MonoBehaviour
             myAudioSystem.playNeutralDamageSound();
             StartCoroutine(damageRecoveryTime(0.1f));
         }
-
+        Debug.Log(damageRecieved);
         DammageLaunch(damageRecieved, attackerPosition);
     }
 
@@ -2391,7 +2391,7 @@ public class playerController : MonoBehaviour
             // if attacked from the left launch right. if attacked from the left launch right;
             launchDir = diff.x > 0 ? Vector2.left : Vector2.right;
             // Adds a bit of y to give the left and rigt launch an arc
-            launchDir.y = yIncrease;
+            launchDir.y = yMultiplier;
         }
         else
         {
@@ -2402,14 +2402,9 @@ public class playerController : MonoBehaviour
 
         launchDir.Normalize();
 
-        Vector2 finalLaunchVector = (launchDir * damage);
+        
+        Vector2 finalLaunchVector = launchDir * damageToForceCurve.Evaluate(damage);
 
-        if (damage <= 70)
-        {
-            finalLaunchVector *= launchMultiplier;
-        }
-
-        //myRigidbody.AddForce(finalLaunchVector, ForceMode2D.Impulse);
         float launchDuration = 0.1f;
         myRigidbody.velocity = Vector2.zero;
         StartCoroutine(SmoothLaunch(finalLaunchVector, launchDuration));

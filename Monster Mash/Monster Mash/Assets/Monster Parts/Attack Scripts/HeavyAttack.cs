@@ -140,7 +140,7 @@ public class HeavyAttack : BaseAttack
             Damage = end;
         }
 
-        Debug.Log(Damage);
+        //Debug.Log(Damage);
 
     }
 
@@ -152,12 +152,13 @@ public class HeavyAttack : BaseAttack
         {
             startingDamage = Damage;
         }
+
+        Damage = startingDamage;
     }
 
     public void OnHeavyAttackEnded()
     {
         IsHeavyAttackHeld = false;
         heavyChargeElapsed = 0f;
-        Damage = startingDamage;
     }
 }

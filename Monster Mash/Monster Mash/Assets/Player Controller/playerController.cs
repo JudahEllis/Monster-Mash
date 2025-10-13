@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -126,10 +126,8 @@ public class playerController : MonoBehaviour
     private Vector2Int lastInputDirection;
 
     [Header("Damage Launching")]
-    [SerializeField] private bool debug;
-    [SerializeField] private float xForce;
-    [SerializeField] private float yForce;
-    private int timesHit;
+    [SerializeField] private AnimationCurve damageToForceCurve;
+    [SerializeField, Tooltip("Controls how much of an arc the launch has for left and right")] private float yMultiplier = 1.5f;
 
 
     // damage timer
@@ -2322,13 +2320,11 @@ public class playerController : MonoBehaviour
     #region Health
 
     //damage as to how it relates to the initial strike and the knockback effect
-    public void damaged(int damageRecieved, bool markedForHeavyAttack, bool attackerFacingRight, Vector3 contactPoint)
+    public void damaged(int damageRecieved, bool markedForHeavyAttack, Vector3 attackerPosition, Vector3 contactPoint)
     {
         // Prevents dammage being applied multiple times for one attack
         if (Time.time - lastAttackTime <= 0.5f) { return; }
         lastAttackTime = Time.time;
-
-        timesHit += 1;
 
         canMove = false;
         isRunning = false;
@@ -2377,60 +2373,71 @@ public class playerController : MonoBehaviour
             myAudioSystem.playNeutralDamageSound();
             StartCoroutine(damageRecoveryTime(0.1f));
         }
-
-        if (timesHit >= 3)
-        {
-            DammageLaunch(attackerFacingRight);
-        }
-
         Debug.Log(damageRecieved);
-
+        DammageLaunch(damageRecieved, attackerPosition);
     }
 
-    private void DammageLaunch(bool attackerFacingRight)
+    private void DammageLaunch(int damage, Vector3 attackerPosition)
     {
-        // Damge launch
         isDamageLaunching = true;
 
-        Vector2 launchDir = attackerFacingRight ? new Vector2(1, 1) : new Vector2(-1, 1);
+        Vector2 diff = attackerPosition - transform.position;
+        Vector2 launchDir;
+
+        // Sets the launch direction to the opposite of where the player was hit.
+        // Uses the abs value to check if the attack direction is more horizontal or vertical
+        if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
+        {
+            // if attacked from the left launch right. if attacked from the left launch right;
+            launchDir = diff.x > 0 ? Vector2.left : Vector2.right;
+            // Adds a bit of y to give the left and rigt launch an arc
+            launchDir.y = yMultiplier;
+        }
+        else
+        {
+            // if hit from the top launch down. if hit from the bottom launch up
+            launchDir = diff.y > 0 ? Vector2.down: Vector2.up;
+        }
+
+
         launchDir.Normalize();
 
-        Vector2 scalerVector = new(xForce, yForce);
+        
+        Vector2 finalLaunchVector = launchDir * damageToForceCurve.Evaluate(damage);
 
-        myRigidbody.AddForce(launchDir * scalerVector, ForceMode2D.Impulse);
-
-        myRigidbody.gravityScale = gravityPower;
-        groundFrictionCollider.enabled = false;
-
-        timesHit = 0;
+        float launchDuration = 0.1f;
+        myRigidbody.velocity = Vector2.zero;
+        StartCoroutine(SmoothLaunch(finalLaunchVector, launchDuration));
     }
 
-    // visualize the launch arc in the editor for damage launching
-    private void OnDrawGizmosSelected()
+    // Makes the launch happen over multiple frames instead of all at once which makes the movement less choppy.
+    IEnumerator SmoothLaunch(Vector2 totalForce, float duration)
     {
-        if (!debug) { return; }
-
-        Vector2 launchDir = facingRight ? new Vector2(1, 1) : new Vector2(-1, 1);
-        launchDir.Normalize();
-        Vector2 scalerVector = new(xForce, yForce);
-
-        float mass = myRigidbody != null ? myRigidbody.mass : 1f;
-        Vector2 initialVelocity = (launchDir * scalerVector) / mass;
-
-        float gravity = myRigidbody != null ? myRigidbody.gravityScale * Physics2D.gravity.y : -9.81f;
-        Vector2 startPos = transform.position;
-
-        int steps = 30;
-        float timeStep = 0.05f;
-        Vector2 prevPoint = startPos;
-        for (int i = 1; i <= steps; i++)
+        if (duration <= 0f)
         {
-            float t = i * timeStep;
-            Vector2 point = startPos + initialVelocity * t + 0.5f * t * t * new Vector2(0, gravity);
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(prevPoint, point);
-            prevPoint = point;
+            myRigidbody.AddForce(totalForce, ForceMode2D.Impulse);
+            yield break;
         }
+
+        float elapsed = 0f;
+
+        // Divides the total force by the mass to get the total velocity change for the current hit.
+        Vector2 targetVelocityChange = totalForce / myRigidbody.mass;
+        Vector2 startVelocity = myRigidbody.velocity;
+
+        while (elapsed < duration)
+        {
+            // Get a percentage (0 -> 1) of how far we are through the launch
+            float t = elapsed / duration;
+            // based on the percentage lerp the current velocity towards the total velocity change
+            Vector2 desiredVelocity = Vector2.Lerp(startVelocity, startVelocity + targetVelocityChange, t);
+            myRigidbody.velocity = desiredVelocity;
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        // Ensure final velocity equals what the impulse would’ve done
+        myRigidbody.velocity = startVelocity + targetVelocityChange;
     }
 
     IEnumerator damageRecoveryTime(float recoveryTime)

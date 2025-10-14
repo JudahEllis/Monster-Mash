@@ -140,7 +140,7 @@ public class NewMonsterPart : MonoBehaviour
     private void Update()
     {
         // gets the clip length so that the heavy finishes charging when the attack animation ends 
-        if (attackMarkedHeavy && heavyAttack.IsHeavyAttackHeld)
+        if (heavyAttack.IsHeavyAttackHeld)
         {
             float clipLength = GetCurrentAnimationClipLength();
             heavyAttack.ChargeHeavyAttack(clipLength);
@@ -444,14 +444,12 @@ public class NewMonsterPart : MonoBehaviour
                     myAnimator.SetBool("Attack Marked Heavy", false);
                     triggerNeutralOrHeavy();
                 }
-
                 heavyAttack.OnHeavyAttackEnded();
             }
             else
             {
                 attackMarkedHeavy = true;
                 myAnimator.SetBool("Attack Marked Heavy", true);
-                heavyAttack.OnHeavyAttackStarted();
             }
         }
     }
@@ -496,6 +494,7 @@ public class NewMonsterPart : MonoBehaviour
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
+            heavyAttack.OnHeavyAttackStarted();
             PartVisual.triggerChargeVisual();
         }
         else
@@ -1388,7 +1387,6 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (attackFocusOn)
         {
-            heavyAttack.OnHeavyAttackEnded();
             heavyCollider.gameObject.GetComponent<monsterPartReference>().isFullyChargedHeavy = true;
             myAnimator.SetBool("Charge Attack Active", true);
             myMainSystem.chargeForward();

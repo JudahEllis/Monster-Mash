@@ -119,7 +119,7 @@ public class HeavyAttack : BaseAttack
     // Increases the heavy damage from the min -> max depending on how long you hold down the button
     public void ChargeHeavyAttack(float animationClipLength)
     {
-        if (animationClipLength <= 0f || Damage >= DamageRange.Max)
+        if (animationClipLength <= 0f)
             return;
 
         // Track elapsed charge time
@@ -138,22 +138,18 @@ public class HeavyAttack : BaseAttack
         if (heavyChargeElapsed >= animationClipLength)
         {
             Damage = end;
+            OnHeavyAttackEnded();
         }
-
-        //Debug.Log(Damage);
-
     }
 
     public void OnHeavyAttackStarted()
     {
-        IsHeavyAttackHeld = true;
-
         if (startingDamage == 0)
         {
             startingDamage = Damage;
         }
 
-        Damage = startingDamage;
+        IsHeavyAttackHeld = true;
     }
 
     public void OnHeavyAttackEnded()

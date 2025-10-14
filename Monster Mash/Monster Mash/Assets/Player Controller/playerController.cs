@@ -2373,7 +2373,7 @@ public class playerController : MonoBehaviour
             myAudioSystem.playNeutralDamageSound();
             StartCoroutine(damageRecoveryTime(0.1f));
         }
-        Debug.Log(damageRecieved);
+
         DammageLaunch(damageRecieved, attackerPosition);
     }
 

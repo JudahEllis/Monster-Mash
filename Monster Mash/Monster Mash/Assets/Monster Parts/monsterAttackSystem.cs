@@ -4,6 +4,8 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using System.Linq;
+using Random = UnityEngine.Random;
 
 
 public class monsterAttackSystem : MonoBehaviour
@@ -43,7 +45,6 @@ public class monsterAttackSystem : MonoBehaviour
     public Animator myAnimator;
     private Animator mainTorso;
 
-    public monsterPart[] oldattackSlotMonsterParts = new monsterPart[8];
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
@@ -51,8 +52,10 @@ public class monsterAttackSystem : MonoBehaviour
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
     [Header("Damage and Status Effects")]
-    public int health = 800;
-    private int monsterPartIndividualHealth = 0;
+    public int MaxHealth = 800;
+    private int segmentHealth;
+    private int currentHealth;
+
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
     public bool poisonedStatusEffect;
@@ -409,6 +412,8 @@ public class monsterAttackSystem : MonoBehaviour
 
         // set default emotes
         myPlayer.playerControlsMap.Emotes.Enable();
+
+        CalculateStartHealth();
         
     }
 
@@ -2357,6 +2362,30 @@ public class monsterAttackSystem : MonoBehaviour
     #endregion
 
     #region Health
+
+
+    private void CalculateStartHealth()
+    {
+        currentHealth = MaxHealth;
+        List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null).ToList();
+        segmentHealth = MaxHealth / activeAttackSlots.Count;
+    }
+
+    public void DecreaseHealth(int damage)
+    {
+        currentHealth -= Mathf.Clamp(damage, 0, MaxHealth);
+
+        if (MaxHealth - currentHealth == segmentHealth)
+        {
+            //TODO: Add logic for when you only have one part left
+            List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null).ToList();
+            activeAttackSlots[Random.Range(0, activeAttackSlots.Count)].disconnectThisPart();
+
+            currentHealth = MaxHealth;
+        }
+    }
+
+
 
     public void neutralDamage()
     {

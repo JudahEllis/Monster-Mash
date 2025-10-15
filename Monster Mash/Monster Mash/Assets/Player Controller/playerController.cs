@@ -2375,6 +2375,8 @@ public class playerController : MonoBehaviour
         if (Time.time - lastAttackTime <= 0.5f) { return; }
         lastAttackTime = Time.time;
 
+        myMonster.DecreaseHealth(damageRecieved);
+
         canMove = false;
         isRunning = false;
         isWalking = false;

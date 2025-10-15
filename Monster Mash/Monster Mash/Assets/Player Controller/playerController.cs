@@ -60,6 +60,8 @@ public class playerController : MonoBehaviour
     bool canJump = true;
     bool jumpButtonReset = false;
     //public bool primedForBigJump = false;
+    private Coroutine disableJumpCoroutine;
+    private Coroutine landEnableJumpCoroutine;
     public int numberOfJumps = 2;
     public int numberOfJumpsLeft = 2;
     /// <summary>
@@ -964,16 +966,31 @@ public class playerController : MonoBehaviour
 
     private void land()
     {
+        unlockPlayerController();
         isDamageLaunching = false;
         grounded = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
+
+        if (disableJumpCoroutine != null)
+        {
+            StopCoroutine(disableJumpCoroutine);
+            disableJumpCoroutine = null;
+        }
+
+        if (landEnableJumpCoroutine != null)
+        {
+            StopCoroutine(landEnableJumpCoroutine);
+            landEnableJumpCoroutine = null;
+        }
+        landEnableJumpCoroutine = StartCoroutine(SetCanJumpDelayed(0.45f));
+
         bodyCollider.enabled = true;
         smallBodyCollider.enabled = true;
         isPhasingThroughPlatform = false;
         isFastFalling = false;
         landDetectionReady = true;
-        canJump = true;
+        //canJump = true;
         canDash = true;
         insideFloor = false;
         //canRoll = true;
@@ -2316,6 +2333,38 @@ public class playerController : MonoBehaviour
     }
 
     #endregion
+
+    public void DisableJumpingFor(float seconds)
+    {
+        if (landEnableJumpCoroutine != null)
+        {
+            StopCoroutine(landEnableJumpCoroutine);
+            landEnableJumpCoroutine = null;
+        }
+
+        if (disableJumpCoroutine != null)
+        {
+            StopCoroutine(disableJumpCoroutine);
+            disableJumpCoroutine = null;
+        }
+
+        disableJumpCoroutine = StartCoroutine(DisableJumpingCoroutine(seconds));
+    }
+
+    private IEnumerator DisableJumpingCoroutine(float seconds)
+    {
+        canJump = false;
+        yield return new WaitForSeconds(seconds);
+        canJump = true;
+        disableJumpCoroutine = null;
+    }
+
+    private IEnumerator SetCanJumpDelayed(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        canJump = true;
+        landEnableJumpCoroutine = null;
+    }
 
     #region Health
 

@@ -496,6 +496,9 @@ public class NewMonsterPart : MonoBehaviour
             myMainSystem.heavyAttackActivated();
             heavyAttack.OnHeavyAttackStarted();
             PartVisual.triggerChargeVisual();
+
+            float chargeDuration = GetCurrentAnimationClipLength();
+            myMainSystem.myPlayer.DisableJumpingFor(chargeDuration);
         }
         else
         {

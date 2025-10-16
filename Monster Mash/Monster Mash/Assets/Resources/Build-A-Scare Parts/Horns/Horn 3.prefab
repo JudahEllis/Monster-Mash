@@ -1230,7 +1230,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &190385272212073032
 Transform:
   m_ObjectHideFlags: 0
@@ -9968,11 +9968,6 @@ MonoBehaviour:
   attackAnimationID: 1
   connected: 1
   PartType: 8
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -10184,7 +10179,7 @@ MonoBehaviour:
   bakeValues: []
 --- !u!95 &7558171910711805230
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10201,7 +10196,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &-3359269097036918665
 MonoBehaviour:
   m_ObjectHideFlags: 0

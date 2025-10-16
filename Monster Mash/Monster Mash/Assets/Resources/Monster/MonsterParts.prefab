@@ -73403,7 +73403,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4738599461976080067
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -73420,7 +73420,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4738599461976080068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73438,19 +73439,14 @@ MonoBehaviour:
   isFloatingMonster: 0
   isWalking: 0
   isRunning: 0
+  isCrouching: 0
   focusedAttackActive: 0
+  calm: 0
   emoteActive: 0
   onPlatformEdge: 0
+  damageLocked: 0
   myPlayer: {fileID: 0}
-  oldattackSlotMonsterParts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  myAnimator: {fileID: 0}
   attackSlotMonsterParts:
   - {fileID: 0}
   - {fileID: 0}
@@ -73461,7 +73457,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   allMonsterParts: []
-  health: 100
+  MaxHealth: 100
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0

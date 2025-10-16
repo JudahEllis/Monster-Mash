@@ -15,7 +15,6 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public MonsterPartVisual PartVisual;
     public bool requiresUniqueAnimationOffset;
     public Collider stompDetection;
-    public int monsterPartHealth = 100;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
     public int monsterPartID = 1;
     public int attackAnimationID = 1;

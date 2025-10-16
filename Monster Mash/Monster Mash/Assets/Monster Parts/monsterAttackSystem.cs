@@ -546,6 +546,12 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
+    private List<NewMonsterPart> GetActiveAttackSlots()
+    {
+        List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null && part.connected).ToList();
+        return activeAttackSlots;
+    }
+
     #endregion
 
     #region Attacks
@@ -2367,21 +2373,31 @@ public class monsterAttackSystem : MonoBehaviour
     private void CalculateStartHealth()
     {
         currentHealth = MaxHealth;
-        List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null).ToList();
+        List<NewMonsterPart> activeAttackSlots = GetActiveAttackSlots();
         segmentHealth = MaxHealth / activeAttackSlots.Count;
     }
 
     public void DecreaseHealth(int damage)
     {
-        currentHealth -= Mathf.Clamp(damage, 0, MaxHealth);
+        currentHealth -= damage;
+        Debug.Log(currentHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
 
-        if (MaxHealth - currentHealth == segmentHealth)
+        while (MaxHealth - currentHealth >= segmentHealth)
         {
-            //TODO: Add logic for when you only have one part left
-            List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null).ToList();
-            activeAttackSlots[Random.Range(0, activeAttackSlots.Count)].disconnectThisPart();
+            var activeAttackSlots = GetActiveAttackSlots();
+            if (activeAttackSlots.Count > 0)
+            {
+                popOffMonsterPart(activeAttackSlots[Random.Range(0, activeAttackSlots.Count)]);
 
-            currentHealth = MaxHealth;
+                if (GetActiveAttackSlots().Count == 0)
+                {
+                    Debug.Log("Monster Dead");
+                    totalDestruction();
+                    return;
+                }
+            }
+            currentHealth += segmentHealth; // Increase current health by one segment untill it reaches the max health
         }
     }
 

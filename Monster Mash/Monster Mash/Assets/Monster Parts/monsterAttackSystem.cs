@@ -4,6 +4,8 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using System.Linq;
+using Random = UnityEngine.Random;
 
 
 public class monsterAttackSystem : MonoBehaviour
@@ -43,7 +45,6 @@ public class monsterAttackSystem : MonoBehaviour
     public Animator myAnimator;
     private Animator mainTorso;
 
-    public monsterPart[] oldattackSlotMonsterParts = new monsterPart[8];
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
@@ -51,8 +52,10 @@ public class monsterAttackSystem : MonoBehaviour
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
     [Header("Damage and Status Effects")]
-    public int health = 800;
-    private int monsterPartIndividualHealth = 0;
+    public int MaxHealth = 800;
+    private int segmentHealth;
+    private int currentHealth;
+
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
     public bool poisonedStatusEffect;
@@ -409,6 +412,8 @@ public class monsterAttackSystem : MonoBehaviour
 
         // set default emotes
         myPlayer.playerControlsMap.Emotes.Enable();
+
+        CalculateStartHealth();
         
     }
 
@@ -539,6 +544,12 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
             allMonsterParts[i].triggerIdle();
         }
+    }
+
+    private List<NewMonsterPart> GetActiveAttackSlots()
+    {
+        List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null && part.connected).ToList();
+        return activeAttackSlots;
     }
 
     #endregion
@@ -2357,6 +2368,40 @@ public class monsterAttackSystem : MonoBehaviour
     #endregion
 
     #region Health
+
+
+    private void CalculateStartHealth()
+    {
+        currentHealth = MaxHealth;
+        List<NewMonsterPart> activeAttackSlots = GetActiveAttackSlots();
+        segmentHealth = MaxHealth / activeAttackSlots.Count;
+    }
+
+    public void DecreaseHealth(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log(currentHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+
+        while (MaxHealth - currentHealth >= segmentHealth)
+        {
+            var activeAttackSlots = GetActiveAttackSlots();
+            if (activeAttackSlots.Count > 0)
+            {
+                popOffMonsterPart(activeAttackSlots[Random.Range(0, activeAttackSlots.Count)]);
+
+                if (GetActiveAttackSlots().Count == 0)
+                {
+                    Debug.Log("Monster Dead");
+                    totalDestruction();
+                    return;
+                }
+            }
+            currentHealth += segmentHealth; // Increase current health by one segment untill it reaches the max health
+        }
+    }
+
+
 
     public void neutralDamage()
     {

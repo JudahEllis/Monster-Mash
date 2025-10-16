@@ -1399,8 +1399,8 @@ Transform:
   m_GameObject: {fileID: 7001348208784661608}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.19157928, y: 0.19157928, z: 0.19157928}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.1560183, y: 0.1560183, z: 0.1560183}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9196233024999596604}
   - {fileID: 4745284837679308656}
@@ -1409,7 +1409,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5263893370027782296
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1426,7 +1426,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3940441365691102359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1451,11 +1452,6 @@ MonoBehaviour:
   attackAnimationID: 1
   connected: 1
   PartType: 8
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -1523,6 +1519,7 @@ MonoBehaviour:
     - rid: 7054365525696053257
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
+        <Damage>k__BackingField: 0
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}
@@ -1532,6 +1529,7 @@ MonoBehaviour:
     - rid: 7054365525696053258
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
+        <Damage>k__BackingField: 0
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}

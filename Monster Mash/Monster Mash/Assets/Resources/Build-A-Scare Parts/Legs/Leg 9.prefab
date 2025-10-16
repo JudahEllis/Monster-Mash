@@ -249,7 +249,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &693267535654581827
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -266,7 +266,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7743770250737371920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,11 +292,6 @@ MonoBehaviour:
   attackAnimationID: 1
   connected: 1
   PartType: 3
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -373,7 +369,7 @@ MonoBehaviour:
     - rid: 8001968035020406860
       type: {class: GrappleHeavy, ns: , asm: Assembly-CSharp}
       data:
-        <Damage>k__BackingField: 0
+        <Damage>k__BackingField: 10
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}

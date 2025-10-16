@@ -849,11 +849,13 @@ public class NewMonsterPart : MonoBehaviour
 
         if (attackMarkedHeavy == true)
         {
+            if (heavyCollider == null || heavyColliderReference == null) { return; }
             heavyCollider.enabled = false;
             heavyColliderReference.resetAttackHistory();
         }
         else
         {
+            if (neutralCollider == null || neutralColliderReference == null) { return; }
             neutralCollider.enabled = false;
             neutralColliderReference.resetAttackHistory();
         }

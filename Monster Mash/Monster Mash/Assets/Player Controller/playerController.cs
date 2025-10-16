@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,8 +60,6 @@ public class playerController : MonoBehaviour
     bool canJump = true;
     bool jumpButtonReset = false;
     //public bool primedForBigJump = false;
-    private Coroutine disableJumpCoroutine;
-    private Coroutine landEnableJumpCoroutine;
     public int numberOfJumps = 2;
     public int numberOfJumpsLeft = 2;
     /// <summary>
@@ -966,31 +964,26 @@ public class playerController : MonoBehaviour
 
     private void land()
     {
+        foreach (var part in myMonster.attackSlotMonsterParts)
+        {
+            if (part.isAttacking)
+            {
+                part.triggerJabOrSlashCollisionsOff();
+            }
+        }
+
         unlockPlayerController();
         isDamageLaunching = false;
         grounded = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
 
-        if (disableJumpCoroutine != null)
-        {
-            StopCoroutine(disableJumpCoroutine);
-            disableJumpCoroutine = null;
-        }
-
-        if (landEnableJumpCoroutine != null)
-        {
-            StopCoroutine(landEnableJumpCoroutine);
-            landEnableJumpCoroutine = null;
-        }
-        landEnableJumpCoroutine = StartCoroutine(SetCanJumpDelayed(0.45f));
-
         bodyCollider.enabled = true;
         smallBodyCollider.enabled = true;
         isPhasingThroughPlatform = false;
         isFastFalling = false;
         landDetectionReady = true;
-        //canJump = true;
+        canJump = true;
         canDash = true;
         insideFloor = false;
         //canRoll = true;
@@ -1561,7 +1554,7 @@ public class playerController : MonoBehaviour
         {
             myMonster.attackSlotMonsterParts[1].attackAnimationID = inputModifier;
             myMonster.attack(1, inputModifier);
-            canMove = false;
+            //canMove = false;
             buttonB_Pressed = true;
         }
     }
@@ -1583,7 +1576,7 @@ public class playerController : MonoBehaviour
         {
             myMonster.attackSlotMonsterParts[2].attackAnimationID = inputModifier;
             myMonster.attack(2, inputModifier);
-            canMove = false;
+            //canMove = false;
             buttonX_Pressed = true;
         }
     }
@@ -1605,7 +1598,7 @@ public class playerController : MonoBehaviour
         {
             myMonster.attackSlotMonsterParts[3].attackAnimationID = inputModifier;
             myMonster.attack(3, inputModifier);
-            canMove = false;
+            //canMove = false;
             buttonY_Pressed = true;
         }
     }
@@ -2212,35 +2205,21 @@ public class playerController : MonoBehaviour
     private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
     {
         float elapsed = 0f;
-
-        Vector2 totalAppliedOffset = Vector2.zero;
+        float modifierX = totalOffset.x / duration;
+        float modifierY = totalOffset.y / duration;
 
         while (elapsed < duration)
         {
-            float delta = Time.fixedDeltaTime;
-            elapsed += delta;
-            float t = Mathf.Clamp01(elapsed / duration); // Progress from 0 to 1
+            // Only modify the X and/or Y velocity by the intended amount, let gravity handle the rest
+            myRigidbody.velocity = new Vector2(modifierX, myRigidbody.velocity.y + modifierY);
 
-            // Calculate how much total offset should be applied at time t
-            Vector2 desiredOffset = Vector2.Lerp(Vector2.zero, totalOffset, t);
-
-            // Calculate how much new offset to apply this frame
-            Vector2 frameAttackOffset = desiredOffset - totalAppliedOffset;
-            totalAppliedOffset = desiredOffset;
-
-            // Sample the *current* player velocity (so it works even while moving/jumping/etc.)
-            Vector2 liveVelocity = myRigidbody.velocity;
-            Vector2 baseMovement = liveVelocity * delta;
-
-            // Move by current velocity + attack offset for this frame
-            myRigidbody.MovePosition(myRigidbody.position + baseMovement + frameAttackOffset);
-
-            yield return new WaitForFixedUpdate(); // Wait for next physics update
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
     }
 
 
-        IEnumerator leapAttackForwardControl()
+    IEnumerator leapAttackForwardControl()
     {
         yield return new WaitForSeconds(0.1f);
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
@@ -2336,19 +2315,7 @@ public class playerController : MonoBehaviour
 
     public void DisableJumpingFor(float seconds)
     {
-        if (landEnableJumpCoroutine != null)
-        {
-            StopCoroutine(landEnableJumpCoroutine);
-            landEnableJumpCoroutine = null;
-        }
-
-        if (disableJumpCoroutine != null)
-        {
-            StopCoroutine(disableJumpCoroutine);
-            disableJumpCoroutine = null;
-        }
-
-        disableJumpCoroutine = StartCoroutine(DisableJumpingCoroutine(seconds));
+        StartCoroutine(DisableJumpingCoroutine(seconds));
     }
 
     private IEnumerator DisableJumpingCoroutine(float seconds)
@@ -2356,14 +2323,6 @@ public class playerController : MonoBehaviour
         canJump = false;
         yield return new WaitForSeconds(seconds);
         canJump = true;
-        disableJumpCoroutine = null;
-    }
-
-    private IEnumerator SetCanJumpDelayed(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        canJump = true;
-        landEnableJumpCoroutine = null;
     }
 
     #region Health

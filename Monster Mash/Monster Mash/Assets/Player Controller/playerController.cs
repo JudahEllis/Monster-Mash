@@ -964,12 +964,9 @@ public class playerController : MonoBehaviour
 
     private void land()
     {
-        foreach (var part in myMonster.attackSlotMonsterParts)
+        foreach (var part in myMonster.GetActiveAttackSlots())
         {
-            if (part.isAttacking)
-            {
-                part.triggerJabOrSlashCollisionsOff();
-            }
+            part.triggerJabOrSlashCollisionsOff();
         }
 
         unlockPlayerController();
@@ -2205,14 +2202,14 @@ public class playerController : MonoBehaviour
     private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
     {
         float elapsed = 0f;
+        // Clamp the Y offset to a reasonable value (e.g., 5 units)
+        float maxY = totalOffset.y;
         float modifierX = totalOffset.x / duration;
-        float modifierY = totalOffset.y / duration;
+        float modifierY = Mathf.Clamp(totalOffset.y / duration, -maxY, maxY);
 
         while (elapsed < duration)
         {
-            // Only modify the X and/or Y velocity by the intended amount, let gravity handle the rest
             myRigidbody.velocity = new Vector2(modifierX, myRigidbody.velocity.y + modifierY);
-
             elapsed += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }

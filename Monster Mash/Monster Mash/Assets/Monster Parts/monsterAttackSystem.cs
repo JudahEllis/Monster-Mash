@@ -546,7 +546,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    private List<NewMonsterPart> GetActiveAttackSlots()
+    public List<NewMonsterPart> GetActiveAttackSlots()
     {
         List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null && part.connected).ToList();
         return activeAttackSlots;

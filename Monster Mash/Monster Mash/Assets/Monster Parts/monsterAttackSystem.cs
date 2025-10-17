@@ -2612,37 +2612,10 @@ public class monsterAttackSystem : MonoBehaviour
                 }
             }
         }
-
-        healthCheck();
-    }
-
-    private void healthCheck()
-    {
-        int limbsStillActive = 0;
-        for (int i = 0; i < attackSlotMonsterParts.Length; i++)
-        {
-            if (attackSlotMonsterParts[i] != null)
-            {
-                if (attackSlotMonsterParts[i].connected)
-                {
-                    limbsStillActive++;
-                }
-            }
-        }
-
-        if (limbsStillActive == 0)
-        {
-            totalDestruction();
-        }
-        else
-        {
-            partDestructionVisual.Play();
-        }
     }
 
     public void totalDestruction()
     {
-
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             if (allMonsterParts[i].connected)
@@ -2656,97 +2629,62 @@ public class monsterAttackSystem : MonoBehaviour
             nonMappedMonsterParts[i].disconnectThisPart();
         }
 
-        StartCoroutine(removeAllMonsterPartsFromStage());
-
-        destructionVisual.Play();
+        StartCoroutine(RemoveAllPartsAndDestroyPlayer());
         //spawn goo
+        destructionVisual.Play();
     }
 
-    private void turnOffAllMonsterPartPhysics()
+    private IEnumerator RemoveAllPartsAndDestroyPlayer()
     {
+        int partsCount = nonMappedMonsterParts.Count;
+        int finishedCount = 0;
 
+        // Use a local function to track completion
+        IEnumerator RemovePartCoroutine(GameObject part)
+        {
+            yield return StartCoroutine(removeMonsterPartFromStage(part));
+            finishedCount++;
+        }
+
+        // Start all coroutines
         for (int i = 0; i < nonMappedMonsterParts.Count; i++)
         {
-            nonMappedMonsterParts[i].turnOffPhysics();
+            StartCoroutine(RemovePartCoroutine(nonMappedMonsterParts[i].gameObject));
         }
-    }
 
-
-    private void deactivateAllMonsterParts()
-    {
-
-        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
+        // Wait until all are finished
+        while (finishedCount < partsCount)
         {
-            nonMappedMonsterParts[i].gameObject.SetActive(false);
+            yield return null;
         }
-    }
 
-    private void reactivateAllMonsterParts()
-    {
-
-        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
-        {
-            nonMappedMonsterParts[i].gameObject.SetActive(true);
-        }
+        // Now safe to destroy player
+        DynamicCamera.Instance.playerTransforms.Remove(myPlayer.transform);
+        Destroy(myPlayer.gameObject);
     }
 
     IEnumerator removeMonsterPartFromStage(GameObject partToDisappear)
     {
+        // Initial delays and setup
         yield return new WaitForSeconds(0.1f);
         destructionPhysicsHelper.SetActive(false);
-        yield return new WaitForSeconds(3);
-        partToDisappear.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(3f);
+        partToDisappear.SetActive(false);
         partToDisappear.GetComponent<Rigidbody>().isKinematic = true;
-        yield return new WaitForSeconds(0.2f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.3f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(false);
 
-    }
+        // Toggle part on/off
+        float toggleInterval = Random.Range(0.2f, 0.5f);
+        int toggleCount = 8;
+        bool activeState = true;
+        for (int i = 0; i < toggleCount; i++)
+        {
+            yield return new WaitForSeconds(toggleInterval);
+            partToDisappear.SetActive(activeState);
+            activeState = !activeState;
+        }
 
-    IEnumerator removeAllMonsterPartsFromStage()
-    {
-        yield return new WaitForSeconds(0.1f);
-        destructionPhysicsHelper.SetActive(false);
-        yield return new WaitForSeconds(8);
-        deactivateAllMonsterParts();
-        turnOffAllMonsterPartPhysics();
-        yield return new WaitForSeconds(0.2f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.5f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.2f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.4f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.3f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        deactivateAllMonsterParts();
+        Destroy(partToDisappear);
     }
 
     #endregion

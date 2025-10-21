@@ -51,10 +51,10 @@ public class monsterAttackSystem : MonoBehaviour
     public NewMonsterPart[] allMonsterParts;
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
-    [Header("Damage and Status Effects")]
-    public int MaxHealth = 800;
-    private int segmentHealth;
-    private int currentHealth;
+    [field: Header("Damage and Status Effects")]
+    [field: SerializeField] public int MaxHealth { get; private set; } = 800;
+    public int SegmentHealth { get; private set; }
+    public int CurrentHealth { get; private set; }
 
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -2372,18 +2372,18 @@ public class monsterAttackSystem : MonoBehaviour
 
     private void CalculateStartHealth()
     {
-        currentHealth = MaxHealth;
+        CurrentHealth = MaxHealth;
         List<NewMonsterPart> activeAttackSlots = GetActiveAttackSlots();
-        segmentHealth = MaxHealth / activeAttackSlots.Count;
+        SegmentHealth = MaxHealth / activeAttackSlots.Count;
     }
 
     public void DecreaseHealth(int damage)
     {
-        currentHealth -= damage;
-        Debug.Log(currentHealth);
-        currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+        CurrentHealth -= damage;
+        Debug.Log(CurrentHealth);
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
 
-        while (MaxHealth - currentHealth >= segmentHealth)
+        while (MaxHealth - CurrentHealth >= SegmentHealth)
         {
             var activeAttackSlots = GetActiveAttackSlots();
             if (activeAttackSlots.Count > 0)
@@ -2397,7 +2397,14 @@ public class monsterAttackSystem : MonoBehaviour
                     return;
                 }
             }
-            currentHealth += segmentHealth; // Increase current health by one segment untill it reaches the max health
+
+            CurrentHealth += SegmentHealth; // Increase current health by one segment untill it reaches the max health
+
+            // Remove the reaminder if it is not enouth for a full segment
+            if ((MaxHealth - CurrentHealth) < SegmentHealth)
+            {
+                CurrentHealth = MaxHealth;
+            }
         }
     }
 

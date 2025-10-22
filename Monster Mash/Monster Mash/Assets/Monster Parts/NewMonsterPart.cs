@@ -96,7 +96,7 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Internal Info - Don't Touch")]
     [HideInInspector] public bool isBracing = false;
-    [HideInInspector] public bool attackMarkedHeavy = false;
+    /*[HideInInspector]*/ public bool attackMarkedHeavy = false;
     [HideInInspector] public bool heavyAttackInMotion = false;
     public bool fullActiveHeavy = false;
     public bool requiresRightStance = false;
@@ -497,7 +497,7 @@ public class NewMonsterPart : MonoBehaviour
             PartVisual.triggerChargeVisual();
 
             float chargeDuration = GetCurrentAnimationClipLength();
-            myMainSystem.myPlayer.DisableJumpingFor(chargeDuration);
+            myMainSystem.myPlayer.DisableJumpingAndCollidersFor(chargeDuration);
         }
         else
         {
@@ -860,6 +860,21 @@ public class NewMonsterPart : MonoBehaviour
             neutralColliderReference.resetAttackHistory();
         }
 
+    }
+
+    public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
+    {
+        //turn off neutral vfx holder
+        jabOrSlashLanded = false;
+
+        if (heavyCollider == null || heavyColliderReference == null) { return; }
+            heavyCollider.enabled = false;
+            heavyColliderReference.resetAttackHistory();
+        
+
+            if (neutralCollider == null || neutralColliderReference == null) { return; }
+            neutralCollider.enabled = false;
+            neutralColliderReference.resetAttackHistory();
     }
     #endregion
 

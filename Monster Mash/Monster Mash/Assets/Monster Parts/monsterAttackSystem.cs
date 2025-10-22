@@ -52,6 +52,9 @@ public class monsterAttackSystem : MonoBehaviour
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
     [field: Header("Damage and Status Effects")]
+
+    public event EventHandler OnMonsterPartRemoved;
+    public event EventHandler OnMonsterDeath;
     [field: SerializeField] public int MaxHealth { get; private set; } = 800;
     public int SegmentHealth { get; private set; }
     public int CurrentHealth { get; private set; }
@@ -2609,6 +2612,7 @@ public class monsterAttackSystem : MonoBehaviour
                     partRemoved.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     partRemoved.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     destructionPhysicsHelper.SetActive(true);
+                    OnMonsterPartRemoved?.Invoke(this, EventArgs.Empty);
                     StartCoroutine(removeMonsterPartFromStage(attackSlotMonsterParts[i].gameObject));
                     //store some sort of parental and location data
                     //bool saying disconnect
@@ -2639,6 +2643,7 @@ public class monsterAttackSystem : MonoBehaviour
         StartCoroutine(RemoveAllPartsAndDestroyPlayer());
         //spawn goo
         destructionVisual.Play();
+        OnMonsterDeath?.Invoke(this, EventArgs.Empty);
     }
 
     private IEnumerator RemoveAllPartsAndDestroyPlayer()

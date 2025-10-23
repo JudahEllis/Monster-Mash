@@ -6,8 +6,8 @@ public class HealthUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject playerSpawnsParent;
     [SerializeField] private HealthUI[] healthUI;
-    [SerializeField] private Color startColor;
-    [SerializeField] private Color endColor;
+
+    [SerializeField] private Gradient healthGradient;
 
     private monsterAttackSystem[] players;
 
@@ -18,7 +18,7 @@ public class HealthUIManager : MonoBehaviour
         for (int i = 0; i < players.Length; i++)
         {
             healthUI[i].gameObject.SetActive(true);
-            healthUI[i].Setup(players[i], startColor, endColor);
+            healthUI[i].Setup(players[i], healthGradient);
         }
     }
 }

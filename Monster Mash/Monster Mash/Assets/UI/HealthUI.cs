@@ -12,8 +12,7 @@ public class HealthUI : MonoBehaviour
     private int stockIndex;
 
     private monsterAttackSystem playerRef;
-    private Color startColor;
-    private Color endColor;
+    private Gradient healthGradient;
 
     private bool allowUpdate;
 
@@ -25,16 +24,16 @@ public class HealthUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateHealthUI();
+        //UpdateHealthUI();
     }
 
-    public void Setup(monsterAttackSystem playerRef, Color startColor, Color endColor)
+    public void Setup(monsterAttackSystem playerRef, Gradient healthGradient)
     {
         this.playerRef = playerRef;
-        this.startColor = startColor;
-        this.endColor = endColor;
+        this.healthGradient = healthGradient;
 
-        heartbeatUI.color = startColor;
+        float startPercent = 0;
+        heartbeatUI.color = healthGradient.Evaluate(startPercent);
 
         SubscribeEvents();
         SetupStocks();
@@ -51,26 +50,49 @@ public class HealthUI : MonoBehaviour
         }
     }
 
-    private void UpdateHealthUI()
+    private void UpdateHealthUI(object sender, HealthEventArgs healthEventArgs)
     {
-        if (!allowUpdate) { return; }
+        int start = healthEventArgs.MaxHealth;
+        int end = healthEventArgs.MaxHealth - healthEventArgs.SegmentHealth;
 
-        int start = playerRef.MaxHealth;
-        int end = playerRef.MaxHealth - playerRef.SegmentHealth;
+        float healthPercentage = Mathf.InverseLerp(start, end, healthEventArgs.CurrentHealth);
+        Color newColor = healthGradient.Evaluate(healthPercentage);
 
-        float healthPercentage = Mathf.InverseLerp(start, end, playerRef.CurrentHealth);
-        heartbeatUI.color = Color.Lerp(startColor, endColor, healthPercentage);
+        if (heartbeatUI.color != newColor) 
+        {
+            StartCoroutine(LerpColor(heartbeatUI.color, newColor, 0.1f));
+        }
+    }
+
+    IEnumerator LerpColor(Color startingColor, Color newColor, float time)
+    {
+        float elapsedTime = 0;
+
+        while (elapsedTime < time)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t = elapsedTime / time;
+            heartbeatUI.color = Color.Lerp(startingColor, newColor, t);
+
+            yield return null;
+        }
+
+        heartbeatUI.color = newColor;
+        yield return null;
     }
 
     private void SubscribeEvents()
     {
         playerRef.OnMonsterPartRemoved += RemoveStock;
+        playerRef.OnHealthUpdated += UpdateHealthUI;
         playerRef.OnMonsterDeath += DisableHealthBar;
     }
 
     private void UnsubscribeEvents()
     {
         playerRef.OnMonsterPartRemoved -= RemoveStock;
+        playerRef.OnHealthUpdated += UpdateHealthUI;
         playerRef.OnMonsterDeath -= DisableHealthBar;
     }
 

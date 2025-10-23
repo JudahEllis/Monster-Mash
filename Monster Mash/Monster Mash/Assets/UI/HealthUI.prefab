@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105217561883
 RectTransform:
   m_ObjectHideFlags: 0
@@ -105,7 +105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105253582941
 RectTransform:
   m_ObjectHideFlags: 0
@@ -283,7 +283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105273822784
 RectTransform:
   m_ObjectHideFlags: 0
@@ -994,7 +994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105405273442
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1083,7 +1083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105417144328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1385,13 +1385,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1272453105571370283}
   - component: {fileID: 1272453105571370282}
+  - component: {fileID: 8493857754865841341}
   m_Layer: 5
   m_Name: Player UI (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105571370283
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1434,6 +1435,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8493857754865841341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272453105571370284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a560f7653f948bf4ea1daf19bee53670, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartbeatUI: {fileID: 1272453105480865731}
+  stocks:
+  - {fileID: 1272453106684842820}
+  - {fileID: 1272453105273822785}
+  - {fileID: 1272453105217561884}
+  - {fileID: 1272453105417144329}
+  - {fileID: 1272453107213074728}
+  - {fileID: 1272453106575693853}
+  - {fileID: 1272453107110663388}
 --- !u!1 &1272453105595444952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,7 +1739,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105671554362
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1939,7 +1961,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105735555390
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2028,7 +2050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105739844503
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2288,6 +2310,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1272453105789802004}
+  - component: {fileID: 1852687906985339845}
   m_Layer: 5
   m_Name: HealthUI
   m_TagString: Untagged
@@ -2319,6 +2342,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -118}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1852687906985339845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272453105789802005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47b041a8dc3375746b172af6c5036fdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpawnsParent: {fileID: 0}
+  healthUI:
+  - {fileID: 3176672798364775386}
+  - {fileID: 1679059646770036119}
+  - {fileID: 8493857754865841341}
+  - {fileID: 2571020077206489096}
+  healthGradient:
+    serializedVersion: 2
+    key0: {r: 0.1137255, g: 0.8980393, b: 0.11764707, a: 1}
+    key1: {r: 1, g: 0.9266054, b: 0, a: 1}
+    key2: {r: 0.9176471, g: 0.043137256, b: 0.043137256, a: 1}
+    key3: {r: 0.9176471, g: 0.043137256, b: 0.043137256, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 32112
+    ctime1: 51773
+    ctime2: 65535
+    ctime3: 65535
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 65535
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
 --- !u!1 &1272453105820204517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2335,7 +2405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105820204516
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2424,7 +2494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105860461358
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2513,7 +2583,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105860967912
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2602,7 +2672,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105926287834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2691,7 +2761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105929722439
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2780,7 +2850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453105969228752
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3004,7 +3074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106114180312
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3182,7 +3252,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106176908275
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3271,7 +3341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106251071540
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3495,7 +3565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106291610144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3584,7 +3654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106415363967
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3762,7 +3832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106445458755
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3851,7 +3921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106508144111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3940,7 +4010,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106520546389
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4023,13 +4093,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1272453106549023429}
   - component: {fileID: 1272453106549023428}
+  - component: {fileID: 3176672798364775386}
   m_Layer: 5
   m_Name: Player UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106549023429
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4072,6 +4143,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3176672798364775386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272453106549023430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a560f7653f948bf4ea1daf19bee53670, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartbeatUI: {fileID: 1272453105268763936}
+  stocks:
+  - {fileID: 1272453106906699009}
+  - {fileID: 1272453105929722440}
+  - {fileID: 1272453105969228753}
+  - {fileID: 1272453105253582942}
+  - {fileID: 1272453106251071541}
+  - {fileID: 1272453106415363936}
+  - {fileID: 1272453106520546390}
 --- !u!1 &1272453106575693853
 GameObject:
   m_ObjectHideFlags: 0
@@ -4088,7 +4180,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106575693852
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4579,7 +4671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106684842819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4846,7 +4938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106906699008
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5061,13 +5153,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1272453106990136499}
   - component: {fileID: 1272453106990136498}
+  - component: {fileID: 2571020077206489096}
   m_Layer: 5
   m_Name: Player UI (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453106990136499
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5110,6 +5203,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2571020077206489096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272453106990136500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a560f7653f948bf4ea1daf19bee53670, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartbeatUI: {fileID: 1272453105779320914}
+  stocks:
+  - {fileID: 1272453105671554363}
+  - {fileID: 1272453105405273443}
+  - {fileID: 1272453106445458756}
+  - {fileID: 1272453106291610145}
+  - {fileID: 1272453105926287835}
+  - {fileID: 1272453106508144016}
+  - {fileID: 1272453105860461359}
 --- !u!1 &1272453107058518160
 GameObject:
   m_ObjectHideFlags: 0
@@ -5126,7 +5240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453107058518255
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5215,7 +5329,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453107110663387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5617,7 +5731,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453107213074727
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5743,13 +5857,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1272453107334059204}
   - component: {fileID: 1272453107334059203}
+  - component: {fileID: 1679059646770036119}
   m_Layer: 5
   m_Name: Player UI (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1272453107334059204
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5792,3 +5907,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1679059646770036119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272453107334059205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a560f7653f948bf4ea1daf19bee53670, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartbeatUI: {fileID: 1272453105779562657}
+  stocks:
+  - {fileID: 1272453107058518160}
+  - {fileID: 1272453105739844504}
+  - {fileID: 1272453105820204517}
+  - {fileID: 1272453106114180313}
+  - {fileID: 1272453105860967913}
+  - {fileID: 1272453106176908276}
+  - {fileID: 1272453105735555391}

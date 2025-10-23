@@ -7,6 +7,13 @@ using UnityEngine.Events;
 using System.Linq;
 using Random = UnityEngine.Random;
 
+public class HealthEventArgs : EventArgs
+{
+    public int MaxHealth;
+    public int CurrentHealth;
+    public int SegmentHealth;
+}
+
 
 public class monsterAttackSystem : MonoBehaviour
 {
@@ -51,13 +58,15 @@ public class monsterAttackSystem : MonoBehaviour
     public NewMonsterPart[] allMonsterParts;
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
-    [field: Header("Damage and Status Effects")]
-
+    [Header("Damage and Status Effects")]
+    [SerializeField] private int maxHealth = 800;
     public event EventHandler OnMonsterPartRemoved;
+    public event EventHandler<HealthEventArgs> OnHealthUpdated;
     public event EventHandler OnMonsterDeath;
-    [field: SerializeField] public int MaxHealth { get; private set; } = 800;
-    public int SegmentHealth { get; private set; }
-    public int CurrentHealth { get; private set; }
+
+    private int segmentHealth;
+    private int currentHealth;
+    private HealthEventArgs healthEventArgs = new();
 
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -2375,18 +2384,24 @@ public class monsterAttackSystem : MonoBehaviour
 
     private void CalculateStartHealth()
     {
-        CurrentHealth = MaxHealth;
+        currentHealth = maxHealth;
         List<NewMonsterPart> activeAttackSlots = GetActiveAttackSlots();
-        SegmentHealth = MaxHealth / activeAttackSlots.Count;
+        segmentHealth = maxHealth / activeAttackSlots.Count;
+
+        healthEventArgs.MaxHealth = maxHealth;
+        healthEventArgs.CurrentHealth = currentHealth;
+        healthEventArgs.SegmentHealth = segmentHealth;
     }
 
     public void DecreaseHealth(int damage)
     {
-        CurrentHealth -= damage;
-        Debug.Log(CurrentHealth);
-        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        while (MaxHealth - CurrentHealth >= SegmentHealth)
+        healthEventArgs.CurrentHealth = currentHealth;
+        OnHealthUpdated?.Invoke(this, healthEventArgs);
+
+        while (maxHealth - currentHealth >= segmentHealth)
         {
             var activeAttackSlots = GetActiveAttackSlots();
             if (activeAttackSlots.Count > 0)
@@ -2401,13 +2416,16 @@ public class monsterAttackSystem : MonoBehaviour
                 }
             }
 
-            CurrentHealth += SegmentHealth; // Increase current health by one segment untill it reaches the max health
+            currentHealth += segmentHealth; // Increase current health by one segment untill it reaches the max health
 
             // Remove the reaminder if it is not enouth for a full segment
-            if ((MaxHealth - CurrentHealth) < SegmentHealth)
+            if ((maxHealth - currentHealth) < segmentHealth)
             {
-                CurrentHealth = MaxHealth;
+                currentHealth = maxHealth;
             }
+
+            healthEventArgs.CurrentHealth = currentHealth;
+            OnHealthUpdated?.Invoke(this, healthEventArgs);
         }
     }
 

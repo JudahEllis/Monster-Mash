@@ -86,7 +86,7 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public bool isRightSidedLimb;
     [HideInInspector] public bool isLeftSidedLimb;
     [HideInInspector] public MonsterPartConnectionPoint connectionPoint = MonsterPartConnectionPoint.None;
-    [HideInInspector] public bool isGroundedLimb;
+    public bool isGroundedLimb;
     private string torsoCommand = "";
     private string torsoCommandOverride = "";
     [HideInInspector] public bool hasTorsoCommandOverride = false; //refers to heads on torsos, torsos on torsos, torsos on heads on torsos, etc. that needs to move the main body

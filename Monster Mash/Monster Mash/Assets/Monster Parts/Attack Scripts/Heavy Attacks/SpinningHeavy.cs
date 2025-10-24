@@ -3,7 +3,7 @@ public class SpinningHeavy : HeavyAttack
     public SpinningHeavy()
     {
         Attack = HeavyAttackType.Spinning;
-        DamageRange = DamageRange.Range4;
+        DamageRange = DamageRange.Range2;
     }
 
     public override void triggerAttackRelease(NewMonsterPart monsterPartRef)

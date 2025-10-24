@@ -7,6 +7,13 @@ using UnityEngine.Events;
 using System.Linq;
 using Random = UnityEngine.Random;
 
+public class HealthEventArgs : EventArgs
+{
+    public int MaxHealth;
+    public int CurrentHealth;
+    public int SegmentHealth;
+}
+
 
 public class monsterAttackSystem : MonoBehaviour
 {
@@ -52,9 +59,14 @@ public class monsterAttackSystem : MonoBehaviour
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
     [Header("Damage and Status Effects")]
-    public int MaxHealth = 800;
+    [SerializeField] private int maxHealth = 800;
+    public event EventHandler OnMonsterPartRemoved;
+    public event EventHandler<HealthEventArgs> OnHealthUpdated;
+    public event EventHandler OnMonsterDeath;
+
     private int segmentHealth;
     private int currentHealth;
+    private HealthEventArgs healthEventArgs = new();
 
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -2372,18 +2384,24 @@ public class monsterAttackSystem : MonoBehaviour
 
     private void CalculateStartHealth()
     {
-        currentHealth = MaxHealth;
+        currentHealth = maxHealth;
         List<NewMonsterPart> activeAttackSlots = GetActiveAttackSlots();
-        segmentHealth = MaxHealth / activeAttackSlots.Count;
+        segmentHealth = maxHealth / activeAttackSlots.Count;
+
+        healthEventArgs.MaxHealth = maxHealth;
+        healthEventArgs.CurrentHealth = currentHealth;
+        healthEventArgs.SegmentHealth = segmentHealth;
     }
 
     public void DecreaseHealth(int damage)
     {
         currentHealth -= damage;
-        Debug.Log(currentHealth);
-        currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        while (MaxHealth - currentHealth >= segmentHealth)
+        healthEventArgs.CurrentHealth = currentHealth;
+        OnHealthUpdated?.Invoke(this, healthEventArgs);
+
+        while (maxHealth - currentHealth >= segmentHealth)
         {
             var activeAttackSlots = GetActiveAttackSlots();
             if (activeAttackSlots.Count > 0)
@@ -2397,7 +2415,17 @@ public class monsterAttackSystem : MonoBehaviour
                     return;
                 }
             }
+
             currentHealth += segmentHealth; // Increase current health by one segment untill it reaches the max health
+
+            // Remove the reaminder if it is not enouth for a full segment
+            if ((maxHealth - currentHealth) < segmentHealth)
+            {
+                currentHealth = maxHealth;
+            }
+
+            healthEventArgs.CurrentHealth = currentHealth;
+            OnHealthUpdated?.Invoke(this, healthEventArgs);
         }
     }
 
@@ -2602,6 +2630,7 @@ public class monsterAttackSystem : MonoBehaviour
                     partRemoved.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     partRemoved.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     destructionPhysicsHelper.SetActive(true);
+                    OnMonsterPartRemoved?.Invoke(this, EventArgs.Empty);
                     StartCoroutine(removeMonsterPartFromStage(attackSlotMonsterParts[i].gameObject));
                     //store some sort of parental and location data
                     //bool saying disconnect
@@ -2632,6 +2661,7 @@ public class monsterAttackSystem : MonoBehaviour
         StartCoroutine(RemoveAllPartsAndDestroyPlayer());
         //spawn goo
         destructionVisual.Play();
+        OnMonsterDeath?.Invoke(this, EventArgs.Empty);
     }
 
     private IEnumerator RemoveAllPartsAndDestroyPlayer()

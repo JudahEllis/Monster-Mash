@@ -964,11 +964,6 @@ public class playerController : MonoBehaviour
 
     private void land()
     {
-        foreach (var part in myMonster.GetActiveAttackSlots())
-        {
-            part.triggerJabOrSlashCollisionsOff();
-        }
-
         unlockPlayerController();
         isDamageLaunching = false;
         grounded = true;
@@ -2310,12 +2305,7 @@ public class playerController : MonoBehaviour
 
     #endregion
 
-    public void DisableJumpingFor(float seconds)
-    {
-        StartCoroutine(DisableJumpingCoroutine(seconds));
-    }
-
-    private IEnumerator DisableJumpingCoroutine(float seconds)
+    public IEnumerator DisableJumping(float seconds)
     {
         canJump = false;
         yield return new WaitForSeconds(seconds);

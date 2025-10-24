@@ -2595,13 +2595,22 @@ public class monsterAttackSystem : MonoBehaviour
         isGrounded = false;
         isLaunching = true;
         myAnimator.SetTrigger("Launch");
-        StartCoroutine(spinTimer());
+        //StartCoroutine(spinTimer());
     }
 
-    IEnumerator spinTimer()
+    /*IEnumerator spinTimer()
     {
         yield return new WaitForSeconds(0.2f);
         myAnimator.SetTrigger("Spin");
+    }*/
+
+    public IEnumerator SpinTimer()
+    {
+        myAnimator.SetTrigger("Flourish Twirl");
+        yield return new WaitForSeconds(1f);
+        myAnimator.ResetTrigger("Flourish Twirl");
+        myAnimator.SetTrigger("Land");
+
     }
 
     public void getOutOfLaunch()

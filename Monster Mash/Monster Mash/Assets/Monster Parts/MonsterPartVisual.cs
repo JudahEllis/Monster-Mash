@@ -274,6 +274,8 @@ public class MonsterPartVisual : MonoBehaviour
     public void triggerAttackRelease()
     {
 
+        //Debug.Log("Trigger Attack Release called");
+
         if (monsterPartRef.isJointed)
         {
             // not sure about this whole section, it looks important
@@ -536,6 +538,7 @@ public class MonsterPartVisual : MonoBehaviour
     #region Movement
     public void triggerWalk()
     {
+
         if (monsterPartRef.connected == false)
         {
             return;

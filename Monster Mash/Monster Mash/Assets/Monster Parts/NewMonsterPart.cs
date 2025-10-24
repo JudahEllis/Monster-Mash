@@ -96,7 +96,7 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Internal Info - Don't Touch")]
     [HideInInspector] public bool isBracing = false;
-    [HideInInspector] public bool attackMarkedHeavy = false;
+    /*[HideInInspector]*/ public bool attackMarkedHeavy = false;
     [HideInInspector] public bool heavyAttackInMotion = false;
     public bool fullActiveHeavy = false;
     public bool requiresRightStance = false;
@@ -497,7 +497,7 @@ public class NewMonsterPart : MonoBehaviour
             PartVisual.triggerChargeVisual();
 
             float chargeDuration = GetCurrentAnimationClipLength();
-            myMainSystem.myPlayer.DisableJumpingFor(chargeDuration);
+            myMainSystem.StartCoroutine(myMainSystem.myPlayer.DisableJumping(chargeDuration));
         }
         else
         {
@@ -844,6 +844,8 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOff() //called in attack animation
     {
+        Debug.Log("Test Collisions Off");
+
         //turn off neutral vfx holder
         jabOrSlashLanded = false;
 
@@ -861,6 +863,7 @@ public class NewMonsterPart : MonoBehaviour
         }
 
     }
+
     #endregion
 
     #region Reel Attack Specific Functions

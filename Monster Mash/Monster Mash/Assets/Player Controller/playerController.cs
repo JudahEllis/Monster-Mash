@@ -962,18 +962,8 @@ public class playerController : MonoBehaviour
         return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
     }
 
-    private void DisableAttackColliders()
-    {
-        foreach (var part in myMonster.GetActiveAttackSlots())
-        {
-            part.forceTriggerJabOrSlashCollisionsOff();
-        }
-        //Debug.Log("Disabled Attack Colliders");
-    }
-
     private void land()
     {
-        DisableAttackColliders();
         unlockPlayerController();
         isDamageLaunching = false;
         grounded = true;
@@ -2315,16 +2305,10 @@ public class playerController : MonoBehaviour
 
     #endregion
 
-    public void DisableJumpingAndCollidersFor(float seconds)
-    {
-        StartCoroutine(DisableJumpingAndCollidersCoroutine(seconds));
-    }
-
-    private IEnumerator DisableJumpingAndCollidersCoroutine(float seconds)
+    public IEnumerator DisableJumping(float seconds)
     {
         canJump = false;
         yield return new WaitForSeconds(seconds);
-        DisableAttackColliders();
         canJump = true;
     }
 

@@ -2576,17 +2576,13 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetTrigger("Spin");
     }*/
 
-    public void PlayerSpin()
-    {
-        StartCoroutine(SpinTimer());
-    }
-
-    IEnumerator SpinTimer()
+    public IEnumerator SpinTimer()
     {
         myAnimator.SetTrigger("Flourish Twirl");
         yield return new WaitForSeconds(1f);
         myAnimator.ResetTrigger("Flourish Twirl");
         myAnimator.SetTrigger("Land");
+
     }
 
     public void getOutOfLaunch()

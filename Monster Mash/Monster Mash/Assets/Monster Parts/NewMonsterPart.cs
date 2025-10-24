@@ -86,7 +86,7 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public bool isRightSidedLimb;
     [HideInInspector] public bool isLeftSidedLimb;
     [HideInInspector] public MonsterPartConnectionPoint connectionPoint = MonsterPartConnectionPoint.None;
-    public bool isGroundedLimb;
+    [HideInInspector] public bool isGroundedLimb;
     private string torsoCommand = "";
     private string torsoCommandOverride = "";
     [HideInInspector] public bool hasTorsoCommandOverride = false; //refers to heads on torsos, torsos on torsos, torsos on heads on torsos, etc. that needs to move the main body
@@ -497,7 +497,7 @@ public class NewMonsterPart : MonoBehaviour
             PartVisual.triggerChargeVisual();
 
             float chargeDuration = GetCurrentAnimationClipLength();
-            myMainSystem.myPlayer.DisableJumpingAndCollidersFor(chargeDuration);
+            myMainSystem.StartCoroutine(myMainSystem.myPlayer.DisableJumping(chargeDuration));
         }
         else
         {
@@ -844,6 +844,8 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOff() //called in attack animation
     {
+        Debug.Log("Test Collisions Off");
+
         //turn off neutral vfx holder
         jabOrSlashLanded = false;
 
@@ -862,20 +864,6 @@ public class NewMonsterPart : MonoBehaviour
 
     }
 
-    public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
-    {
-        //turn off neutral vfx holder
-        jabOrSlashLanded = false;
-
-        if (heavyCollider == null || heavyColliderReference == null) { return; }
-            heavyCollider.enabled = false;
-            heavyColliderReference.resetAttackHistory();
-        
-
-            if (neutralCollider == null || neutralColliderReference == null) { return; }
-            neutralCollider.enabled = false;
-            neutralColliderReference.resetAttackHistory();
-    }
     #endregion
 
     #region Reel Attack Specific Functions

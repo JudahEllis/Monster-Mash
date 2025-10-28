@@ -60,7 +60,7 @@ public class HealthUI : MonoBehaviour
 
         if (heartbeatUI.color != newColor) 
         {
-            float lerpTime = 0.5f;
+            float lerpTime = 0.2f;
             StartCoroutine(LerpColor(heartbeatUI.color, newColor, lerpTime));
         }
     }

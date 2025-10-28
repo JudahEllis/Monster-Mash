@@ -844,7 +844,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOff() //called in attack animation
     {
-        Debug.Log("Test Collisions Off");
+        //Debug.Log("Test Collisions Off");
 
         //turn off neutral vfx holder
         jabOrSlashLanded = false;

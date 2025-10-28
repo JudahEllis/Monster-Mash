@@ -1773,6 +1773,7 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (isGroundedLimb || PartType is MonsterPartType.Torso or MonsterPartType.Arm)
         {
+            if (myAnimator == null) { return; }
             myAnimator.SetBool("Teeter", true);
         }
     }

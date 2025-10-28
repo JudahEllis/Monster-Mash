@@ -10,21 +10,14 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private GameObject[] stocks;
     private List<GameObject> activeStocks = new();
     private int stockIndex;
-
+    private int lastSegmeantIndex = -1;
     private monsterAttackSystem playerRef;
     private Gradient healthGradient;
-
-    private bool allowUpdate;
+    private Coroutine colorCoroutine;
 
     private void OnDisable()
     {
         UnsubscribeEvents();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //UpdateHealthUI();
     }
 
     public void Setup(monsterAttackSystem playerRef, Gradient healthGradient)
@@ -37,8 +30,6 @@ public class HealthUI : MonoBehaviour
 
         SubscribeEvents();
         SetupStocks();
-
-        allowUpdate = true;
     }
 
     private void SetupStocks()
@@ -54,15 +45,39 @@ public class HealthUI : MonoBehaviour
     {
         int start = healthEventArgs.MaxHealth;
         int end = healthEventArgs.MaxHealth - healthEventArgs.SegmentHealth;
+        int segmeantIndex = GetCurrentSegmentIndex(healthEventArgs);
 
         float healthPercentage = Mathf.InverseLerp(start, end, healthEventArgs.CurrentHealth);
         Color newColor = healthGradient.Evaluate(healthPercentage);
 
-        if (heartbeatUI.color != newColor) 
+        // flashes red if an entire segment was lost in one hit
+        if (segmeantIndex != lastSegmeantIndex)
         {
-            float lerpTime = 0.5f;
-            StartCoroutine(LerpColor(heartbeatUI.color, newColor, lerpTime));
+            if (colorCoroutine  != null)
+            {
+                StopCoroutine(colorCoroutine);
+            }
+
+            colorCoroutine = StartCoroutine(ColorFlash());
         }
+        else if (heartbeatUI.color != newColor)
+        {
+            if (colorCoroutine != null)
+            {
+                StopCoroutine(colorCoroutine);
+            }
+
+            float lerpTime = 0.2f;
+            colorCoroutine = StartCoroutine(LerpColor(heartbeatUI.color, newColor, lerpTime));
+        }
+
+        lastSegmeantIndex = segmeantIndex;
+    }
+
+    private int GetCurrentSegmentIndex(HealthEventArgs healthEventArgs)
+    {
+        if (healthEventArgs.SegmentHealth <= 0) return 0;
+        return (healthEventArgs.MaxHealth - healthEventArgs.CurrentHealth) / healthEventArgs.SegmentHealth;
     }
 
     IEnumerator LerpColor(Color startingColor, Color newColor, float time)
@@ -81,6 +96,18 @@ public class HealthUI : MonoBehaviour
 
         heartbeatUI.color = newColor;
         yield return null;
+    }
+
+    IEnumerator ColorFlash()
+    {
+        Color red = healthGradient.Evaluate(1);
+        Color green = healthGradient.Evaluate(0);
+        float colorLerpTime = 0.2f;
+        float transitionTime = 0.2f;
+
+        yield return StartCoroutine(LerpColor(heartbeatUI.color, red, colorLerpTime));
+        yield return new WaitForSeconds(transitionTime);
+        yield return StartCoroutine(LerpColor(heartbeatUI.color, green, colorLerpTime));
     }
 
     private void SubscribeEvents()
@@ -108,7 +135,6 @@ public class HealthUI : MonoBehaviour
     private void DisableHealthBar(object sender, EventArgs e)
     {
         heartbeatUI.gameObject.SetActive(false);
-        allowUpdate = false;
         UnsubscribeEvents();
     }
 }

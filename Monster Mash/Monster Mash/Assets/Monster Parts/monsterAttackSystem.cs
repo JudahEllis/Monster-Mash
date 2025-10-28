@@ -2410,7 +2410,6 @@ public class monsterAttackSystem : MonoBehaviour
 
                 if (GetActiveAttackSlots().Count == 0)
                 {
-                    Debug.Log("Monster Dead");
                     totalDestruction();
                     return;
                 }

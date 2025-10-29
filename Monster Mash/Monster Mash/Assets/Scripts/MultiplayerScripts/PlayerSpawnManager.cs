@@ -97,8 +97,6 @@ public class PlayerSpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        controller.PlayerInputSetUp();
-
         monsterControl.AssignMyPlayer(controller);
 
         monsterControl.turnOffLimbConnectors();
@@ -108,5 +106,6 @@ public class PlayerSpawnManager : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
 
         monsterControl.awakenTheBeast();
+        controller.PlayerInputSetUp(); // I moved this because there was an issue where you could move before everything was setup which threw errors. -Nick
     }
 }

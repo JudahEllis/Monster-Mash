@@ -14,6 +14,7 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public Animator myAnimator;
     [HideInInspector] public MonsterPartVisual PartVisual;
     public bool requiresUniqueAnimationOffset;
+    public bool isInGroundedArea = false;
     public Collider stompDetection;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
     public int monsterPartID = 1;
@@ -357,6 +358,20 @@ public class NewMonsterPart : MonoBehaviour
     #endregion
 
     #region Collision Occlusion and Collision Logic
+
+    public void OnLandedDuringAttack()
+    {
+        if (attackMarkedHeavy)
+        {
+            isAttacking = false;
+            attackFocusOn = false;
+            attackMarkedHeavy = false;
+            fullActiveHeavy = false;
+            heavyAttackInMotion = false;
+
+            forceTriggerJabOrSlashCollisionsOff();
+        }
+    }
 
     public void triggerCollisionLogic()
     {
@@ -862,6 +877,22 @@ public class NewMonsterPart : MonoBehaviour
             neutralColliderReference.resetAttackHistory();
         }
 
+    }
+
+    public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
+    {
+        //Debug.Log("Test Collisions Off");
+
+        //turn off neutral vfx holder
+        jabOrSlashLanded = false;
+
+        if (heavyCollider == null || heavyColliderReference == null) { return; }
+        heavyCollider.enabled = false;
+        heavyColliderReference.resetAttackHistory();
+
+        if (neutralCollider == null || neutralColliderReference == null) { return; }
+        neutralCollider.enabled = false;
+        neutralColliderReference.resetAttackHistory();
     }
 
     #endregion

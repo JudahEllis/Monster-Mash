@@ -4,26 +4,39 @@ using UnityEngine;
 
 public class groundedLimbArea : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private List<NewMonsterPart> allParts;
+
+    private List<NewMonsterPart> GetAllPartsInRoot()
     {
-        if (other.GetComponent<monsterPartReference>() != null)
+        var root = transform.root;
+        var allParts = new List<NewMonsterPart>(root.GetComponentsInChildren<NewMonsterPart>(true));
+        return allParts;
+    }
+
+    private void Start()
+    {
+        allParts = GetAllPartsInRoot();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Solid") || collision.CompareTag("Semi Solid"))
         {
-            if (other.GetComponent<monsterPartReference>().partReference)
+            foreach (var part in allParts)
             {
-                NewMonsterPart partOnGround = other.GetComponent<monsterPartReference>().partReference;
-                partOnGround.isGroundedLimb = true;
+                part.isInGroundedArea = true;
+                part.OnLandedDuringAttack();
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (other.GetComponent<monsterPartReference>() != null)
+        if (collision.CompareTag("Solid") || collision.CompareTag("Semi Solid"))
         {
-            if (other.GetComponent<monsterPartReference>().partReference)
+            foreach (var part in allParts)
             {
-                NewMonsterPart partOnGround = other.GetComponent<monsterPartReference>().partReference;
-                partOnGround.isGroundedLimb = false;
+                part.isInGroundedArea = false;
             }
         }
     }

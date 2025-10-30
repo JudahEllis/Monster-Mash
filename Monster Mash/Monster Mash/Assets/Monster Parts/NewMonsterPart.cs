@@ -358,6 +358,20 @@ public class NewMonsterPart : MonoBehaviour
 
     #region Collision Occlusion and Collision Logic
 
+    public void OnLandedDuringAttack()
+    {
+        if (attackMarkedHeavy)
+        {
+            isAttacking = false;
+            attackFocusOn = false;
+            attackMarkedHeavy = false;
+            fullActiveHeavy = false;
+            heavyAttackInMotion = false;
+
+            forceTriggerJabOrSlashCollisionsOff();
+        }
+    }
+
     public void triggerCollisionLogic()
     {
         for (int u = 0; u < referencesToIgnore.Count; u++)
@@ -862,6 +876,22 @@ public class NewMonsterPart : MonoBehaviour
             neutralColliderReference.resetAttackHistory();
         }
 
+    }
+
+    public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
+    {
+        //Debug.Log("Test Collisions Off");
+
+        //turn off neutral vfx holder
+        jabOrSlashLanded = false;
+
+        if (heavyCollider == null || heavyColliderReference == null) { return; }
+        heavyCollider.enabled = false;
+        heavyColliderReference.resetAttackHistory();
+
+        if (neutralCollider == null || neutralColliderReference == null) { return; }
+        neutralCollider.enabled = false;
+        neutralColliderReference.resetAttackHistory();
     }
 
     #endregion

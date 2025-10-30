@@ -14,7 +14,6 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public Animator myAnimator;
     [HideInInspector] public MonsterPartVisual PartVisual;
     public bool requiresUniqueAnimationOffset;
-    public bool isInGroundedArea = false;
     public Collider stompDetection;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
     public int monsterPartID = 1;

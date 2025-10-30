@@ -24,8 +24,12 @@ public class groundedLimbArea : MonoBehaviour
         {
             foreach (var part in allParts)
             {
-                part.isInGroundedArea = true;
                 part.OnLandedDuringAttack();
+
+                if (part.PartType == MonsterPartType.Leg)
+                {
+                    part.isGroundedLimb = true;
+                }
             }
         }
     }
@@ -36,7 +40,10 @@ public class groundedLimbArea : MonoBehaviour
         {
             foreach (var part in allParts)
             {
-                part.isInGroundedArea = false;
+                if (part.PartType == MonsterPartType.Leg)
+                {
+                    part.isGroundedLimb = false;
+                }
             }
         }
     }

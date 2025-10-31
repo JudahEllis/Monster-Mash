@@ -894,6 +894,20 @@ public class NewMonsterPart : MonoBehaviour
         neutralColliderReference.resetAttackHistory();
     }
 
+    /*public IEnumerator ResetMovement()
+    {
+        float waitTime = GetCurrentAnimationClipLength();
+        if (waitTime > 0f)
+            yield return new WaitForSeconds(waitTime);
+        else
+            yield return null;
+
+        forceTriggerJabOrSlashCollisionsOff();
+
+        myMainSystem.myPlayer.canMove = true;
+        myMainSystem.myPlayer.canJump = true;
+    }*/
+
     #endregion
 
     #region Reel Attack Specific Functions

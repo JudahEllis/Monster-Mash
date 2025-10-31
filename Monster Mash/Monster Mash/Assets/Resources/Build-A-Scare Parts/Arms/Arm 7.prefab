@@ -44399,7 +44399,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1086340943901848182
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -44416,7 +44416,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4878818098894340769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44430,22 +44431,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myMainSystem: {fileID: 0}
-  connectedMonsterPart: {fileID: 0}
+  connectedMonsterPart: {fileID: 1086340943901848182}
   mainTorso: {fileID: 0}
   myAnimator: {fileID: 0}
   PartVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
-  monsterPartHealth: 100
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
   PartType: 2
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -44459,8 +44454,8 @@ MonoBehaviour:
   grabbedStatusEffect: 0
   neutralAttack:
     rid: 8001968035020406801
-  neutralCollider: {fileID: 0}
-  neutralColliderReference: {fileID: 0}
+  neutralCollider: {fileID: 7661223937496621097}
+  neutralColliderReference: {fileID: 7101804670260537955}
   needsReloadNeutral: 0
   reloadTimeNeutral: 1
   isReloadedNeutral: 1
@@ -44468,9 +44463,9 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 8001968035020406802
-  heavyCollider: {fileID: 0}
-  heavyColliderReference: {fileID: 0}
+    rid: 7054366158059470860
+  heavyCollider: {fileID: 8704301036907855384}
+  heavyColliderReference: {fileID: 7144460538623273739}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
   reloadTimeHeavy: 1
@@ -44510,6 +44505,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 7054366158059470860
+      type: {class: JabHeavy, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 50
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 1
     - rid: 8001968035020406801
       type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
       data:
@@ -44520,16 +44525,6 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 1
-    - rid: 8001968035020406802
-      type: {class: SlashHeavy, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 90
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 2
 --- !u!114 &7191056573203174187
 MonoBehaviour:
   m_ObjectHideFlags: 0

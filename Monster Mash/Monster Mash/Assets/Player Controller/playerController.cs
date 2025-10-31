@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.WSA;
+using System.Linq;
 
 public class playerController : MonoBehaviour
 {
@@ -57,7 +58,7 @@ public class playerController : MonoBehaviour
     private bool isCrouching = false;
     public bool isPhasingThroughPlatform;
     private bool isFastFalling = false;
-    bool canJump = true;
+    public bool canJump = true;
     bool jumpButtonReset = false;
     //public bool primedForBigJump = false;
     public int numberOfJumps = 2;
@@ -133,6 +134,15 @@ public class playerController : MonoBehaviour
     // damage timer
     float lastAttackTime = -Mathf.Infinity;
 
+    public List<NewMonsterPart> allParts;
+    public List<NewMonsterPart> legs;
+
+    private List<NewMonsterPart> GetAllPartsInRoot()
+    {
+        var allParts = new List<NewMonsterPart>(transform.root.GetComponentsInChildren<NewMonsterPart>(true));
+        return allParts;
+    }
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -153,6 +163,11 @@ public class playerController : MonoBehaviour
                 //print("New Action Map: " + playerInput.currentActionMap);
             }
         }
+    }
+    private void Start()
+    {
+        allParts = GetAllPartsInRoot();
+        legs = allParts.Where(part => part.PartType == MonsterPartType.Leg).ToList();
     }
 
     private void OnDestroy()
@@ -2311,6 +2326,34 @@ public class playerController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         canJump = true;
     }
+
+    public void SetGroundedState(bool isGrounded)
+    {
+        foreach (var part in legs)
+        {
+            part.isGroundedLimb = isGrounded;
+        }
+    }
+
+    public void ResetLegAnimations()
+    {
+        foreach (var part in legs)
+        {
+            if (part.myAnimator != null)
+            {
+                part.myAnimator.SetBool("Running", false);
+                part.myAnimator.SetBool("Walking", false);
+            }
+        }
+    }
+
+    public void ResetAttackColliders()
+    {
+        foreach (var part in allParts)
+        {
+            part.OnLandedDuringAttack();
+        }
+    }    
 
     #region Health
 

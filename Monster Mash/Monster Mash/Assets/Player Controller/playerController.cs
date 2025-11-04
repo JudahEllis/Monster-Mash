@@ -2343,6 +2343,8 @@ public class playerController : MonoBehaviour
             {
                 part.myAnimator.SetBool("Running", false);
                 part.myAnimator.SetBool("Walking", false);
+                part.myAnimator.SetBool("Teeter", false);
+                part.myAnimator.SetTrigger("Idle");
             }
         }
     }

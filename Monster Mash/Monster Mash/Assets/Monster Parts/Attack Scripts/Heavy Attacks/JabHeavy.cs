@@ -21,6 +21,7 @@ public class JabHeavy : HeavyAttack
     {
         base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
+        //monsterPartRef.myMainSystem.StartCoroutine(monsterPartRef.ResetMovement());
     }
 
     public override void PassDamage()

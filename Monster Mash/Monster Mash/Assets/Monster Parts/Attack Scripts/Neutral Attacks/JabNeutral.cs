@@ -27,6 +27,7 @@ public class JabNeutral : NeutralAttack
     {
         base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
+        //monsterPartRef.myMainSystem.StartCoroutine(monsterPartRef.ResetMovement());
     }
 
     public override void triggerNeutralAttackVisuals()

@@ -894,7 +894,7 @@ public class NewMonsterPart : MonoBehaviour
         neutralColliderReference.resetAttackHistory();
     }
 
-    /*public IEnumerator ResetMovement()
+    public IEnumerator ResetMovement()
     {
         float waitTime = GetCurrentAnimationClipLength();
         if (waitTime > 0f)
@@ -906,7 +906,7 @@ public class NewMonsterPart : MonoBehaviour
 
         myMainSystem.myPlayer.canMove = true;
         myMainSystem.myPlayer.canJump = true;
-    }*/
+    }
 
     #endregion
 

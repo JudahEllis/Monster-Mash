@@ -461,6 +461,8 @@ public class NewMonsterPart : MonoBehaviour
             }
             else
             {
+                if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.None) { return; }
+
                 attackMarkedHeavy = true;
                 myAnimator.SetBool("Attack Marked Heavy", true);
             }
@@ -842,6 +844,9 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOn() //called in attack animation
     {
+
+        Debug.Log("Collisions On");
+
         //turn on neutral vfx holder
         jabOrSlashLanded = false;
 
@@ -858,6 +863,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOff() //called in attack animation
     {
+        /*
         //Debug.Log("Test Collisions Off");
 
         //turn off neutral vfx holder
@@ -875,12 +881,13 @@ public class NewMonsterPart : MonoBehaviour
             neutralCollider.enabled = false;
             neutralColliderReference.resetAttackHistory();
         }
+        */
 
     }
 
     public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
     {
-        //Debug.Log("Test Collisions Off");
+        Debug.Log("Collisions Off");
 
         //turn off neutral vfx holder
         jabOrSlashLanded = false;
@@ -892,20 +899,6 @@ public class NewMonsterPart : MonoBehaviour
         if (neutralCollider == null || neutralColliderReference == null) { return; }
         neutralCollider.enabled = false;
         neutralColliderReference.resetAttackHistory();
-    }
-
-    public IEnumerator ResetMovement()
-    {
-        float waitTime = GetCurrentAnimationClipLength();
-        if (waitTime > 0f)
-            yield return new WaitForSeconds(waitTime);
-        else
-            yield return null;
-
-        forceTriggerJabOrSlashCollisionsOff();
-
-        myMainSystem.myPlayer.canMove = true;
-        myMainSystem.myPlayer.canJump = true;
     }
 
     #endregion
@@ -956,13 +949,19 @@ public class NewMonsterPart : MonoBehaviour
     #region Stomp Attack Specific Functions
     public void triggerStompDetectorOn()
     {
-        stompDetection.enabled = true;
-        myMainSystem.stompAttack();
+        if (stompDetection != null)
+        {
+            stompDetection.enabled = true;
+            myMainSystem.stompAttack();
+        }
     }
 
     public void triggerStompDetectionOff()
     {
-        stompDetection.enabled = false;
+        if (stompDetection != null)
+        {
+            stompDetection.enabled = false;
+        }
     }
     #endregion
 

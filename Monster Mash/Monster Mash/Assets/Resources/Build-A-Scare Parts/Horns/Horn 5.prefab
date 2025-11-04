@@ -2529,7 +2529,7 @@ GameObject:
   - component: {fileID: 5917779792228336587}
   - component: {fileID: 4842665033851357641}
   m_Layer: 0
-  m_Name: Horn5
+  m_Name: Horn 5
   m_TagString: Connection - Monster Part
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2593,7 +2593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myMainSystem: {fileID: 0}
-  connectedMonsterPart: {fileID: 0}
+  connectedMonsterPart: {fileID: 8951358414844590950}
   mainTorso: {fileID: 0}
   myAnimator: {fileID: 0}
   PartVisual: {fileID: 0}
@@ -2615,7 +2615,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 8001968035020406835
+    rid: 3665106666952589556
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -2667,6 +2667,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 3665106666952589556
+      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
     - rid: 8001968035020406834
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
@@ -2677,16 +2687,6 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
-    - rid: 8001968035020406835
-      type: {class: ProjectileNeutral, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 10
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 4
 --- !u!114 &5285885074470929418
 MonoBehaviour:
   m_ObjectHideFlags: 0

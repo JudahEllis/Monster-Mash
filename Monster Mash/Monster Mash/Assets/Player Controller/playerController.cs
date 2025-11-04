@@ -1559,6 +1559,7 @@ public class playerController : MonoBehaviour
 
         if (context.started)
         {
+            if (myMonster.attackSlotMonsterParts[1] == null) { return; }
             myMonster.attackSlotMonsterParts[1].attackAnimationID = inputModifier;
             myMonster.attack(1, inputModifier);
             //canMove = false;
@@ -1581,6 +1582,7 @@ public class playerController : MonoBehaviour
 
         if (context.started)
         {
+            if (myMonster.attackSlotMonsterParts[2] == null) { return; }
             myMonster.attackSlotMonsterParts[2].attackAnimationID = inputModifier;
             myMonster.attack(2, inputModifier);
             //canMove = false;
@@ -1603,6 +1605,7 @@ public class playerController : MonoBehaviour
 
         if (context.started)
         {
+            if (myMonster.attackSlotMonsterParts[3] == null) { return; }
             myMonster.attackSlotMonsterParts[3].attackAnimationID = inputModifier;
             myMonster.attack(3, inputModifier);
             //canMove = false;
@@ -1904,6 +1907,7 @@ public class playerController : MonoBehaviour
     public void lockPlayerController()
     {
         canMove = false;
+        //canJump = false;
         isRunning = false;
         isWalking = false;
 
@@ -1939,6 +1943,7 @@ public class playerController : MonoBehaviour
     public void unlockPlayerController()
     {
         canMove = true;
+        //canJump = true;
         isRunning = false;
         isWalking = false;
         isAttacking = false;
@@ -2319,6 +2324,17 @@ public class playerController : MonoBehaviour
     }
 
     #endregion
+
+    /*public IEnumerator DisableJumping(float seconds, Action onComplete = null)
+    {
+        Debug.Log(seconds);
+        canJump = false;
+        //canMove = false;
+        yield return new WaitForSeconds(seconds);
+        canJump = true;
+        //canMove = true;
+        onComplete?.Invoke();
+    }*/
 
     public IEnumerator DisableJumping(float seconds)
     {

@@ -15,7 +15,6 @@ public class NewMonsterPart : MonoBehaviour
     [HideInInspector] public MonsterPartVisual PartVisual;
     public bool requiresUniqueAnimationOffset;
     public Collider stompDetection;
-    public int monsterPartHealth = 100;
     //monsterPartID - jumper parts = 0, organic parts = 1, and scientific parts = 2
     public int monsterPartID = 1;
     public int attackAnimationID = 1;
@@ -31,23 +30,16 @@ public class NewMonsterPart : MonoBehaviour
 #if UNITY_EDITOR
     void OnValidate()
     {
-        if (neutralAttack == null)
-            neutralAttack = new NeutralAttack();
+        neutralAttack ??= new NeutralAttack();
 
-        if (heavyAttack == null)
-            heavyAttack = new HeavyAttack();
+        heavyAttack ??= new HeavyAttack();
     }
 #endif
    [Header("Monster Part Questionaire")]
 
     public MonsterPartType PartType;
 
-    [Header("Damage and Status Effects")]
-    public int baseNeutralAttackDamage = 0;
-    public int baseHeavyAttackDamage = 0;
-    [HideInInspector] public int builtUpAttackPower = 0;
-    public int builtUpAddedDamage = 0;
-    [HideInInspector] public int damage = 0;
+    [Header("Status Effects")]
     //Status Effects
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
@@ -104,7 +96,7 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Internal Info - Don't Touch")]
     [HideInInspector] public bool isBracing = false;
-    [HideInInspector] public bool attackMarkedHeavy = false;
+    /*[HideInInspector]*/ public bool attackMarkedHeavy = false;
     [HideInInspector] public bool heavyAttackInMotion = false;
     public bool fullActiveHeavy = false;
     public bool requiresRightStance = false;
@@ -143,6 +135,16 @@ public class NewMonsterPart : MonoBehaviour
 
     public ParticleSystem[] myIdleVFX;
     public List<monsterPartReference> referencesToIgnore = new List<monsterPartReference>();
+
+    private void Update()
+    {
+        // gets the clip length so that the heavy finishes charging when the attack animation ends 
+        if (heavyAttack.IsHeavyAttackHeld)
+        {
+            float clipLength = GetCurrentAnimationClipLength();
+            heavyAttack.ChargeHeavyAttack(clipLength);
+        }
+    }
 
     #region Build a Scare Tools
     public void AttackSetup()
@@ -356,6 +358,20 @@ public class NewMonsterPart : MonoBehaviour
 
     #region Collision Occlusion and Collision Logic
 
+    public void OnLandedDuringAttack()
+    {
+        if (attackMarkedHeavy)
+        {
+            isAttacking = false;
+            attackFocusOn = false;
+            attackMarkedHeavy = false;
+            fullActiveHeavy = false;
+            heavyAttackInMotion = false;
+
+            forceTriggerJabOrSlashCollisionsOff();
+        }
+    }
+
     public void triggerCollisionLogic()
     {
         for (int u = 0; u < referencesToIgnore.Count; u++)
@@ -441,6 +457,7 @@ public class NewMonsterPart : MonoBehaviour
                     myAnimator.SetBool("Attack Marked Heavy", false);
                     triggerNeutralOrHeavy();
                 }
+                heavyAttack.OnHeavyAttackEnded();
             }
             else
             {
@@ -456,7 +473,11 @@ public class NewMonsterPart : MonoBehaviour
         {
             if (!isReloadedNeutral)
             {
-                triggerNeutralOrHeavyRefresh(true);
+                if (attackFocusOn && isAttacking)
+                {
+                    triggerNeutralOrHeavyRefresh(true);
+                }
+                
                 return;
             }
         }
@@ -465,7 +486,11 @@ public class NewMonsterPart : MonoBehaviour
         {
             if (!isReloadedHeavy)
             {
-                triggerNeutralOrHeavyRefresh(true);
+                if (attackFocusOn && isAttacking)
+                {
+                    triggerNeutralOrHeavyRefresh(true);
+                }
+                
                 return;
             }
         }
@@ -482,18 +507,16 @@ public class NewMonsterPart : MonoBehaviour
             heavyAttackInMotion = true;
             myMainSystem.switchBraceStance(); //for a stronger looking leg stance
             myMainSystem.heavyAttackActivated();
-            triggerHeavyAttackPowerUp();//by triggering the heavy, 1 power up is granted
+            heavyAttack.OnHeavyAttackStarted();
             PartVisual.triggerChargeVisual();
+
+            float chargeDuration = GetCurrentAnimationClipLength();
+            myMainSystem.StartCoroutine(myMainSystem.myPlayer.DisableJumping(chargeDuration));
         }
         else
         {
             myAnimator.SetTrigger("Force Neutral Attack");
         }
-    }
-
-    public void triggerHeavyAttackPowerUp()
-    {
-        heavyAttack.triggerHeavyAttackPowerUp();
     }
 
     public void triggerHeavyLegStance()
@@ -766,6 +789,26 @@ public class NewMonsterPart : MonoBehaviour
 
     }
 
+    private float GetCurrentAnimationClipLength()
+    {
+        if (myAnimator != null)
+        {
+            AnimatorClipInfo[] clipInfo = myAnimator.GetCurrentAnimatorClipInfo(0);
+            if (clipInfo.Length > 0)
+            {
+                // this is the run time of the clip and not the array length
+                return clipInfo[0].clip.length;
+            }
+            
+        }
+        return 0f;
+    }
+
+    private void triggerHeavyAttackPowerUp()
+    {
+
+    }
+
     #endregion
 
     #endregion
@@ -815,21 +858,42 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOff() //called in attack animation
     {
+        //Debug.Log("Test Collisions Off");
+
         //turn off neutral vfx holder
         jabOrSlashLanded = false;
 
         if (attackMarkedHeavy == true)
         {
+            if (heavyCollider == null || heavyColliderReference == null) { return; }
             heavyCollider.enabled = false;
             heavyColliderReference.resetAttackHistory();
         }
         else
         {
+            if (neutralCollider == null || neutralColliderReference == null) { return; }
             neutralCollider.enabled = false;
             neutralColliderReference.resetAttackHistory();
         }
 
     }
+
+    public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
+    {
+        //Debug.Log("Test Collisions Off");
+
+        //turn off neutral vfx holder
+        jabOrSlashLanded = false;
+
+        if (heavyCollider == null || heavyColliderReference == null) { return; }
+        heavyCollider.enabled = false;
+        heavyColliderReference.resetAttackHistory();
+
+        if (neutralCollider == null || neutralColliderReference == null) { return; }
+        neutralCollider.enabled = false;
+        neutralColliderReference.resetAttackHistory();
+    }
+
     #endregion
 
     #region Reel Attack Specific Functions
@@ -1739,6 +1803,7 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (isGroundedLimb || PartType is MonsterPartType.Torso or MonsterPartType.Arm)
         {
+            if (myAnimator == null) { return; }
             myAnimator.SetBool("Teeter", true);
         }
     }

@@ -4,6 +4,15 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using System.Linq;
+using Random = UnityEngine.Random;
+
+public class HealthEventArgs : EventArgs
+{
+    public int MaxHealth;
+    public int CurrentHealth;
+    public int SegmentHealth;
+}
 
 
 public class monsterAttackSystem : MonoBehaviour
@@ -19,7 +28,7 @@ public class monsterAttackSystem : MonoBehaviour
     public bool isWalking = false;
     public bool isRunning = false;
     private bool isGliding = false;
-    private bool isCrouching = false;
+    public bool isCrouching = false;
     public bool focusedAttackActive = false;
     private bool heavyAttackActive = false;
     private bool canRoll = true;
@@ -32,18 +41,17 @@ public class monsterAttackSystem : MonoBehaviour
     bool requiresFlourish = false;
     bool requiresFlourishingTwirl = false;
     bool requiresFlourishingRoll = false;
-    bool calm = false;
+    public bool calm = false;
     public bool emoteActive = false;
     public bool onPlatformEdge;
-    private bool damageLocked = false;
+    public bool damageLocked = false;
     private bool forceFallingActivated = false;
     private bool isLaunching = false;
 
     public playerController myPlayer;
-    private Animator myAnimator;
+    public Animator myAnimator;
     private Animator mainTorso;
 
-    public monsterPart[] oldattackSlotMonsterParts = new monsterPart[8];
     public NewMonsterPart[] attackSlotMonsterParts = new NewMonsterPart[8];
     private int[] attackSlotMonsterID = new int[8];
     private List<monsterPartReference> listOfInternalReferences = new List<monsterPartReference>();
@@ -51,8 +59,15 @@ public class monsterAttackSystem : MonoBehaviour
     private List<NewMonsterPart> nonMappedMonsterParts = new List<NewMonsterPart>();
 
     [Header("Damage and Status Effects")]
-    public int health = 800;
-    private int monsterPartIndividualHealth = 0;
+    [SerializeField] private int maxHealth = 800;
+    public event EventHandler OnMonsterPartRemoved;
+    public event EventHandler<HealthEventArgs> OnHealthUpdated;
+    public event EventHandler OnMonsterDeath;
+
+    private int segmentHealth;
+    private int currentHealth;
+    private HealthEventArgs healthEventArgs = new();
+
     public bool burnedStatusEffect;
     public bool electrifiedStatusEffect;
     public bool poisonedStatusEffect;
@@ -309,7 +324,6 @@ public class monsterAttackSystem : MonoBehaviour
                     {
                         if (allMonsterParts[i].PartType is MonsterPartType.Torso)
                         {
-                            isFloatingMonster = true;
                             allMonsterParts[i].isFloatingTorso = isFloatingMonster;
                         }
                     }
@@ -411,7 +425,7 @@ public class monsterAttackSystem : MonoBehaviour
         // set default emotes
         myPlayer.playerControlsMap.Emotes.Enable();
 
-        
+        CalculateStartHealth();
         
     }
 
@@ -435,9 +449,9 @@ public class monsterAttackSystem : MonoBehaviour
 
     */
 
-    public void AssignMonsterPartAttackInfo(MonsterPartData.Button assignedButton, monsterPart part)
+    public void AssignMonsterPartAttackInfo(MonsterPartData.Button assignedButton, NewMonsterPart part)
     {
-        oldattackSlotMonsterParts[(int)assignedButton] = part;
+        attackSlotMonsterParts[(int)assignedButton] = part;
     }
 
 
@@ -446,8 +460,6 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetBool("Spawning In", true);
         myAnimator.SetTrigger("Spawn In");
         yield return new WaitForSeconds(0.2f);
-
-        emoteManager.PlayRandomEmote();
 
         yield return new WaitForSeconds(2f);
         //myAnimator.SetBool("Idle Bounce Allowed", true);
@@ -542,6 +554,12 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
             allMonsterParts[i].triggerIdle();
         }
+    }
+
+    public List<NewMonsterPart> GetActiveAttackSlots()
+    {
+        List<NewMonsterPart> activeAttackSlots = attackSlotMonsterParts.Where(part => part != null && part.connected).ToList();
+        return activeAttackSlots;
     }
 
     #endregion
@@ -1922,7 +1940,7 @@ public class monsterAttackSystem : MonoBehaviour
         }
     }
 
-    private void forceStopCrouch()
+    public void forceStopCrouch()
     {
         isCrouching = false;
 
@@ -2361,6 +2379,55 @@ public class monsterAttackSystem : MonoBehaviour
 
     #region Health
 
+
+    private void CalculateStartHealth()
+    {
+        currentHealth = maxHealth;
+        List<NewMonsterPart> activeAttackSlots = GetActiveAttackSlots();
+        segmentHealth = maxHealth / activeAttackSlots.Count;
+
+        healthEventArgs.MaxHealth = maxHealth;
+        healthEventArgs.CurrentHealth = currentHealth;
+        healthEventArgs.SegmentHealth = segmentHealth;
+    }
+
+    public void DecreaseHealth(int damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        healthEventArgs.CurrentHealth = currentHealth;
+        OnHealthUpdated?.Invoke(this, healthEventArgs);
+
+        while (maxHealth - currentHealth >= segmentHealth)
+        {
+            var activeAttackSlots = GetActiveAttackSlots();
+            if (activeAttackSlots.Count > 0)
+            {
+                popOffMonsterPart(activeAttackSlots[Random.Range(0, activeAttackSlots.Count)]);
+
+                if (GetActiveAttackSlots().Count == 0)
+                {
+                    totalDestruction();
+                    return;
+                }
+            }
+
+            currentHealth += segmentHealth; // Increase current health by one segment untill it reaches the max health
+
+            // Remove the reaminder if it is not enouth for a full segment
+            if ((maxHealth - currentHealth) < segmentHealth)
+            {
+                currentHealth = maxHealth;
+            }
+
+            healthEventArgs.CurrentHealth = currentHealth;
+            OnHealthUpdated?.Invoke(this, healthEventArgs);
+        }
+    }
+
+
+
     public void neutralDamage()
     {
         //this can interrupt running, walking, screeching turns, jumps, double jumps, wing flaps, lands, gliding, falling, neutral attacks, wind ups, emotes
@@ -2525,13 +2592,22 @@ public class monsterAttackSystem : MonoBehaviour
         isGrounded = false;
         isLaunching = true;
         myAnimator.SetTrigger("Launch");
-        StartCoroutine(spinTimer());
+        //StartCoroutine(spinTimer());
     }
 
-    IEnumerator spinTimer()
+    /*IEnumerator spinTimer()
     {
         yield return new WaitForSeconds(0.2f);
         myAnimator.SetTrigger("Spin");
+    }*/
+
+    public IEnumerator SpinTimer()
+    {
+        myAnimator.SetTrigger("Flourish Twirl");
+        yield return new WaitForSeconds(1f);
+        myAnimator.ResetTrigger("Flourish Twirl");
+        myAnimator.SetTrigger("Land");
+
     }
 
     public void getOutOfLaunch()
@@ -2560,6 +2636,7 @@ public class monsterAttackSystem : MonoBehaviour
                     partRemoved.neutralAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     partRemoved.heavyAttack.OnAttackRelease -= myPlayer.ApplyMovementModifier;
                     destructionPhysicsHelper.SetActive(true);
+                    OnMonsterPartRemoved?.Invoke(this, EventArgs.Empty);
                     StartCoroutine(removeMonsterPartFromStage(attackSlotMonsterParts[i].gameObject));
                     //store some sort of parental and location data
                     //bool saying disconnect
@@ -2570,37 +2647,10 @@ public class monsterAttackSystem : MonoBehaviour
                 }
             }
         }
-
-        healthCheck();
-    }
-
-    private void healthCheck()
-    {
-        int limbsStillActive = 0;
-        for (int i = 0; i < attackSlotMonsterParts.Length; i++)
-        {
-            if (attackSlotMonsterParts[i] != null)
-            {
-                if (attackSlotMonsterParts[i].connected)
-                {
-                    limbsStillActive++;
-                }
-            }
-        }
-
-        if (limbsStillActive == 0)
-        {
-            totalDestruction();
-        }
-        else
-        {
-            partDestructionVisual.Play();
-        }
     }
 
     public void totalDestruction()
     {
-
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
             if (allMonsterParts[i].connected)
@@ -2614,97 +2664,65 @@ public class monsterAttackSystem : MonoBehaviour
             nonMappedMonsterParts[i].disconnectThisPart();
         }
 
-        StartCoroutine(removeAllMonsterPartsFromStage());
-
-        destructionVisual.Play();
+        StartCoroutine(RemoveAllPartsAndDestroyPlayer());
         //spawn goo
+        destructionVisual.Play();
+        OnMonsterDeath?.Invoke(this, EventArgs.Empty);
     }
 
-    private void turnOffAllMonsterPartPhysics()
+    private IEnumerator RemoveAllPartsAndDestroyPlayer()
     {
+        int partsCount = nonMappedMonsterParts.Count;
+        int finishedCount = 0;
 
-        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
+        // Use a local function to track completion
+        IEnumerator RemovePartCoroutine(GameObject part)
         {
-            nonMappedMonsterParts[i].turnOffPhysics();
+            yield return StartCoroutine(removeMonsterPartFromStage(part));
+            finishedCount++;
         }
-    }
 
-
-    private void deactivateAllMonsterParts()
-    {
-
+        // Start all coroutines
         for (int i = 0; i < nonMappedMonsterParts.Count; i++)
         {
-            nonMappedMonsterParts[i].gameObject.SetActive(false);
+            StartCoroutine(RemovePartCoroutine(nonMappedMonsterParts[i].gameObject));
         }
-    }
 
-    private void reactivateAllMonsterParts()
-    {
-
-        for (int i = 0; i < nonMappedMonsterParts.Count; i++)
+        // Wait until all are finished
+        while (finishedCount < partsCount)
         {
-            nonMappedMonsterParts[i].gameObject.SetActive(true);
+            yield return null;
+        }
+
+        // Now safe to destroy player
+        if (playerManager.Instance != null)
+        {
+            playerManager.Instance.RemovePlayer(myPlayer);
         }
     }
 
     IEnumerator removeMonsterPartFromStage(GameObject partToDisappear)
     {
+        // Initial delays and setup
         yield return new WaitForSeconds(0.1f);
         destructionPhysicsHelper.SetActive(false);
-        yield return new WaitForSeconds(3);
-        partToDisappear.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(3f);
+        partToDisappear.SetActive(false);
         partToDisappear.GetComponent<Rigidbody>().isKinematic = true;
-        yield return new WaitForSeconds(0.2f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.3f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        partToDisappear.SetActive(false);
 
-    }
+        // Toggle part on/off
+        float toggleInterval = Random.Range(0.2f, 0.5f);
+        int toggleCount = 8;
+        bool activeState = true;
+        for (int i = 0; i < toggleCount; i++)
+        {
+            yield return new WaitForSeconds(toggleInterval);
+            partToDisappear.SetActive(activeState);
+            activeState = !activeState;
+        }
 
-    IEnumerator removeAllMonsterPartsFromStage()
-    {
-        yield return new WaitForSeconds(0.1f);
-        destructionPhysicsHelper.SetActive(false);
-        yield return new WaitForSeconds(8);
-        deactivateAllMonsterParts();
-        turnOffAllMonsterPartPhysics();
-        yield return new WaitForSeconds(0.2f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.5f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.2f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.4f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.3f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        deactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        reactivateAllMonsterParts();
-        yield return new WaitForSeconds(0.1f);
-        deactivateAllMonsterParts();
+        Destroy(partToDisappear);
     }
 
     #endregion
@@ -2718,366 +2736,6 @@ public class monsterAttackSystem : MonoBehaviour
     #endregion
 
     #region Emotes
-
-
-    public void fierceEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].fierceEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void gasEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-            gasVisual.Stop();
-            gasVisual.Play();
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].gasEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void mockingEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].mockingEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void danceEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-            musicVisual.Stop();
-            musicVisual.Play();
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].danceEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void jackEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].jackEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void thinkingEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].thinkingEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void booEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            spookyVisual.Stop();
-            spookyVisual.Play();
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].booEmote();
-            }
-
-            forceStopCrouch();
-        }
-
-    }
-
-    public void excerciseEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].excerciseEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void hulaEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            hulaHoopVisual.Stop();
-            hulaHoopVisual.Play();
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].hulaEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void vomitEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            vomitVisual.Stop();
-            vomitVisual.Play();
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].vomitEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void brianEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].brianEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void sleepEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-
-            if (facingRight)
-            {
-                //sleepVisual_Right.Stop();
-                //sleepVisual_Right.Play();
-                sleepVisual.Stop();
-                sleepVisual.Play();
-            }
-            else
-            {
-                sleepVisual.Stop();
-                sleepVisual.Play();
-            }
-
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].sleepEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void explosiveEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            fieryVisual.Stop();
-            fieryVisual.Play();
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].explosiveEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void laughingEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].laughingEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
-
-    public void sneezingEmote()
-    {
-        if (damageLocked)
-        {
-            return;
-        }
-
-        if (focusedAttackActive == false && isGrounded && emoteActive == false && isRunning == false && isWalking == false && isCrouching == false)
-        {
-            emoteActive = true;
-            calm = false;
-            sneezeVisual.Stop();
-            sneezeVisual.Play();
-            myAnimator.SetBool("Idle Bounce Allowed", false);
-
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].sneezingEmote();
-            }
-
-            forceStopCrouch();
-        }
-    }
 
     public void emoteEnded()
     {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.WSA;
 
 public class playerController : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class playerController : MonoBehaviour
     private float groundedModifer = 1;
     private float airbornModifer = 0.75f;
     private float currentGroundedStateModifier = 1;
+    private bool isDamageLaunching;
     public bool canMove = true;
     public bool isWalking = false;
     public bool isRunning = false;
@@ -123,6 +125,14 @@ public class playerController : MonoBehaviour
     private int inputModifier = 1;
     private Vector2Int lastInputDirection;
 
+    [Header("Damage Launching")]
+    [SerializeField] private AnimationCurve damageToForceCurve;
+    [SerializeField, Tooltip("Controls how much of an arc the launch has for left and right")] private float yMultiplier = 1.5f;
+
+
+    // damage timer
+    float lastAttackTime = -Mathf.Infinity;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -145,9 +155,7 @@ public class playerController : MonoBehaviour
         }
     }
 
-   
-
-    private void OnDisable()
+    private void OnDestroy()
     {
         UnsubscribeActionMap();
     }
@@ -170,7 +178,7 @@ public class playerController : MonoBehaviour
         SubscribeActionMap();
     }
 
-    void SubscribeActionMap()
+    private void SubscribeActionMap()
     {
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += OnLeftStick;
 
@@ -192,10 +200,14 @@ public class playerController : MonoBehaviour
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started += onButtonY;
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += onButtonY;
+
+        playerInput.actions.FindAction("ShowMenu").Enable();
+        playerInput.actions.FindAction("ShowMenu").performed += ShowRemappingMenu;
     }
 
-    void UnsubscribeActionMap()
+    private void UnsubscribeActionMap()
     {
+        if (playerInput == null) {  return; }
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
 
@@ -217,6 +229,16 @@ public class playerController : MonoBehaviour
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started -= onButtonY;
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= onButtonY;
+
+        playerInput.actions.FindAction("ShowMenu").Disable();
+        playerInput.actions.FindAction("ShowMenu").performed -= ShowRemappingMenu;
+    }
+
+    private void ShowRemappingMenu(InputAction.CallbackContext ctx)
+    {
+        if (InputRemapper.Instance == null) {  return; }
+
+        InputRemapper.Instance.ShowMenu(playerInput);
     }
 
     
@@ -942,9 +964,12 @@ public class playerController : MonoBehaviour
 
     private void land()
     {
+        unlockPlayerController();
+        isDamageLaunching = false;
         grounded = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
+
         bodyCollider.enabled = true;
         smallBodyCollider.enabled = true;
         isPhasingThroughPlatform = false;
@@ -1521,7 +1546,7 @@ public class playerController : MonoBehaviour
         {
             myMonster.attackSlotMonsterParts[1].attackAnimationID = inputModifier;
             myMonster.attack(1, inputModifier);
-            canMove = false;
+            //canMove = false;
             buttonB_Pressed = true;
         }
     }
@@ -1543,7 +1568,7 @@ public class playerController : MonoBehaviour
         {
             myMonster.attackSlotMonsterParts[2].attackAnimationID = inputModifier;
             myMonster.attack(2, inputModifier);
-            canMove = false;
+            //canMove = false;
             buttonX_Pressed = true;
         }
     }
@@ -1565,7 +1590,7 @@ public class playerController : MonoBehaviour
         {
             myMonster.attackSlotMonsterParts[3].attackAnimationID = inputModifier;
             myMonster.attack(3, inputModifier);
-            canMove = false;
+            //canMove = false;
             buttonY_Pressed = true;
         }
     }
@@ -2172,35 +2197,21 @@ public class playerController : MonoBehaviour
     private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
     {
         float elapsed = 0f;
-
-        Vector2 totalAppliedOffset = Vector2.zero;
+        // Clamp the Y offset to a reasonable value (e.g., 5 units)
+        float maxY = totalOffset.y;
+        float modifierX = totalOffset.x / duration;
+        float modifierY = Mathf.Clamp(totalOffset.y / duration, -maxY, maxY);
 
         while (elapsed < duration)
         {
-            float delta = Time.fixedDeltaTime;
-            elapsed += delta;
-            float t = Mathf.Clamp01(elapsed / duration); // Progress from 0 to 1
-
-            // Calculate how much total offset should be applied at time t
-            Vector2 desiredOffset = Vector2.Lerp(Vector2.zero, totalOffset, t);
-
-            // Calculate how much new offset to apply this frame
-            Vector2 frameAttackOffset = desiredOffset - totalAppliedOffset;
-            totalAppliedOffset = desiredOffset;
-
-            // Sample the *current* player velocity (so it works even while moving/jumping/etc.)
-            Vector2 liveVelocity = myRigidbody.velocity;
-            Vector2 baseMovement = liveVelocity * delta;
-
-            // Move by current velocity + attack offset for this frame
-            myRigidbody.MovePosition(myRigidbody.position + baseMovement + frameAttackOffset);
-
-            yield return new WaitForFixedUpdate(); // Wait for next physics update
+            myRigidbody.velocity = new Vector2(modifierX, myRigidbody.velocity.y + modifierY);
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
     }
 
 
-        IEnumerator leapAttackForwardControl()
+    IEnumerator leapAttackForwardControl()
     {
         yield return new WaitForSeconds(0.1f);
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
@@ -2294,11 +2305,24 @@ public class playerController : MonoBehaviour
 
     #endregion
 
+    public IEnumerator DisableJumping(float seconds)
+    {
+        canJump = false;
+        yield return new WaitForSeconds(seconds);
+        canJump = true;
+    }
+
     #region Health
 
     //damage as to how it relates to the initial strike and the knockback effect
-    public void damaged(int damageRecieved, bool markedForHeavyAttack, int attackDirection, Vector3 contactPoint)
+    public void damaged(int damageRecieved, bool markedForHeavyAttack, Vector3 attackerPosition, Vector3 contactPoint)
     {
+        // Prevents dammage being applied multiple times for one attack
+        if (Time.time - lastAttackTime <= 0.5f) { return; }
+        lastAttackTime = Time.time;
+
+        myMonster.DecreaseHealth(damageRecieved);
+
         canMove = false;
         isRunning = false;
         isWalking = false;
@@ -2347,6 +2371,70 @@ public class playerController : MonoBehaviour
             StartCoroutine(damageRecoveryTime(0.1f));
         }
 
+        DammageLaunch(damageRecieved, attackerPosition);
+    }
+
+    private void DammageLaunch(int damage, Vector3 attackerPosition)
+    {
+        isDamageLaunching = true;
+
+        Vector2 diff = attackerPosition - transform.position;
+        Vector2 launchDir;
+
+        // Sets the launch direction to the opposite of where the player was hit.
+        // Uses the abs value to check if the attack direction is more horizontal or vertical
+        if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
+        {
+            // if attacked from the left launch right. if attacked from the left launch right;
+            launchDir = diff.x > 0 ? Vector2.left : Vector2.right;
+            // Adds a bit of y to give the left and rigt launch an arc
+            launchDir.y = yMultiplier;
+        }
+        else
+        {
+            // if hit from the top launch down. if hit from the bottom launch up
+            launchDir = diff.y > 0 ? Vector2.down: Vector2.up;
+        }
+
+
+        launchDir.Normalize();
+
+        
+        Vector2 finalLaunchVector = launchDir * damageToForceCurve.Evaluate(damage);
+
+        float launchDuration = 0.1f;
+        myRigidbody.velocity = Vector2.zero;
+        StartCoroutine(SmoothLaunch(finalLaunchVector, launchDuration));
+    }
+
+    // Makes the launch happen over multiple frames instead of all at once which makes the movement less choppy.
+    IEnumerator SmoothLaunch(Vector2 totalForce, float duration)
+    {
+        if (duration <= 0f)
+        {
+            myRigidbody.AddForce(totalForce, ForceMode2D.Impulse);
+            yield break;
+        }
+
+        float elapsed = 0f;
+
+        // Divides the total force by the mass to get the total velocity change for the current hit.
+        Vector2 targetVelocityChange = totalForce / myRigidbody.mass;
+        Vector2 startVelocity = myRigidbody.velocity;
+
+        while (elapsed < duration)
+        {
+            // Get a percentage (0 -> 1) of how far we are through the launch
+            float t = elapsed / duration;
+            // based on the percentage lerp the current velocity towards the total velocity change
+            Vector2 desiredVelocity = Vector2.Lerp(startVelocity, startVelocity + targetVelocityChange, t);
+            myRigidbody.velocity = desiredVelocity;
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        // Ensure final velocity equals what the impulse would’ve done
+        myRigidbody.velocity = startVelocity + targetVelocityChange;
     }
 
     IEnumerator damageRecoveryTime(float recoveryTime)
@@ -2359,7 +2447,11 @@ public class playerController : MonoBehaviour
         isWalking = false;
         isAttacking = false;
         //myRigidbody.gravityScale = gravityPower;
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        if (!isDamageLaunching)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
+        
 
         if (isGrounded())
         {

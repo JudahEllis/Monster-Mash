@@ -3,6 +3,11 @@ using System;
 [Serializable]
 public class JabHeavy : HeavyAttack
 {
+    public JabHeavy()
+    {
+        Attack = HeavyAttackType.Jab;
+        DamageRange = DamageRange.Range3;
+    }
     public override void triggerHeavyAttackVisuals()
     {
         if (monsterPartRef.jabOrSlashLanded == false && monsterPartVisualRef.heavyMissVFXHolder != null)
@@ -18,15 +23,11 @@ public class JabHeavy : HeavyAttack
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 
-    public override void heavyAttackPowerCalculation()
+    public override void PassDamage()
     {
-        base.heavyAttackPowerCalculation();
-
         monsterPartRef.heavyColliderReference.resetAttackHistory();
-        monsterPartRef.heavyColliderReference.damage = monsterPartRef.damage;
+        monsterPartRef.heavyColliderReference.damage = Damage;
         monsterPartRef.heavyColliderReference.markedHeavy = true;
-
-        damageClearance();
     }
 
     public override void statusEffectAndDamageCalculations()

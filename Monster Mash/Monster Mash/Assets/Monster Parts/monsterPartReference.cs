@@ -72,7 +72,8 @@ public class monsterPartReference : MonoBehaviour
                     {
                         //attack
                         pointOfContact = other.ClosestPointOnBounds(transform.position);
-                        damagedMonster.myPlayer.damaged(damage, markedHeavy, directionOfAttack, pointOfContact);
+                        playerController player = GetComponentInParent<playerController>();
+                        damagedMonster.myPlayer.damaged(damage, markedHeavy, player.transform.position, pointOfContact);
 
                         if (hasStatusEffect && markedHeavy)
                         {

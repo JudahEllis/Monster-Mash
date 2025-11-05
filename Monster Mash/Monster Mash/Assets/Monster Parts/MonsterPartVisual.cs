@@ -274,6 +274,8 @@ public class MonsterPartVisual : MonoBehaviour
     public void triggerAttackRelease()
     {
 
+        //Debug.Log("Trigger Attack Release called");
+
         if (monsterPartRef.isJointed)
         {
             // not sure about this whole section, it looks important
@@ -298,7 +300,7 @@ public class MonsterPartVisual : MonoBehaviour
 
             if (monsterPartRef.attackMarkedHeavy)
             {
-                monsterPartRef.heavyAttack.heavyAttackPowerCalculation();
+                monsterPartRef.heavyAttack.PassDamage();
                 triggerHeavyChargeVisual();
 
                 if (hasHeavyMovementCommand)
@@ -365,7 +367,7 @@ public class MonsterPartVisual : MonoBehaviour
             }
             else
             {
-                monsterPartRef.neutralAttack.neutralAttackPowerCalculation();
+                monsterPartRef.neutralAttack.PassDamage();
 
                 if (hasNeutralMovementCommand)
                 {
@@ -536,6 +538,7 @@ public class MonsterPartVisual : MonoBehaviour
     #region Movement
     public void triggerWalk()
     {
+
         if (monsterPartRef.connected == false)
         {
             return;

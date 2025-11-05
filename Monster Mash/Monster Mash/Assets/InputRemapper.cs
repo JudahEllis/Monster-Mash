@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -19,18 +20,32 @@ public class RedButtonWrapper
 
 public class InputRemapper : MonoBehaviour
 {
-    [SerializeField] private GameObject remappingUI;
+    public static InputRemapper Instance { get; private set; }
     public static UnityEvent OnRebind = new();
+
+    [SerializeField] private GameObject remappingUI;
+
+    private PlayerInput currentPlayer;
     private ControlItemData[] allControlItems;
     // using the input action name as a key to identify specific buttons when the game loads
     private RedButtonWrapper redButtonWrapper = new();
-    [SerializeField] private InputActionAsset playerActionAsset;
-    private InputAction showMenuAction;
+    private InputActionAsset playerActions;
     private readonly string redButtonsKey = "redButtons";
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {
-        DontDestroyOnLoad(transform.parent);
         allControlItems = GetComponentsInChildren<ControlItemData>();
 
         if (PlayerPrefs.HasKey(redButtonsKey))
@@ -38,6 +53,122 @@ public class InputRemapper : MonoBehaviour
             redButtonWrapper = JsonUtility.FromJson<RedButtonWrapper>(PlayerPrefs.GetString(redButtonsKey));
         }
 
+        remappingUI.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnApplicationQuit()
+    {
+        EnableDevices();
+    }
+
+    private void EnableDevices()
+    {
+        foreach (var players in PlayerInput.all)
+        {
+            for (int i = 0; i < players.devices.Count; i++)
+            {
+                InputSystem.EnableDevice(players.devices[i]);
+            }
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EnableDevices();
+    }
+
+    public void ShowMenu(PlayerInput player)
+    {
+        currentPlayer = player;
+        playerActions = player.actions;
+
+        if (!remappingUI.activeSelf)
+        {
+            LoadUIText();
+
+            remappingUI.SetActive(true);
+
+            if (allControlItems != null && allControlItems.Length > 0)
+            {
+                EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
+            }
+
+            foreach (var players in PlayerInput.all)
+            {
+                players.actions.FindActionMap("Monster Controls").Disable();
+
+                if (players.playerIndex != currentPlayer.playerIndex)
+                {
+                    for (int i = 0; i < players.devices.Count; i++)
+                    {
+                        InputSystem.DisableDevice(players.devices[i]);
+                    }
+                }
+            }
+        }
+        else
+        {
+            remappingUI.SetActive(false);
+
+            foreach (var players in PlayerInput.all)
+            {
+                players.actions.FindActionMap("Monster Controls").Enable();
+
+                if (players.playerIndex != currentPlayer.playerIndex)
+                {
+                    for (int i = 0; i < players.devices.Count; i++)
+                    {
+                        InputSystem.EnableDevice(players.devices[i]);
+                    }
+                }
+            }
+        }
+    }
+
+    // called from button event
+    public void Rebind(ControlItemData controlItem)
+    {
+        controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        playerActions.FindAction(controlItem.rebindTarget.action.name).Disable();
+        controlItem.rebindTarget.action.Disable();
+
+       
+        controlItem.rebindTarget.action.PerformInteractiveRebinding()
+            .WithAction(playerActions.FindAction(controlItem.rebindTarget.action.name))
+            .WithControlsHavingToMatchPath("<Gamepad>") // limits accepted inputs to gamepad buttons
+            .WithCancelingThrough(Gamepad.current.buttonEast)
+            .OnComplete(callback =>
+            {
+                SetButtonTextToDisplayString(controlItem);
+                StartCoroutine(DelayReenable(playerActions.FindAction(controlItem.rebindTarget.action.name)));
+                callback.Dispose();
+
+                var rebinds = controlItem.rebindTarget.action.actionMap.SaveBindingOverridesAsJson();
+                PlayerPrefs.SetString($"{currentPlayer.playerIndex}{controlItem.rebindTarget.action.actionMap.name}", rebinds);
+                OnRebind.Invoke();
+            })
+            .OnCancel(callback => 
+            { 
+                SetButtonTextToDisplayString(controlItem);
+                StartCoroutine(DelayReenable(playerActions.FindAction(controlItem.rebindTarget.action.name)));
+                callback.Dispose();
+            })
+            .OnPotentialMatch(callback =>
+            {
+                if (controlItem.rebindTarget.action.actionMap.name.Equals("XBOX")) { return; }
+
+                CheckForButtonConflicts(controlItem, callback);
+            })
+            .Start();
+    }
+
+    private void LoadUIText()
+    {
         LoadRebinds();
 
         foreach (ControlItemData controlItem in allControlItems)
@@ -49,61 +180,6 @@ public class InputRemapper : MonoBehaviour
                 controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().color = Color.red;
             }
         }
-
-        remappingUI.SetActive(false);
-    }
-
-    private void OnEnable()
-    {
-        showMenuAction = playerActionAsset.FindAction("ShowMenu");
-        showMenuAction.Enable();
-        showMenuAction.performed += ctx => ShowMenu();
-
-        if (allControlItems != null && allControlItems.Length > 0)
-        {
-            EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
-        }
-    }
-
-    private void OnDisable()
-    {
-        showMenuAction.Disable();
-        showMenuAction.performed -= ctx => ShowMenu();
-    }
-
-    // called from button event
-    public void Rebind(ControlItemData controlItem)
-    {
-        controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().text = "";
-
-        controlItem.rebindTarget.action.Disable();
-        controlItem.rebindTarget.action.PerformInteractiveRebinding()
-            .WithAction(controlItem.rebindTarget.action)
-            .WithControlsHavingToMatchPath("<Gamepad>") // limits accepted inputs to gamepad buttons
-            .WithCancelingThrough(Gamepad.current.buttonEast)
-            .OnComplete(callback =>
-            {
-                SetButtonTextToDisplayString(controlItem);
-                StartCoroutine(DelayReenable(controlItem.rebindTarget.action));
-                callback.Dispose();
-
-                var rebinds = controlItem.rebindTarget.action.actionMap.SaveBindingOverridesAsJson();
-                PlayerPrefs.SetString(controlItem.rebindTarget.action.actionMap.name, rebinds);
-                OnRebind.Invoke();
-            })
-            .OnCancel(callback => 
-            { 
-                SetButtonTextToDisplayString(controlItem);
-                StartCoroutine(DelayReenable(controlItem.rebindTarget.action));
-                callback.Dispose();
-            })
-            .OnPotentialMatch(callback =>
-            {
-                if (controlItem.rebindTarget.action.actionMap.name.Equals("XBOX")) { return; }
-
-                CheckForButtonConflicts(controlItem, callback);
-            })
-            .Start();
     }
 
     private void CheckForButtonConflicts(ControlItemData controlItem, InputActionRebindingExtensions.RebindingOperation callback)
@@ -131,7 +207,6 @@ public class InputRemapper : MonoBehaviour
                     {
                         redButtonWrapper.redButtons.Add(controlItem.rebindTarget.action.name);
                         PlayerPrefs.SetString(redButtonsKey, JsonUtility.ToJson(redButtonWrapper));
-
                     }
 
                     return;
@@ -156,14 +231,15 @@ public class InputRemapper : MonoBehaviour
 
         foreach (ControlItemData controlItem in allControlItems)
         {
-            string actionMapName = controlItem.rebindTarget.action.actionMap.name;
+            string actionMapName = playerActions.FindAction(controlItem.rebindTarget.action.name).actionMap.name;
+            string playerKey = $"{currentPlayer.playerIndex}{actionMapName}";
 
-            if (lastActionMapName.Equals(actionMapName)) { return; }
+            if (lastActionMapName.Equals(actionMapName)) { continue; }
 
-            if (PlayerPrefs.HasKey(actionMapName))
+            if (PlayerPrefs.HasKey(playerKey))
             {
-                string rebinds = PlayerPrefs.GetString(actionMapName);
-                controlItem.rebindTarget.action.actionMap.LoadBindingOverridesFromJson(rebinds);
+                string rebinds = PlayerPrefs.GetString(playerKey);
+                playerActions.FindActionMap(actionMapName).LoadBindingOverridesFromJson(rebinds);
             }
 
             lastActionMapName = actionMapName;
@@ -172,27 +248,8 @@ public class InputRemapper : MonoBehaviour
 
     private void SetButtonTextToDisplayString(ControlItemData controlItem)
     {
-        controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().text = controlItem.rebindTarget.action.GetBindingDisplayString();
-    }
-
-    private void ShowMenu()
-    {
-        if (!remappingUI.activeSelf)
-        {
-            remappingUI.SetActive(true);
-
-            if (allControlItems != null && allControlItems.Length > 0)
-            {
-                EventSystem.current.SetSelectedGameObject(allControlItems[0].buttonRef.gameObject);
-            }
-
-            playerActionAsset.FindActionMap("Monster Controls").Disable();
-        }
-        else
-        {
-            remappingUI.SetActive(false);
-            playerActionAsset.FindActionMap("Monster Controls").Enable();
-        }
+        InputAction action = playerActions.FindAction(controlItem.rebindTarget.action.name);
+        controlItem.buttonRef.GetComponentInChildren<TextMeshProUGUI>().text = action.GetBindingDisplayString();
     }
 
     IEnumerator DelayReenable(InputAction actionRef)

@@ -52,8 +52,6 @@ public class DynamicCamera : MonoBehaviour
 
         zClampCurve = new AnimationCurve(new Keyframe(0, clampValuesZ[1].position.z),
             new Keyframe(1, clampValuesZ[0].position.z));
-
-
     }
 
     private void LateUpdate()

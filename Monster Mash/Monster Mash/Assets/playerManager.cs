@@ -31,8 +31,6 @@ public class playerManager : MonoBehaviour
             Instance = this;
         }
 
-        Debug.Log(Instance);
-
         playerInputManager = this.GetComponent<PlayerInputManager>();
     }
 

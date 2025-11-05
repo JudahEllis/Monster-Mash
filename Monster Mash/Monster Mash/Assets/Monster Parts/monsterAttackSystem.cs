@@ -2695,8 +2695,10 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         // Now safe to destroy player
-        DynamicCamera.Instance.playerTransforms.Remove(myPlayer.transform);
-        Destroy(myPlayer.gameObject);
+        if (playerManager.Instance != null)
+        {
+            playerManager.Instance.RemovePlayer(myPlayer);
+        }
     }
 
     IEnumerator removeMonsterPartFromStage(GameObject partToDisappear)

@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 public class playerManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class playerManager : MonoBehaviour
     public DynamicCamera battleCamera;
 
     public string intendedActionMap;
+    public static playerManager Instance { get; private set; }
 
     [SerializeField]
     private Transform[] playerSpawnPoints;
@@ -20,6 +22,17 @@ public class playerManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        Debug.Log(Instance);
+
         playerInputManager = this.GetComponent<PlayerInputManager>();
     }
 
@@ -138,5 +151,18 @@ public class playerManager : MonoBehaviour
     private void OnPlayerLeft()
     {
 
+    }
+
+    public void RemovePlayer(playerController player)
+    {
+        battleCamera.playerTransforms.Remove(player.transform);
+        players.Remove(player);
+        Destroy(player);
+
+        // Hard coding the scene name is not good practice but its only tempory to get the demo together
+        if (players.Count <= 1)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }

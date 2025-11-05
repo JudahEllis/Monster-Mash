@@ -461,8 +461,6 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetTrigger("Spawn In");
         yield return new WaitForSeconds(0.2f);
 
-        emoteManager.PlayRandomEmote();
-
         yield return new WaitForSeconds(2f);
         //myAnimator.SetBool("Idle Bounce Allowed", true);
         //forceEndEmote();

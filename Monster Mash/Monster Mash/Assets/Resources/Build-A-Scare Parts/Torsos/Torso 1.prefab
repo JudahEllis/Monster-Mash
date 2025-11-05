@@ -616,7 +616,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!95 &7868091955846385449
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -633,7 +633,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &372849240354671536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,16 +658,6 @@ MonoBehaviour:
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
-  isArm: 0
-  isLeg: 0
-  isTail: 0
-  isWing: 0
-  isHead: 0
-  isEye: 0
-  isMouth: 0
-  isTorso: 1
-  isHorn: 0
-  isDecor: 0
   PartType: 1
   baseNeutralAttackDamage: 0
   baseHeavyAttackDamage: 0
@@ -685,7 +676,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    Attack: 0
+    rid: 7159924695398350848
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -695,7 +686,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    Attack: 0
+    rid: 7159924695398350849
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -734,6 +725,27 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 7159924695398350848
+      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+      data:
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
+    - rid: 7159924695398350849
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+      data:
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
 --- !u!114 &8486629709189050260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1474,6 +1486,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 91f97795de292e844873eac31a3c6e0d,
         type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 91f97795de292e844873eac31a3c6e0d,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1785,7 +1802,7 @@ MeshCollider:
   m_GameObject: {fileID: 1815315950302534055}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

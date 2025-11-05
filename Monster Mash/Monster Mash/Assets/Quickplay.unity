@@ -880,6 +880,7 @@ Transform:
   - {fileID: 2124791190}
   - {fileID: 697736137}
   - {fileID: 1122930129}
+  - {fileID: 1461699509}
   - {fileID: 1112194138}
   - {fileID: 1214007485}
   m_Father: {fileID: 1050029211}
@@ -920,7 +921,7 @@ MonoBehaviour:
       partRotation: {x: -0, y: -0, z: -0, w: 1}
       partScale: {x: -1, y: 1, z: 1}
       partPosition: {x: 0.369, y: -0.82, z: 0.10092461}
-      partButton: 2
+      partButton: 0
       palleteSwapIndex: 
       partHexCode: 
       isFlipped: 0
@@ -928,7 +929,15 @@ MonoBehaviour:
       partRotation: {x: -0, y: -0, z: -0, w: 1}
       partScale: {x: 1, y: 1, z: 1}
       partPosition: {x: -0.326, y: -0.91, z: -0.0014262199}
-      partButton: 3
+      partButton: 0
+      palleteSwapIndex: 
+      partHexCode: 
+      isFlipped: 0
+    - partPrefabPath: Build-A-Scare Parts/Arms/Arm 7
+      partRotation: {x: -0, y: -0, z: -0, w: 1}
+      partScale: {x: 1, y: 1, z: 1}
+      partPosition: {x: -0.40288544, y: -0.2164213, z: -0.049133778}
+      partButton: 0
       palleteSwapIndex: 
       partHexCode: 
       isFlipped: 0
@@ -1115,7 +1124,7 @@ PrefabInstance:
     - target: {fileID: 8024796071805918015, guid: b518409c6a1eb2c4cb2df6fbd24cb5d5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8024796071805918015, guid: b518409c6a1eb2c4cb2df6fbd24cb5d5,
         type: 3}
@@ -7974,7 +7983,7 @@ PrefabInstance:
     - target: {fileID: 8024796071805918015, guid: b518409c6a1eb2c4cb2df6fbd24cb5d5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8024796071805918015, guid: b518409c6a1eb2c4cb2df6fbd24cb5d5,
         type: 3}
@@ -10245,6 +10254,7 @@ MonoBehaviour:
   isWalking: 0
   isRunning: 0
   focusedAttackActive: 0
+  emoteActive: 0
   onPlatformEdge: 0
   myPlayer: {fileID: 0}
   oldattackSlotMonsterParts:
@@ -10306,6 +10316,20 @@ MonoBehaviour:
   nativeReel: {fileID: 0}
   SFXManager: {fileID: 0}
   floorCheck: {fileID: 0}
+  emoteManager:
+    defaultEmotes:
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
+    - EmoteSlot: 0
+      EmoteName: 0
+      emoteInputAction: {fileID: 0}
 --- !u!95 &1253434600
 Animator:
   serializedVersion: 4
@@ -11322,7 +11346,7 @@ MonoBehaviour:
       partRotation: {x: 0, y: 0, z: 0, w: 1}
       partScale: {x: -1, y: 1, z: 1}
       partPosition: {x: 0.369, y: -0.82, z: 0.10092461}
-      partButton: 2
+      partButton: 0
       palleteSwapIndex: 
       partHexCode: 
       isFlipped: 0
@@ -11330,7 +11354,15 @@ MonoBehaviour:
       partRotation: {x: 0, y: 0, z: 0, w: 1}
       partScale: {x: 1, y: 1, z: 1}
       partPosition: {x: -0.326, y: -0.91, z: -0.0014262199}
-      partButton: 3
+      partButton: 0
+      palleteSwapIndex: 
+      partHexCode: 
+      isFlipped: 0
+    - partPrefabPath: Build-A-Scare Parts/Arms/Arm 7
+      partRotation: {x: 0, y: 0, z: 0, w: 1}
+      partScale: {x: 1, y: 1, z: 1}
+      partPosition: {x: -0.40288544, y: -0.2164213, z: -0.049133778}
+      partButton: 0
       palleteSwapIndex: 
       partHexCode: 
       isFlipped: 0
@@ -11931,6 +11963,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441957789}
   m_CullTransparentMesh: 1
+--- !u!1001 &1461699508
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 65438257}
+    m_Modifications:
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.40288544
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2164213
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.049133778
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679641645737022274, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arm 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d5dc5b95d7ad5684c90f245f5d0c612b, type: 3}
+--- !u!4 &1461699509 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1526991660947257583, guid: d5dc5b95d7ad5684c90f245f5d0c612b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1461699508}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1467357586
 GameObject:
   m_ObjectHideFlags: 0

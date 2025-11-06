@@ -2235,6 +2235,11 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].bounceCorrections(true);
         }
 
+        for (int i = 0; i < GetActiveAttackSlots().Count; i++)
+        {
+            GetActiveAttackSlots()[i].forceTriggerJabOrSlashCollisionsOff();
+        }
+
         if (myPlayer != null)
         {
             myPlayer.unlockPlayerController();

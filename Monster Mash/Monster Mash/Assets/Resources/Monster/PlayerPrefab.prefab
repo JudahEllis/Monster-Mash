@@ -459,6 +459,7 @@ MonoBehaviour:
   grounded: 0
   landDetectionReady: 1
   isPhasingThroughPlatform: 0
+  canJump: 1
   numberOfJumps: 2
   numberOfJumpsLeft: 2
   isGooball: 0
@@ -556,6 +557,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   yMultiplier: 1.5
+  allParts: []
 --- !u!50 &5364141700156790741
 Rigidbody2D:
   serializedVersion: 4
@@ -1124,6 +1126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8176efd88a70ad4409eed33d88f104d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myPlayer: {fileID: 1351053803857597442}
 --- !u!61 &8551292697588775064
 BoxCollider2D:
   m_ObjectHideFlags: 0

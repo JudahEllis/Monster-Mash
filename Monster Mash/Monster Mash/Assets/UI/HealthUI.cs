@@ -10,7 +10,7 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private GameObject[] stocks;
     private List<GameObject> activeStocks = new();
     private int stockIndex;
-    private int lastSegmeantIndex = -1;
+    private int lastSegmeantIndex;
     private monsterAttackSystem playerRef;
     private Gradient healthGradient;
     private Coroutine colorCoroutine;

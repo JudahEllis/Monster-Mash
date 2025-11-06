@@ -41,8 +41,6 @@ public class DynamicCamera : MonoBehaviour
     [SerializeField]
     AnimationCurve zClampCurve;
 
-    public static DynamicCamera Instance { get; private set; }
-
     void Start()
     {
         
@@ -50,15 +48,6 @@ public class DynamicCamera : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-
         maxDist = Vector3.Distance(stageClampValues[0].transform.position, stageClampValues[1].transform.position);
 
         zClampCurve = new AnimationCurve(new Keyframe(0, clampValuesZ[1].position.z),

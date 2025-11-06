@@ -127,6 +127,13 @@ public class BuildAScareManager : MonoBehaviour
     bool partZoom;
 
     [SerializeField]
+    LayerMask connectionMask;
+
+    string connectionTag = "ConnectionCheck";
+
+    Transform connectionCheckObj;
+
+    [SerializeField]
     CinemachineVirtualCamera[] mainScreenCameras;
 
     void Awake()
@@ -171,6 +178,12 @@ public class BuildAScareManager : MonoBehaviour
         }
 
         locomotionCoroutines = new List<Coroutine>();
+
+        //Ray testRay = new Ray(transform.position, transform.forward);
+
+        //print(testRay.GetPoint(10));
+
+        
     }
 
     public void StartNewBuildAScare()
@@ -243,6 +256,16 @@ public class BuildAScareManager : MonoBehaviour
                     part.transform.parent = partScaleEmpty;
 
                     currentPartObj = part;
+
+                    //Temp will find a better solution
+
+                    foreach(Transform child in currentPartObj.transform)
+                    {
+                        if(child.gameObject.tag == connectionTag)
+                        {
+                            connectionCheckObj = child;
+                        }
+                    }
 
                     zoneSelection = true;
 
@@ -591,6 +614,29 @@ public class BuildAScareManager : MonoBehaviour
     private void LateUpdate()
     {
         PartClamp();
+    }
+
+    bool ConnectionCheck(Transform partConnectionPoint)
+    {
+        Collider[] connectors = Physics.OverlapSphere(partConnectionPoint.position, 0.075f, connectionMask);
+
+        if(connectors.Length >= 1)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(partSelected && !torsoSelected)
+        {
+            Gizmos.DrawSphere(connectionCheckObj.position, 0.05f);
+        }
     }
 
     #region Direct Control Functions
@@ -1062,59 +1108,7 @@ public class BuildAScareManager : MonoBehaviour
         {
             if(partSelected)
             {
-                currentPartObj.transform.parent = partSpawnPoint.transform;
-
-                MonsterPartData part = currentPartObj.GetComponent<TempPartData>().monsterPart;
-
-                part.partPosition = currentPartObj.transform.localPosition;
-
-                part.partRotation = currentPartObj.transform.localRotation;
-
-                part.partScale = currentPartObj.transform.localScale;
-
-                currentMonster.monsterParts.Add(part);
-
-                currentPartObj = null;
-
-                partSelected = false;
-
-                moveModeVisuals[(int)partLocomotionMode].SetActive(false);
-
-                /*
-
-                if(controlMode == ControlMode.DirectControl)
-                {
-                    StopCoroutineList(locomotionCoroutines);
-                }
-
-                */
-
-                partMovementEmpty.transform.position = partSpawnPoint.transform.position;
-
-                partRotationEmpty.transform.rotation = partSpawnPoint.transform.rotation;
-
-                partScaleEmpty.transform.localScale = partSpawnPoint.transform.localScale;
-
-                if(firstPart)
-                {
-                    firstPart = false;
-
-                    sideTabs.interactable = true;
-                }
-
-                if(torsoSelected)
-                { 
-                    if(controlMode == ControlMode.DirectControl)
-                    {
-                        currentPartType = 0;
-
-                        //OpenPartSelector(currentPartType);
-                    }
-
-                    torsoSelected = false;
-                }
-
-                rotAxis = Axis.X;
+                PartPlacement(); 
             }
 
             else if(zoneSelection)
@@ -1128,6 +1122,101 @@ public class BuildAScareManager : MonoBehaviour
                 //StartCoroutineList(locomotionCoroutines, PartLocomotionControl());
             }
         }
+    }
+
+    void PartPlacement()
+    {
+        if (torsoSelected)
+        {
+            PlaceTorso();
+        }
+
+        else
+        {
+            PlacePart();
+        }
+
+        rotAxis = Axis.X;
+    }
+
+    void PlacePart()
+    {
+        if(ConnectionCheck(connectionCheckObj))
+        {
+            currentPartObj.transform.parent = partSpawnPoint.transform;
+
+            MonsterPartData part = currentPartObj.GetComponent<TempPartData>().monsterPart;
+
+            part.partPosition = currentPartObj.transform.localPosition;
+
+            part.partRotation = currentPartObj.transform.localRotation;
+
+            part.partScale = currentPartObj.transform.localScale;
+
+            currentMonster.monsterParts.Add(part);
+
+            currentPartObj = null;
+
+            partSelected = false;
+
+            moveModeVisuals[(int)partLocomotionMode].SetActive(false);
+
+            partMovementEmpty.transform.position = partSpawnPoint.transform.position;
+
+            partRotationEmpty.transform.rotation = partSpawnPoint.transform.rotation;
+
+            partScaleEmpty.transform.localScale = partSpawnPoint.transform.localScale;
+        }
+
+        else
+        {
+            //Drop
+        }
+
+    }
+
+    void PlaceTorso()
+    {
+        currentPartObj.transform.parent = partSpawnPoint.transform;
+
+        MonsterPartData part = currentPartObj.GetComponent<TempPartData>().monsterPart;
+
+        part.partPosition = currentPartObj.transform.localPosition;
+
+        part.partRotation = currentPartObj.transform.localRotation;
+
+        part.partScale = currentPartObj.transform.localScale;
+
+        currentMonster.monsterParts.Add(part);
+
+        currentPartObj = null;
+
+        partSelected = false;
+
+        moveModeVisuals[(int)partLocomotionMode].SetActive(false);
+
+        partMovementEmpty.transform.position = partSpawnPoint.transform.position;
+
+        partRotationEmpty.transform.rotation = partSpawnPoint.transform.rotation;
+
+        partScaleEmpty.transform.localScale = partSpawnPoint.transform.localScale;
+
+        if (controlMode == ControlMode.DirectControl)
+        {
+            currentPartType = 0;
+
+            //OpenPartSelector(currentPartType);
+        }
+
+        if (firstPart)
+        {
+            firstPart = false;
+
+            sideTabs.interactable = true;
+        }
+
+        torsoSelected = false;
+
     }
 
     void Back(InputAction.CallbackContext context)

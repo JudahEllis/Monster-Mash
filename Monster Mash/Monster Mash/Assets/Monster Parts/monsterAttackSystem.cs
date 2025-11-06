@@ -461,8 +461,6 @@ public class monsterAttackSystem : MonoBehaviour
         myAnimator.SetTrigger("Spawn In");
         yield return new WaitForSeconds(0.2f);
 
-        emoteManager.PlayRandomEmote();
-
         yield return new WaitForSeconds(2f);
         //myAnimator.SetBool("Idle Bounce Allowed", true);
         //forceEndEmote();
@@ -2702,8 +2700,10 @@ public class monsterAttackSystem : MonoBehaviour
         }
 
         // Now safe to destroy player
-        DynamicCamera.Instance.playerTransforms.Remove(myPlayer.transform);
-        Destroy(myPlayer.gameObject);
+        if (playerManager.Instance != null)
+        {
+            playerManager.Instance.RemovePlayer(myPlayer);
+        }
     }
 
     IEnumerator removeMonsterPartFromStage(GameObject partToDisappear)

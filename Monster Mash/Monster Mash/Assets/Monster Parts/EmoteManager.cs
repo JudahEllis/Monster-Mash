@@ -230,6 +230,8 @@ public class EmoteManager
 
     public void jackEmote(monsterAttackSystem attackSystem)
     {
+        if (attackSystem.myAnimator == null) { return; }
+
         if (attackSystem.damageLocked)
         {
             return;

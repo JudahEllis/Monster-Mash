@@ -2348,6 +2348,13 @@ public class playerController : MonoBehaviour
         foreach (var part in legs)
         {
             part.isGroundedLimb = isGrounded;
+
+            /*if (chargingForward && isGrounded)
+            {
+                Debug.Log("Ending Charge Forward");
+                part.endChargeForward();
+                endChargeForward();
+            }*/
         }
     }
 

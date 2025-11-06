@@ -661,7 +661,7 @@ Transform:
   - {fileID: 4378425164557874383}
   m_Father: {fileID: 4378425164928025553}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.011383265, y: 10.901656, z: -20.485867}
+  m_LocalEulerAnglesHint: {x: -1.8324586, y: 5.406507, z: -6.178955}
 --- !u!1 &4378425163613256987
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,6 +821,9 @@ GameObject:
   - component: {fileID: 4378425163673360957}
   - component: {fileID: 4378425163673360954}
   - component: {fileID: 4378425163673360955}
+  - component: {fileID: 2922156992744883478}
+  - component: {fileID: 9205857187060490462}
+  - component: {fileID: 7063587535752082452}
   m_Layer: 0
   m_Name: Tail 1
   m_TagString: Connection - Monster Part
@@ -915,6 +918,212 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &2922156992744883478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378425163673360952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e011b5bda4bd26c4e8a3f662c95e82aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myMainSystem: {fileID: 0}
+  connectedMonsterPart: {fileID: 4378425163673360956}
+  mainTorso: {fileID: 0}
+  myAnimator: {fileID: 0}
+  PartVisual: {fileID: 0}
+  requiresUniqueAnimationOffset: 0
+  stompDetection: {fileID: 0}
+  monsterPartID: 1
+  attackAnimationID: 1
+  connected: 1
+  PartType: 0
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  cursedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
+  grabbedStatusEffect: 0
+  neutralAttack:
+    rid: 3665106666952589496
+  neutralCollider: {fileID: 0}
+  neutralColliderReference: {fileID: 0}
+  needsReloadNeutral: 0
+  reloadTimeNeutral: 1
+  isReloadedNeutral: 1
+  isReloadedHeavy: 1
+  jabOrSlashLanded: 0
+  neutralAttackHitAudioLibrary: []
+  heavyAttack:
+    rid: 3665106666952589497
+  heavyCollider: {fileID: 0}
+  heavyColliderReference: {fileID: 0}
+  heavyMuzzle: {fileID: 0}
+  needsReloadHeavy: 0
+  reloadTimeHeavy: 1
+  heavyAttackHitAudioLibrary: []
+  isJointed: 1
+  isRightSidedLimb: 0
+  isLeftSidedLimb: 0
+  connectionPoint: -1
+  isGroundedLimb: 0
+  hasTorsoCommandOverride: 0
+  isBracing: 0
+  attackMarkedHeavy: 0
+  heavyAttackInMotion: 0
+  fullActiveHeavy: 0
+  requiresRightStance: 0
+  requiresLeftStance: 0
+  requiresForwardStance: 0
+  requiresBackwardStance: 0
+  isLeadingLeg: 0
+  isFloatingGroundedLeg: 0
+  isFloatingTorso: 0
+  hasFlightedIdle: 0
+  visualForAnimationTests: {fileID: 0}
+  hasHeavyBrace: 0
+  isAttacking: 0
+  attackFocusOn: 0
+  isWalking: 0
+  isRunning: 0
+  facingRight: 0
+  grounded: 1
+  reelAttackBuiltUpPower: 0
+  reelAttackCurrentThreshold: 0
+  powerUpCheckAllowed: 1
+  reelAttackLanded: 0
+  myIdleVFX: []
+  referencesToIgnore: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 3665106666952589496
+      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
+    - rid: 3665106666952589497
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
+--- !u!114 &9205857187060490462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378425163673360952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9179718352d80e44988ac796fe78ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neutralAttackHitVFXArray: []
+  neutralAttackForwardSwingVFXArray: []
+  neutralAttackBackwardSwingVFXArray: []
+  neutralAttackDownwardSwingVFXArray: []
+  neutralAttackMissVFXArray: []
+  neutralAttackDefaultVFXArray: []
+  neutralStompVFXArray: []
+  neutralHitVFXHolder: {fileID: 0}
+  neutralForwardSwingVFXHolder: {fileID: 0}
+  neutralBackwardSwingVFXHolder: {fileID: 0}
+  neutralDownwardSwingVFXHolder: {fileID: 0}
+  neutralMissVFXHolder: {fileID: 0}
+  neutralDefaultSprayVFXHolder: {fileID: 0}
+  neutralStompVFXHolder: {fileID: 0}
+  heavyAttackHitVFXArray: []
+  heavyAttackForwardSwingVFXArray: []
+  heavyAttackBackwardSwingVFXArray: []
+  heavyAttackDownwardSwingVFXArray: []
+  heavyAttackMissVFXArray: []
+  heavyAttackDefaultVFXArray: []
+  heavyStompVFXArray: []
+  heavyHitVFXHolder: {fileID: 0}
+  heavyForwardSwingVFXHolder: {fileID: 0}
+  heavyBackwardSwingVFXHolder: {fileID: 0}
+  heavyDownwardSwingVFXHolder: {fileID: 0}
+  heavyMissVFXHolder: {fileID: 0}
+  heavyDefaultSprayVFXHolder: {fileID: 0}
+  heavyStompVFXHolder: {fileID: 0}
+  myIdleVFX: []
+  neutralHitVFXManager: {fileID: 0}
+  neutralMissVFXManager: {fileID: 0}
+  neutralDefaultSprayVFXManager: {fileID: 0}
+  heavyHitVFXManager: {fileID: 0}
+  heavyMissVFXManager: {fileID: 0}
+  heavyDefaultSprayVFXManager: {fileID: 0}
+  neutralVFXStoredParent: {fileID: 0}
+  neutralVFXStoredPosition: {x: 0, y: 0, z: 0}
+  neutralVFXStoredRotation: {x: 0, y: 0, z: 0, w: 0}
+  heavyVFXStoredParent: {fileID: 0}
+  heavyVFXStoredPosition: {x: 0, y: 0, z: 0}
+  heavyVFXStoredRotation: {x: 0, y: 0, z: 0, w: 0}
+  chargeVisual: {fileID: 0}
+  heavyChargeVisual: {fileID: 0}
+  specialRunVisual: {fileID: 0}
+  neutralMuzzle: {fileID: 0}
+  heavyMuzzle: {fileID: 0}
+  hasHeavyMovementCommand: 0
+  forwardHeavyMovementCommand: 
+  upwardHeavyMovementCommand: 
+  backwardHeavyMovementCommand: 
+  downwardHeavyMovementCommand: 
+  hasNeutralMovementCommand: 0
+  forwardNeutralMovementCommand: 
+  upwardNeutralMovementCommand: 
+  backwardNeutralMovementCommand: 
+  downwardNeutralMovementCommand: 
+  hasTorsoCommand: 0
+  hasHeadCommand: 0
+  forwardInputTorsoCommand: 
+  backwardInputTorsoCommand: 
+  upwardInputTorsoCommand: 
+  downwardInputTorsoCommand: 
+  forwardInputHeadCommand: 
+  backwardInputHeadCommand: 
+  upwardInputHeadCommand: 
+  downwardInputHeadCommand: 
+--- !u!114 &7063587535752082452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378425163673360952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756df74fad2df74b9c20dcbbc89e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPart:
+    partPrefabPath: Build-A-Scare Parts/Tails/Tail 1
+    partRotation: {x: 0, y: 0, z: 0, w: 0}
+    partScale: {x: 0, y: 0, z: 0}
+    partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
 --- !u!1 &4378425163757297134
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,7 +1341,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4378425163949911630}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.000000669794, y: 0.0000099775425, z: -86.159485}
+  m_LocalEulerAnglesHint: {x: -0.0000006697924, y: 0.000009977542, z: -86.159485}
 --- !u!1 &4378425163867746913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,7 +1578,7 @@ MonoBehaviour:
   partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
-  isHurtbox: 0
+  isHurtbox: 1
   isStomp: 0
   isProjectile: 0
   isJabOrSlash: 0
@@ -1430,7 +1639,7 @@ Transform:
   - {fileID: 4378425165194654660}
   m_Father: {fileID: 4378425164015362017}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -2.8148685, y: 4.2902937, z: -17.306818}
+  m_LocalEulerAnglesHint: {x: 6.9162803, y: 19.260485, z: -9.21134}
 --- !u!1 &4378425163951130243
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,7 +2256,7 @@ Transform:
   - {fileID: 4378425164466353923}
   m_Father: {fileID: 4378425165310036806}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0.5597917, y: -8.74689, z: -22.912302}
+  m_LocalEulerAnglesHint: {x: 7.729487, y: 24.432856, z: -7.9975867}
 --- !u!1 &4378425164045361157
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,7 +2322,7 @@ Transform:
   - {fileID: 4378425164298805250}
   m_Father: {fileID: 4378425163949911630}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0.5366913, y: 2.0997944, z: -8.765496}
+  m_LocalEulerAnglesHint: {x: 3.282926, y: 25.134338, z: -8.922131}
 --- !u!1 &4378425164179433351
 GameObject:
   m_ObjectHideFlags: 0
@@ -2440,7 +2649,7 @@ MonoBehaviour:
   partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
-  isHurtbox: 0
+  isHurtbox: 1
   isStomp: 0
   isProjectile: 0
   isJabOrSlash: 0
@@ -2571,7 +2780,7 @@ Transform:
   - {fileID: 4378425165383182861}
   m_Father: {fileID: 4378425165081385426}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 2.1839808e-36, y: 0, z: 0}
 --- !u!1 &4378425164466353920
 GameObject:
   m_ObjectHideFlags: 0
@@ -2687,7 +2896,7 @@ MonoBehaviour:
   partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
-  isHurtbox: 0
+  isHurtbox: 1
   isStomp: 0
   isProjectile: 0
   isJabOrSlash: 0
@@ -2746,7 +2955,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4378425165310036806}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.00001059983, y: 0.000009361817, z: -86.45109}
+  m_LocalEulerAnglesHint: {x: -0.000010599828, y: 0.000009361816, z: -86.45108}
 --- !u!1 &4378425164557636954
 GameObject:
   m_ObjectHideFlags: 0
@@ -2894,7 +3103,7 @@ MonoBehaviour:
   partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
-  isHurtbox: 0
+  isHurtbox: 1
   isStomp: 0
   isProjectile: 0
   isJabOrSlash: 0
@@ -3552,7 +3761,7 @@ Transform:
   - {fileID: 4378425163921032291}
   m_Father: {fileID: 4378425164422757479}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -4.7757096, y: 5.421547, z: -5.908304}
+  m_LocalEulerAnglesHint: {x: -2.3275006, y: 2.4577458, z: 7.9624467}
 --- !u!1 &4378425164928025566
 GameObject:
   m_ObjectHideFlags: 0
@@ -3584,7 +3793,7 @@ Transform:
   - {fileID: 4378425163603516854}
   m_Father: {fileID: 4378425164885406834}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 4.5626225, y: -14.707907, z: -12.254987}
+  m_LocalEulerAnglesHint: {x: 3.478411, y: -7.458616, z: -4.220858}
 --- !u!1 &4378425164946333258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3856,7 +4065,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 4378425164961473533}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -4514,7 +4723,7 @@ Transform:
   - {fileID: 4378425164961473532}
   m_Father: {fileID: 4378425164078796812}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -2.5042574, y: -3.913486, z: 7.7909513}
+  m_LocalEulerAnglesHint: {x: 0.81819016, y: 28.330786, z: -5.206748}
 --- !u!1 &4378425165194654661
 GameObject:
   m_ObjectHideFlags: 0
@@ -4630,7 +4839,7 @@ MonoBehaviour:
   partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
-  isHurtbox: 0
+  isHurtbox: 1
   isStomp: 0
   isProjectile: 0
   isJabOrSlash: 0
@@ -4754,7 +4963,7 @@ Transform:
   - {fileID: 4378425164015362017}
   m_Father: {fileID: 4378425163603516854}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 1.5903215, y: 1.9181658, z: -23.709518}
+  m_LocalEulerAnglesHint: {x: 7.503038, y: 31.340086, z: -9.854307}
 --- !u!1 &4378425165320738148
 GameObject:
   m_ObjectHideFlags: 0
@@ -5112,7 +5321,7 @@ MonoBehaviour:
   partReference: {fileID: 0}
   referencesToIgnore: []
   isHitbox: 0
-  isHurtbox: 0
+  isHurtbox: 1
   isStomp: 0
   isProjectile: 0
   isJabOrSlash: 0

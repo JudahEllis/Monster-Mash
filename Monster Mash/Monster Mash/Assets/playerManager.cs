@@ -94,9 +94,11 @@ public class playerManager : MonoBehaviour
         //this switches player event systems to determine whether one player controls the UI or all players control the UI
         if (players.Count > 0)
         {
+            MultiplayerEventSystem[] multiplayerEventSystems = GameObject.FindObjectsOfType<MultiplayerEventSystem>();
+
             for (int i = 0; i < players.Count; i++)
             {
-                GameObject potentialMultiplayerEventSystem = GameObject.Find("Player " + players[i].playerIndex + " Multiplayer System");
+                /*GameObject potentialMultiplayerEventSystem = GameObject.Find("Player " + players[i].playerIndex + " Multiplayer System");
 
                 if (potentialMultiplayerEventSystem != null)
                 {
@@ -105,6 +107,13 @@ public class playerManager : MonoBehaviour
                 else
                 {
                     players[i].gameObject.GetComponent<PlayerInput>().uiInputModule = null;
+                }*/
+
+                if (multiplayerEventSystems.Length <= 0) { return; }
+
+                if (multiplayerEventSystems[i] != null)
+                {
+                    players[i].GetComponent<PlayerInput>().uiInputModule = multiplayerEventSystems[i].GetComponent<InputSystemUIInputModule>();
                 }
             }
         }
@@ -157,7 +166,7 @@ public class playerManager : MonoBehaviour
         players.Remove(player);
         Destroy(player);
 
-        // Hard coding the scene name is not good practice but its only tempory to get the demo together
+        // temp solution for demo
         if (players.Count <= 1)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

@@ -2699,7 +2699,6 @@ public class monsterAttackSystem : MonoBehaviour
             yield return null;
         }
 
-        // Now safe to destroy player
         if (playerManager.Instance != null)
         {
             playerManager.Instance.RemovePlayer(myPlayer);

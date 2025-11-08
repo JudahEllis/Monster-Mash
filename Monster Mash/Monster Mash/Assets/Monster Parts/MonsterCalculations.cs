@@ -104,12 +104,11 @@ public class MonsterCalculations
 
     private void LoadJSON()
     {
-        string jsonPath = "Assets/Resources/Data/attack_configs.json";
+        TextAsset jsonFile = Resources.Load<TextAsset>("Data/attack_configs");
 
-        if (File.Exists(jsonPath))
+        if (jsonFile != null)
         {
-            string jsonText = File.ReadAllText(jsonPath);
-            attackConfigList = JsonUtility.FromJson<AttackConfigList>(jsonText);
+            attackConfigList = JsonUtility.FromJson<AttackConfigList>(jsonFile.text);
         }
     }
 

@@ -19,6 +19,8 @@ public class playerManager : MonoBehaviour
     [SerializeField]
     private Transform[] playerSpawnPoints;
 
+    private int tempPlayerCount;
+
 
     private void Awake()
     {
@@ -65,6 +67,7 @@ public class playerManager : MonoBehaviour
         }
 
         togglePlayerJoining();
+        tempPlayerCount++;
         #endregion
 
         #region Correct Action Map
@@ -164,10 +167,14 @@ public class playerManager : MonoBehaviour
     {
         battleCamera.playerTransforms.Remove(player.transform);
         players.Remove(player);
+
+        tempPlayerCount -= 1;
+        tempPlayerCount = Mathf.Clamp(tempPlayerCount, 0, 4);
+
         Destroy(player);
 
         // temp solution for demo
-        if (players.Count <= 1)
+        if (tempPlayerCount <= 1)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }

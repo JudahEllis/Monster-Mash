@@ -306,15 +306,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -363,6 +373,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497260936275
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -438,6 +456,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 1
   projectileSpeed: 70
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 0
   spreadOfSpray: 40
@@ -518,15 +541,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -575,6 +608,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497312755198
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -681,15 +722,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -738,6 +789,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497331923606
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1151,15 +1210,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -1208,6 +1277,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497358667706
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1424,15 +1501,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -1481,6 +1568,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497408107434
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1616,15 +1711,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -1673,6 +1778,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497415680547
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1742,6 +1855,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 0
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 1
   spreadOfSpray: 0
@@ -2178,15 +2296,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -2235,6 +2363,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497591683957
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2500,15 +2636,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -2557,6 +2703,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497690938258
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2950,6 +3104,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 0
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 1
   spreadOfSpray: 0
@@ -3094,6 +3253,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 0
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 1
   spreadOfSpray: 0
@@ -3357,15 +3521,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -3414,6 +3588,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497854306573
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3742,15 +3924,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -3799,6 +3991,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497899145003
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3963,15 +4163,25 @@ MonoBehaviour:
   isProjectile: 0
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4033,15 +4243,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4090,6 +4310,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497939537554
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4164,15 +4392,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4221,6 +4459,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497995982926
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4308,15 +4554,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4365,6 +4621,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470497999820846
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4533,15 +4797,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4590,6 +4864,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498005986580
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4694,15 +4976,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4751,6 +5043,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498047774947
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4859,15 +5159,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -4916,6 +5226,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498055957034
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5313,15 +5631,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -5370,6 +5698,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498142874191
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5948,15 +6284,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -6005,6 +6351,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498279458133
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6389,15 +6743,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -6446,6 +6810,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498357168341
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6647,15 +7019,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -6704,6 +7086,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498385656955
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7129,15 +7519,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -7186,6 +7586,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498435173732
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7257,15 +7665,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -7314,6 +7732,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498435771579
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7513,15 +7939,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -7570,6 +8006,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498458351508
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7638,6 +8082,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 70
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 1
   isSubSprayHolder: 0
   spreadOfSpray: 40
@@ -7718,15 +8167,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -7775,6 +8234,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498475938952
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7846,15 +8313,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -7903,6 +8380,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498480377806
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7974,15 +8459,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -8031,6 +8526,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498485896697
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8102,15 +8605,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -8159,6 +8672,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498491491311
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8259,6 +8780,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 0
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 1
   spreadOfSpray: 0
@@ -8640,15 +9166,25 @@ MonoBehaviour:
   isProjectile: 0
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -8998,6 +9534,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 70
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 0
   spreadOfSpray: 40
@@ -9081,15 +9622,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -9138,6 +9689,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498742401324
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9322,15 +9881,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -9379,6 +9948,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498755189653
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9550,15 +10127,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -9607,6 +10194,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498799418037
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9919,15 +10514,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -9976,6 +10581,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498849551497
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10050,15 +10663,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -10107,6 +10730,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498851291318
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10423,15 +11054,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -10480,6 +11121,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498931244515
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10567,15 +11216,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -10624,6 +11283,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498950460388
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10728,15 +11395,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -10785,6 +11462,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470498965450596
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11471,15 +12156,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -11528,6 +12223,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499066693140
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11678,15 +12381,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -11735,6 +12448,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499072466689
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11809,15 +12530,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -11866,6 +12597,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499077601144
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11951,6 +12690,11 @@ MonoBehaviour:
   isJabOrSlashHolder: 0
   isProjectileHolder: 0
   projectileSpeed: 0
+  isBoomerangHolder: 0
+  isReloaded: 1
+  myMonsterPart: {fileID: 0}
+  neutralOrHeavy: 0
+  turnOnAssetWhenReloaded: {fileID: 0}
   isSprayHolder: 0
   isSubSprayHolder: 1
   spreadOfSpray: 0
@@ -12228,15 +12972,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -12285,6 +13039,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499119764436
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12650,15 +13412,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -12707,6 +13479,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499229734634
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12781,15 +13561,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -12838,6 +13628,14 @@ MonoBehaviour:
   leftRotation: {x: 0.49999997, y: 0.49999997, z: 0.49999997, w: -0.49999997}
   rightRotation: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499249957407
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12978,7 +13776,6 @@ GameObject:
   - component: {fileID: 8930470499313183137}
   - component: {fileID: 8930470499313183136}
   - component: {fileID: 8930470499313183143}
-  - component: {fileID: 8930470499313183142}
   m_Layer: 0
   m_Name: 'Arm 4 (Right) '
   m_TagString: Connection - Monster Part
@@ -13017,7 +13814,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8930470499313183138
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -13034,7 +13831,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!135 &8930470499313183137
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -13087,10 +13885,9 @@ MonoBehaviour:
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -13098,7 +13895,14 @@ MonoBehaviour:
   slashNeutralAttack: 0
   sprayNeutralAttack: 1
   projectileNeutralAttack: 0
-  beamNeutralAttack: 0
+  homingMissileNeutralAttack: 0
+  anvilNeutralAttack: 0
+  bowlingBallNeutralAttack: 0
+  gaseousNeutralAttack: 0
+  reflectingNeutralAttack: 0
+  suctionNeutralAttack: 0
+  AOENeutralAttack: 0
+  boomerangNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 8930470498466224546}
   neutralForwardSwingVFXHolder: {fileID: 0}
   neutralBackwardSwingVFXHolder: {fileID: 0}
@@ -13108,6 +13912,10 @@ MonoBehaviour:
   neutralStompVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
   neutralMuzzle: {fileID: 8930470499071233515}
+  needsReloadNeutral: 0
+  reloadTimeNeutral: 1
+  isReloadedNeutral: 1
+  isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
   neutralAttackForwardSwingVFXArray: []
   neutralAttackBackwardSwingVFXArray: []
@@ -13115,12 +13923,27 @@ MonoBehaviour:
   neutralAttackMissVFXArray: []
   neutralAttackDefaultVFXArray: []
   neutralStompVFXArray: []
+  neutralAttackHitAudioLibrary: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
   projectileHeavyAttack: 1
   beamHeavyAttack: 0
   reelHeavyAttack: 0
+  grappleHeavyAttack: 0
+  boomerangHeavyAttack: 0
+  homingMissileHeavyAttack: 0
+  anvilHeavyAttack: 0
+  bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
+  powerBoostingHeavyAttack: 0
+  shieldHeavyAttack: 0
+  reflectingHeavyAttack: 0
+  eatingHeavyAttack: 0
+  suctionHeavyAttack: 0
+  AOEHeavyAttack: 0
+  chargingHeavyAttack: 0
+  selfExplodingHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 8930470497270191165}
   heavyForwardSwingVFXHolder: {fileID: 0}
   heavyBackwardSwingVFXHolder: {fileID: 0}
@@ -13130,6 +13953,10 @@ MonoBehaviour:
   heavyStompVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
   heavyMuzzle: {fileID: 8930470498607138040}
+  needsReloadHeavy: 0
+  reloadTimeHeavy: 1
+  chargeVisual: {fileID: 0}
+  heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
   heavyAttackForwardSwingVFXArray: []
   heavyAttackBackwardSwingVFXArray: []
@@ -13137,6 +13964,7 @@ MonoBehaviour:
   heavyAttackMissVFXArray: []
   heavyAttackDefaultVFXArray: []
   heavyStompVFXArray: []
+  heavyAttackHitAudioLibrary: []
   isJointed: 1
   isRightShoulderLimb: 0
   isLeftShoudlerLimb: 0
@@ -13155,6 +13983,7 @@ MonoBehaviour:
   isRightSidedLimb: 1
   isLeftSidedLimb: 0
   isGroundedLimb: 0
+  isBracing: 0
   attackMarkedHeavy: 0
   requiresRightStance: 0
   requiresLeftStance: 0
@@ -13166,6 +13995,8 @@ MonoBehaviour:
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  attackFocusOn: 0
+  isRunning: 0
   facingRight: 0
   grounded: 1
   myIdleVFX: []
@@ -13186,24 +14017,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8930470499313183142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8930470499313183141}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &8930470499314717467
 GameObject:
   m_ObjectHideFlags: 0
@@ -13455,15 +14268,25 @@ MonoBehaviour:
   isProjectile: 1
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0
@@ -13512,6 +14335,14 @@ MonoBehaviour:
   leftRotation: {x: 0, y: 0, z: 0, w: 0}
   rightRotation: {x: 0, y: 0, z: 0, w: 0}
   facingRight: 0
+  needsReload: 0
+  isBoomerang: 0
+  height: 0
+  distance: 0
+  autoEnd: 0
+  turnAround: 0
+  isReloaded: 0
+  neutralOrHeavy: 0
 --- !u!136 &8930470499317952437
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13796,15 +14627,25 @@ MonoBehaviour:
   isProjectile: 0
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
   damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
   stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
+  cursedStatusEffect: 0
   confusedStatusEffect: 0
   slimedStatusEffect: 0
-  stunnedStatusEffect: 0
   frozenStatusEffect: 0
   squashedStatusEffect: 0
   slowedStatusEffect: 0

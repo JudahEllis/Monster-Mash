@@ -47,6 +47,7 @@ MonoBehaviour:
   myMainSystem: {fileID: 0}
   connectedMonsterPart: {fileID: 0}
   mainTorso: {fileID: 0}
+  specialRunVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
   monsterPartHealth: 100
@@ -63,50 +64,93 @@ MonoBehaviour:
   isTorso: 0
   isHorn: 0
   isDecor: 0
+  baseNeutralAttackDamage: 0
+  baseHeavyAttackDamage: 0
+  builtUpAddedDamage: 0
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  cursedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
   jabNeutralAttack: 0
   slashNeutralAttack: 0
   sprayNeutralAttack: 0
   projectileNeutralAttack: 0
-  beamNeutralAttack: 0
+  homingMissileNeutralAttack: 0
+  anvilNeutralAttack: 0
+  bowlingBallNeutralAttack: 0
+  gaseousNeutralAttack: 0
+  reflectingNeutralAttack: 0
+  suctionNeutralAttack: 0
+  AOENeutralAttack: 0
+  boomerangNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
+  neutralForwardSwingVFXHolder: {fileID: 0}
+  neutralBackwardSwingVFXHolder: {fileID: 0}
+  neutralDownwardSwingVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
   neutralDefaultSprayVFXHolder: {fileID: 0}
+  neutralStompVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
-  neutralForwardMuzzle: {fileID: 0}
-  neutralUpwardMuzzle: {fileID: 0}
-  neutralDownwardMuzzle: {fileID: 0}
-  neutralBackwardMuzzle: {fileID: 0}
+  neutralMuzzle: {fileID: 0}
+  needsReloadNeutral: 0
+  reloadTimeNeutral: 1
+  isReloadedNeutral: 1
+  isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
+  neutralAttackForwardSwingVFXArray: []
+  neutralAttackBackwardSwingVFXArray: []
+  neutralAttackDownwardSwingVFXArray: []
   neutralAttackMissVFXArray: []
   neutralAttackDefaultVFXArray: []
+  neutralStompVFXArray: []
+  neutralAttackHitAudioLibrary: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
   projectileHeavyAttack: 0
   beamHeavyAttack: 0
   reelHeavyAttack: 0
+  grappleHeavyAttack: 0
+  boomerangHeavyAttack: 0
+  homingMissileHeavyAttack: 0
+  anvilHeavyAttack: 0
+  bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
+  powerBoostingHeavyAttack: 0
+  shieldHeavyAttack: 0
+  reflectingHeavyAttack: 0
+  eatingHeavyAttack: 0
+  suctionHeavyAttack: 0
+  AOEHeavyAttack: 0
+  chargingHeavyAttack: 0
+  selfExplodingHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
+  heavyForwardSwingVFXHolder: {fileID: 0}
+  heavyBackwardSwingVFXHolder: {fileID: 0}
+  heavyDownwardSwingVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
   heavyDefaultSprayVFXHolder: {fileID: 0}
+  heavyStompVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
-  heavyForwardMuzzle: {fileID: 0}
-  heavyUpwardMuzzle: {fileID: 0}
-  heavyDownwardMuzzle: {fileID: 0}
-  heavyBackwardMuzzle: {fileID: 0}
+  heavyMuzzle: {fileID: 0}
+  needsReloadHeavy: 0
+  reloadTimeHeavy: 1
+  chargeVisual: {fileID: 0}
+  heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
+  heavyAttackForwardSwingVFXArray: []
+  heavyAttackBackwardSwingVFXArray: []
+  heavyAttackDownwardSwingVFXArray: []
   heavyAttackMissVFXArray: []
   heavyAttackDefaultVFXArray: []
-  burnedStatusEffect: 0
-  electrifiedStatusEffect: 0
-  poisonedStatusEffect: 0
-  stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
-  confusedStatusEffect: 0
-  slimedStatusEffect: 0
-  stunnedStatusEffect: 0
-  frozenStatusEffect: 0
-  squashedStatusEffect: 0
-  slowedStatusEffect: 0
+  heavyStompVFXArray: []
+  heavyAttackHitAudioLibrary: []
   isJointed: 0
   isRightShoulderLimb: 0
   isLeftShoudlerLimb: 0
@@ -125,15 +169,20 @@ MonoBehaviour:
   isRightSidedLimb: 0
   isLeftSidedLimb: 0
   isGroundedLimb: 0
+  isBracing: 0
   attackMarkedHeavy: 0
   requiresRightStance: 0
   requiresLeftStance: 0
   requiresForwardStance: 0
   requiresBackwardStance: 0
   isLeadingLeg: 0
+  isFloatingGroundedLeg: 0
+  isFloatingTorso: 0
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  attackFocusOn: 0
+  isRunning: 0
   facingRight: 0
   grounded: 1
   myIdleVFX: []
@@ -199,20 +248,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 6603876602030288669}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 1
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &2665954302395179179
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,20 +310,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 9061804531898809630}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 1
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &2914524713653635238
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,20 +372,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 5723495471849339069}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 1
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &3748789089093226876
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,20 +434,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 5598983357194741129}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 1
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &4046753991909497757
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,6 +562,29 @@ MonoBehaviour:
   isProjectile: 0
   isJabOrSlash: 0
   isReel: 0
+  isGrapple: 0
+  isBoomerang: 0
+  isChargingJab: 0
+  damage: 0
+  hasTickDamage: 0
+  tickDamage: 0
+  tickTiming: 0
+  tickDamageDuration: 0
+  markedHeavy: 0
+  isFullyChargedHeavy: 0
+  directionOfAttack: 1
+  hasStatusEffect: 0
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  cursedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
+  grabbedStatusEffect: 0
 --- !u!1 &4075908515929101656
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,20 +646,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 868537534683461061}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &4549685128293860678
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,20 +708,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 7304386436887540315}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 1
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &4680632388218028767
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,20 +770,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 2857351777036979740}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 1
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &6047406088099548699
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,20 +832,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 4105599091239043084}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 1
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &6990393959356699222
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,20 +894,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 5536352769465271532}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 1
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &8808489228792741522
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,7 +907,6 @@ GameObject:
   - component: {fileID: 620733612748020033}
   - component: {fileID: 1227121148225449802}
   - component: {fileID: 3055724878614543883}
-  - component: {fileID: 9002624107195542661}
   - component: {fileID: -8652445134801855834}
   m_Layer: 0
   m_Name: Torso 1
@@ -980,7 +934,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &620733612748020033
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -997,7 +951,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1227121148225449802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1013,6 +968,7 @@ MonoBehaviour:
   myMainSystem: {fileID: 0}
   connectedMonsterPart: {fileID: 0}
   mainTorso: {fileID: 0}
+  specialRunVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
   monsterPartHealth: 100
@@ -1029,50 +985,93 @@ MonoBehaviour:
   isTorso: 1
   isHorn: 0
   isDecor: 0
+  baseNeutralAttackDamage: 0
+  baseHeavyAttackDamage: 0
+  builtUpAddedDamage: 0
+  burnedStatusEffect: 0
+  electrifiedStatusEffect: 0
+  poisonedStatusEffect: 0
+  stinkyStatusEffect: 0
+  cursedStatusEffect: 0
+  confusedStatusEffect: 0
+  slimedStatusEffect: 0
+  frozenStatusEffect: 0
+  squashedStatusEffect: 0
+  slowedStatusEffect: 0
   jabNeutralAttack: 0
   slashNeutralAttack: 0
   sprayNeutralAttack: 0
   projectileNeutralAttack: 0
-  beamNeutralAttack: 0
+  homingMissileNeutralAttack: 0
+  anvilNeutralAttack: 0
+  bowlingBallNeutralAttack: 0
+  gaseousNeutralAttack: 0
+  reflectingNeutralAttack: 0
+  suctionNeutralAttack: 0
+  AOENeutralAttack: 0
+  boomerangNeutralAttack: 0
   neutralHitVFXHolder: {fileID: 0}
+  neutralForwardSwingVFXHolder: {fileID: 0}
+  neutralBackwardSwingVFXHolder: {fileID: 0}
+  neutralDownwardSwingVFXHolder: {fileID: 0}
   neutralMissVFXHolder: {fileID: 0}
   neutralDefaultSprayVFXHolder: {fileID: 0}
+  neutralStompVFXHolder: {fileID: 0}
   neutralCollider: {fileID: 0}
-  neutralForwardMuzzle: {fileID: 0}
-  neutralUpwardMuzzle: {fileID: 0}
-  neutralDownwardMuzzle: {fileID: 0}
-  neutralBackwardMuzzle: {fileID: 0}
+  neutralMuzzle: {fileID: 0}
+  needsReloadNeutral: 0
+  reloadTimeNeutral: 1
+  isReloadedNeutral: 1
+  isReloadedHeavy: 1
   neutralAttackHitVFXArray: []
+  neutralAttackForwardSwingVFXArray: []
+  neutralAttackBackwardSwingVFXArray: []
+  neutralAttackDownwardSwingVFXArray: []
   neutralAttackMissVFXArray: []
   neutralAttackDefaultVFXArray: []
+  neutralStompVFXArray: []
+  neutralAttackHitAudioLibrary: []
   jabHeavyAttack: 0
   slashHeavyAttack: 0
   sprayHeavyAttack: 0
   projectileHeavyAttack: 0
   beamHeavyAttack: 0
   reelHeavyAttack: 0
+  grappleHeavyAttack: 0
+  boomerangHeavyAttack: 0
+  homingMissileHeavyAttack: 0
+  anvilHeavyAttack: 0
+  bowlingBallHeavyAttack: 0
+  gaseousHeavyAttack: 0
+  powerBoostingHeavyAttack: 0
+  shieldHeavyAttack: 0
+  reflectingHeavyAttack: 0
+  eatingHeavyAttack: 0
+  suctionHeavyAttack: 0
+  AOEHeavyAttack: 0
+  chargingHeavyAttack: 0
+  selfExplodingHeavyAttack: 0
   heavyHitVFXHolder: {fileID: 0}
+  heavyForwardSwingVFXHolder: {fileID: 0}
+  heavyBackwardSwingVFXHolder: {fileID: 0}
+  heavyDownwardSwingVFXHolder: {fileID: 0}
   heavyMissVFXHolder: {fileID: 0}
   heavyDefaultSprayVFXHolder: {fileID: 0}
+  heavyStompVFXHolder: {fileID: 0}
   heavyCollider: {fileID: 0}
-  heavyForwardMuzzle: {fileID: 0}
-  heavyUpwardMuzzle: {fileID: 0}
-  heavyDownwardMuzzle: {fileID: 0}
-  heavyBackwardMuzzle: {fileID: 0}
+  heavyMuzzle: {fileID: 0}
+  needsReloadHeavy: 0
+  reloadTimeHeavy: 1
+  chargeVisual: {fileID: 0}
+  heavyChargeVisual: {fileID: 0}
   heavyAttackHitVFXArray: []
+  heavyAttackForwardSwingVFXArray: []
+  heavyAttackBackwardSwingVFXArray: []
+  heavyAttackDownwardSwingVFXArray: []
   heavyAttackMissVFXArray: []
   heavyAttackDefaultVFXArray: []
-  burnedStatusEffect: 0
-  electrifiedStatusEffect: 0
-  poisonedStatusEffect: 0
-  stinkyStatusEffect: 0
-  hauntedStatusEffect: 0
-  confusedStatusEffect: 0
-  slimedStatusEffect: 0
-  stunnedStatusEffect: 0
-  frozenStatusEffect: 0
-  squashedStatusEffect: 0
-  slowedStatusEffect: 0
+  heavyStompVFXArray: []
+  heavyAttackHitAudioLibrary: []
   isJointed: 0
   isRightShoulderLimb: 0
   isLeftShoudlerLimb: 0
@@ -1091,15 +1090,20 @@ MonoBehaviour:
   isRightSidedLimb: 0
   isLeftSidedLimb: 0
   isGroundedLimb: 0
+  isBracing: 0
   attackMarkedHeavy: 0
   requiresRightStance: 0
   requiresLeftStance: 0
   requiresForwardStance: 0
   requiresBackwardStance: 0
   isLeadingLeg: 0
+  isFloatingGroundedLeg: 0
+  isFloatingTorso: 0
   hasFlightedIdle: 0
   visualForAnimationTests: {fileID: 0}
   hasHeavyBrace: 0
+  attackFocusOn: 0
+  isRunning: 0
   facingRight: 0
   grounded: 1
   myIdleVFX: []
@@ -1120,24 +1124,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9002624107195542661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8808489228792741522}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!114 &-8652445134801855834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1155,6 +1141,10 @@ MonoBehaviour:
     partRotation: {x: 0, y: 0, z: 0, w: 0}
     partScale: {x: 0, y: 0, z: 0}
     partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
 --- !u!1 &8957835221887174014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1216,20 +1206,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 4240399789203486132}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 1
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 0
+  connectionPoint: -1
 --- !u!1 &9191703782688152961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,20 +1268,7 @@ MonoBehaviour:
   triggerBubble: {fileID: 4496973255980672704}
   connectedBodyPiece: {fileID: 620733612748020033}
   monsterPartMemory: []
-  isLeftHeadConnection: 0
-  isRightHeadConnection: 0
-  isFaceConnection: 0
-  isTopHeadConnection: 0
-  isBackHeadConnection: 0
-  isLeftUpperTorsoConnection: 0
-  isRightUpperTorsoConnection: 0
-  isNeckTorsoConnection: 0
-  isLeftLowerTorsoConnection: 0
-  isRightLowerTorsoConnection: 0
-  isTailTorsoConnection: 0
-  isShoulderBladeTorsoConnection: 0
-  isChestTorsoConnection: 0
-  isBellyTorsoConnection: 1
+  connectionPoint: -1
 --- !u!1001 &8617009567843393146
 PrefabInstance:
   m_ObjectHideFlags: 0

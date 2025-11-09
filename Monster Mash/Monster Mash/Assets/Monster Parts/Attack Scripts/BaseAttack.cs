@@ -58,6 +58,9 @@ public abstract class BaseAttack
         float clipLength = monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).length;
 
         OnAttackRelease?.Invoke(this, new TriggerAttackReleaseEventArgs(movementModifier, clipLength));
+
+        monsterPartRef.myMainSystem.myPlayer.StartCoroutine(monsterPartRef.myMainSystem.myPlayer.DisableJumping(clipLength));
+        monsterPartRef.myMainSystem.myPlayer.isAttacking = true;
     }
 
     public virtual void CancelAttack()

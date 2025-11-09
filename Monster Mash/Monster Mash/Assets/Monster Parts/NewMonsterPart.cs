@@ -525,9 +525,6 @@ public class NewMonsterPart : MonoBehaviour
             myMainSystem.heavyAttackActivated();
             heavyAttack.OnHeavyAttackStarted();
             PartVisual.triggerChargeVisual();
-
-            float chargeDuration = GetCurrentAnimationClipLength();
-            myMainSystem.StartCoroutine(myMainSystem.myPlayer.DisableJumping(chargeDuration));
         }
         else
         {
@@ -805,7 +802,7 @@ public class NewMonsterPart : MonoBehaviour
 
     }
 
-    private float GetCurrentAnimationClipLength()
+    public float GetCurrentAnimationClipLength()
     {
         if (myAnimator != null)
         {

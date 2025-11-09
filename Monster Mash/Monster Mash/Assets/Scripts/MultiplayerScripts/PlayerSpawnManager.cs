@@ -74,7 +74,10 @@ public class PlayerSpawnManager : MonoBehaviour
 
                 spawnedPart.transform.localScale = partData.partScale;
 
-                monsterControl.AssignMonsterPartAttackInfo(partData.partButton, spawnedPart.GetComponentInChildren<NewMonsterPart>());
+                if (partData.partButton != MonsterPartData.Button.NONE)
+                {
+                    monsterControl.AssignMonsterPartAttackInfo(partData.partButton, spawnedPart.GetComponentInChildren<NewMonsterPart>());
+                }
 
                 IPartAdjustable[] partAdjustments = spawnedPart.GetComponentsInChildren<IPartAdjustable>();
 

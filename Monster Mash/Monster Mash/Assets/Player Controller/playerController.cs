@@ -26,6 +26,7 @@ public class playerController : MonoBehaviour
     private InputActionMap UIcontrols;
     //private bool UIcontrolsNeeded = true;
     private InputActionMap monsterControls;
+    [SerializeField] private Collider2D currentPlatformCollider;
     //private bool monsterControlsNeeded = false;
 
     //
@@ -293,6 +294,49 @@ public class playerController : MonoBehaviour
         UpdateInputDirection();
         if (monsterControllerActive)
         {
+
+            if (!isPhasingThroughPlatform && !isGrounded())
+            {
+                Collider2D platform = GetClosestPlatform();
+                if (platform != null)
+                {
+                    currentPlatformCollider = platform;
+                }   
+            }
+
+            if (isPhasingThroughPlatform)
+            {
+                phase();
+            }
+            else
+            {
+                antiPhase(true);
+            }
+
+            if (isPhasingThroughPlatform)
+            {
+                // Only check for re-enabling if we are currently phasing
+                bool touching = false;
+                if (bodyCollider.IsTouchingLayers(semiSolidGroundLayer)) touching = true;
+                if (smallBodyCollider.IsTouchingLayers(semiSolidGroundLayer)) touching = true;
+                if (groundFrictionCollider.IsTouchingLayers(semiSolidGroundLayer)) touching = true;
+
+                if (!touching)
+                {
+                    currentPlatformCollider = null;
+                    isPhasingThroughPlatform = false;
+                }
+            }
+
+            /*if (isGrounded())
+            {
+                if (grounded == false)
+                {
+                    land();
+                }
+            }*/
+
+
             if (isGrounded() && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f))
             {
                 if (grounded == false)
@@ -332,8 +376,9 @@ public class playerController : MonoBehaviour
                     }
                     */
                 }
-                
-            }else if ((myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && myRigidbody.gravityScale != slowFallGravityPower && canMove && slowFallBlocked == false)
+
+            }
+            else if ((myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && myRigidbody.gravityScale != slowFallGravityPower && canMove && slowFallBlocked == false)
             {
                 //falling
                 activateSlowFall();
@@ -677,7 +722,7 @@ public class playerController : MonoBehaviour
                                 phase();
                                 phaseThroughPlatformVisual();
                                 grounded = false;
-                                isPhasingThroughPlatform = true;
+                                //isPhasingThroughPlatform = true;
                                 isCrouching = false;
                                 isFastFalling = false;
                                 landDetectionReady = false;
@@ -708,7 +753,7 @@ public class playerController : MonoBehaviour
 
                         if (isPhasingThroughPlatform && isSemiGrounded())
                         {
-                            isPhasingThroughPlatform = false;
+                            //isPhasingThroughPlatform = false;
 
                         }
                     }
@@ -737,7 +782,7 @@ public class playerController : MonoBehaviour
                 if (isDashing && grabbingWall == false)
                 {
                     #region Dash Momentum and Entering Wall Grab
-                    if (rightJoystickVector.x > 0.1f)
+                    /*if (rightJoystickVector.x > 0.1f)
                     {
                         myRigidbody.velocity = new Vector2(1 * dashSpeed, 0);
 
@@ -755,13 +800,13 @@ public class playerController : MonoBehaviour
                             wallGrab(-1);
                         }
                     }
-
+                    */
                     #endregion
                 }
                 else if (grabbingWall)
                 {
                     #region Exiting Wall Grab by land, slipping, or jumping
-                    if ((isGrounded() || isSemiGrounded()) && grounded == false)
+                    /*if ((isGrounded() || isSemiGrounded()) && grounded == false)
                     {
                         land();
                     }
@@ -782,6 +827,7 @@ public class playerController : MonoBehaviour
                         wallJump(1);
                         bigJumpVisual();
                     }
+                    */
                     #endregion
                 }
             }
@@ -881,6 +927,12 @@ public class playerController : MonoBehaviour
         }
         */
 
+        /*if (!isAttacking && !willAttack)
+        {
+            canMove = true;
+        }*/
+
+
         if (context.performed)
         {
             if ((leftJoystickVector.x > 0.9f && facingRight) || (leftJoystickVector.x < -0.9f && facingRight == false))
@@ -958,7 +1010,6 @@ public class playerController : MonoBehaviour
                 }
             }
         }
-
     }
 
     private bool isGrounded()
@@ -976,21 +1027,29 @@ public class playerController : MonoBehaviour
         return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
     }
 
+    private Collider2D GetClosestPlatform()
+    {
+        return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
+    }
+
     private void land()
     {
-        unlockPlayerController();
+        //unlockPlayerController();
         isDamageLaunching = false;
         grounded = true;
         numberOfJumpsLeft = numberOfJumps;
         StopCoroutine(jumpRecharge());
 
-        bodyCollider.enabled = true;
-        smallBodyCollider.enabled = true;
-        isPhasingThroughPlatform = false;
+        //myMonster.attackFocusOff();
+        //isAttacking = false;
+
+        //bodyCollider.enabled = true;
+        //smallBodyCollider.enabled = true;
+        //isPhasingThroughPlatform = false;
         isFastFalling = false;
         landDetectionReady = true;
-        canJump = true;
-        canDash = true;
+        //canJump = true;
+        //canDash = true;
         insideFloor = false;
         //canRoll = true;
 
@@ -1032,7 +1091,7 @@ public class playerController : MonoBehaviour
         }
         else
         {
-            lateLandVisualCorrections();
+            //lateLandVisualCorrections();
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
             turnOnFriction();
             requiresLateLand = true;
@@ -1125,13 +1184,13 @@ public class playerController : MonoBehaviour
             StartCoroutine(jumpRecharge());
             //StartCoroutine(landDetectionDelay());
 
-            if (isBelowSemiGround())
+            /*if (isBelowSemiGround())
             {
                 phase();
                 isPhasingThroughPlatform = true;
                 isCrouching = false;
                 isFastFalling = false;
-            }
+            }*/
         }
     }
 
@@ -1202,7 +1261,7 @@ public class playerController : MonoBehaviour
         }
         */
 
-        if (context.performed && (canDash || canRoll) && grabbingWall == false)
+        /*if (context.performed && (canDash || canRoll) && grabbingWall == false)
         {
 
             if (isGrounded() || isSemiGrounded())
@@ -1266,6 +1325,7 @@ public class playerController : MonoBehaviour
             }
 
         }
+        */
 
     }
 
@@ -1435,6 +1495,7 @@ public class playerController : MonoBehaviour
 
     private void wallGrab(int direction)
     {
+        /*
         wallGrabVisual();
         StopCoroutine(dashTime());
         //endDashAttackVisual();
@@ -1448,6 +1509,7 @@ public class playerController : MonoBehaviour
         myRigidbody.velocity = new Vector2(0, 0);
         //print("Grabbing Wall");
         //change visual based on direction
+        */
     }
     private void wallJump(int direction)
     {
@@ -1458,7 +1520,7 @@ public class playerController : MonoBehaviour
         myRigidbody.velocity = new Vector2(direction * wallJumpPower, bigJumpPower);
         StartCoroutine(jumpRecharge());
         endWallGrabVisual();
-        bodyCollider.enabled = true;
+        //bodyCollider.enabled = true;
         //standingVisual.enabled = true;
         //ballVisual.enabled = false;
         isDashing = false;
@@ -1636,7 +1698,7 @@ public class playerController : MonoBehaviour
     private void startMiscIdleAnimations()
     {
         canMove = true;
-        isAttacking = false;
+        //isAttacking = false;
         myMonster.focusedAttackActive = false;
 
         if (atPlatformEdge)
@@ -1812,20 +1874,40 @@ public class playerController : MonoBehaviour
 
     private void phase()
     {
+        /*
         bodyCollider.enabled = false;
         smallBodyCollider.enabled = false;
         groundFrictionCollider.enabled = false;
         isPhasingThroughPlatform = true;
+        */
+
+        if (currentPlatformCollider != null)
+        {
+            Physics2D.IgnoreCollision(bodyCollider, currentPlatformCollider, true);
+            Physics2D.IgnoreCollision(smallBodyCollider, currentPlatformCollider, true);
+            Physics2D.IgnoreCollision(groundFrictionCollider, currentPlatformCollider, true);
+            isPhasingThroughPlatform = true;
+        }    
     }
 
     private void antiPhase(bool hasOverride)
     {
         if (hasOverride || insideFloor == false)
         {
+            /*
             bodyCollider.enabled = true;
             smallBodyCollider.enabled = true;
             //groundFrictionCollider.enabled = true;
             isPhasingThroughPlatform = false;
+            */
+
+            if (currentPlatformCollider != null)
+            {
+                Physics2D.IgnoreCollision(bodyCollider, currentPlatformCollider, false);
+                Physics2D.IgnoreCollision(smallBodyCollider, currentPlatformCollider, false);
+                Physics2D.IgnoreCollision(groundFrictionCollider, currentPlatformCollider, false);
+                isPhasingThroughPlatform = false;
+            }
         }
     }
 
@@ -1849,10 +1931,10 @@ public class playerController : MonoBehaviour
 
     public void damageLockPlayercontroller()
     {
-        canMove = false;
+        //canMove = false;
         isRunning = false;
         isWalking = false;
-        antiPhase(false);
+        //antiPhase(false);
 
         if (grounded)
         {
@@ -1876,7 +1958,7 @@ public class playerController : MonoBehaviour
         canMove = true;
         isRunning = false;
         isWalking = false;
-        isAttacking = false;
+        //isAttacking = false;
         //myRigidbody.gravityScale = gravityPower;
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 
@@ -1905,8 +1987,9 @@ public class playerController : MonoBehaviour
 
     public void lockPlayerController()
     {
+        //Debug.Log("Player Controller Locked");
         canMove = false;
-        //canJump = false;
+        canJump = false;
         isRunning = false;
         isWalking = false;
 
@@ -1918,8 +2001,8 @@ public class playerController : MonoBehaviour
         if (isDashing == false && isRolling == false)
         {
             //myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            isAttacking = true;
-            antiPhase(false);
+            //isAttacking = true;
+            //antiPhase(false);
             //heavyActivated();
             midAirWindUp();
         }
@@ -1941,14 +2024,16 @@ public class playerController : MonoBehaviour
 
     public void unlockPlayerController()
     {
+        //Debug.Log("Player Controller Unlocked");
         canMove = true;
-        //canJump = true;
+        canJump = true;
         isRunning = false;
         isWalking = false;
         isAttacking = false;
         //myRigidbody.gravityScale = gravityPower;
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 
+        
         if (isDashing == false && isRolling == false)
         {
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
@@ -1962,7 +2047,7 @@ public class playerController : MonoBehaviour
             requiresLateLand = false;
             //lateLandVisualCorrections();
         }
-
+        
         
 
         /*
@@ -2324,22 +2409,13 @@ public class playerController : MonoBehaviour
 
     #endregion
 
-    /*public IEnumerator DisableJumping(float seconds, Action onComplete = null)
-    {
-        Debug.Log(seconds);
-        canJump = false;
-        //canMove = false;
-        yield return new WaitForSeconds(seconds);
-        canJump = true;
-        //canMove = true;
-        onComplete?.Invoke();
-    }*/
-
     public IEnumerator DisableJumping(float seconds)
     {
-        canJump = false;
+        Debug.Log("Started Attack");
+        lockPlayerController(); 
         yield return new WaitForSeconds(seconds);
-        canJump = true;
+        Debug.Log("Ended Attack");
+        unlockPlayerController(); 
     }
 
     public void SetGroundedState(bool isGrounded)
@@ -2390,10 +2466,10 @@ public class playerController : MonoBehaviour
 
         myMonster.DecreaseHealth(damageRecieved);
 
-        canMove = false;
+        //canMove = false;
         isRunning = false;
         isWalking = false;
-        antiPhase(false);
+        //antiPhase(false);
 
         bool facingPunch;
 
@@ -2512,7 +2588,7 @@ public class playerController : MonoBehaviour
         canMove = true;
         isRunning = false;
         isWalking = false;
-        isAttacking = false;
+        //isAttacking = false;
         //myRigidbody.gravityScale = gravityPower;
         if (!isDamageLaunching)
         {
@@ -2608,19 +2684,38 @@ public class playerController : MonoBehaviour
         }
     }
 
+    private IEnumerator PhaseTimer()
+    {
+        if (isPhasingThroughPlatform)
+        {
+            Debug.Log("Phase Timer Started");
+            phase();
+            isPhasingThroughPlatform = true;
+            isCrouching = false;
+            isFastFalling = false;
+            yield return new WaitForSeconds(0.15f);
+            antiPhase(false);
+            isPhasingThroughPlatform = false;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Solid")
         {
             if (isPhasingThroughPlatform)
             {
+                isPhasingThroughPlatform = false;
                 antiPhase(true);
+                
             }
         }
 
         if (collision.gameObject.tag == "Semi Solid")
         {
+            currentPlatformCollider = collision;
             insideFloor = true;
+            //StartCoroutine(PhaseTimer());
         }
 
         if (collision.gameObject.tag == "Platform Edge")
@@ -2642,6 +2737,16 @@ public class playerController : MonoBehaviour
         {
             insideFloor = false;
             landDetectionReady = true;
+            isPhasingThroughPlatform = false;
+            //grounded = false;
+            //antiPhase(true);
+            //currentPlatformCollider = null;
+
+            /*if (isPhasingThroughPlatform)
+            {
+                antiPhase(true);
+            }*/
+            //StartCoroutine(PhaseTimer());
         }
 
         if (collision.gameObject.tag == "Platform Edge")

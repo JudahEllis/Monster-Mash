@@ -2205,7 +2205,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         if (myPlayer != null)
         {
-            myPlayer.lockPlayerController();
+            //myPlayer.lockPlayerController();
         }
     }
 
@@ -2242,7 +2242,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         if (myPlayer != null)
         {
-            myPlayer.unlockPlayerController();
+            //myPlayer.unlockPlayerController();
         }
 
     }

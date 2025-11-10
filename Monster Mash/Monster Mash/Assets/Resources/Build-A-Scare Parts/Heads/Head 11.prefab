@@ -732,6 +732,37 @@ Transform:
   m_Father: {fileID: 8914965914816690494}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2786010902385475482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2965259353043580255}
+  m_Layer: 0
+  m_Name: ConnectionCheck
+  m_TagString: ConnectionCheck
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2965259353043580255
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2786010902385475482}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
+  m_LocalPosition: {x: 0, y: 0.265, z: 0.098}
+  m_LocalScale: {x: 2.3131099, y: 2.3131099, z: 2.3131099}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8914965914816690494}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -180}
 --- !u!1 &2828456443234064555
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,7 +1605,7 @@ GameObject:
   - component: {fileID: 6816018892159036203}
   - component: {fileID: 4679430837052725697}
   - component: {fileID: 4820688987135790404}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: head_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1665,7 +1696,7 @@ MeshCollider:
   m_GameObject: {fileID: 4461390225068653739}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -2631,6 +2662,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4267878844137448090}
+  - {fileID: 2965259353043580255}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2690,7 +2722,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 3665106684488712350
+    rid: 1127518610339136056
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -2700,7 +2732,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 3665106684488712351
+    rid: 1127518610339136057
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -2742,7 +2774,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3665106684488712350
+    - rid: 1127518610339136056
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -2752,7 +2784,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
-    - rid: 3665106684488712351
+    - rid: 1127518610339136057
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0

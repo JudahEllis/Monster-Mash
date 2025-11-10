@@ -63709,7 +63709,7 @@ Transform:
   - {fileID: 1934499001447493492}
   - {fileID: 1934499001011576444}
   - {fileID: 1934499000801074825}
-  - {fileID: 5344875295659971662}
+  - {fileID: 8228454884091687557}
   - {fileID: 1934499002765869574}
   - {fileID: 1934499002564369249}
   - {fileID: 1934499002680291514}
@@ -103091,9 +103091,9 @@ GameObject:
   - component: {fileID: 1934499002262364412}
   - component: {fileID: 1934499002262364410}
   - component: {fileID: 1934499002262364411}
-  - component: {fileID: 3429533399034048006}
-  - component: {fileID: 2115858596793085679}
-  - component: {fileID: 2616977609228466216}
+  - component: {fileID: 4868912332588189339}
+  - component: {fileID: 367729278125314338}
+  - component: {fileID: -3975690035172641297}
   m_Layer: 0
   m_Name: Tail 2
   m_TagString: Connection - Monster Part
@@ -103114,6 +103114,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1934499001093975042}
+  - {fileID: 3319360429760358672}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -103167,7 +103168,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3429533399034048006
+--- !u!114 &4868912332588189339
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103202,7 +103203,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 3665106666952589414
+    rid: 6991769383328022554
   neutralCollider: {fileID: 1934499000801074827}
   neutralColliderReference: {fileID: 1934499000801074824}
   needsReloadNeutral: 0
@@ -103212,9 +103213,9 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 3665106666952589417
-  heavyCollider: {fileID: 3100472730129740353}
-  heavyColliderReference: {fileID: 8321334514859531777}
+    rid: 6991769383328022557
+  heavyCollider: {fileID: 7861016137735960559}
+  heavyColliderReference: {fileID: 6911040938211542806}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
   reloadTimeHeavy: 1
@@ -103254,7 +103255,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3665106666952589414
+    - rid: 6991769383328022554
       type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 10
@@ -103264,7 +103265,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 1
-    - rid: 3665106666952589417
+    - rid: 6991769383328022557
       type: {class: SpinningHeavy, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 90
@@ -103274,7 +103275,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 21
---- !u!114 &2115858596793085679
+--- !u!114 &367729278125314338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103352,7 +103353,7 @@ MonoBehaviour:
   backwardInputHeadCommand: 
   upwardInputHeadCommand: 
   downwardInputHeadCommand: 
---- !u!114 &2616977609228466216
+--- !u!114 &-3975690035172641297
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157675,7 +157676,7 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.81323427, y: 1.1398232, z: 0}
     m_Extent: {x: 0.24429399, y: 0.10174835, z: 0.13477997}
   m_DirtyAABB: 0
---- !u!1 &4043051571968358650
+--- !u!1 &6065573282667587133
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157683,25 +157684,56 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5344875295659971662}
-  - component: {fileID: 3495003811251442800}
-  - component: {fileID: 6825714500797812753}
-  - component: {fileID: 3100472730129740353}
-  - component: {fileID: 8321334514859531777}
+  - component: {fileID: 3319360429760358672}
   m_Layer: 0
-  m_Name: HeavyHitbox
-  m_TagString: Hitbox
+  m_Name: ConnectionCheck
+  m_TagString: ConnectionCheck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5344875295659971662
+--- !u!4 &3319360429760358672
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043051571968358650}
+  m_GameObject: {fileID: 6065573282667587133}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0.159}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1934499002262364415}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!1 &7452714513037502299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8228454884091687557}
+  - component: {fileID: 9051909243832066792}
+  - component: {fileID: 8189279613193156096}
+  - component: {fileID: 7861016137735960559}
+  - component: {fileID: 6911040938211542806}
+  m_Layer: 0
+  m_Name: Heavy Hitbox
+  m_TagString: Hitbox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8228454884091687557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7452714513037502299}
   m_LocalRotation: {x: -0.5905737, y: 0.37953836, z: 0.5590203, w: 0.44121376}
   m_LocalPosition: {x: -1.5738724, y: -0.09626759, z: -0.011839635}
   m_LocalScale: {x: 3.147248, y: 3.147214, z: 3.147158}
@@ -157710,21 +157742,21 @@ Transform:
   m_Father: {fileID: 1934499001517626948}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3495003811251442800
+--- !u!33 &9051909243832066792
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043051571968358650}
+  m_GameObject: {fileID: 7452714513037502299}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &6825714500797812753
+--- !u!23 &8189279613193156096
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043051571968358650}
+  m_GameObject: {fileID: 7452714513037502299}
   m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -157760,26 +157792,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3100472730129740353
+--- !u!135 &7861016137735960559
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043051571968358650}
+  m_GameObject: {fileID: 7452714513037502299}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8321334514859531777
+--- !u!114 &6911040938211542806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043051571968358650}
+  m_GameObject: {fileID: 7452714513037502299}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83dded194cf0ff14d8f35e0e9c721b43, type: 3}

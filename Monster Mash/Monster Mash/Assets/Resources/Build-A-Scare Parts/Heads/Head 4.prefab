@@ -876,6 +876,37 @@ Transform:
   m_Father: {fileID: 223147964620397996}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5259127056038998903
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5184376394017977971}
+  m_Layer: 0
+  m_Name: ConnectionCheck
+  m_TagString: ConnectionCheck
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5184376394017977971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5259127056038998903}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
+  m_LocalPosition: {x: 0, y: 0.437, z: 0.485}
+  m_LocalScale: {x: 2.1291556, y: 2.1291556, z: 2.1291547}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7218622802246241131}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -180}
 --- !u!1 &5447242892129851975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,6 +1438,7 @@ Transform:
   m_Children:
   - {fileID: 1113124408675874627}
   - {fileID: 2383896719531727627}
+  - {fileID: 5184376394017977971}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1466,7 +1498,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 3665106684488712338
+    rid: 1127518610339135946
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -1476,7 +1508,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 3665106684488712339
+    rid: 1127518610339135947
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -1518,7 +1550,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3665106684488712338
+    - rid: 1127518610339135946
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -1528,7 +1560,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
-    - rid: 3665106684488712339
+    - rid: 1127518610339135947
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -1709,7 +1741,7 @@ GameObject:
   - component: {fileID: 1317179791657560154}
   - component: {fileID: 7606871321065687744}
   - component: {fileID: 8076341010836831609}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: moe_low.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1800,7 +1832,7 @@ MeshCollider:
   m_GameObject: {fileID: 8595278436320782886}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

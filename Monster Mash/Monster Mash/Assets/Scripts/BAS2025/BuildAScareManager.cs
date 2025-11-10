@@ -183,7 +183,7 @@ public class BuildAScareManager : MonoBehaviour
 
         //print(testRay.GetPoint(10));
 
-        
+        eventSystem.SetSelectedGameObject(monsterSelectButtons[0].gameObject);
     }
 
     public void StartNewBuildAScare()
@@ -264,6 +264,8 @@ public class BuildAScareManager : MonoBehaviour
                         if(child.gameObject.tag == connectionTag)
                         {
                             connectionCheckObj = child;
+
+                            break;
                         }
                     }
 
@@ -618,24 +620,36 @@ public class BuildAScareManager : MonoBehaviour
 
     bool ConnectionCheck(Transform partConnectionPoint)
     {
-        Collider[] connectors = Physics.OverlapSphere(partConnectionPoint.position, 0.075f, connectionMask);
+        bool canConnect = true;
+
+        Collider[] connectors = Physics.OverlapSphere(partConnectionPoint.position, 0.2f, connectionMask);
 
         if(connectors.Length >= 1)
         {
-            return true;
+            if (connectors.Length == 1)
+            {
+                foreach (Collider col in connectors)
+                {
+                    if (col.transform.parent.transform.parent.gameObject == partConnectionPoint.parent.gameObject)
+                    {
+                        canConnect = false;
+
+                        break;
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            return canConnect;
         }
 
         else
         {
             return false;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(partSelected && !torsoSelected)
-        {
-            Gizmos.DrawSphere(connectionCheckObj.position, 0.05f);
         }
     }
 
@@ -1135,8 +1149,6 @@ public class BuildAScareManager : MonoBehaviour
         {
             PlacePart();
         }
-
-        rotAxis = Axis.X;
     }
 
     void PlacePart()
@@ -1166,6 +1178,8 @@ public class BuildAScareManager : MonoBehaviour
             partRotationEmpty.transform.rotation = partSpawnPoint.transform.rotation;
 
             partScaleEmpty.transform.localScale = partSpawnPoint.transform.localScale;
+
+            rotAxis = Axis.X;
         }
 
         else
@@ -1214,6 +1228,8 @@ public class BuildAScareManager : MonoBehaviour
 
             sideTabs.interactable = true;
         }
+
+        rotAxis = Axis.X;
 
         torsoSelected = false;
 

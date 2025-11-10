@@ -169,7 +169,6 @@ GameObject:
   - component: {fileID: 5001282121013753051}
   - component: {fileID: 5298834414481013891}
   - component: {fileID: -8796175457074068524}
-  - component: {fileID: 8709900863561759801}
   m_Layer: 0
   m_Name: Torso 16
   m_TagString: Untagged
@@ -250,7 +249,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 1127518610339136140
+    rid: 3665106684488712386
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -260,7 +259,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 1127518610339136141
+    rid: 3665106684488712387
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -302,7 +301,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1127518610339136140
+    - rid: 3665106684488712386
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -312,7 +311,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
-    - rid: 1127518610339136141
+    - rid: 3665106684488712387
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -437,30 +436,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &8709900863561759801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986620385958280184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c464bf34c1fd63648877a9e3369017b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  limbPoints:
-  - {fileID: 3047092698191720819}
-  - {fileID: 2288382688222426225}
-  - {fileID: 2765156300761350055}
-  - {fileID: 8961337523888864885}
-  - {fileID: 6931626211144353380}
-  - {fileID: 5303028624872688532}
-  - {fileID: 435949948607158699}
-  - {fileID: 8341357804797547770}
-  - {fileID: 8102191563840251499}
-  - {fileID: 8726658103094721811}
-  - {fileID: 7829261964083653066}
 --- !u!1 &1120812018494234268
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,7 +1177,7 @@ GameObject:
   - component: {fileID: 5077620369098370868}
   - component: {fileID: 7667613027571150068}
   - component: {fileID: 8004780755869685111}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Cylinder.029
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1291,7 +1266,7 @@ MeshCollider:
   m_GameObject: {fileID: 5595342136761887254}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

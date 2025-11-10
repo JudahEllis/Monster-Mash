@@ -44402,7 +44402,6 @@ GameObject:
   - component: {fileID: 4878818098894340769}
   - component: {fileID: 7191056573203174187}
   - component: {fileID: 345465670521728287}
-  - component: {fileID: 3575180661362224074}
   - component: {fileID: 5691367084033176096}
   - component: {fileID: 5098096811479324648}
   m_Layer: 0
@@ -44463,7 +44462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myMainSystem: {fileID: 0}
-  connectedMonsterPart: {fileID: 0}
+  connectedMonsterPart: {fileID: 1086340943901848182}
   mainTorso: {fileID: 0}
   myAnimator: {fileID: 0}
   PartVisual: {fileID: 0}
@@ -44486,8 +44485,8 @@ MonoBehaviour:
   grabbedStatusEffect: 0
   neutralAttack:
     rid: 8001968035020406801
-  neutralCollider: {fileID: 0}
-  neutralColliderReference: {fileID: 0}
+  neutralCollider: {fileID: 7661223937496621097}
+  neutralColliderReference: {fileID: 7101804670260537955}
   needsReloadNeutral: 0
   reloadTimeNeutral: 1
   isReloadedNeutral: 1
@@ -44495,9 +44494,9 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 8001968035020406802
-  heavyCollider: {fileID: 0}
-  heavyColliderReference: {fileID: 0}
+    rid: 7054366158059470860
+  heavyCollider: {fileID: 8704301036907855384}
+  heavyColliderReference: {fileID: 7144460538623273739}
   heavyMuzzle: {fileID: 0}
   needsReloadHeavy: 0
   reloadTimeHeavy: 1
@@ -44537,6 +44536,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 7054366158059470860
+      type: {class: JabHeavy, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 50
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 1
     - rid: 8001968035020406801
       type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
       data:
@@ -44547,16 +44556,6 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 1
-    - rid: 8001968035020406802
-      type: {class: SlashHeavy, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 90
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 2
 --- !u!114 &7191056573203174187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44651,24 +44650,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3575180661362224074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6679641645737022274}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!135 &5691367084033176096
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -150,6 +150,8 @@ public class HeavyAttack : BaseAttack
         }
 
         IsHeavyAttackHeld = true;
+
+        monsterPartRef.myMainSystem.myPlayer.lockPlayerController();
     }
 
     public void OnHeavyAttackEnded()

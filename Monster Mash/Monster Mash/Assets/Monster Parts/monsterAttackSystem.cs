@@ -2205,7 +2205,7 @@ public class monsterAttackSystem : MonoBehaviour
 
         if (myPlayer != null)
         {
-            myPlayer.lockPlayerController();
+            //myPlayer.lockPlayerController();
         }
     }
 
@@ -2235,9 +2235,14 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].bounceCorrections(true);
         }
 
+        for (int i = 0; i < GetActiveAttackSlots().Count; i++)
+        {
+            GetActiveAttackSlots()[i].forceTriggerJabOrSlashCollisionsOff();
+        }
+
         if (myPlayer != null)
         {
-            myPlayer.unlockPlayerController();
+            //myPlayer.unlockPlayerController();
         }
 
     }
@@ -2694,7 +2699,6 @@ public class monsterAttackSystem : MonoBehaviour
             yield return null;
         }
 
-        // Now safe to destroy player
         if (playerManager.Instance != null)
         {
             playerManager.Instance.RemovePlayer(myPlayer);

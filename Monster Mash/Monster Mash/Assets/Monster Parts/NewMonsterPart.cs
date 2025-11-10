@@ -146,6 +146,16 @@ public class NewMonsterPart : MonoBehaviour
         }
     }
 
+    private bool AnimatorHasParameter(Animator animator, string paramName)
+    {
+        foreach (var param in animator.parameters)
+        {
+            if (param.name == paramName)
+                return true;
+        }
+        return false;
+    }
+
     #region Build a Scare Tools
     public void AttackSetup()
     {
@@ -370,6 +380,10 @@ public class NewMonsterPart : MonoBehaviour
 
             forceTriggerJabOrSlashCollisionsOff();
         }
+        else
+        {
+            forceTriggerJabOrSlashCollisionsOff();
+        }    
     }
 
     public void triggerCollisionLogic()
@@ -461,6 +475,8 @@ public class NewMonsterPart : MonoBehaviour
             }
             else
             {
+                if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.None) { return; }
+
                 attackMarkedHeavy = true;
                 myAnimator.SetBool("Attack Marked Heavy", true);
             }
@@ -509,9 +525,6 @@ public class NewMonsterPart : MonoBehaviour
             myMainSystem.heavyAttackActivated();
             heavyAttack.OnHeavyAttackStarted();
             PartVisual.triggerChargeVisual();
-
-            float chargeDuration = GetCurrentAnimationClipLength();
-            myMainSystem.StartCoroutine(myMainSystem.myPlayer.DisableJumping(chargeDuration));
         }
         else
         {
@@ -789,7 +802,7 @@ public class NewMonsterPart : MonoBehaviour
 
     }
 
-    private float GetCurrentAnimationClipLength()
+    public float GetCurrentAnimationClipLength()
     {
         if (myAnimator != null)
         {
@@ -842,6 +855,9 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOn() //called in attack animation
     {
+
+        //Debug.Log("Collisions On");
+
         //turn on neutral vfx holder
         jabOrSlashLanded = false;
 
@@ -858,6 +874,7 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerJabOrSlashCollisionsOff() //called in attack animation
     {
+        /*
         //Debug.Log("Test Collisions Off");
 
         //turn off neutral vfx holder
@@ -875,12 +892,13 @@ public class NewMonsterPart : MonoBehaviour
             neutralCollider.enabled = false;
             neutralColliderReference.resetAttackHistory();
         }
+        */
 
     }
 
     public void forceTriggerJabOrSlashCollisionsOff() //called in attack animation
     {
-        //Debug.Log("Test Collisions Off");
+        //Debug.Log("Collisions Off");
 
         //turn off neutral vfx holder
         jabOrSlashLanded = false;
@@ -942,13 +960,19 @@ public class NewMonsterPart : MonoBehaviour
     #region Stomp Attack Specific Functions
     public void triggerStompDetectorOn()
     {
-        stompDetection.enabled = true;
-        myMainSystem.stompAttack();
+        if (stompDetection != null)
+        {
+            stompDetection.enabled = true;
+            myMainSystem.stompAttack();
+        }
     }
 
     public void triggerStompDetectionOff()
     {
-        stompDetection.enabled = false;
+        if (stompDetection != null)
+        {
+            stompDetection.enabled = false;
+        }
     }
     #endregion
 
@@ -1422,12 +1446,12 @@ public class NewMonsterPart : MonoBehaviour
 
     public void triggerChargeForward()
     {
-        if (attackFocusOn)
+        /*if (attackFocusOn)
         {
             heavyCollider.gameObject.GetComponent<monsterPartReference>().isFullyChargedHeavy = true;
             myAnimator.SetBool("Charge Attack Active", true);
             myMainSystem.chargeForward();
-        }
+        }*/
     }
 
     public void endChargeForward()
@@ -1804,7 +1828,12 @@ public class NewMonsterPart : MonoBehaviour
         if (isGroundedLimb || PartType is MonsterPartType.Torso or MonsterPartType.Arm)
         {
             if (myAnimator == null) { return; }
-            myAnimator.SetBool("Teeter", true);
+
+            if (myAnimator != null && AnimatorHasParameter(myAnimator, "Teeter"))
+            {
+                myAnimator.SetBool("Teeter", true);
+            }
+            
         }
     }
 
@@ -1812,7 +1841,10 @@ public class NewMonsterPart : MonoBehaviour
     {
         if (isGroundedLimb ||PartType is MonsterPartType.Torso or MonsterPartType.Arm)
         {
-            myAnimator.SetBool("Teeter", false);
+            if (myAnimator != null && AnimatorHasParameter(myAnimator, "Teeter"))
+            {
+                myAnimator.SetBool("Teeter", false);
+            }
         }
     }
 

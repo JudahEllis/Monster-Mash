@@ -19,6 +19,8 @@ public class playerManager : MonoBehaviour
     [SerializeField]
     private Transform[] playerSpawnPoints;
 
+    private int tempPlayerCount;
+
 
     private void Awake()
     {
@@ -65,6 +67,7 @@ public class playerManager : MonoBehaviour
         }
 
         togglePlayerJoining();
+        tempPlayerCount++;
         #endregion
 
         #region Correct Action Map
@@ -94,9 +97,11 @@ public class playerManager : MonoBehaviour
         //this switches player event systems to determine whether one player controls the UI or all players control the UI
         if (players.Count > 0)
         {
+            MultiplayerEventSystem[] multiplayerEventSystems = GameObject.FindObjectsOfType<MultiplayerEventSystem>();
+
             for (int i = 0; i < players.Count; i++)
             {
-                GameObject potentialMultiplayerEventSystem = GameObject.Find("Player " + players[i].playerIndex + " Multiplayer System");
+                /*GameObject potentialMultiplayerEventSystem = GameObject.Find("Player " + players[i].playerIndex + " Multiplayer System");
 
                 if (potentialMultiplayerEventSystem != null)
                 {
@@ -105,6 +110,13 @@ public class playerManager : MonoBehaviour
                 else
                 {
                     players[i].gameObject.GetComponent<PlayerInput>().uiInputModule = null;
+                }*/
+
+                if (multiplayerEventSystems.Length <= 0) { return; }
+
+                if (multiplayerEventSystems[i] != null)
+                {
+                    players[i].GetComponent<PlayerInput>().uiInputModule = multiplayerEventSystems[i].GetComponent<InputSystemUIInputModule>();
                 }
             }
         }
@@ -155,10 +167,14 @@ public class playerManager : MonoBehaviour
     {
         battleCamera.playerTransforms.Remove(player.transform);
         players.Remove(player);
+
+        tempPlayerCount -= 1;
+        tempPlayerCount = Mathf.Clamp(tempPlayerCount, 0, 4);
+
         Destroy(player);
 
-        // Hard coding the scene name is not good practice but its only tempory to get the demo together
-        if (players.Count <= 1)
+        // temp solution for demo
+        if (tempPlayerCount <= 1)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }

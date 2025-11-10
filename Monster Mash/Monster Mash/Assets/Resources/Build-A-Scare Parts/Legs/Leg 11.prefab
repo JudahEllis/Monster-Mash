@@ -124,8 +124,8 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 333850069383676890}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
+  m_IsTrigger: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -148,7 +148,7 @@ MonoBehaviour:
   isHurtbox: 0
   isStomp: 0
   isProjectile: 0
-  isJabOrSlash: 0
+  isJabOrSlash: 1
   isReel: 0
   isGrapple: 0
   isBoomerang: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 7677421868964118530
+    rid: 3665106666952589349
   neutralCollider: {fileID: 8612952373876308493}
   neutralColliderReference: {fileID: 7684608197546052984}
   needsReloadNeutral: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 7677421868964118531
+    rid: 3665106666952589352
   heavyCollider: {fileID: 5105915727953997479}
   heavyColliderReference: {fileID: 7080297843807809110}
   heavyMuzzle: {fileID: 0}
@@ -321,17 +321,17 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7677421868964118530
-      type: {class: SlashNeutral, ns: , asm: Assembly-CSharp}
+    - rid: 3665106666952589349
+      type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
       data:
-        <Damage>k__BackingField: 50
+        <Damage>k__BackingField: 10
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 2
-    - rid: 7677421868964118531
+        Attack: 1
+    - rid: 3665106666952589352
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
           <Right>k__BackingField: {x: 0, y: 0}
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 18
+        Attack: 0
 --- !u!114 &8461487983085794991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,7 +427,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042779307686554857}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.1
@@ -444,7 +444,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -562,8 +562,8 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285776969387421234}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
+  m_IsTrigger: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -586,7 +586,7 @@ MonoBehaviour:
   isHurtbox: 0
   isStomp: 0
   isProjectile: 0
-  isJabOrSlash: 0
+  isJabOrSlash: 1
   isReel: 0
   isGrapple: 0
   isBoomerang: 0

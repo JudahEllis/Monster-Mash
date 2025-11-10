@@ -14,7 +14,12 @@ public class JabNeutral : NeutralAttack
     {
         monsterPartRef.neutralColliderReference.resetAttackHistory();
         monsterPartRef.neutralColliderReference.damage = Damage;
-        monsterPartRef.heavyColliderReference.markedHeavy = false;
+
+        if (monsterPartRef.heavyColliderReference != null) 
+        {
+            monsterPartRef.heavyColliderReference.markedHeavy = false;
+        }
+
     }
 
     public override void statusEffectAndDamageCalculations()

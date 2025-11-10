@@ -2027,7 +2027,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 3665106702903803916
+    rid: 9026522299554070564
   neutralCollider: {fileID: 8840371647693896945}
   neutralColliderReference: {fileID: 6134149355042886289}
   needsReloadNeutral: 0
@@ -2037,7 +2037,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 3665106702903803913
+    rid: 9026522299554070567
   heavyCollider: {fileID: 8840371647693896945}
   heavyColliderReference: {fileID: 6134149355042886289}
   heavyMuzzle: {fileID: 0}
@@ -2079,26 +2079,26 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3665106702903803913
-      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+    - rid: 9026522299554070564
+      type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
       data:
-        <Damage>k__BackingField: 0
+        <Damage>k__BackingField: 10
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
-    - rid: 3665106702903803916
-      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+        Attack: 1
+    - rid: 9026522299554070567
+      type: {class: JabHeavy, ns: , asm: Assembly-CSharp}
       data:
-        <Damage>k__BackingField: 0
+        <Damage>k__BackingField: 50
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
+        Attack: 1
 --- !u!114 &7427702874014871051
 MonoBehaviour:
   m_ObjectHideFlags: 0

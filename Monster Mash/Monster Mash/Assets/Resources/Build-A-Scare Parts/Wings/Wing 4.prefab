@@ -485,7 +485,6 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4126306163081225070}
-  - {fileID: 89819650859509909}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -545,7 +544,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 1127518610339135774
+    rid: 3665106684488712290
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -555,7 +554,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 1127518610339135775
+    rid: 3665106684488712291
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -597,7 +596,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1127518610339135774
+    - rid: 3665106684488712290
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -607,7 +606,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
-    - rid: 1127518610339135775
+    - rid: 3665106684488712291
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -828,37 +827,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6007800257178441119
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 89819650859509909}
-  m_Layer: 0
-  m_Name: ConnectionCheck
-  m_TagString: ConnectionCheck
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &89819650859509909
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6007800257178441119}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: -0.01, z: 0.0908}
-  m_LocalScale: {x: 0.58447784, y: 0.58447784, z: 0.58447784}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4524196688396771528}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &8773236989164902439
 GameObject:
   m_ObjectHideFlags: 0

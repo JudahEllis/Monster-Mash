@@ -474,7 +474,7 @@ GameObject:
   - component: {fileID: 8390628063931712288}
   - component: {fileID: 4843543080135624102}
   - component: {fileID: 6832650278897156789}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Cube.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -563,7 +563,7 @@ MeshCollider:
   m_GameObject: {fileID: 2450549272280769197}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -708,7 +708,6 @@ GameObject:
   - component: {fileID: 8792585415409048150}
   - component: {fileID: 4484748507160582624}
   - component: {fileID: -9013781691385031478}
-  - component: {fileID: 3394261954978700110}
   m_Layer: 0
   m_Name: Torso 14
   m_TagString: Untagged
@@ -789,7 +788,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    rid: 1127518610339136128
+    rid: 3665106684488712378
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -799,7 +798,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    rid: 1127518610339136129
+    rid: 3665106684488712379
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -841,7 +840,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1127518610339136128
+    - rid: 3665106684488712378
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -851,7 +850,7 @@ MonoBehaviour:
           <Up>k__BackingField: {x: 0, y: 0}
           <Down>k__BackingField: {x: 0, y: 0}
         Attack: 0
-    - rid: 1127518610339136129
+    - rid: 3665106684488712379
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 0
@@ -976,30 +975,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &3394261954978700110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4266096717133254558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c464bf34c1fd63648877a9e3369017b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  limbPoints:
-  - {fileID: 8062378169370661179}
-  - {fileID: 7188682987243240556}
-  - {fileID: 3143239423725422004}
-  - {fileID: 4952243345881151391}
-  - {fileID: 3569351598430002401}
-  - {fileID: 4875464845264609035}
-  - {fileID: 7775021148090470208}
-  - {fileID: 8501834042513393263}
-  - {fileID: 503480993991165542}
-  - {fileID: 7819956211192353917}
-  - {fileID: 6336664017981122108}
 --- !u!1 &5087130020244800147
 GameObject:
   m_ObjectHideFlags: 0

@@ -2411,10 +2411,8 @@ public class playerController : MonoBehaviour
 
     public IEnumerator DisableJumping(float seconds)
     {
-        Debug.Log("Started Attack");
         lockPlayerController(); 
         yield return new WaitForSeconds(seconds);
-        Debug.Log("Ended Attack");
         unlockPlayerController(); 
     }
 

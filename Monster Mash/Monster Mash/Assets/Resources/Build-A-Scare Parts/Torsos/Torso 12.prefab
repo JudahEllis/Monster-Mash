@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 350537373104106834}
   - component: {fileID: 7183608972205778858}
   - component: {fileID: 3623138517073872764}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Cylinder.050
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -594,7 +594,7 @@ MeshCollider:
   m_GameObject: {fileID: 2746775723657528624}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -1262,6 +1262,7 @@ GameObject:
   - component: {fileID: 86848071814494541}
   - component: {fileID: 7854751565979272664}
   - component: {fileID: 829606694878328171}
+  - component: {fileID: 637361842842781140}
   m_Layer: 0
   m_Name: Torso 12
   m_TagString: Untagged
@@ -1288,7 +1289,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1934487207062218254
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1305,7 +1306,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &157163616758095679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,26 +1327,10 @@ MonoBehaviour:
   PartVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
-  monsterPartHealth: 100
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
-  isArm: 0
-  isLeg: 0
-  isTail: 0
-  isWing: 0
-  isHead: 0
-  isEye: 0
-  isMouth: 0
-  isTorso: 1
-  isHorn: 0
-  isDecor: 0
   PartType: 1
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -1357,7 +1343,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    Attack: 0
+    rid: 1127518610339136116
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -1367,7 +1353,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    Attack: 0
+    rid: 1127518610339136117
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -1406,6 +1392,29 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1127518610339136116
+      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
+    - rid: 1127518610339136117
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
 --- !u!114 &86848071814494541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1517,6 +1526,34 @@ MonoBehaviour:
     partRotation: {x: 0, y: 0, z: 0, w: 0}
     partScale: {x: 0, y: 0, z: 0}
     partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
+--- !u!114 &637361842842781140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124875332346146522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c464bf34c1fd63648877a9e3369017b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  limbPoints:
+  - {fileID: 3678405541862529060}
+  - {fileID: 2194661371332529641}
+  - {fileID: 3347370668833362760}
+  - {fileID: 2474778852035529238}
+  - {fileID: 3550376766693520497}
+  - {fileID: 439562740964288543}
+  - {fileID: 4182975728699723971}
+  - {fileID: 5942149886821969426}
+  - {fileID: 7173558079707448599}
+  - {fileID: 7948826622311227080}
+  - {fileID: 3638595383731901575}
 --- !u!1 &7914683332396054724
 GameObject:
   m_ObjectHideFlags: 0

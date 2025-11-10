@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 1716018825108022027}
   - component: {fileID: 881602424762731276}
   - component: {fileID: -2040698513168716363}
+  - component: {fileID: 8516864832147046707}
   m_Layer: 0
   m_Name: Torso 13
   m_TagString: Untagged
@@ -196,7 +197,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6559885105473780421
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -213,7 +214,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3617872780147814580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,26 +235,10 @@ MonoBehaviour:
   PartVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
-  monsterPartHealth: 100
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
-  isArm: 0
-  isLeg: 0
-  isTail: 0
-  isWing: 0
-  isHead: 0
-  isEye: 0
-  isMouth: 0
-  isTorso: 1
-  isHorn: 0
-  isDecor: 0
   PartType: 1
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -265,7 +251,7 @@ MonoBehaviour:
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
   neutralAttack:
-    Attack: 0
+    rid: 1127518610339136122
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -275,7 +261,7 @@ MonoBehaviour:
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
   heavyAttack:
-    Attack: 0
+    rid: 1127518610339136123
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -314,6 +300,29 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1127518610339136122
+      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
+    - rid: 1127518610339136123
+      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 0
+        movementModifier:
+          <Left>k__BackingField: {x: 0, y: 0}
+          <Right>k__BackingField: {x: 0, y: 0}
+          <Up>k__BackingField: {x: 0, y: 0}
+          <Down>k__BackingField: {x: 0, y: 0}
+        Attack: 0
 --- !u!114 &1716018825108022027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,6 +434,34 @@ MonoBehaviour:
     partRotation: {x: 0, y: 0, z: 0, w: 0}
     partScale: {x: 0, y: 0, z: 0}
     partPosition: {x: 0, y: 0, z: 0}
+    partButton: 0
+    palleteSwapIndex: 
+    partHexCode: 
+    isFlipped: 0
+--- !u!114 &8516864832147046707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318154739591873780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c464bf34c1fd63648877a9e3369017b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  limbPoints:
+  - {fileID: 2283611408668581545}
+  - {fileID: 5211597272613205310}
+  - {fileID: 2293137455720359751}
+  - {fileID: 3936208531968553273}
+  - {fileID: 861066846432963967}
+  - {fileID: 4225124412472605751}
+  - {fileID: 7250097288401053205}
+  - {fileID: 6183806077952772758}
+  - {fileID: 7294695292369807061}
+  - {fileID: 7400937465825868386}
+  - {fileID: 5395962215140087414}
 --- !u!1 &1431756941993313385
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,7 +1520,7 @@ GameObject:
   - component: {fileID: 2688132470747141332}
   - component: {fileID: 6568156797663304621}
   - component: {fileID: 6962190643191765095}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Cube.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1572,7 +1609,7 @@ MeshCollider:
   m_GameObject: {fileID: 8594602286918096218}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

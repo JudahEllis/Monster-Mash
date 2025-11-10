@@ -654,16 +654,10 @@ MonoBehaviour:
   PartVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
-  monsterPartHealth: 100
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
   PartType: 1
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -731,6 +725,7 @@ MonoBehaviour:
     - rid: 7159924695398350848
       type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
       data:
+        <Damage>k__BackingField: 0
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}
@@ -740,6 +735,7 @@ MonoBehaviour:
     - rid: 7159924695398350849
       type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
       data:
+        <Damage>k__BackingField: 0
         movementModifier:
           <Left>k__BackingField: {x: 0, y: 0}
           <Right>k__BackingField: {x: 0, y: 0}

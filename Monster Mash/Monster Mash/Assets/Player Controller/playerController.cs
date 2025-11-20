@@ -2283,16 +2283,23 @@ public class playerController : MonoBehaviour
     {
         leftStickIsAttacking = true;
 
-        var currentMovementModifier = lastInputDirectionVector switch
+        Vector2 currentMovementModifier = Vector2.zero;
+        switch (lastInputDirection)
         {
-            var dir when dir == Vector2Int.left => eventArgs.MovementModifier.Left,
-            var dir when dir == Vector2Int.right => eventArgs.MovementModifier.Right,
-            var dir when dir == Vector2Int.up => eventArgs.MovementModifier.Up,
-            var dir when dir == Vector2Int.down => eventArgs.MovementModifier.Down,
-            _ => Vector2.zero,
-        };
+            case InputDirection.Forward:
+                currentMovementModifier = facingRight ? eventArgs.MovementModifier.Right : eventArgs.MovementModifier.Left;
+                break;
+            case InputDirection.Backward:
+                currentMovementModifier = facingRight ? eventArgs.MovementModifier.Left : eventArgs.MovementModifier.Right;
+                break;
+            case InputDirection.Up:
+                currentMovementModifier = eventArgs.MovementModifier.Up;
+                break;
+            case InputDirection.Down:
+                currentMovementModifier = eventArgs.MovementModifier.Down;
+                break;
+        }
 
-        // using the animation clip length so that the movement duration matches the animation
         StartCoroutine(ApplySmoothedMovementModifier(currentMovementModifier, eventArgs.ClipLength));
     }
 

@@ -47,7 +47,6 @@ public class playerController : MonoBehaviour
     public bool canMove = true;
     public bool isWalking = false;
     public bool isRunning = false;
-    private int directionModifier = -1;
     //
     public bool grounded = false;
     private bool atPlatformEdge = false;
@@ -924,18 +923,12 @@ public class playerController : MonoBehaviour
             
             if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
             {
-                if (facingRight == false && leftJoystickVector.x > 0.1f)
+                if (lastInputDirection is InputDirection.Forward)
                 {
-                    //face right
-                    facingRight = true;
-                    directionModifier = 1;
                     flipRightVisual();
                 }
-                else if (facingRight && leftJoystickVector.x < -0.1f)
+                else if (lastInputDirection is InputDirection.Backward)
                 {
-                    //face left
-                    facingRight = false;
-                    directionModifier = -1;
                     flipLeftVisual();
                 }
             }
@@ -1680,11 +1673,13 @@ public class playerController : MonoBehaviour
     private void flipLeftVisual()
     {
         myMonster.flipLeft();
+        facingRight = false;
     }
 
     private void flipRightVisual()
     {
         myMonster.flipRight();
+        facingRight = true;
     }
 
     /*
@@ -1940,16 +1935,8 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         }
 
-        //temp code
-        if (grounded)
-        {
-            turnOffFriction();
-            myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
-        }
-        else
-        {
-            myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
-        }
+        myRigidbody.velocity = Vector2.zero;
+        myRigidbody.angularVelocity = 0;
     }
 
     public void damageUnlockPlayerController()
@@ -2232,13 +2219,13 @@ public class playerController : MonoBehaviour
             {
                 turnOnFriction();
                 myRigidbody.velocity = new Vector2(0, 0);
-                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
             }
             else
             {
                 heavyActivated();
                 myRigidbody.velocity = new Vector2(0, 0);
-                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
                 StartCoroutine(leapAttackForwardControl());
             }
         }
@@ -2336,7 +2323,7 @@ public class playerController : MonoBehaviour
     {
         if (isFacingEdge() || atPlatformEdge == false)
         {
-            myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
+            //myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
         }
 
         /*
@@ -2492,15 +2479,11 @@ public class playerController : MonoBehaviour
             if (facingRight == false)
             {
                 //face right
-                facingRight = true;
-                directionModifier = 1;
                 flipRightVisual();
             }
             else if (facingRight)
             {
                 //face left
-                facingRight = false;
-                directionModifier = -1;
                 flipLeftVisual();
             }
         }

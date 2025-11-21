@@ -123,6 +123,7 @@ public class playerController : MonoBehaviour
     [SerializeField]
     private Rigidbody2D myRigidbody;
     Vector2 lastInputDirectionVector;
+    float directionThreshold = 0.2f;
     private enum InputDirection
     {
         Forward = 1,
@@ -911,26 +912,31 @@ public class playerController : MonoBehaviour
         if (context.canceled)
         {
             jumpButtonReset = true;
-            lastInputDirection = InputDirection.Forward;
+            lastInputDirection = facingRight ? InputDirection.Forward : InputDirection.Backward;
+            return;
         }
-
 
         if (context.performed)
         {
-            lastInputDirectionVector = leftJoystickVector.normalized;
-            UpdateInputDirection(lastInputDirectionVector);
-            Debug.Log(lastInputDirection);
-            
-            if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
+            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
             {
-                if (lastInputDirection is InputDirection.Forward)
+                lastInputDirectionVector = leftJoystickVector.normalized;
+                UpdateInputDirection(lastInputDirectionVector);
+                
+
+                if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
                 {
-                    flipRightVisual();
+                    if (lastInputDirection is InputDirection.Forward)
+                    {
+                        flipRightVisual();
+                    }
+                    else if (lastInputDirection is InputDirection.Backward)
+                    {
+                        flipLeftVisual();
+                    }
                 }
-                else if (lastInputDirection is InputDirection.Backward)
-                {
-                    flipLeftVisual();
-                }
+
+                Debug.Log($"Last Input Direction:{lastInputDirection}");
             }
 
             if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
@@ -980,22 +986,22 @@ public class playerController : MonoBehaviour
     {
         if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
         {
-            if (directionVector.x > 0)
+            if (directionVector.x > directionThreshold)
             {
                 lastInputDirection = InputDirection.Forward;
             }
-            else if (directionVector.x < 0)
+            else if (directionVector.x < -directionThreshold)
             {
                 lastInputDirection = InputDirection.Backward;
             }
         }
-        else if (Mathf.Abs(directionVector.y) > 0) // y is dominant or equal
+        else if (Mathf.Abs(directionVector.y) > directionThreshold)
         {
-            if (directionVector.y > 0)
+            if (directionVector.y > directionThreshold)
             {
                 lastInputDirection = InputDirection.Up;
             }
-            else if (directionVector.y < 0)
+            else if (directionVector.y < -directionThreshold)
             {
                 lastInputDirection = InputDirection.Down;
             }
@@ -1042,16 +1048,6 @@ public class playerController : MonoBehaviour
         //canDash = true;
         insideFloor = false;
         //canRoll = true;
-
-        if (facingRight)
-        {
-            lastInputDirectionVector = new Vector2Int(1, 0);
-        }
-        else
-        {
-            lastInputDirectionVector = new Vector2Int(-1, 0);
-        }
-
 
         if (grabbingWall)
         {
@@ -2274,10 +2270,10 @@ public class playerController : MonoBehaviour
         switch (lastInputDirection)
         {
             case InputDirection.Forward:
-                currentMovementModifier = facingRight ? eventArgs.MovementModifier.Right : eventArgs.MovementModifier.Left;
+                currentMovementModifier = eventArgs.MovementModifier.Right;
                 break;
             case InputDirection.Backward:
-                currentMovementModifier = facingRight ? eventArgs.MovementModifier.Left : eventArgs.MovementModifier.Right;
+                currentMovementModifier = eventArgs.MovementModifier.Left;
                 break;
             case InputDirection.Up:
                 currentMovementModifier = eventArgs.MovementModifier.Up;

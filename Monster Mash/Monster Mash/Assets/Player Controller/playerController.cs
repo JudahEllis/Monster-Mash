@@ -299,7 +299,6 @@ public class playerController : MonoBehaviour
         //This section moves the x axis of the player
         //For moving the y axis of the player, check out the jumping category of the movement section
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
-        UpdateInputDirection();
         if (monsterControllerActive)
         {
 
@@ -2240,25 +2239,6 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(20 * directionModifier, myRigidbody.velocity.y);
         }
         */
-    }
-
-    private void UpdateInputDirection()
-    {
-        float deadZone = 0.2f;
-        Vector2 input = leftJoystickVector.normalized;
-        if (leftJoystickValue >= deadZone)
-        {
-           
-
-            if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-            {
-                lastInputDirectionVector = new Vector2Int(input.x > 0 ? 1 : -1, 0);
-            }
-            else if (Mathf.Abs(input.y) > 0)
-            {
-                lastInputDirectionVector = new Vector2Int(0, input.y > 0 ? 1 : -1);
-            }
-        }
     }
 
     // Listens for when an attack calls Trigger Attack Release

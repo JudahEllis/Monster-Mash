@@ -122,17 +122,23 @@ public class playerController : MonoBehaviour
 
     [SerializeField]
     private Rigidbody2D myRigidbody;
-    Vector2 lastInputDirectionVector;
-    float directionThreshold = 0.2f;
+    
+    // player flip vars
     private enum InputDirection
     {
+        None = -99,
         Forward = 1,
         Backward = -1,
         Up = 2,
         Down = 0
     }
 
+    private Vector2 lastInputDirectionVector;
+    float directionThreshold = 0.2f;
     private InputDirection lastInputDirection = InputDirection.Forward;
+    private InputDirection pendingInputDirection;
+    private float directionTimer = 0f;
+    private float flipDelay = 0.03f;
 
     [Header("Damage Launching")]
     [SerializeField] private AnimationCurve damageToForceCurve;
@@ -919,7 +925,7 @@ public class playerController : MonoBehaviour
         {
             if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
             {
-                lastInputDirectionVector = leftJoystickVector.normalized;
+                lastInputDirectionVector = leftJoystickVector;
                 UpdateInputDirection(lastInputDirectionVector);
                 
 
@@ -934,8 +940,6 @@ public class playerController : MonoBehaviour
                         flipLeftVisual();
                     }
                 }
-
-                Debug.Log($"Last Input Direction:{lastInputDirection}");
             }
 
             if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
@@ -983,27 +987,63 @@ public class playerController : MonoBehaviour
 
     private void UpdateInputDirection(Vector2 directionVector)
     {
+        InputDirection detectedInputDirection = InputDirection.None;
+
+        // is the detected input more horizontal then vertical?
         if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
         {
+            // if it is more horziontal is it positive or negative and is greater then the deadzone
             if (directionVector.x > directionThreshold)
             {
-                lastInputDirection = InputDirection.Forward;
+                detectedInputDirection = InputDirection.Forward;
             }
             else if (directionVector.x < -directionThreshold)
             {
-                lastInputDirection = InputDirection.Backward;
+                detectedInputDirection = InputDirection.Backward;
             }
         }
+        // is the dtected input more vertical then horizontal?
         else if (Mathf.Abs(directionVector.y) > directionThreshold)
         {
+            //if it is more vertical is it positive or negative and is greater then the deadzone
             if (directionVector.y > directionThreshold)
             {
-                lastInputDirection = InputDirection.Up;
+                detectedInputDirection = InputDirection.Up;
             }
             else if (directionVector.y < -directionThreshold)
             {
-                lastInputDirection = InputDirection.Down;
+                detectedInputDirection = InputDirection.Down;
             }
+        }
+
+        CheckIfDirectionCommittedTo(detectedInputDirection);
+    }
+
+    // Checks if the change in input direction is being committed to(held down) and not an acidental flick.
+    private void CheckIfDirectionCommittedTo(InputDirection detectedInputDirection)
+    {
+        // did the direction change?
+        if (detectedInputDirection != lastInputDirection && detectedInputDirection != InputDirection.None)
+        {
+            // player changed direction before it was fully committed. Most likely an acidental flick. Resets timer
+            if (pendingInputDirection != detectedInputDirection)
+            {
+                pendingInputDirection = detectedInputDirection;
+                directionTimer = 0f;
+            }
+
+            directionTimer += Time.deltaTime;
+            // player fully committed to the change in input. Update the direction
+            if (directionTimer >= flipDelay)
+            {
+                lastInputDirection = pendingInputDirection;
+            }
+        }
+        // The direction has not changed. Reset timmer if it is still running
+        else
+        {
+            directionTimer = 0f;
+            pendingInputDirection = InputDirection.None;
         }
     }
 

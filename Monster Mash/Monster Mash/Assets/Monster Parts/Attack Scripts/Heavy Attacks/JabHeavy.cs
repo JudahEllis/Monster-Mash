@@ -14,9 +14,9 @@ public class JabHeavy : HeavyAttack
         }
     }
 
-    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    public override void triggerAttackRelease()
     {
-        base.triggerAttackRelease(monsterPartRef);
+        base.triggerAttackRelease();
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

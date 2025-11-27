@@ -19,9 +19,9 @@ public class SlashHeavy : HeavyAttack
         monsterPartRef.heavyColliderReference.damage = Damage;
         monsterPartRef.heavyColliderReference.markedHeavy = true;
     }
-    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    public override void triggerAttackRelease()
     {
-        base.triggerAttackRelease(monsterPartRef);
+        base.triggerAttackRelease();
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

@@ -52,7 +52,7 @@ public abstract class BaseAttack: MonoBehaviour
 
     }
 
-    public virtual void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    public virtual void triggerAttackRelease()
     {
         // Get the attack animation length so that the movement is timed to the animation
         float clipLength = monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).length;

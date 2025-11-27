@@ -25,7 +25,7 @@ public class TriggerAttackReleaseEventArgs : EventArgs
 }
 
 
-public abstract class BaseAttack
+public abstract class BaseAttack: MonoBehaviour
 {
     public DamageRange DamageRange { get; protected set; } = DamageRange.Range0;
     /// <summary>
@@ -70,7 +70,7 @@ public abstract class BaseAttack
 
     public virtual void TriggerAttack()
     {
-
+        
     }
 
     /// <summary>

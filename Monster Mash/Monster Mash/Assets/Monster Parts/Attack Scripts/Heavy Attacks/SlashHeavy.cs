@@ -1,13 +1,10 @@
-using System;
-
-[Serializable]
 public class SlashHeavy : HeavyAttack
 {
     public SlashHeavy()
     {
-        Attack = HeavyAttackType.Slash;
         DamageRange = DamageRange.Range4;
     }
+
     public override void triggerHeavyAttackVisuals()
     {
         if (monsterPartRef.jabOrSlashLanded == false && monsterPartVisualRef.heavyMissVFXHolder != null)

@@ -8,7 +8,14 @@ public class ProjectileNeutral : NeutralAttack
     [SerializeField] private Transform projectileMuzzle;
     [SerializeField] private float projectileSpeed;
 
+    [Header("Object Pool Settings")]
+    [SerializeField] private int poolStartSize;
+    [SerializeField] private int poolMaxSize;
+
     private IObjectPool<NewProjectile> objectPool;
+
+    private Vector3 originalProjectileScale;
+    private Quaternion orginalProjectileRotation;
 
     public ProjectileNeutral()
     {
@@ -21,43 +28,10 @@ public class ProjectileNeutral : NeutralAttack
         SetupPool();
     }
 
-    private void SetupPool()
+    public override void TriggerAttackRelease()
     {
-        // ?? is compound assignment syntax which checks if the refrence is null before assigning it.
-        // OnAwakenTheBeast might be invoked multiple times and we dont want to waste resources overwriting the pool each time
-        objectPool ??= new ObjectPool<NewProjectile>(CreateProjectile, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject);
-    }
-
-    private NewProjectile CreateProjectile()
-    {
-        NewProjectile projectileInstance = Instantiate(projectilePrefab, projectileMuzzle.transform.position, Quaternion.identity, projectileMuzzle);
-        projectileInstance.ObjectPool = objectPool;
-        projectileInstance.Speed = projectileSpeed;
-        return projectileInstance;
-    }
-
-    private void OnGetFromPool(NewProjectile pooledObject)
-    {
-        pooledObject.gameObject.SetActive(true);
-        pooledObject.transform.SetParent(null, true);
-    }
-
-    private void OnReleaseToPool(NewProjectile pooledObject)
-    {
-        pooledObject.gameObject.SetActive(false);
-        pooledObject.transform.SetParent(projectileMuzzle);
-    }
-
-    private void OnDestroyPooledObject(NewProjectile pooledObject)
-    {
-        Destroy(pooledObject.gameObject);
-    }
-
-    public override void triggerAttackRelease()
-    {
-        base.triggerAttackRelease();
+        base.TriggerAttackRelease();
         NewProjectile projectile = objectPool.Get();
-        projectile.Fire();
     }
 
     public override void PassDamage()
@@ -80,4 +54,53 @@ public class ProjectileNeutral : NeutralAttack
             StoredParentSetup();
         }
     }
+
+    #region Object Pooling
+
+    private void SetupPool()
+    {
+        // ?? is compound assignment syntax which checks if the refrence is null before assigning it.
+        // OnAwakenTheBeast might be invoked multiple times and we dont want to waste resources overwriting the pool each time
+        objectPool ??= new ObjectPool<NewProjectile>(CreateProjectile, 
+            OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, false, poolStartSize, poolMaxSize);
+
+        originalProjectileScale = projectilePrefab.transform.localScale;
+        orginalProjectileRotation = projectilePrefab.transform.localRotation;
+    }
+
+    private NewProjectile CreateProjectile()
+    {
+        NewProjectile projectileInstance = Instantiate(projectilePrefab, projectileMuzzle);
+
+        projectileInstance.ObjectPool = objectPool;
+        projectileInstance.Speed = projectileSpeed;
+        projectileInstance.Damage = Damage;
+        projectileInstance.PlayerRef = monsterPartRef.myMainSystem.myPlayer;
+
+        return projectileInstance;
+    }
+
+    private void OnGetFromPool(NewProjectile pooledObject)
+    {
+        pooledObject.gameObject.SetActive(true);
+        pooledObject.transform.SetParent(null);
+        pooledObject.transform.localScale = originalProjectileScale;
+        pooledObject.Fire();
+    }
+
+    private void OnReleaseToPool(NewProjectile pooledObject)
+    {
+        pooledObject.transform.SetParent(projectileMuzzle);
+        pooledObject.transform.localPosition = projectileMuzzle.localPosition;
+        pooledObject.transform.localScale = originalProjectileScale;
+        pooledObject.transform.localRotation = orginalProjectileRotation;
+        pooledObject.IsReleased = false;
+        pooledObject.gameObject.SetActive(false);
+    }
+
+    private void OnDestroyPooledObject(NewProjectile pooledObject)
+    {
+        Destroy(pooledObject.gameObject);
+    }
+    #endregion
 }

@@ -14,9 +14,6 @@ public class ProjectileNeutral : NeutralAttack
 
     private IObjectPool<NewProjectile> objectPool;
 
-    private Vector3 originalProjectileScale;
-    private Quaternion orginalProjectileRotation;
-
     public ProjectileNeutral()
     {
         DamageRange = DamageRange.Range2;
@@ -63,14 +60,11 @@ public class ProjectileNeutral : NeutralAttack
         // OnAwakenTheBeast might be invoked multiple times and we dont want to waste resources overwriting the pool each time
         objectPool ??= new ObjectPool<NewProjectile>(CreateProjectile, 
             OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, false, poolStartSize, poolMaxSize);
-
-        originalProjectileScale = projectilePrefab.transform.localScale;
-        orginalProjectileRotation = projectilePrefab.transform.localRotation;
     }
 
     private NewProjectile CreateProjectile()
     {
-        NewProjectile projectileInstance = Instantiate(projectilePrefab, projectileMuzzle);
+        NewProjectile projectileInstance = Instantiate(projectilePrefab);
 
         projectileInstance.ObjectPool = objectPool;
         projectileInstance.Speed = projectileSpeed;
@@ -83,17 +77,12 @@ public class ProjectileNeutral : NeutralAttack
     private void OnGetFromPool(NewProjectile pooledObject)
     {
         pooledObject.gameObject.SetActive(true);
-        pooledObject.transform.SetParent(null);
-        pooledObject.transform.localScale = originalProjectileScale;
+        pooledObject.transform.SetPositionAndRotation(projectileMuzzle.position, projectileMuzzle.rotation);
         pooledObject.Fire();
     }
 
     private void OnReleaseToPool(NewProjectile pooledObject)
     {
-        pooledObject.transform.SetParent(projectileMuzzle);
-        pooledObject.transform.localPosition = projectileMuzzle.localPosition;
-        pooledObject.transform.localScale = originalProjectileScale;
-        pooledObject.transform.localRotation = orginalProjectileRotation;
         pooledObject.IsReleased = false;
         pooledObject.gameObject.SetActive(false);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-[CreateAssetMenu(fileName = "ProjectileConfig", menuName = "ScriptableObjects/Attacks/ProjectileConfigSO")]
+[CreateAssetMenu(fileName = "MonsterPartNameProjectileConfig", menuName = "ScriptableObjects/Attacks/ProjectileConfigSO")]
 public class ProjectileConfigSO : ScriptableObject
 {
     [SerializeField] protected NewProjectile projectilePrefab;
@@ -17,8 +17,8 @@ public class ProjectileConfigSO : ScriptableObject
 
     public IObjectPool<NewProjectile> ObjectPool { get; private set; }
 
-    private int damage;
-    private playerController playerRef;
+    protected int damage;
+    protected playerController playerRef;
     private Transform projectileMuzzle;
 
     public void SetupPool(int damage, playerController playerRef, Transform projectileMuzzle)

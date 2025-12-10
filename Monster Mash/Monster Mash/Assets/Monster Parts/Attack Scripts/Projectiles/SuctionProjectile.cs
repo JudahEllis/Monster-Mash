@@ -11,26 +11,16 @@ public class SuctionProjectile : NewProjectile
     private float totalTickTime;
     private Coroutine tickCoroutine;
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void OnPlayerHit(Collider other, playerController player)
     {
-        playerController potentialPlayer = other.GetComponentInParent<playerController>();
+        contactPoint = other.ClosestPointOnBounds(transform.position);
+        originalScale = transform.localScale;
 
-        if (other.CompareTag("Solid"))
-        {
-           DeactivateProjectile();
-        }
-        else if (potentialPlayer != null && potentialPlayer != playerRef)
-        {
-            playerRef = potentialPlayer;
-            contactPoint = other.ClosestPointOnBounds(transform.position);
-            originalScale = transform.localScale;
-
-            transform.SetParent(other.transform);
-            tickCoroutine ??= StartCoroutine(TickDamage(totalTickTime));  
-        }
+        transform.SetParent(other.transform);
+        tickCoroutine ??= StartCoroutine(TickDamage(player));
     }
 
-    private IEnumerator TickDamage(float totalTickTime)
+    private IEnumerator TickDamage(playerController target)
     {
         float tickDelay = 1f;
         float elapsed = 0;
@@ -38,7 +28,7 @@ public class SuctionProjectile : NewProjectile
         while (elapsed < totalTickTime)
         {
             elapsed += Time.deltaTime;
-            playerRef.damaged(damage, false, transform.position, contactPoint);
+            target.damaged(damage, false, transform.position, contactPoint);
             yield return new WaitForSeconds(tickDelay);
         }
 
@@ -47,7 +37,7 @@ public class SuctionProjectile : NewProjectile
             transform.SetParent(null);
             transform.localScale = originalScale;
             tickCoroutine = null;
-            objectPool.Release(this);
+            DeactivateProjectile();
         }
     }
 }

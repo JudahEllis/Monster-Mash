@@ -39,9 +39,14 @@ public class NewProjectile : MonoBehaviour
         }
         else if (potentialPlayer != null && potentialPlayer != playerRef)
         {
-            potentialPlayer.damaged(damage, false, transform.position, other.ClosestPointOnBounds(transform.position));
-            DeactivateProjectile();
+            OnPlayerHit(other, potentialPlayer);
         }
+    }
+
+    protected virtual void OnPlayerHit(Collider other, playerController player)
+    {
+        player.damaged(damage, false, transform.position, other.ClosestPointOnBounds(transform.position));
+        DeactivateProjectile();
     }
 
     protected virtual IEnumerator DelayedDeactivate(float delay)

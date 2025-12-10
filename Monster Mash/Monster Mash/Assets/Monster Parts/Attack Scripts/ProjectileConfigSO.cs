@@ -19,13 +19,17 @@ public class ProjectileConfigSO : ScriptableObject
 
     protected int damage;
     protected playerController playerRef;
-    private Transform projectileMuzzle;
+    protected Quaternion muzzleInitialRotation;
+    protected Transform projectileMuzzle;
+    
 
     public void SetupPool(int damage, playerController playerRef, Transform projectileMuzzle)
     {
         this.damage = damage;
         this.playerRef = playerRef;
         this.projectileMuzzle = projectileMuzzle;
+
+        muzzleInitialRotation = this.projectileMuzzle.rotation;
 
         // ?? is compound assignment syntax which checks if the refrence is null before assigning it.
         // OnAwakenTheBeast might be invoked multiple times and we dont want to waste resources overwriting the pool each time
@@ -56,14 +60,18 @@ public class ProjectileConfigSO : ScriptableObject
     protected virtual NewProjectile CreateProjectile()
     {
         NewProjectile projectileInstance = Instantiate(projectilePrefab);
+        SetupProjectile(projectileInstance);
 
+        return projectileInstance;
+    }
+
+    protected virtual void SetupProjectile(NewProjectile projectileInstance)
+    {
         projectileInstance.ObjectPool = ObjectPool;
         projectileInstance.Speed = projectileSpeed;
         projectileInstance.Damage = damage;
         projectileInstance.LifeTime = projectileLifetime;
         projectileInstance.PlayerRef = playerRef;
-
-        return projectileInstance;
     }
 
     protected virtual void OnGetFromPool(NewProjectile pooledObject)

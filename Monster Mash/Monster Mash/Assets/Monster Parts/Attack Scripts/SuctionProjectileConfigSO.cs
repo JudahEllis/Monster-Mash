@@ -8,18 +8,16 @@ public class SuctionProjectileConfigSO : ProjectileConfigSO
     [Header("Suction Settings")]
     [SerializeField] private float totalTickTime = 5f;
 
-    protected override NewProjectile CreateProjectile()
+    protected override void SetupProjectile(NewProjectile projectileInstance)
     {
-        SuctionProjectile projectileInstance = (SuctionProjectile)Instantiate(projectilePrefab);
+        base.SetupProjectile(projectileInstance);
+        SuctionProjectile suctionProjectile = projectileInstance as SuctionProjectile;
+        suctionProjectile.TotalTickTime = totalTickTime;
+    }
 
-        projectileInstance.ObjectPool = ObjectPool;
-        projectileInstance.TotalTickTime = totalTickTime;
-        projectileInstance.Speed = projectileSpeed;
-        projectileInstance.Damage = damage;
-        projectileInstance.LifeTime = projectileLifetime;
-        projectileInstance.PlayerRef = playerRef;
-
-        return projectileInstance;
-
+    protected override void OnGetFromPool(NewProjectile pooledObject)
+    {
+        projectileMuzzle.transform.rotation = muzzleInitialRotation;
+        base.OnGetFromPool(pooledObject);
     }
 }

@@ -14,10 +14,4 @@ public class SuctionProjectileConfigSO : ProjectileConfigSO
         SuctionProjectile suctionProjectile = projectileInstance as SuctionProjectile;
         suctionProjectile.TotalTickTime = totalTickTime;
     }
-
-    protected override void OnGetFromPool(NewProjectile pooledObject)
-    {
-        projectileMuzzle.transform.rotation = muzzleInitialRotation;
-        base.OnGetFromPool(pooledObject);
-    }
 }

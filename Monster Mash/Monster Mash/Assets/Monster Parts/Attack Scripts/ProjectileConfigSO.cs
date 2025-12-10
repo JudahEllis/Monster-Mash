@@ -19,17 +19,16 @@ public class ProjectileConfigSO : ScriptableObject
 
     protected int damage;
     protected playerController playerRef;
-    protected Quaternion muzzleInitialRotation;
-    protected Transform projectileMuzzle;
+    private Transform projectileMuzzle;
+    private NewMonsterPart partRef;
     
 
-    public void SetupPool(int damage, playerController playerRef, Transform projectileMuzzle)
+    public void SetupPool(ProjectileRefrenceData data)
     {
-        this.damage = damage;
-        this.playerRef = playerRef;
-        this.projectileMuzzle = projectileMuzzle;
-
-        muzzleInitialRotation = this.projectileMuzzle.rotation;
+        damage = data.Damage;
+        playerRef = data.PlayerRef;
+        partRef = data.MonsterPartRef;
+        projectileMuzzle = data.ProjectileMuzzle;
 
         // ?? is compound assignment syntax which checks if the refrence is null before assigning it.
         // OnAwakenTheBeast might be invoked multiple times and we dont want to waste resources overwriting the pool each time
@@ -77,7 +76,38 @@ public class ProjectileConfigSO : ScriptableObject
     protected virtual void OnGetFromPool(NewProjectile pooledObject)
     {
         pooledObject.gameObject.SetActive(true);
-        pooledObject.transform.SetPositionAndRotation(projectileMuzzle.position, projectileMuzzle.rotation);
+        pooledObject.transform.position = projectileMuzzle.transform.position;
+        Quaternion rotation = CalculateSpawnRotation();
+        pooledObject.transform.rotation = rotation;
+    }
+
+    private Quaternion CalculateSpawnRotation()
+    {
+        Quaternion rotation = Quaternion.identity;
+
+        switch (playerRef.LastInputDirection)
+        {
+            case playerController.InputDirection.Forward:
+            case playerController.InputDirection.Backward:
+                rotation = Quaternion.LookRotation(partRef.transform.forward);
+
+                // tails fire backwards so we need to reverse the rotation
+                if (partRef.PartType is MonsterPartType.Tail)
+                {
+                    rotation = Quaternion.Inverse(rotation);
+                }
+
+                break;
+            // The monster parts can have slight up and down rotations so we dont want to rely on the up/down vectors of the parts
+            case playerController.InputDirection.Up:
+                rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+                break;
+            case playerController.InputDirection.Down:
+                rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+                break;
+        }
+
+        return rotation;
     }
 
     protected virtual void OnReleaseToPool(NewProjectile pooledObject)

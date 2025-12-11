@@ -5,7 +5,8 @@ using UnityEngine.Pool;
 
 public class NewProjectile : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] protected Rigidbody rb;
+    [SerializeField] protected Collider coliiderRef;
     public IObjectPool<NewProjectile> ObjectPool { set => objectPool = value; }
     public float Speed { set => speed = value; }
     public int Damage { set => damage = value; }
@@ -19,13 +20,13 @@ public class NewProjectile : MonoBehaviour
     protected float lifeTime;
     protected bool isReleased;
     protected playerController playerRef;
+    protected Coroutine delayedDeactivateCoroutine;
 
     public virtual void Fire()
     {
         rb.AddForce(transform.forward *  speed, ForceMode.VelocityChange);
-
         // Safety measure incase the projectile escapes the stage
-        StartCoroutine(DelayedDeactivate(lifeTime));
+        delayedDeactivateCoroutine = StartCoroutine(DelayedDeactivate(lifeTime));
     }
 
 
@@ -35,10 +36,12 @@ public class NewProjectile : MonoBehaviour
 
         if (other.CompareTag("Solid"))
         {
+            Debug.Log("Solid hit");
             DeactivateProjectile();
         }
         else if (potentialPlayer != null && potentialPlayer != playerRef)
         {
+            coliiderRef.enabled = false;
             OnPlayerHit(other, potentialPlayer);
         }
     }
@@ -62,6 +65,8 @@ public class NewProjectile : MonoBehaviour
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        coliiderRef.enabled = true;
+        delayedDeactivateCoroutine = null;
 
         objectPool.Release(this);
     }

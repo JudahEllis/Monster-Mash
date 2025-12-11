@@ -43,6 +43,8 @@ public class ProjectileConfigSO : ScriptableObject
 
     private void PreWarm()
     {
+        // player starts with some projectiles already in the pool.
+        // This helps with performance by creating all the projectiles when the player spawns in instead of when the first few projectiles are fired during gameplay.
         List<NewProjectile> projectiles = new();
        
         for (int i = 0; i < poolStartSize; i++)
@@ -77,33 +79,35 @@ public class ProjectileConfigSO : ScriptableObject
     {
         pooledObject.gameObject.SetActive(true);
         pooledObject.transform.position = projectileMuzzle.transform.position;
-        Quaternion rotation = CalculateSpawnRotation();
+        Quaternion rotation = CalculateSpawnRotation(pooledObject);
         pooledObject.transform.rotation = rotation;
     }
 
-    private Quaternion CalculateSpawnRotation()
+    private Quaternion CalculateSpawnRotation(NewProjectile pooledObject)
     {
+        // There were too many issues with using the muzzle rotation because of the rotations inherited from the bone.
+        // So instead I just set the rotation manualy based on the input direction
+
         Quaternion rotation = Quaternion.identity;
+
+        Vector3 forward = new (0, 90, 0);
+        Vector3 backward = new (0, -90, 0);
+        Vector3 up = new (-90, 0, 0);
+        Vector3 down = new (90, 0, 0);
 
         switch (playerRef.LastInputDirection)
         {
             case playerController.InputDirection.Forward:
-            case playerController.InputDirection.Backward:
-                rotation = Quaternion.LookRotation(partRef.transform.forward);
-
-                // tails fire backwards so we need to reverse the rotation
-                if (partRef.PartType is MonsterPartType.Tail)
-                {
-                    rotation = Quaternion.Inverse(rotation);
-                }
-
+                rotation = Quaternion.Euler(forward);
                 break;
-            // The monster parts can have slight up and down rotations so we dont want to rely on the up/down vectors of the parts
+            case playerController.InputDirection.Backward:
+                rotation = Quaternion.Euler(backward);
+                break;
             case playerController.InputDirection.Up:
-                rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+                rotation = Quaternion.Euler(up);
                 break;
             case playerController.InputDirection.Down:
-                rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+                rotation = Quaternion.Euler(down);
                 break;
         }
 

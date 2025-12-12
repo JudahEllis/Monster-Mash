@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 public class NewProjectile : MonoBehaviour
 {
     [SerializeField] protected Rigidbody rb;
-    [SerializeField] protected Collider coliiderRef;
+    [field: SerializeField] public Collider ColiiderRef { get; private set; }
     public IObjectPool<NewProjectile> ObjectPool { set => objectPool = value; }
     public float Speed { set => speed = value; }
     public int Damage { set => damage = value; }
@@ -41,7 +41,7 @@ public class NewProjectile : MonoBehaviour
         }
         else if (potentialPlayer != null && potentialPlayer != playerRef)
         {
-            coliiderRef.enabled = false;
+            ColiiderRef.enabled = false;
             OnPlayerHit(other, potentialPlayer);
         }
     }
@@ -65,7 +65,7 @@ public class NewProjectile : MonoBehaviour
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        coliiderRef.enabled = true;
+        ColiiderRef.enabled = true;
         delayedDeactivateCoroutine = null;
 
         objectPool.Release(this);

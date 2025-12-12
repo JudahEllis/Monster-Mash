@@ -89,6 +89,7 @@ public class ProjectileConfigSO : ScriptableObject
         // So instead I just set the rotation manualy based on the input direction
 
         Quaternion rotation = Quaternion.identity;
+        var capsule = pooledObject.ColiiderRef as CapsuleCollider;
 
         Vector3 forward = new (0, 90, 0);
         Vector3 backward = new (0, -90, 0);
@@ -99,15 +100,19 @@ public class ProjectileConfigSO : ScriptableObject
         {
             case playerController.InputDirection.Forward:
                 rotation = Quaternion.Euler(forward);
+                capsule.direction = 0;
                 break;
             case playerController.InputDirection.Backward:
                 rotation = Quaternion.Euler(backward);
+                capsule.direction = 0;
                 break;
             case playerController.InputDirection.Up:
                 rotation = Quaternion.Euler(up);
+                capsule.direction = 1;
                 break;
             case playerController.InputDirection.Down:
                 rotation = Quaternion.Euler(down);
+                capsule.direction = 1;
                 break;
         }
 

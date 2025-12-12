@@ -9,7 +9,6 @@ public class SuctionProjectile : NewProjectile
     public float TotalTickTime { set => totalTickTime = value; }
 
     private Vector3 contactPoint;
-    private Vector3 originalScale;
     private float totalTickTime;
     private float elapsedTickTime;
     private Coroutine tickCoroutine;
@@ -28,13 +27,9 @@ public class SuctionProjectile : NewProjectile
             StopCoroutine(delayedDeactivateCoroutine);
             delayedDeactivateCoroutine = null;
         }
-
-        originalScale = transform.localScale;
-        
+     
         transform.SetParent(other.transform);
-        transform.localScale = originalScale * attachedScaleMultiplier;
-        transform.position = contactPoint;
-
+        
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
@@ -42,7 +37,6 @@ public class SuctionProjectile : NewProjectile
     private void DetatachFromPlayer()
     {
         transform.SetParent(null);
-        transform.localScale = originalScale;
         tickCoroutine = null;
         DeactivateProjectile();
     }
@@ -55,7 +49,6 @@ public class SuctionProjectile : NewProjectile
         {
             elapsedTickTime += tickDelay;
             target.damaged(damage, false, transform.position, contactPoint);
-            Debug.Log(elapsedTickTime);
             yield return new WaitForSeconds(tickDelay);
         }
 

@@ -37,7 +37,7 @@ public class ProjectileConfigSO : ScriptableObject
 
         if (preWarm)
         {
-            PreWarm();
+            //PreWarm();
         }
     }
 
@@ -81,6 +81,7 @@ public class ProjectileConfigSO : ScriptableObject
         pooledObject.transform.position = projectileMuzzle.transform.position;
         Quaternion rotation = CalculateSpawnRotation(pooledObject);
         pooledObject.transform.rotation = rotation;
+        Time.timeScale = 0;
     }
 
     private Quaternion CalculateSpawnRotation(NewProjectile pooledObject)

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class SuctionProjectile : NewProjectile
 {
-    [SerializeField, Tooltip("Because of the distance to the camera the projectile can appear smaller when attached." +
-        "To fix this we scale the projectile up when it gets attached"), Range(1,2)] private float attachedScaleMultiplier;
     public float TotalTickTime { set => totalTickTime = value; }
 
     private Vector3 contactPoint;
+    private Vector3 originalScale;
     private float totalTickTime;
     private float elapsedTickTime;
     private Coroutine tickCoroutine;
@@ -27,16 +26,19 @@ public class SuctionProjectile : NewProjectile
             StopCoroutine(delayedDeactivateCoroutine);
             delayedDeactivateCoroutine = null;
         }
-     
+
+        originalScale = transform.localScale;
         transform.SetParent(other.transform);
-        
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        
     }
 
     private void DetatachFromPlayer()
     {
         transform.SetParent(null);
+        transform.localScale = originalScale;
         tickCoroutine = null;
         DeactivateProjectile();
     }

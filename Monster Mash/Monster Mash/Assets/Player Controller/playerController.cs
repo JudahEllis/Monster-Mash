@@ -135,7 +135,7 @@ public class playerController : MonoBehaviour
 
     private Vector2 lastInputDirectionVector;
     float directionThreshold = 0.2f;
-    public InputDirection LastInputDirection { get; private set; } = InputDirection.Forward;
+    public InputDirection LastInputDirection { get; private set; } = InputDirection.Backward;
     private InputDirection pendingInputDirection;
     private float directionTimer = 0f;
     private float flipDelay = 0.03f;

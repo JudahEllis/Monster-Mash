@@ -36,7 +36,6 @@ public class NewProjectile : MonoBehaviour
 
         if (other.CompareTag("Solid"))
         {
-            Debug.Log("Solid hit");
             DeactivateProjectile();
         }
         else if (potentialPlayer != null && potentialPlayer != playerRef)

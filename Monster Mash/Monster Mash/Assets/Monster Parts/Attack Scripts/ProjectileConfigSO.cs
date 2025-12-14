@@ -37,7 +37,7 @@ public class ProjectileConfigSO : ScriptableObject
 
         if (preWarm)
         {
-            //PreWarm();
+            PreWarm();
         }
     }
 
@@ -78,9 +78,7 @@ public class ProjectileConfigSO : ScriptableObject
     protected virtual void OnGetFromPool(NewProjectile pooledObject)
     {
         pooledObject.gameObject.SetActive(true);
-        pooledObject.transform.position = projectileMuzzle.transform.position;
-        Quaternion rotation = CalculateSpawnRotation(pooledObject);
-        pooledObject.transform.rotation = rotation;
+        pooledObject.transform.SetPositionAndRotation(projectileMuzzle.transform.position, CalculateSpawnRotation(pooledObject));
     }
 
     private Quaternion CalculateSpawnRotation(NewProjectile pooledObject)

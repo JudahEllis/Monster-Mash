@@ -119,6 +119,13 @@ public class monsterAttackSystem : MonoBehaviour
     public SFXManager SFXManager;
     public GameObject floorCheck;
 
+    /// <summary>
+    /// flag for when the monster anim is in a state suitable for attack. 
+    /// This is useful for attacks that need to be synced with the monster anim for example tail projectile attacks.
+    /// The default value is true so that normal attacks are not affected
+    /// </summary>
+    private bool monsterAnimReadyForAttack = true;
+
     // Emotes
     [Header("Emotes")]
     public EmoteManager emoteManager;
@@ -1044,6 +1051,41 @@ public class monsterAttackSystem : MonoBehaviour
         stopForceFall();
         leapingAttackVisual.Stop();
         leapingAttackVisual.Play();
+    }
+
+    public IEnumerator Quick180Turn()
+    {
+        const float delay = 0.5f;
+
+        switch(myPlayer.facingRight)
+        {
+            case true:
+                myAnimator.Play("Quick180 - Left");
+                yield return new WaitForSeconds(delay);
+                myAnimator.Play("Quick180 - Right");
+                break;
+            case false:
+                myAnimator.Play("Quick180 - Right");
+                yield return new WaitForSeconds(delay);
+                myAnimator.Play("Quick180 - Left");
+                break;
+        }
+    }
+
+    // called from animation event. Tells the monster part when to attack. Used when attacks need to be synced to the monster anim
+    public void SetMonsterAnimReadyForAttack()
+    {
+        monsterAnimReadyForAttack = true;
+    }
+
+    public void RequestAnimSync()
+    {
+        monsterAnimReadyForAttack = false;
+    }
+
+    public bool IsMonsterReadyForAttack()
+    {
+        return monsterAnimReadyForAttack;
     }
 
     #endregion

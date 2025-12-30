@@ -432,9 +432,9 @@ public class MonsterPartVisual : MonoBehaviour
         }
     }
 
-    IEnumerator TriggerMonsterPartAttack(BaseAttack attack)
+    private IEnumerator TriggerMonsterPartAttack(BaseAttack attack)
     {
-        yield return new WaitUntil(() => monsterPartRef.myMainSystem.MonsterReadyForAttack());
+        yield return new WaitUntil(() => monsterPartRef.myMainSystem.IsMonsterReadyForAttack());
         attack.TriggerAttackRelease();
     }
 

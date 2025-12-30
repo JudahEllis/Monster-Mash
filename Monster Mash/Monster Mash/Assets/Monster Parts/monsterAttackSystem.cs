@@ -121,8 +121,8 @@ public class monsterAttackSystem : MonoBehaviour
 
     /// <summary>
     /// flag for when the monster anim is in a state suitable for attack. 
-    /// This is useful for attacks that need to be synced with the monster anim for example tail projectile aattacks.
-    /// The default value is true so that noraml attacks are not affected
+    /// This is useful for attacks that need to be synced with the monster anim for example tail projectile attacks.
+    /// The default value is true so that normal attacks are not affected
     /// </summary>
     private bool monsterAnimReadyForAttack = true;
 
@@ -1055,19 +1055,19 @@ public class monsterAttackSystem : MonoBehaviour
 
     public IEnumerator Quick180Turn()
     {
-        float delay = 0.5f;
+        const float delay = 0.5f;
 
-        switch(myPlayer.LastInputDirection)
+        switch(myPlayer.facingRight)
         {
-            case playerController.InputDirection.Forward:
-                flipLeft();
+            case true:
+                myAnimator.Play("Quick180 - Left");
                 yield return new WaitForSeconds(delay);
-                flipRight();
+                myAnimator.Play("Quick180 - Right");
                 break;
-            case playerController.InputDirection.Backward:
-                flipRight();
+            case false:
+                myAnimator.Play("Quick180 - Right");
                 yield return new WaitForSeconds(delay);
-                flipLeft();
+                myAnimator.Play("Quick180 - Left");
                 break;
         }
     }
@@ -1075,7 +1075,6 @@ public class monsterAttackSystem : MonoBehaviour
     // called from animation event. Tells the monster part when to attack. Used when attacks need to be synced to the monster anim
     public void SetMonsterAnimReadyForAttack()
     {
-        Debug.Log("Animation event called");
         monsterAnimReadyForAttack = true;
     }
 
@@ -1084,7 +1083,7 @@ public class monsterAttackSystem : MonoBehaviour
         monsterAnimReadyForAttack = false;
     }
 
-    public bool MonsterReadyForAttack()
+    public bool IsMonsterReadyForAttack()
     {
         return monsterAnimReadyForAttack;
     }
